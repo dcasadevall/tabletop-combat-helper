@@ -23,7 +23,7 @@ namespace Prototype {
         }
 
         private void Update() {
-            if (Input.GetKeyUp(KeyCode.S)) {
+            if (Input.GetKeyUp(KeyCode.Space)) {
                 UnitPickerViewController.Show();
             }
         }

@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 4182120716770292421}
   - component: {fileID: 4457210621946192195}
   - component: {fileID: 1128208171444016200}
+  - component: {fileID: 1643203263639080315}
   m_Layer: 0
   m_Name: Map_ Farathar's Hall
   m_TagString: Untagged
@@ -194,3 +195,23 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
+--- !u!114 &1643203263639080315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4182120716770292423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 570211f0245556343990d9e664af8a7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  regionOutlineColor: {r: 1, g: 1, b: 1, a: 1}
+  regionFillColor: {r: 0.45314682, g: 1, b: 0.25943398, a: 0.2}
+  currentArea: 0
+  regionList:
+  - p0: {x: -9.911277, y: 9.963168}
+    p1: {x: 9.991288, y: -9.991291}
+  - p0: {x: -9.911276, y: 10.015059}
+    p1: {x: 10.04318, y: -9.887507}
