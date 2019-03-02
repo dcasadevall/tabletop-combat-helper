@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f17b3ac8e0ee645dc9e857c36660e510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapPrefab: {fileID: 4182120716770292423, guid: 85be60b81460146929d45fe40523fe6e,
+  mapPrefab: {fileID: 6926228958852073944, guid: f84ccccd2bec842a68b60fde5020904d,
     type: 3}
   cameraController: {fileID: 3874603854720862414}
 --- !u!4 &111128775
