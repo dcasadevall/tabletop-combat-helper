@@ -1,9 +1,13 @@
-using UnityEngine;
+using Logging;
+using Ninject;
+using Ninject.Unity;
 
 namespace Grid {
     /// <summary>
     /// Debug MonoBehaviour that allows os to visualize an <see cref="ICombatGrid"/>.
     /// </summary>
-    public class CombatGridVisualizingBehaviour : MonoBehaviour {
+    public class CombatGridVisualizingBehaviour : DIMono {
+        [Inject]
+        private ILogger Logger { get; set; }
     }
 }
