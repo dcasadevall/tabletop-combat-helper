@@ -46,3 +46,4 @@ MonoBehaviour:
   binderPrefabs:
   - {fileID: 6322870240105521159, guid: 8ac7833ca2585484fadcc2b624fa4f8f, type: 3}
   - {fileID: 8841515930360062471, guid: 86c14b09c1b194cbaa1eafd28c04b8c5, type: 3}
+  - {fileID: 6444427784965321022, guid: d562214db939c492abbd838b45e10509, type: 3}
