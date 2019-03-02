@@ -1,4 +1,5 @@
 ﻿
+using Grid.Serialized;
 using UnityEngine;
 
 namespace Grid {
@@ -35,5 +36,10 @@ namespace Grid {
         /// The origin (0, 0) position in Unity World Space coordinates.
         /// </summary>
         Vector2 WorldSpaceOrigin { get; }
+        /// <summary>
+        /// Loads the given <see cref="GridData"/>, setting values like grid dimensions.
+        /// </summary>
+        /// <param name="data"></param>
+        void LoadGridData(GridData data);
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using Grid.Serialized;
 using UnityEngine;
 
 namespace Grid {
@@ -28,6 +30,11 @@ namespace Grid {
             get {
                 return _worldSpaceOrigin;
             }
+        }
+
+        public void LoadGridData(GridData gridData) {
+            _numTilesX = Math.Max(1, gridData.numTilesX);
+            _numTilesY = Math.Max(1, gridData.numTilesY);
         }
     }
 }
