@@ -1,6 +1,10 @@
+using Drawing.UI;
 using UnityEngine;
 
 namespace Prototype {
+    /// <summary>
+    /// This prototype camera movement script needs to die soon
+    /// </summary>
     [RequireComponent(typeof(Camera))]
     public class PrototypeCameraController : MonoBehaviour {
         private Camera cam;
@@ -21,7 +25,9 @@ namespace Prototype {
             cam = GetComponent<Camera>();
         }
 
+        private Vector3 lastPosition;
         private void Update() {
+            // Panning with WASD
             float speed = 5.0f;
             if(Input.GetKey(KeyCode.D)) {
                 transform.Translate(new Vector3(speed * Time.deltaTime,0,0));
@@ -82,6 +88,26 @@ namespace Prototype {
                 transform.position = Vector3.Lerp(transform.position, newCameraPosition, smoothTime);
             } else {
                 transform.position = newCameraPosition;
+            }
+
+            if (DragAndDropBehaviour.isDragging) {
+                return;
+            }
+
+            if (DrawingViewController.isDrawing) {
+                return;
+            }
+            
+            // Panning with mouse
+            float mouseSensitivity = 0.02f;
+            if (Input.GetMouseButtonDown(0)) {
+                lastPosition = Input.mousePosition;
+            }
+ 
+            if (Input.GetMouseButton(0)) {
+                Vector3 delta = Input.mousePosition - lastPosition;
+                transform.Translate(-delta.x * mouseSensitivity, -delta.y * mouseSensitivity, 0);
+                lastPosition = Input.mousePosition;
             }
         }
 

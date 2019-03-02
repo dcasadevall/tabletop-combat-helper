@@ -7,6 +7,8 @@ namespace Drawing.UI {
     /// itself through unity's lifecycle.
     /// </summary>
     public class DrawingViewController : MonoBehaviour {
+        // TODO: Inject this
+        public static bool isDrawing = false;
         public GameObject startPaintingButton;
         public GameObject stopPaintingButton;
         public GameObject drawingTools;
@@ -21,6 +23,7 @@ namespace Drawing.UI {
             stopPaintingButton.SetActive(true);
             drawingTools.SetActive(true);
             drawableCollider.enabled = true;
+            isDrawing = true;
         }
         
         public void StopPainting() {
@@ -28,6 +31,7 @@ namespace Drawing.UI {
             stopPaintingButton.SetActive(false);
             drawingTools.SetActive(false);
             drawableCollider.enabled = false;
+            isDrawing = false;
         }
     }
 }
