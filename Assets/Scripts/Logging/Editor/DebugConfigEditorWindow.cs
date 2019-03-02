@@ -11,7 +11,7 @@ namespace Logging.Editor {
     public class DebugConfigEditorWindow : EditorWindow {
         public List<LoggedFeatureState> featureList;
         
-        [MenuItem("EvokeGames/Debug Settings")]
+        [MenuItem("Logging/Logging Settings")]
         private static void OpenWindow() {
             DebugConfigEditorWindow window = GetWindow<DebugConfigEditorWindow>();
             
