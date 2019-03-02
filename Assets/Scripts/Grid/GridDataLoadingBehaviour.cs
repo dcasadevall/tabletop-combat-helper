@@ -1,7 +1,6 @@
 using Grid.Serialized;
 using Ninject;
 using Ninject.Unity;
-using UnityEngine;
 
 namespace Grid {
     /// <summary>
@@ -12,7 +11,7 @@ namespace Grid {
         public GridData gridData;
         
         [Inject]
-        public ICombatGrid Grid { get; set; }
+        private ICombatGrid Grid { get; set; }
 
         private void Start() {
             Grid.LoadGridData(gridData);

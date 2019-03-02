@@ -14,6 +14,11 @@ namespace Logging {
             }
             
             string formatedMessage = FormatFeatureString(loggedFeature.name, format);
+            LogValue(formatedMessage, Debug.LogError, tokens);
+        }
+        
+        public void LogError(LoggedFeature loggedFeature, string format, params string[] tokens) {
+            string formatedMessage = FormatFeatureString(loggedFeature.name, format);
             LogValue(formatedMessage, Debug.Log, tokens);
         }
         

@@ -1,4 +1,3 @@
-using Logging;
 using Ninject;
 using Ninject.Unity;
 
@@ -8,6 +7,6 @@ namespace Grid {
     /// </summary>
     public class CombatGridVisualizingBehaviour : DIMono {
         [Inject]
-        private ILogger Logger { get; set; }
+        private ICombatGrid CombatGrid { get; set; }
     }
 }

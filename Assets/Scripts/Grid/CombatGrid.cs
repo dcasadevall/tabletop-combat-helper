@@ -3,6 +3,10 @@ using Grid.Serialized;
 using UnityEngine;
 
 namespace Grid {
+    /// <summary>
+    /// <see cref="ICombatGrid"/> implementation that simply stores the values given by <see cref="LoadGridData"/>.
+    /// It also provides a set of default values.
+    /// </summary>
     public class CombatGrid : ICombatGrid {
         private uint _numTilesX = 400;
         public uint NumTilesX {

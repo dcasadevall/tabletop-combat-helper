@@ -13,6 +13,7 @@ namespace Logging {
         public static LoggedFeature Pooling => new LoggedFeature("Pooling");
         public static LoggedFeature Coroutines => new LoggedFeature("Coroutines");
         public static LoggedFeature Units => new LoggedFeature("Units");
+        public static LoggedFeature Map => new LoggedFeature("Map");
         public static LoggedFeature Grid => new LoggedFeature("Grid");
         
         private static readonly HashSet<LoggedFeature> _features = new HashSet<LoggedFeature>();

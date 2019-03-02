@@ -15,5 +15,14 @@ namespace Logging {
         /// <param name="format"></param>
         /// <param name="tokens"></param>
         void Log(LoggedFeature loggedFeature, String format, params string[] tokens);
+        
+        /// <summary>
+        /// Logs an error for the given feature, with the given format string and tokens.
+        /// Syntax used is the same as <see cref="format"/>.
+        /// </summary>
+        /// <param name="loggedFeature"></param>
+        /// <param name="format"></param>
+        /// <param name="tokens"></param>
+        void LogError(LoggedFeature loggedFeature, String format, params string[] tokens);
     }
 }
