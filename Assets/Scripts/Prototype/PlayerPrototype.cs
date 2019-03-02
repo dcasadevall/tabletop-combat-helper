@@ -21,12 +21,6 @@ namespace Prototype {
         private void Awake() {
             _unitDatas = GetComponent<PlayerPrototypeDI>().unitDatas;
         }
-        
-/*        public override void OnStartClient() {
-            base.OnStartClient();
-
-            OnUnitIndexChanged(unitIndex);
-        }*/
 
         private void OnUnitIndexChanged(uint newUnitIndex) {
             spriteRenderer.sprite = _unitDatas[newUnitIndex].Sprite;
