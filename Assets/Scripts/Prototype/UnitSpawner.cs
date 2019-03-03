@@ -56,7 +56,6 @@ namespace Prototype {
             Debug.Log("setting index: " + index);
             SetPlayerData(instantiatedUnit.GetComponent<PlayerPrototype>(), unitData, index);
             NetworkServer.Spawn(instantiatedUnit);
-            SetPlayerData(instantiatedUnit.GetComponent<PlayerPrototype>(), unitData, index);
         }
 
         private void SetPlayerData(PlayerPrototype playerPrototype, IUnitData unitData, int index) {
