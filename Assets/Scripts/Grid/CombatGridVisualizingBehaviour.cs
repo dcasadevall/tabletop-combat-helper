@@ -1,12 +1,16 @@
-using Ninject;
-using Ninject.Unity;
+using UnityEngine;
+using Zenject;
 
 namespace Grid {
     /// <summary>
     /// Debug MonoBehaviour that allows os to visualize an <see cref="ICombatGrid"/>.
     /// </summary>
-    public class CombatGridVisualizingBehaviour : DIMono {
+    public class CombatGridVisualizingBehaviour : MonoBehaviour {
+        private ICombatGrid _combatGrid;
+        
         [Inject]
-        private ICombatGrid CombatGrid { get; set; }
+        public void Construct(ICombatGrid combatGrid) {
+            _combatGrid = combatGrid;
+        }
     }
 }

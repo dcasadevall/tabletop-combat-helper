@@ -1,20 +1,24 @@
 using Grid.Serialized;
-using Ninject;
-using Ninject.Unity;
+using UnityEngine;
+using Zenject;
 
 namespace Grid {
     /// <summary>
-    /// Monobehaviour used to load the selected <see cref="GridData"/> into the current
+    /// <see cref="MonoBehaviour"/> used to load the selected <see cref="GridData"/> into the current
     /// <see cref="ICombatGrid"/>
     /// </summary>
-    public class GridDataLoadingBehaviour : DIMono {
-        public GridData gridData;
+    public class GridDataLoadingBehaviour : MonoBehaviour {
+        [SerializeField]
+        private GridData _gridData;
+        private ICombatGrid _combatGrid;
         
         [Inject]
-        private ICombatGrid Grid { get; set; }
+        public void Construct(ICombatGrid combatGrid) {
+            _combatGrid = combatGrid;
+        }
 
         private void Start() {
-            Grid.LoadGridData(gridData);
+            _combatGrid.LoadGridData(_gridData);
         }
     }
 }

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Logging;
-using Ninject;
-using Ninject.Unity;
 using Units.Serialized;
+using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 using ILogger = Logging.ILogger;
 
 namespace Units.UI {
-    public class UnitPickerViewController : DIMono, IUnitPickerViewController {
+    public class UnitPickerViewController : MonoBehaviour, IUnitPickerViewController {
         public event Action<IUnitData> SpawnUnitClicked = delegate {};
 
         public Dropdown dropdown;
@@ -16,20 +16,23 @@ namespace Units.UI {
         
         private int _selectedIndex = 0;
         
+        private List<IUnitData> _unitDatas;
+        private ILogger _logger;
+
         [Inject]
-        private ILogger Logger { get; set; }
-        
-        [Inject] 
-        private IUnitData[] unitDatas { get; set; }
+        public void Construct(List<IUnitData> unitDatas, ILogger logger) {
+            _unitDatas = unitDatas;
+            _logger = logger;
+        }
 
         private void Start() {
             if (dropdown == null) {
-                Logger.LogError(LoggedFeature.Units, "Dropdown not assigned.");
+                _logger.LogError(LoggedFeature.Units, "Dropdown not assigned.");
                 return;
             }
             
             if (spawnButton == null) {
-                Logger.LogError(LoggedFeature.Units, "Spawn button not assigned.");
+                _logger.LogError(LoggedFeature.Units, "Spawn button not assigned.");
                 return;
             }
             
@@ -41,28 +44,28 @@ namespace Units.UI {
         }
 
         private void HandleOnSpawnButtonClicked() {
-            if (_selectedIndex < 0 || _selectedIndex >= unitDatas.Length) {
-                Logger.LogError(LoggedFeature.Units, "Invalid selected index: {0}", _selectedIndex.ToString());
+            if (_selectedIndex < 0 || _selectedIndex >= _unitDatas.Count) {
+                _logger.LogError(LoggedFeature.Units, "Invalid selected index: {0}", _selectedIndex.ToString());
                 return;
             }
             
-            SpawnUnitClicked.Invoke(unitDatas[_selectedIndex]);
+            SpawnUnitClicked.Invoke(_unitDatas[_selectedIndex]);
         }
 
         public void Show() {
             if (dropdown == null) {
-                Logger.LogError(LoggedFeature.Units, "Dropdown not assigned.");
+                _logger.LogError(LoggedFeature.Units, "Dropdown not assigned.");
                 return;
             }
             
             if (spawnButton == null) {
-                Logger.LogError(LoggedFeature.Units, "Spawn button not assigned.");
+                _logger.LogError(LoggedFeature.Units, "Spawn button not assigned.");
                 return;
             }
 
             dropdown.ClearOptions();
             List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
-            foreach (var unitData in unitDatas) {
+            foreach (var unitData in _unitDatas) {
                 options.Add(new Dropdown.OptionData(unitData.Name, unitData.Sprite));
             }
             dropdown.AddOptions(options);

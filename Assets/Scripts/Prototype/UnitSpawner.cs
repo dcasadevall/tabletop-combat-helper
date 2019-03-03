@@ -1,51 +1,48 @@
-using System.Collections;
+using System.Collections.Generic;
 using Logging;
-using Ninject;
-using Ninject.Unity;
 using Units.Serialized;
 using Units.UI;
 using UnityEngine;
 using UnityEngine.Networking;
+using Zenject;
 using ILogger = Logging.ILogger;
 
 namespace Prototype {
     // TEMPORARY prototype class to spawn units.
-    public class UnitSpawner : DIMono {
-        public GameObject unitPrefab;
-        
+    public class UnitSpawner : MonoBehaviour {
+        private IUnitPickerViewController _unitPickerViewController;
+        private ILogger _logger;
+        private List<IUnitData> _unitDatas;
+        private UnitNetworkBehaviour.Pool _unitNetworkBehaviourPool;
+
         [Inject]
-        private IUnitPickerViewController UnitPickerViewController { get; set; }
-        
-        [Inject]
-        private ILogger Logger { get; set; }
-        
-        [Inject]
-        private IUnitData[] UnitDatas { get; set; }
+        public void Construct(IUnitPickerViewController unitPickerVc, ILogger logger, List<IUnitData> unitDatas,
+                              UnitNetworkBehaviour.Pool unitNetworkBehaviourPool) {
+            _logger = logger;
+            _unitPickerViewController = unitPickerVc;
+            _unitDatas = unitDatas;
+            _unitNetworkBehaviourPool = unitNetworkBehaviourPool;
+        }
 
         private void Start() {
-            UnitPickerViewController.SpawnUnitClicked += HandleSpawnUnitClicked;
+            _unitPickerViewController.SpawnUnitClicked += HandleSpawnUnitClicked;
 
             for (int i = 0; i < 6; i++) {
-                HandleSpawnUnitClicked(UnitDatas[i]);
+                HandleSpawnUnitClicked(_unitDatas[i]);
             }
         }
 
         private void Update() {
             if (Input.GetKeyUp(KeyCode.Space)) {
-                UnitPickerViewController.Show();
+                _unitPickerViewController.Show();
             }
         }
 
         private void HandleSpawnUnitClicked(IUnitData unitData) {
-            UnitPickerViewController.Hide();
-            if (unitPrefab == null) {
-                Logger.Log(LoggedFeature.Units, "unitPrefab not assigned.");
-                return;
-            }
-            
-            GameObject instantiatedUnit = Instantiate(unitPrefab);
+            _unitPickerViewController.Hide();
+
             int index = 0;
-            foreach (var data in UnitDatas) {
+            foreach (var data in _unitDatas) {
                 if (data == unitData) {
                     break;
                 }
@@ -53,15 +50,9 @@ namespace Prototype {
                 index++;
             }
 
-            Debug.Log("setting index: " + index);
-            SetPlayerData(instantiatedUnit.GetComponent<PlayerPrototype>(), unitData, index);
-            NetworkServer.Spawn(instantiatedUnit);
-        }
-
-        private void SetPlayerData(PlayerPrototype playerPrototype, IUnitData unitData, int index) {
-            playerPrototype.spriteRenderer.sprite = unitData.Sprite;
-            playerPrototype.avatarIconRenderer.sprite = unitData.AvatarSprite;
-            playerPrototype.unitIndex = index;
+            _logger.Log(LoggedFeature.Units, "Spawning unit with index: {0}", index);
+            UnitNetworkBehaviour unitNetworkBehaviour = _unitNetworkBehaviourPool.Spawn(index);
+            NetworkServer.Spawn(unitNetworkBehaviour.gameObject);
         }
     }
 }

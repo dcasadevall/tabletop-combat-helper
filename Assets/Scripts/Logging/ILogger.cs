@@ -14,7 +14,7 @@ namespace Logging {
         /// <param name="loggedFeature"></param>
         /// <param name="format"></param>
         /// <param name="tokens"></param>
-        void Log(LoggedFeature loggedFeature, String format, params string[] tokens);
+        void Log(LoggedFeature loggedFeature, String format, params object[] tokens);
         
         /// <summary>
         /// Logs an error for the given feature, with the given format string and tokens.
@@ -23,6 +23,6 @@ namespace Logging {
         /// <param name="loggedFeature"></param>
         /// <param name="format"></param>
         /// <param name="tokens"></param>
-        void LogError(LoggedFeature loggedFeature, String format, params string[] tokens);
+        void LogError(LoggedFeature loggedFeature, String format, params object[] tokens);
     }
 }

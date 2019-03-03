@@ -1,9 +1,8 @@
 ﻿using Logging;
-using Ninject;
-using Ninject.Unity;
 using Prototype;
 using UnityEngine;
 using UnityEngine.Networking;
+using Zenject;
 using ILogger = Logging.ILogger;
 
 namespace Map {
@@ -15,9 +14,13 @@ namespace Map {
     public class MapLoadingBehaviour : NetworkBehaviour {
         public GameObject mapPrefab;
         public PrototypeCameraController cameraController;
-        
-/*        [Inject]
-        private ILogger Logger { get; set; }*/
+
+        private ILogger _logger;
+
+        [Inject]
+        public void Construct(ILogger logger) {
+            _logger = logger;
+        }
 
         private void Start() {
             SpawnMap();
@@ -25,12 +28,12 @@ namespace Map {
         
         private void SpawnMap() {
             if (mapPrefab == null) {
-                // Logger.LogError(LoggedFeature.Map, "Map Prefab not assigned.");
+                _logger.LogError(LoggedFeature.Map, "Map Prefab not assigned.");
                 return;
             }
             
             if (cameraController == null) {
-                // Logger.LogError(LoggedFeature.Map, "Map cameraController not assigned.");
+                _logger.LogError(LoggedFeature.Map, "Map cameraController not assigned.");
                 return;
             }
 

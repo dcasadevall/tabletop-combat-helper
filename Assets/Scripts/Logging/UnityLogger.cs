@@ -8,18 +8,18 @@ namespace Logging {
     /// It uses Unity's default <see cref="UnityEngine.Debug"/> logger.
     /// </summary>
     public class UnityLogger : ILogger {
-        public void Log(LoggedFeature loggedFeature, string format, params string[] tokens) {
+        public void Log(LoggedFeature loggedFeature, string format, params object[] tokens) {
             if (!LoggingConfig.ShouldLogFeature(loggedFeature)) {
                 return;
             }
             
             string formatedMessage = FormatFeatureString(loggedFeature.name, format);
-            LogValue(formatedMessage, Debug.LogError, tokens);
+            LogValue(formatedMessage, Debug.Log, tokens);
         }
         
-        public void LogError(LoggedFeature loggedFeature, string format, params string[] tokens) {
+        public void LogError(LoggedFeature loggedFeature, string format, params object[] tokens) {
             string formatedMessage = FormatFeatureString(loggedFeature.name, format);
-            LogValue(formatedMessage, Debug.Log, tokens);
+            LogValue(formatedMessage, Debug.LogError, tokens);
         }
         
         #region Parameter formatting
