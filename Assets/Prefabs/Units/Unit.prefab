@@ -304,7 +304,6 @@ MonoBehaviour:
   iconRenderer: {fileID: 1217125120907250110}
   unitRenderers:
   - {fileID: 4607821708794275536}
-  - {fileID: 6185731549489310326}
 --- !u!1 &7614636779065342047
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,7 +342,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7614636779065342047}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
