@@ -1,3 +1,4 @@
+using System.Collections;
 using Logging;
 using Ninject;
 using Ninject.Unity;
@@ -17,6 +18,9 @@ namespace Prototype {
         
         [Inject]
         private ILogger Logger { get; set; }
+        
+        [Inject]
+        private IUnitData[] UnitDatas { get; set; }
 
         private void Start() {
             UnitPickerViewController.SpawnUnitClicked += HandleSpawnUnitClicked;
@@ -36,9 +40,25 @@ namespace Prototype {
             }
             
             GameObject instantiatedUnit = Instantiate(unitPrefab);
-            instantiatedUnit.GetComponent<PlayerPrototype>().spriteRenderer.sprite = unitData.Sprite;
-            instantiatedUnit.GetComponent<PlayerPrototype>().avatarIconRenderer.sprite = unitData.AvatarSprite;
+            int index = 0;
+            foreach (var data in UnitDatas) {
+                if (data == unitData) {
+                    break;
+                }
+                
+                index++;
+            }
+
+            Debug.Log("setting index: " + index);
+            SetPlayerData(instantiatedUnit.GetComponent<PlayerPrototype>(), unitData, index);
             NetworkServer.Spawn(instantiatedUnit);
+            SetPlayerData(instantiatedUnit.GetComponent<PlayerPrototype>(), unitData, index);
+        }
+
+        private void SetPlayerData(PlayerPrototype playerPrototype, IUnitData unitData, int index) {
+            playerPrototype.spriteRenderer.sprite = unitData.Sprite;
+            playerPrototype.avatarIconRenderer.sprite = unitData.AvatarSprite;
+            playerPrototype.unitIndex = index;
         }
     }
 }

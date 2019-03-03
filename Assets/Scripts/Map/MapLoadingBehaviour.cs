@@ -12,12 +12,12 @@ namespace Map {
     /// It also hooks up the region camera with the loaded map region's.
     /// The way we do this will most likely change.
     /// </summary>
-    public class MapLoadingBehaviour : DIMono {
+    public class MapLoadingBehaviour : NetworkBehaviour {
         public GameObject mapPrefab;
         public PrototypeCameraController cameraController;
         
-        [Inject]
-        private ILogger Logger { get; set; }
+/*        [Inject]
+        private ILogger Logger { get; set; }*/
 
         private void Start() {
             SpawnMap();
@@ -25,15 +25,19 @@ namespace Map {
         
         private void SpawnMap() {
             if (mapPrefab == null) {
-                Logger.LogError(LoggedFeature.Map, "Map Prefab not assigned.");
+                // Logger.LogError(LoggedFeature.Map, "Map Prefab not assigned.");
                 return;
             }
             
             if (cameraController == null) {
-                Logger.LogError(LoggedFeature.Map, "Map cameraController not assigned.");
+                // Logger.LogError(LoggedFeature.Map, "Map cameraController not assigned.");
                 return;
             }
 
+            if (!isServer) {
+                return;
+            }
+            
             GameObject instantiatedMap = Instantiate(mapPrefab);
             cameraController.SetRegionHandler(instantiatedMap.GetComponent<RegionHandler>());
             NetworkServer.Spawn(instantiatedMap);

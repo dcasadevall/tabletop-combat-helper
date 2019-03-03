@@ -18,10 +18,6 @@ namespace Prototype {
         private Vector3 positionToMoveTo;
 
         void Start() {
-            if (regionHandler == null) {
-                throw new System.Exception("RegionCamera needs a type of RegionHandler. Either create or assign a region handler object in the scene.");
-            }
-
             cam = GetComponent<Camera>();
         }
 
@@ -50,7 +46,7 @@ namespace Prototype {
 
             Vector3 newCameraPosition = Vector3.zero;
 
-            if (regionHandler.Regions.Count > 0) {
+            if (regionHandler != null && regionHandler.Regions.Count > 0) {
 
                 Region region = regionHandler.ActiveRegion;
 

@@ -123,6 +123,7 @@ GameObject:
   m_Component:
   - component: {fileID: 111128775}
   - component: {fileID: 111128774}
+  - component: {fileID: 111128776}
   m_Layer: 0
   m_Name: MapLoader
   m_TagString: Untagged
@@ -161,6 +162,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &111128776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111128773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!1 &1002134064
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,6 +492,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3874603855073947826, guid: ab4364683af124da39a4cc5fecec50bf,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3874603855073947826, guid: ab4364683af124da39a4cc5fecec50bf,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3874603855073947826, guid: ab4364683af124da39a4cc5fecec50bf,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab4364683af124da39a4cc5fecec50bf, type: 3}
 --- !u!114 &3874603854720862414 stripped
@@ -484,6 +533,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapLoader
       objectReference: {fileID: 0}
+    - target: {fileID: 4537142683744435873, guid: 277898d3e7c8b496eb3732caa25323c8,
+        type: 3}
+      propertyPath: cameraController
+      value: 
+      objectReference: {fileID: 3874603854720862414}
     - target: {fileID: 4537142683744435872, guid: 277898d3e7c8b496eb3732caa25323c8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -539,10 +593,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4537142683744435873, guid: 277898d3e7c8b496eb3732caa25323c8,
-        type: 3}
-      propertyPath: cameraController
-      value: 
-      objectReference: {fileID: 3874603854720862414}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 277898d3e7c8b496eb3732caa25323c8, type: 3}
