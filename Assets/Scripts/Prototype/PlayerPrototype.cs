@@ -12,7 +12,9 @@ namespace Prototype {
     [RequireComponent(typeof(PlayerPrototypeDI))]
     public class PlayerPrototype : NetworkBehaviour {
         public SpriteRenderer spriteRenderer;
+        public SpriteRenderer avatarIconRenderer;
         
+        [HideInInspector]
         [SyncVar(hook="OnUnitIndexChanged")]
         public uint unitIndex;
 
@@ -23,7 +25,9 @@ namespace Prototype {
         }
 
         private void OnUnitIndexChanged(uint newUnitIndex) {
+            // Note: this is never called.
             spriteRenderer.sprite = _unitDatas[newUnitIndex].Sprite;
+            avatarIconRenderer.sprite = _unitDatas[newUnitIndex].AvatarSprite;
         }
     }
 }

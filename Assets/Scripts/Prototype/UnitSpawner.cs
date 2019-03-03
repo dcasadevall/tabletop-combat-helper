@@ -37,6 +37,7 @@ namespace Prototype {
             
             GameObject instantiatedUnit = Instantiate(unitPrefab);
             instantiatedUnit.GetComponent<PlayerPrototype>().spriteRenderer.sprite = unitData.Sprite;
+            instantiatedUnit.GetComponent<PlayerPrototype>().avatarIconRenderer.sprite = unitData.AvatarSprite;
             NetworkServer.Spawn(instantiatedUnit);
         }
     }
