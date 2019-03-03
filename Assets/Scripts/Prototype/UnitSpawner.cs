@@ -24,6 +24,10 @@ namespace Prototype {
 
         private void Start() {
             UnitPickerViewController.SpawnUnitClicked += HandleSpawnUnitClicked;
+
+            for (int i = 0; i < 6; i++) {
+                HandleSpawnUnitClicked(UnitDatas[i]);
+            }
         }
 
         private void Update() {
