@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.CoreModule:UnityEngine:ScriptableObject
   name: Elsbeth
   sprite: {fileID: 21300000, guid: 33f9dd280992e4b7e8ef7e56ade6f5ad, type: 3}
+  avatarSprite: {fileID: 21300000, guid: 256f1a6f85788485fad3b68db68c4001, type: 3}

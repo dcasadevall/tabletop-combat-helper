@@ -14,5 +14,11 @@ namespace Units.Serialized {
         /// Sprite associated with this unit.
         /// </summary>
         Sprite Sprite { get; }
+        
+        /// <summary>
+        /// Sprite associated with this unit's avatar icon.
+        /// Should be shown in minimap and when zoomed out.
+        /// </summary>
+        Sprite AvatarSprite { get; }
     }
 }

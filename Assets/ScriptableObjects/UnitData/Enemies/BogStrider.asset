@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Bog Strider
   sprite: {fileID: 21300000, guid: 701d44a8d24ee482aacb563606afcf32, type: 3}
+  avatarSprite: {fileID: 21300000, guid: 464aa2e89d4964a36af22e0ce7591ac6, type: 3}

@@ -18,5 +18,12 @@ namespace Units.Serialized {
                 return sprite;
             }
         }
+
+        public Sprite avatarSprite;
+        public Sprite AvatarSprite {
+            get {
+                return avatarSprite;
+            }
+        }
     }
 }

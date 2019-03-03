@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.CoreModule:UnityEngine:ScriptableObject
   name: Bedwyr
   sprite: {fileID: 21300000, guid: d880fac97d08c45b8822a77123c0a190, type: 3}
+  avatarSprite: {fileID: 21300000, guid: 1498a747b59ad494691dc3eaef0991ac, type: 3}

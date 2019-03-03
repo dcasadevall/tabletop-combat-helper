@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Aurora
   sprite: {fileID: 21300000, guid: 37b056b0b18914de5acc437a4611d0d3, type: 3}
+  avatarSprite: {fileID: 21300000, guid: 8c030ea2ec58e4ef995fa403124bdfca, type: 3}
