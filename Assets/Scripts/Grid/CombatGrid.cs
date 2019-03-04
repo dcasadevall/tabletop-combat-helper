@@ -29,10 +29,10 @@ namespace Grid {
             }
         }
 
-        private Vector2 _worldSpaceOrigin = Vector2.zero;
-        public Vector2 WorldSpaceOrigin {
+        private Rect _worldSpaceBounds = Rect.zero;
+        public Rect WorldSpaceBounds {
             get {
-                return _worldSpaceOrigin;
+                return _worldSpaceBounds;
             }
         }
 

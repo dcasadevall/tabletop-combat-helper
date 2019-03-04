@@ -5,7 +5,7 @@ using Zenject;
 namespace Grid {
     /// <summary>
     /// <see cref="MonoBehaviour"/> used to load the selected <see cref="GridData"/> into the current
-    /// <see cref="ICombatGrid"/>
+    /// <see cref="ICombatGrid"/>.
     /// </summary>
     public class GridDataLoadingBehaviour : MonoBehaviour {
         [SerializeField]
