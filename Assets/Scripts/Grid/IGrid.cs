@@ -14,7 +14,7 @@ namespace Grid {
     /// X and Y axes are assumed to be oriented left to right and bottom to top.
     /// No rotation is supported for now.
     /// </summary>
-    public interface ICombatGrid {
+    public interface IGrid {
         /// <summary>
         /// The number of tiles in the X axis.
         /// NumTilesX will always be >= 1.

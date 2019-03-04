@@ -6,12 +6,12 @@ namespace Grid {
         public GameObject gridCellPrefab;
         
         public override void InstallBindings() {
-            Container.Bind<ICombatGrid>().To<CombatGrid>().AsSingle();
+            Container.Bind<IGrid>().To<Grid>().AsSingle();
             
 #if DEBUG
             // ITicker and IInitializer
-            Container.BindInterfacesTo<CombatGridVisualizer>().AsSingle();
-            Container.BindFactory<SpriteRenderer, CombatGridVisualizer.GridCellFactory>()
+            Container.BindInterfacesTo<GridVisualizer>().AsSingle();
+            Container.BindFactory<SpriteRenderer, GridVisualizer.GridCellFactory>()
                      .FromComponentInNewPrefab(gridCellPrefab)
                      .UnderTransformGroup("Cells");
 #endif

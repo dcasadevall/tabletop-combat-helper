@@ -32,10 +32,6 @@ namespace Prototype {
             _unitDatas = unitDatas;
         }
 
-        private void Update() {
-            OnUnitIndexChanged(unitIndex);
-        }
-
         private void OnUnitIndexChanged(int newUnitIndex) {
             unitIndex = newUnitIndex;
             if (newUnitIndex >= _unitDatas.Count) {

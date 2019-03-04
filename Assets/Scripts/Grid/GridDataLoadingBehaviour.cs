@@ -5,20 +5,20 @@ using Zenject;
 namespace Grid {
     /// <summary>
     /// <see cref="MonoBehaviour"/> used to load the selected <see cref="GridData"/> into the current
-    /// <see cref="ICombatGrid"/>.
+    /// <see cref="IGrid"/>.
     /// </summary>
     public class GridDataLoadingBehaviour : MonoBehaviour {
         [SerializeField]
         private GridData _gridData;
-        private ICombatGrid _combatGrid;
+        private IGrid _grid;
         
         [Inject]
-        public void Construct(ICombatGrid combatGrid) {
-            _combatGrid = combatGrid;
+        public void Construct(IGrid grid) {
+            _grid = grid;
         }
 
         private void Start() {
-            _combatGrid.LoadGridData(_gridData);
+            _grid.LoadGridData(_gridData);
         }
     }
 }
