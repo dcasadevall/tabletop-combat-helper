@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7122589298872714256}
   - component: {fileID: 7983885918645186825}
+  - component: {fileID: 2864717942891253562}
   m_Layer: 0
   m_Name: LobbySceneContext
   m_TagString: Untagged
@@ -44,10 +45,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
-  _monoInstallers: []
-  _installerPrefabs:
-  - {fileID: 2331196511622841175, guid: 30fe81bd9358a4598a854d54f645695d, type: 3}
+  _monoInstallers:
+  - {fileID: 2864717942891253562}
+  _installerPrefabs: []
   _autoRun: 1
   _parentNewObjectsUnderSceneContext: 0
   _contractNames: []
   _parentContractNames: []
+--- !u!114 &2864717942891253562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4558816120814104912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba0be75458a4415ba754b3516e98c15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

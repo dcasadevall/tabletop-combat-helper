@@ -16,8 +16,12 @@ namespace Units {
                 Container.Bind<IUnitData>().To<UnitData>().FromInstance(unitData);
             }
 
+            // Prototype
             Container.BindMemoryPool<UnitNetworkBehaviour, UnitNetworkBehaviour.Pool>().WithInitialSize(10)
                      .FromComponentInNewPrefab(unitPrefab).UnderTransformGroup("UnitPool");
+
+            // Prototype: Bind ITicker and IInitializable to the UnitsSpawner
+            Container.BindInterfacesTo<UnitSpawner>().AsSingle();
         }
     }
 }

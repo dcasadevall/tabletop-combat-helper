@@ -9,22 +9,23 @@ using ILogger = Logging.ILogger;
 
 namespace Prototype {
     // TEMPORARY prototype class to spawn units.
-    public class UnitSpawner : MonoBehaviour {
+    public class UnitSpawner : IInitializable, ITickable {
         private IUnitPickerViewController _unitPickerViewController;
         private ILogger _logger;
         private List<IUnitData> _unitDatas;
         private UnitNetworkBehaviour.Pool _unitNetworkBehaviourPool;
 
-        [Inject]
-        public void Construct(IUnitPickerViewController unitPickerVc, ILogger logger, List<IUnitData> unitDatas,
-                              UnitNetworkBehaviour.Pool unitNetworkBehaviourPool) {
+        public UnitSpawner(IUnitPickerViewController unitPickerVc, 
+                           ILogger logger, 
+                           List<IUnitData> unitDatas,
+                           UnitNetworkBehaviour.Pool unitNetworkBehaviourPool) {
             _logger = logger;
             _unitPickerViewController = unitPickerVc;
             _unitDatas = unitDatas;
             _unitNetworkBehaviourPool = unitNetworkBehaviourPool;
         }
 
-        private void Start() {
+        public void Initialize() {
             _unitPickerViewController.SpawnUnitClicked += HandleSpawnUnitClicked;
 
             for (int i = 0; i < 6; i++) {
@@ -33,7 +34,7 @@ namespace Prototype {
             }
         }
 
-        private void Update() {
+        public void Tick() {
             if (Input.GetKeyUp(KeyCode.Space)) {
                 _unitPickerViewController.Show();
             }
