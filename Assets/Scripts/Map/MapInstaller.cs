@@ -9,7 +9,6 @@ namespace Map {
         public override void InstallBindings() {
             Container.Bind<ICombatGrid>().To<CombatGrid>().AsSingle();
             
-            // Container.BindInterfacesTo<MapLoader>().AsSingle();
             Container.Bind<MapBehaviour>().AsSingle();
             Container.BindFactory<MapBehaviour, MapBehaviour.Factory>().FromComponentInNewPrefab(mapPrefab);
         }
