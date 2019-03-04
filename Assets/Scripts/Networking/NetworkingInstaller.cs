@@ -9,7 +9,7 @@ namespace Networking {
         public SerializableNetworkSettings settings;
         
         public override void InstallBindings() {
-            Container.BindInstance(settings);
+            Container.Bind<INetworkSettings>().To<SerializableNetworkSettings>().FromInstance(settings);
             Container.Bind<INetworkManager>().To<UNetNetworkManager>().AsSingle();
         } 
     }

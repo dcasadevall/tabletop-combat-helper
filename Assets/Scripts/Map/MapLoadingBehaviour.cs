@@ -1,4 +1,5 @@
 ﻿using Logging;
+using Networking;
 using Prototype;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -11,12 +12,13 @@ namespace Map {
     /// It also hooks up the region camera with the loaded map region's.
     /// The way we do this will most likely change.
     /// </summary>
-    public class MapLoadingBehaviour : NetworkBehaviour {
+    public class MapLoadingBehaviour : MonoBehaviour {
         private ILogger _logger;
         private MapBehaviour.Factory _factory;
+        private INetworkManager _networkManager;
 
         [Inject]
-        public void Construct(MapBehaviour.Factory factory, ILogger logger) {
+        public void Construct(INetworkManager networkManager, MapBehaviour.Factory factory, ILogger logger) {
             _factory = factory;
         }
 
@@ -25,7 +27,7 @@ namespace Map {
         }
         
         private void SpawnMap() {
-            if (!isServer) {
+            if (!_networkManager.IsServer) {
                 return;
             }
             

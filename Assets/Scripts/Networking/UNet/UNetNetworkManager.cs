@@ -7,9 +7,14 @@ namespace Networking.UNet {
         public bool IsConnected { get; private set; }
         public bool IsServer { get; private set; }
 
+        private INetworkSettings _networkSettings;
+        public UNetNetworkManager(INetworkSettings networkSettings) {
+            _networkSettings = networkSettings;
+        }
+
         public IObservable<NetworkConnectionResult> Connect() {
             Subject<NetworkConnectionResult> subject = new Subject<NetworkConnectionResult>();
-            Observable.IntervalFrame(1).Subscribe(delegate {
+            Observable.IntervalFrame(1).Take(1).Subscribe(delegate {
                 bool success;
                 NetworkConnectionResult result = ConnectSync(out success);
                 if (!success) {
