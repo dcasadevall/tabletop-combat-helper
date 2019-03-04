@@ -120,6 +120,7 @@ GameObject:
   - component: {fileID: 4457210621946192195}
   - component: {fileID: 1128208171444016200}
   - component: {fileID: 1643203263639080315}
+  - component: {fileID: 2286225432433056428}
   m_Layer: 0
   m_Name: Map Template
   m_TagString: Untagged
@@ -242,3 +243,15 @@ MonoBehaviour:
     p1: {x: 9.991288, y: -9.991291}
   - p0: {x: -9.911276, y: 10.015059}
     p1: {x: 10.04318, y: -9.887507}
+--- !u!114 &2286225432433056428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4182120716770292423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97cdee6ee4db4233b9889079fba4e0f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

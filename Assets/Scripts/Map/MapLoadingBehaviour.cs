@@ -12,14 +12,12 @@ namespace Map {
     /// The way we do this will most likely change.
     /// </summary>
     public class MapLoadingBehaviour : NetworkBehaviour {
-        public GameObject mapPrefab;
-        public PrototypeCameraController cameraController;
-
         private ILogger _logger;
+        private MapBehaviour.Factory _factory;
 
         [Inject]
-        public void Construct(ILogger logger) {
-            _logger = logger;
+        public void Construct(MapBehaviour.Factory factory, ILogger logger) {
+            _factory = factory;
         }
 
         private void Start() {
@@ -27,23 +25,12 @@ namespace Map {
         }
         
         private void SpawnMap() {
-            if (mapPrefab == null) {
-                _logger.LogError(LoggedFeature.Map, "Map Prefab not assigned.");
-                return;
-            }
-            
-            if (cameraController == null) {
-                _logger.LogError(LoggedFeature.Map, "Map cameraController not assigned.");
-                return;
-            }
-
             if (!isServer) {
                 return;
             }
             
-            GameObject instantiatedMap = Instantiate(mapPrefab);
-            cameraController.SetRegionHandler(instantiatedMap.GetComponent<RegionHandler>());
-            NetworkServer.Spawn(instantiatedMap);
+            MapBehaviour mapBehaviour = _factory.Create();
+            NetworkServer.Spawn(mapBehaviour.gameObject);
         }
     }
 }
