@@ -11,8 +11,12 @@ namespace Units.UI {
     public class UnitPickerViewController : MonoBehaviour, IUnitPickerViewController {
         public event Action<IUnitData> SpawnUnitClicked = delegate {};
 
-        public Dropdown dropdown;
-        public Button spawnButton;
+#pragma warning disable 649
+        [SerializeField]
+        private Dropdown _dropdown;
+        [SerializeField]
+        private Button _spawnButton;
+#pragma warning restore 649
         
         private int _selectedIndex = 0;
         
@@ -26,18 +30,18 @@ namespace Units.UI {
         }
 
         private void Start() {
-            if (dropdown == null) {
+            if (_dropdown == null) {
                 _logger.LogError(LoggedFeature.Units, "Dropdown not assigned.");
                 return;
             }
             
-            if (spawnButton == null) {
+            if (_spawnButton == null) {
                 _logger.LogError(LoggedFeature.Units, "Spawn button not assigned.");
                 return;
             }
             
-            spawnButton.onClick.AddListener(HandleOnSpawnButtonClicked);
-            dropdown.onValueChanged.AddListener(HandleOnValueChanged);
+            _spawnButton.onClick.AddListener(HandleOnSpawnButtonClicked);
+            _dropdown.onValueChanged.AddListener(HandleOnValueChanged);
 
             // Because this class is injected, make sure it is initialized as "hidden".
             Hide();
@@ -53,22 +57,22 @@ namespace Units.UI {
         }
 
         public void Show() {
-            if (dropdown == null) {
+            if (_dropdown == null) {
                 _logger.LogError(LoggedFeature.Units, "Dropdown not assigned.");
                 return;
             }
             
-            if (spawnButton == null) {
+            if (_spawnButton == null) {
                 _logger.LogError(LoggedFeature.Units, "Spawn button not assigned.");
                 return;
             }
 
-            dropdown.ClearOptions();
+            _dropdown.ClearOptions();
             List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
             foreach (var unitData in _unitDatas) {
                 options.Add(new Dropdown.OptionData(unitData.Name, unitData.Sprite));
             }
-            dropdown.AddOptions(options);
+            _dropdown.AddOptions(options);
             
             gameObject.SetActive(true);
         }
