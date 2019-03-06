@@ -7,20 +7,16 @@ namespace Grid {
     /// <see cref="MonoBehaviour"/> used to load the selected <see cref="GridData"/> into the current
     /// <see cref="IGrid"/>.
     /// </summary>
-    public class GridDataLoader : MonoBehaviour {
-#pragma warning disable 649
-        [SerializeField]
-        private GridData _gridData;
-#pragma warning restore 649
-        
+    public class GridDataLoader : IInitializable {
         private IGrid _grid;
-        
-        [Inject]
-        public void Construct(IGrid grid) {
+        private IGridData _gridData;
+
+        public GridDataLoader(IGrid grid, IGridData gridData) {
             _grid = grid;
+            _gridData = gridData;
         }
 
-        private void Start() {
+        public void Initialize() {
             _grid.LoadGridData(_gridData);
         }
     }
