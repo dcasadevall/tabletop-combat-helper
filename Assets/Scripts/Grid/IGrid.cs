@@ -41,6 +41,6 @@ namespace Grid {
         /// Loads the given <see cref="GridData"/>, setting values like grid dimensions.
         /// </summary>
         /// <param name="data"></param>
-        void LoadGridData(GridData data);
+        void LoadGridData(IGridData data);
     }
 }
