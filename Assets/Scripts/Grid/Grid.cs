@@ -37,8 +37,8 @@ namespace Grid {
         }
 
         public void LoadGridData(GridData gridData) {
-            _numTilesX = Math.Max(1, gridData.numTilesX);
-            _numTilesY = Math.Max(1, gridData.numTilesY);
+            _numTilesX = System.Math.Max(1, gridData.numTilesX);
+            _numTilesY = System.Math.Max(1, gridData.numTilesY);
             _worldSpaceBounds = new Rect(-TileSize * NumTilesX / 2.0f,
                                          -TileSize * NumTilesY / 2.0f,
                                          NumTilesX * TileSize,

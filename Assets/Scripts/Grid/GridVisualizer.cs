@@ -1,4 +1,5 @@
 using Debugging;
+using Grid.Positioning;
 using UnityEngine;
 using Zenject;
 
@@ -13,11 +14,14 @@ namespace Grid {
     public class GridVisualizer : IInitializable, ITickable {
         private IGrid _grid;
         private IDebugSettings _debugSettings;
+        private IGridPositionCalculator _positionCalculator;
         private SpriteRenderer[,] _cells;
         private GridCellFactory _factory;
-        
-        public GridVisualizer(IGrid grid, GridCellFactory factory, IDebugSettings debugSettings) {
+
+        public GridVisualizer(IGrid grid, IGridPositionCalculator gridPositionCalculator, GridCellFactory factory,
+                              IDebugSettings debugSettings) {
             _grid = grid;
+            _positionCalculator = gridPositionCalculator;
             _debugSettings = debugSettings;
             _factory = factory;
         }
@@ -42,7 +46,7 @@ namespace Grid {
             
             if (_cells[x, y] == null) {
                 _cells[x, y] = _factory.Create();
-                _cells[x, y].transform.position = GridPositionUtils.GetTileCenterWorldPosition(_grid, x, y);
+                _cells[x, y].transform.position = _positionCalculator.GetTileCenterWorldPosition(_grid, x, y);
             }
 
             _cells[x, y].enabled = _debugSettings.ShowDebugGrid;

@@ -11,6 +11,12 @@ namespace Units.Serialized {
         string Name { get; }
         
         /// <summary>
+        /// An array containing the unit data for pets that are permanent to this unit.
+        /// This means the pets found in this array will always spawn with this unit.
+        /// </summary>
+        IUnitData[] Pets { get; }
+        
+        /// <summary>
         /// Sprite associated with this unit.
         /// </summary>
         Sprite Sprite { get; }
