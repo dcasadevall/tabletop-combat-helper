@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Grid;
 using Grid.Positioning;
@@ -21,9 +22,9 @@ namespace Units {
         private IRandomGridPositionProvider _randomGridPositionProvider;
         private IGrid _grid;
         private IGridPositionCalculator _gridPositionCalculator;
+        private IUnitSpawnSettings _unitSpawnSettings;
         private IGridUnitManager _gridUnitManager;
         private ILogger _logger;
-        private List<IUnitData> _unitDatas;
         private UnitBehaviour.Pool _unitBehaviourPool;
 
         public UnitSpawner(IUnitPickerViewController unitPickerVc, 
@@ -31,8 +32,8 @@ namespace Units {
                            IGridPositionCalculator gridPositionCalculator,
                            IRandomGridPositionProvider randomGridPositionProvider,
                            IGridUnitManager gridUnitManager,
+                           IUnitSpawnSettings unitSpawnSettings,
                            ILogger logger, 
-                           List<IUnitData> unitDatas,
                            UnitBehaviour.Pool unitBehaviourPool) {
             _logger = logger;
             _grid = grid;
@@ -40,17 +41,21 @@ namespace Units {
             _gridUnitManager = gridUnitManager;
             _randomGridPositionProvider = randomGridPositionProvider;
             _unitPickerViewController = unitPickerVc;
-            _unitDatas = unitDatas;
             _unitBehaviourPool = unitBehaviourPool;
+            _unitSpawnSettings = unitSpawnSettings;
         }
 
         public void Initialize() {
             _unitPickerViewController.SpawnUnitClicked += HandleSpawnUnitClicked;
 
             // Spawn 
-            Vector2[] tilePositions = _randomGridPositionProvider.GetRandomUniquePositions(_grid, 4, 6);
+            Vector2[] tilePositions =
+                _randomGridPositionProvider.GetRandomUniquePositions(_grid,
+                                                                     _unitSpawnSettings
+                                                                         .MaxInitialUnitSpawnDistanceToCenter,
+                                                                     _unitSpawnSettings.PlayerUnits.Length);
             for (int i = 0; i < tilePositions.Length; i++) {
-                SpawnUnit(i, tilePositions[i]);
+                SpawnUnit(_unitSpawnSettings.PlayerUnits[i], tilePositions[i]);
             }
         }
 
@@ -62,14 +67,12 @@ namespace Units {
 
         private void HandleSpawnUnitClicked(IUnitData unitData) {
             _unitPickerViewController.Hide();
-
-            int index = _unitDatas.IndexOf(unitData);
-            SpawnUnit(index, Vector3.zero);
+            SpawnUnit(unitData, Vector3.zero);
         }
 
-        private void SpawnUnit(int index, Vector2 tilePosition) {
-            _logger.Log(LoggedFeature.Units, "Spawning unit with index: {0}", index);
-            UnitBehaviour unitBehaviour = _unitBehaviourPool.Spawn(_unitDatas[index]);
+        private void SpawnUnit(IUnitData unitData, Vector2 tilePosition) {
+            _logger.Log(LoggedFeature.Units, "Spawning: {0}", unitData.Name);
+            UnitBehaviour unitBehaviour = _unitBehaviourPool.Spawn(unitData);
             // Unit unit = new Unit(new UnitId(), unitBehaviour.transform);
             
             // Temp code to set position. In the future, we will start the unit in the grid.

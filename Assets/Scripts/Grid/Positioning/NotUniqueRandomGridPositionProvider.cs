@@ -22,12 +22,13 @@ namespace Grid.Positioning {
             Vector2 centerPosition = _gridPositionCalculator.GetTileClosestToCenter(grid);
             
             for (int i = 0; i < numTilesToGenerate; i++) {
-                int xPosition = System.Math.Max(0,
-                                                (int)centerPosition.x -
-                                                _randomProvider.GetRandomIntegerInRange(0, maxDistanceFromCenter));
-                int yPosition = System.Math.Max(0,
-                                                (int)centerPosition.y -
-                                                _randomProvider.GetRandomIntegerInRange(0, maxDistanceFromCenter));
+                int xPosition = (int) centerPosition.x -
+                                _randomProvider.GetRandomIntegerInRange(0, maxDistanceFromCenter);
+                int yPosition = (int) centerPosition.y -
+                                _randomProvider.GetRandomIntegerInRange(0, maxDistanceFromCenter);
+                xPosition = System.Math.Min((int)grid.NumTilesX - 1, System.Math.Max(0, xPosition));
+                yPosition = System.Math.Min((int)grid.NumTilesY - 1, System.Math.Max(0, yPosition));
+                
                 tiles[i] = new Vector2(xPosition, yPosition);
             }
 

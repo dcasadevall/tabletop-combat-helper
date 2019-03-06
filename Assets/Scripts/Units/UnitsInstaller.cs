@@ -6,15 +6,14 @@ using Zenject;
 
 namespace Units {
     public class UnitsInstaller : MonoInstaller {
-        public UnitData[] unitDatas;
+        public UnitSpawnSettings unitSpawnSettingses;
         public GameObject unitPickerViewController;
         public GameObject unitPrefab;
         
         public override void InstallBindings() {
             Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(unitPickerViewController).AsSingle();
-            foreach (var unitData in unitDatas) {
-                Container.Bind<IUnitData>().To<UnitData>().FromInstance(unitData);
-            }
+            Container.Bind<IUnitSpawnSettings>().To<UnitSpawnSettings>().FromInstance(unitSpawnSettingses).AsSingle();
+            Container.Bind<IUnitData>().To<UnitData>().AsSingle();
 
             // Prototype
             Container.BindMemoryPool<UnitBehaviour, UnitBehaviour.Pool>().WithInitialSize(10)

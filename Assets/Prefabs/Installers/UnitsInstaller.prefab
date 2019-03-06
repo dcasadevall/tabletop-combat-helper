@@ -43,15 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cc89c817e276485b8891a1456b8e844, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitDatas:
-  - {fileID: 11400000, guid: e901663d2bf45483396fceeb5ceabb96, type: 2}
-  - {fileID: 11400000, guid: 875ac691587d2451e93f7411a86d7c4c, type: 2}
-  - {fileID: 11400000, guid: 4bb35f0ffaf0148d6b56cccc942fe576, type: 2}
-  - {fileID: 11400000, guid: ba9bfae7d6716446da2433eab2fa8f02, type: 2}
-  - {fileID: 11400000, guid: 5c9013879a79c48428d77db215fa020c, type: 2}
-  - {fileID: 11400000, guid: d6e5fd05fa36640f9b09d17c0f2fbbb3, type: 2}
-  - {fileID: 11400000, guid: bcb5f99ec06b24d2a961a08f69d6a226, type: 2}
-  - {fileID: 11400000, guid: ed0e30f9be4104fb1803ba7986cd86da, type: 2}
+  unitSpawnSettingses: {fileID: 11400000, guid: 55638e91719f64442a3654ede41f33a3,
+    type: 2}
   unitPickerViewController: {fileID: 2097773387127440756, guid: fcdcab687e0524b2ab31c5895a9905db,
     type: 3}
   unitPrefab: {fileID: 6313489448253246766, guid: 3b62971b34b3746be87a5a587fc633c9,

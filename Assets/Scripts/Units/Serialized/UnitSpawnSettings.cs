@@ -3,18 +3,26 @@ using UnityEngine;
 namespace Units.Serialized {
     public class UnitSpawnSettings : ScriptableObject, IUnitSpawnSettings {
         [SerializeField]
-        private readonly IUnit[] _nonPlayerUnits;
-        public IUnit[] NonPlayerUnits {
+        private UnitData[] _nonPlayerUnits;
+        public IUnitData[] NonPlayerUnits {
             get {
                 return _nonPlayerUnits;
             }
         }
 
         [SerializeField]
-        private readonly IUnit[] _playerUnits;
-        public IUnit[] PlayerUnits {
+        private UnitData[] _playerUnits;
+        public IUnitData[] PlayerUnits {
             get {
                 return _playerUnits;
+            }
+        }
+
+        [SerializeField]
+        private int _maxInitialUnitSpawnDistanceToCenter;
+        public int MaxInitialUnitSpawnDistanceToCenter {
+            get {
+                return _maxInitialUnitSpawnDistanceToCenter;
             }
         }
     }
