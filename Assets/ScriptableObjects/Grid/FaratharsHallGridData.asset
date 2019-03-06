@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c12ee14681f44e69447b8537a1eeeef, type: 3}
   m_Name: FaratharsHallGridData
   m_EditorClassIdentifier: UnityEngine.CoreModule:UnityEngine:ScriptableObject
-  numTilesX: 100
-  numTilesY: 100
+  numTilesX: 20
+  numTilesY: 20

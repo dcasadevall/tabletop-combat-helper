@@ -17,7 +17,7 @@ namespace Units {
             }
 
             // Prototype
-            Container.BindMemoryPool<UnitNetworkBehaviour, UnitNetworkBehaviour.Pool>().WithInitialSize(10)
+            Container.BindMemoryPool<UnitBehaviour, UnitBehaviour.Pool>().WithInitialSize(10)
                      .FromComponentInNewPrefab(unitPrefab).UnderTransformGroup("UnitPool");
 
             // Prototype: Bind ITicker and IInitializable to the UnitsSpawner

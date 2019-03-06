@@ -14,7 +14,7 @@ namespace Grid {
     /// X and Y axes are assumed to be oriented left to right and bottom to top.
     /// No rotation is supported for now.
     /// </summary>
-    public interface ICombatGrid {
+    public interface IGrid {
         /// <summary>
         /// The number of tiles in the X axis.
         /// NumTilesX will always be >= 1.
@@ -33,9 +33,10 @@ namespace Grid {
         /// </summary>
         uint TileSize { get; }
         /// <summary>
-        /// The origin (0, 0) position in Unity World Space coordinates.
+        /// The bounds of the rectangle containing this grid, in Unity World Space coordinates.
         /// </summary>
-        Vector2 WorldSpaceOrigin { get; }
+        Rect WorldSpaceBounds { get; }
+        
         /// <summary>
         /// Loads the given <see cref="GridData"/>, setting values like grid dimensions.
         /// </summary>

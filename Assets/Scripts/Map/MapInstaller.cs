@@ -7,8 +7,6 @@ namespace Map {
         public GameObject mapPrefab;
         
         public override void InstallBindings() {
-            Container.Bind<ICombatGrid>().To<CombatGrid>().AsSingle();
-            
             Container.Bind<MapBehaviour>().AsSingle();
             Container.BindFactory<MapBehaviour, MapBehaviour.Factory>().FromComponentInNewPrefab(mapPrefab);
             Container.Bind<IInitializable>().To<MapLoader>().AsSingle();
