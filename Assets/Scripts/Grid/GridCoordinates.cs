@@ -1,8 +1,8 @@
 namespace Grid
 {
-    public class Cell : ICell
+    public class GridCoordinates : IGridCoordinates
     {
-        public Cell()
+        public GridCoordinates()
         {
             X = 0;
             Y = 0;
