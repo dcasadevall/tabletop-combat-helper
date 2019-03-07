@@ -36,7 +36,10 @@ namespace Grid {
         /// The bounds of the rectangle containing this grid, in Unity World Space coordinates.
         /// </summary>
         Rect WorldSpaceBounds { get; }
-        
+        /// <summary>
+        /// The bounds of the rectangle containing this grid, in tile coordinates.
+        /// </summary>
+        Rect TileBounds { get; }
         /// <summary>
         /// Loads the given <see cref="GridData"/>, setting values like grid dimensions.
         /// </summary>
