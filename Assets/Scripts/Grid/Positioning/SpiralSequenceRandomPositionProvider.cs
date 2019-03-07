@@ -9,7 +9,7 @@ namespace Grid.Positioning
     /// <summary>
     /// Implementation of <see cref="IRandomGridPositionProvider"/> which returns a set with no duplicates.
     /// It returns a list of random unique positions walking through the grid from the center outwards in a
-    /// spiral pattern, deciding at every step to pick that position or not by a probability range (50%) 
+    /// spiral pattern, deciding at every step to pick that position or not by a probability range (30%) 
     /// </summary>
     public class SpiralSequenceRandomPositionProvider : IRandomGridPositionProvider
     {
