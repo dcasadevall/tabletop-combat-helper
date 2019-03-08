@@ -39,7 +39,9 @@ namespace Grid.Positioning
                 
                 //If at this point the position is (center.x - maxDistance, center.y - maxDistance) the spiral is
                 //complete for maxDistance.
-                if (currentPosition == spiralEndTile) break;
+                if (currentPosition == spiralEndTile) {
+                    break;
+                }
 
                 stretchStart = new Vector2(currentPosition.x, currentPosition.y - 1);
 
@@ -81,7 +83,6 @@ namespace Grid.Positioning
 
         private Vector2[] ChooseRandomPositionsFromAvailableTiles(LinkedList<Vector2> availableTiles, 
                                                                   int numTilesToGenerate) {
-
             Vector2[] tiles = new Vector2[numTilesToGenerate];
             int chosenTiles = 0;
             float randomNumber;
@@ -102,7 +103,5 @@ namespace Grid.Positioning
 
             return tiles;
         }
-
-       
     }
 }
