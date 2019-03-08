@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Numerics;
 using Math.Random;
 using UnityEngine;
-using Vector2 = UnityEngine.Vector2;
 
 namespace Grid.Positioning
 {
@@ -24,15 +22,11 @@ namespace Grid.Positioning
         }
         
         public Vector2[] GetRandomUniquePositions(IGrid grid, int maxDistanceFromCenter, int numTilesToGenerate){
-            Vector2[] tiles = new Vector2[numTilesToGenerate];
             Vector2 spiralCenter = _gridPositionCalculator.GetTileClosestToCenter(grid);
             Vector2 spiralEndTile = new Vector2(spiralCenter.x - numTilesToGenerate, 
                                                 spiralCenter.y - numTilesToGenerate);
             LinkedList<Vector2> availableTiles = new LinkedList<Vector2>();
             
-            Debug.Log("Spiral Center Tile: (" + (int)spiralCenter.x + "," + 
-                      (int)spiralCenter.y + ")");
-
             int k = 1;
             Vector2 currentPosition, stretchStart = spiralCenter;
 
@@ -82,7 +76,6 @@ namespace Grid.Positioning
         private void AddIfAvailableTile(LinkedList<Vector2> availableTiles, IGrid grid, Vector2 tile) {
             if (grid.TileBounds().Contains(tile)) {
                 availableTiles.AddLast(tile);
-                Debug.Log("Tile (" + tile.x + "," + tile.y + ") Chosen");
             }
         }
 
