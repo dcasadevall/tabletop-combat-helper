@@ -1,5 +1,4 @@
-﻿using Grid;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 namespace Map {

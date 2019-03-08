@@ -11,8 +11,8 @@ namespace Grid.Positioning {
         /// <param name="y"></param>
         /// <returns></returns>
         public Vector2 GetTileCenterWorldPosition(IGrid grid, int x, int y) {
-            float xPosition = grid.WorldSpaceBounds.x + grid.TileSize / 2.0f + grid.TileSize * x;
-            float yPosition = grid.WorldSpaceBounds.y + grid.TileSize / 2.0f + grid.TileSize * y;
+            float xPosition = grid.WorldSpaceBounds().x + grid.TileSize / 2.0f + grid.TileSize * x;
+            float yPosition = grid.WorldSpaceBounds().y + grid.TileSize / 2.0f + grid.TileSize * y;
             
             return new Vector2(xPosition, yPosition);
         }
