@@ -33,10 +33,6 @@ namespace Grid {
         /// </summary>
         uint TileSize { get; }
         /// <summary>
-        /// The bounds of the rectangle containing this grid, in Unity World Space coordinates.
-        /// </summary>
-        Rect WorldSpaceBounds { get; }
-        /// <summary>
         /// Loads the given <see cref="GridData"/>, setting values like grid dimensions.
         /// </summary>
         /// <param name="data"></param>
@@ -45,11 +41,20 @@ namespace Grid {
 
     public static class GridExtensions {
         /// <summary>
+        /// The bounds of the rectangle containing this grid, in Unity World Space coordinates.
+        /// </summary>
+        public static Rect WorldSpaceBounds(this IGrid grid) {
+            return new Rect(-grid.TileSize * grid.NumTilesX / 2.0f,
+                            -grid.TileSize * grid.NumTilesY / 2.0f,
+                            grid.NumTilesX * grid.TileSize,
+                            grid.NumTilesY * grid.TileSize); 
+        }
+		/// <summary>
         /// The bounds of the rectangle containing this grid, in tile coordinates.
         /// </summary>
         public static Rect TileBounds(this IGrid grid) {
             return new Rect(Vector2.zero,
                             new Vector2(grid.NumTilesX, grid.NumTilesY));
-        }
-    }
+    	}
+	}
 }

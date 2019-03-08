@@ -1,0 +1,21 @@
+{
+    "name": "GridPositioningTests",
+    "references": [
+        "ApplicationAssembly",
+        "Zenject-TestFramework",
+        "Zenject",
+        "NSubstitute"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

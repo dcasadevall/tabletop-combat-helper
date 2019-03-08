@@ -22,10 +22,11 @@ namespace Grid.Positioning {
             Vector2 centerPosition = _gridPositionCalculator.GetTileClosestToCenter(grid);
             
             for (int i = 0; i < numTilesToGenerate; i++) {
-                int xPosition = (int) centerPosition.x -
-                                _randomProvider.GetRandomIntegerInRange(0, maxDistanceFromCenter);
-                int yPosition = (int) centerPosition.y -
-                                _randomProvider.GetRandomIntegerInRange(0, maxDistanceFromCenter);
+                int xPosition = (int) centerPosition.x +
+                                _randomProvider.GetRandomIntegerInRange(-maxDistanceFromCenter, maxDistanceFromCenter + 1);
+                int yPosition = (int) centerPosition.y +
+                                _randomProvider.GetRandomIntegerInRange(-maxDistanceFromCenter, maxDistanceFromCenter + 1);
+            
                 xPosition = System.Math.Min((int)grid.NumTilesX - 1, System.Math.Max(0, xPosition));
                 yPosition = System.Math.Min((int)grid.NumTilesY - 1, System.Math.Max(0, yPosition));
                 

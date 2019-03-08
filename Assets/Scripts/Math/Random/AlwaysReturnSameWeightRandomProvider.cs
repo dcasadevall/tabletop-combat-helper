@@ -11,6 +11,10 @@ namespace Math.Random {
             _weight = weight;
         }
 
+        public void SetReturnedWeight(int weight) {
+            _weight = weight;
+        }
+
         public void SetSeed(int seed) {
             //Do nothing
         }
