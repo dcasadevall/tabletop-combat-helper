@@ -1,9 +1,10 @@
 {
-    "name": "Tests",
+    "name": "GridPositioningTests",
     "references": [
         "ApplicationAssembly",
         "Zenject-TestFramework",
-        "Zenject"
+        "Zenject",
+        "NSubstitute"
     ],
     "optionalUnityReferences": [
         "TestAssemblies"

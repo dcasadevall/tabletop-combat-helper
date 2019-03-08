@@ -1,11 +1,9 @@
 {
-    "name": "ApplicationAssembly",
-    "references": [
-        "UniRx",
-        "UniRx.Async",
-        "Zenject"
+    "name": "NSubstitute",
+    "references": [],
+    "optionalUnityReferences": [
+        "TestAssemblies"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
