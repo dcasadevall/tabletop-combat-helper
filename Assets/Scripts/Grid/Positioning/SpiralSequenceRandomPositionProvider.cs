@@ -11,23 +11,19 @@ namespace Grid.Positioning
     /// It returns a list of random unique positions walking through the grid from the center outwards in a
     /// spiral pattern, deciding at every step to pick that position or not by a probability range (30%) 
     /// </summary>
-    public class SpiralSequenceRandomPositionProvider : IRandomGridPositionProvider
-    {
+    public class SpiralSequenceRandomPositionProvider : IRandomGridPositionProvider{
+        private const float kTileChooseProbability = .3f;
+        private const int kMaxTries = 100;
         private IRandomProvider _randomProvider;
         private IGridPositionCalculator _gridPositionCalculator;
-        private const float TileChooseProbability = .3f;
-        private const int MaxTries = 100;
 
         public SpiralSequenceRandomPositionProvider(IGridPositionCalculator gridPositionCalculator, 
-            IRandomProvider randomProvider)
-        {
+                                                    IRandomProvider randomProvider){
             _randomProvider = randomProvider;
             _gridPositionCalculator = gridPositionCalculator;
         }
         
-        public Vector2[] GetRandomUniquePositions(IGrid grid, int maxDistanceFromCenter, int numTilesToGenerate)
-        {
-            //Test algorithm
+        public Vector2[] GetRandomUniquePositions(IGrid grid, int maxDistanceFromCenter, int numTilesToGenerate){
             Vector2[] tiles = new Vector2[numTilesToGenerate];
             Vector2 spiralCenter = _gridPositionCalculator.GetTileClosestToCenter(grid);
             Vector2 spiralEndTile = new Vector2(spiralCenter.x - numTilesToGenerate, 
@@ -97,12 +93,12 @@ namespace Grid.Positioning
             int chosenTiles = 0;
             float randomNumber;
             
-            for (int i = 0; i < MaxTries; i++) {
+            for (int i = 0; i < kMaxTries; i++) {
                 if (chosenTiles == numTilesToGenerate) break;
                 
                 foreach (var tile in availableTiles) {
                     randomNumber = _randomProvider.GetRandomFloatInRange(0, 1);
-                    if (randomNumber <= TileChooseProbability) {
+                    if (randomNumber <= kTileChooseProbability) {
                         tiles[chosenTiles] = tile;
                         chosenTiles++;
                         availableTiles.Remove(tile);
