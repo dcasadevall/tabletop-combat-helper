@@ -36,12 +36,6 @@ namespace Grid {
             }
         }
 
-        private Rect _tileBounds = Rect.zero;
-        public Rect TileBounds {
-            get { return _tileBounds; }
-            
-        }
-
         public void LoadGridData(IGridData gridData) {
             _numTilesX = System.Math.Max(1, gridData.NumTilesX);
             _numTilesY = System.Math.Max(1, gridData.NumTilesY);
@@ -49,8 +43,6 @@ namespace Grid {
                                          -TileSize * NumTilesY / 2.0f,
                                          NumTilesX * TileSize,
                                          NumTilesY * TileSize);
-            _tileBounds = new Rect(Vector2.zero, 
-                                   new Vector2(NumTilesX, NumTilesY));
         }
         
     }

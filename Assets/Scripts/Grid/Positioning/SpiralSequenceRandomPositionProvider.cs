@@ -84,7 +84,7 @@ namespace Grid.Positioning
         }
 
         private void AddIfAvailableTile(LinkedList<Vector2> availableTiles, IGrid grid, Vector2 tile) {
-            if (grid.TileBounds.Contains(tile)) {
+            if (grid.TileBounds().Contains(tile)) {
                 availableTiles.AddLast(tile);
                 Debug.Log("Tile (" + tile.x + "," + tile.y + ") Chosen");
             }
