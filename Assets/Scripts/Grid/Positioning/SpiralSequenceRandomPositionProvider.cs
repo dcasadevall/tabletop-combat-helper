@@ -88,7 +88,9 @@ namespace Grid.Positioning
             float randomNumber;
             
             for (int i = 0; i < kMaxTries; i++) {
-                if (chosenTiles == numTilesToGenerate) break;
+                if (chosenTiles == numTilesToGenerate) {
+                    break;
+                }
                 
                 foreach (var tile in availableTiles) {
                     randomNumber = _randomProvider.GetRandomFloatInRange(0, 1);
