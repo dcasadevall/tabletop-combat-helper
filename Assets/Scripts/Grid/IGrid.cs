@@ -45,9 +45,9 @@ namespace Grid {
         /// </summary>
         public static Rect WorldSpaceBounds(this IGrid grid) {
             return new Rect(-grid.TileSize * grid.NumTilesX / 2.0f,
-                -grid.TileSize * grid.NumTilesY / 2.0f,
-                grid.NumTilesX * grid.TileSize,
-                grid.NumTilesY * grid.TileSize);
+                            -grid.TileSize * grid.NumTilesY / 2.0f,
+                            grid.NumTilesX * grid.TileSize,
+                            grid.NumTilesY * grid.TileSize);
         }
 
         /// <summary>
