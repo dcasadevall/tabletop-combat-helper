@@ -45,16 +45,17 @@ namespace Grid {
         /// </summary>
         public static Rect WorldSpaceBounds(this IGrid grid) {
             return new Rect(-grid.TileSize * grid.NumTilesX / 2.0f,
-                            -grid.TileSize * grid.NumTilesY / 2.0f,
-                            grid.NumTilesX * grid.TileSize,
-                            grid.NumTilesY * grid.TileSize); 
+                -grid.TileSize * grid.NumTilesY / 2.0f,
+                grid.NumTilesX * grid.TileSize,
+                grid.NumTilesY * grid.TileSize);
         }
-		/// <summary>
+
+        /// <summary>
         /// The bounds of the rectangle containing this grid, in tile coordinates.
         /// </summary>
         public static Rect TileBounds(this IGrid grid) {
             return new Rect(Vector2.zero,
                             new Vector2(grid.NumTilesX, grid.NumTilesY));
-    	}
-	}
+        }
+    }
 }
