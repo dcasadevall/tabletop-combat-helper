@@ -40,6 +40,5 @@ namespace Grid {
             _numTilesX = System.Math.Max(1, gridData.NumTilesX);
             _numTilesY = System.Math.Max(1, gridData.NumTilesY);
         }
-        
     }
 }
