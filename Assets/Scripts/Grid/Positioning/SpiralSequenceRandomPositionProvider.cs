@@ -2,26 +2,25 @@ using System.Collections.Generic;
 using Math.Random;
 using UnityEngine;
 
-namespace Grid.Positioning
-{
+namespace Grid.Positioning {
     /// <summary>
     /// Implementation of <see cref="IRandomGridPositionProvider"/> which returns a set with no duplicates.
     /// It returns a list of random unique positions walking through the grid from the center outwards in a
     /// spiral pattern, deciding at every step to pick that position or not by a probability range (30%) 
     /// </summary>
-    public class SpiralSequenceRandomPositionProvider : IRandomGridPositionProvider{
+    public class SpiralSequenceRandomPositionProvider : IRandomGridPositionProvider {
         private const float kTileChooseProbability = .3f;
         private const int kMaxTries = 100;
         private IRandomProvider _randomProvider;
         private IGridPositionCalculator _gridPositionCalculator;
 
         public SpiralSequenceRandomPositionProvider(IGridPositionCalculator gridPositionCalculator, 
-                                                    IRandomProvider randomProvider){
+                                                    IRandomProvider randomProvider) {
             _randomProvider = randomProvider;
             _gridPositionCalculator = gridPositionCalculator;
         }
         
-        public Vector2[] GetRandomUniquePositions(IGrid grid, int maxDistanceFromCenter, int numTilesToGenerate){
+        public Vector2[] GetRandomUniquePositions(IGrid grid, int maxDistanceFromCenter, int numTilesToGenerate) {
             Vector2 spiralCenter = _gridPositionCalculator.GetTileClosestToCenter(grid);
             Vector2 spiralEndTile = new Vector2(spiralCenter.x - numTilesToGenerate, 
                                                 spiralCenter.y - numTilesToGenerate);
