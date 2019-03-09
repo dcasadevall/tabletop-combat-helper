@@ -33,7 +33,7 @@ namespace Grid.Positioning {
                 currentPosition = new Vector2(stretchStart.x, stretchStart.y);
                 for (int i = (int) stretchStart.y; i > stretchStart.y - k; i--) {
                     currentPosition.y = i;
-                    AddIfAvailableTile(availableTiles, grid, currentPosition);
+                    AddTileIfInsideGridBounds(availableTiles, grid, currentPosition);
                 }
                 
                 //If at this point the position is (center.x - maxDistance, center.y - maxDistance) the spiral is
@@ -47,7 +47,7 @@ namespace Grid.Positioning {
                 currentPosition = new Vector2(stretchStart.x, stretchStart.y);
                 for (int i = (int) stretchStart.x; i < stretchStart.x + k; i++) {
                     currentPosition.x = i;
-                    AddIfAvailableTile(availableTiles, grid, currentPosition);
+                    AddTileIfInsideGridBounds(availableTiles, grid, currentPosition);
                 }
 
                 stretchStart = new Vector2(currentPosition.x + 1, currentPosition.y);
@@ -56,7 +56,7 @@ namespace Grid.Positioning {
                 currentPosition = new Vector2(stretchStart.x, stretchStart.y);
                 for (int i = (int) stretchStart.y; i < stretchStart.y + k; i++) {
                     currentPosition.y = i;
-                    AddIfAvailableTile(availableTiles, grid, currentPosition);
+                    AddTileIfInsideGridBounds(availableTiles, grid, currentPosition);
                 }
 
                 stretchStart = new Vector2(currentPosition.x, currentPosition.y + 1);
@@ -64,7 +64,7 @@ namespace Grid.Positioning {
                 currentPosition = new Vector2(stretchStart.x, stretchStart.y);
                 for (int i = (int) stretchStart.x; i > stretchStart.x - k; i--) {
                     currentPosition.x = i;
-                    AddIfAvailableTile(availableTiles, grid, currentPosition);
+                    AddTileIfInsideGridBounds(availableTiles, grid, currentPosition);
                 }
 
                 stretchStart = new Vector2(currentPosition.x - 1, currentPosition.y);
@@ -74,7 +74,7 @@ namespace Grid.Positioning {
             return ChooseRandomPositionsFromAvailableTiles(availableTiles, numTilesToGenerate);
         }
 
-        private void AddIfAvailableTile(LinkedList<Vector2> availableTiles, IGrid grid, Vector2 tile) {
+        private void AddTileIfInsideGridBounds(LinkedList<Vector2> availableTiles, IGrid grid, Vector2 tile) {
             if (grid.TileBounds().Contains(tile)) {
                 availableTiles.AddLast(tile);
             }
