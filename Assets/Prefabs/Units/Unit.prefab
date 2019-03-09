@@ -305,7 +305,7 @@ MonoBehaviour:
   zoomThreshold: 6
   iconRenderer: {fileID: 1217125120907250110}
   unitRenderers:
-  - {fileID: 0}
+  - {fileID: 2552359911937879012}
 --- !u!114 &6421655629006317665
 MonoBehaviour:
   m_ObjectHideFlags: 0
