@@ -13,7 +13,7 @@ namespace Grid {
             Container.Bind<IGridData>().To<GridData>().FromInstance(gridData);
             Container.Bind<IInitializable>().To<GridDataLoader>().AsSingle();
             Container.Bind(typeof(IGridUnitManager), typeof(IInitializable)).To<GridUnitManager>().AsSingle();
-            Container.Bind<IRandomGridPositionProvider>().To<NotUniqueRandomGridPositionProvider>().AsSingle();
+            Container.Bind<IRandomGridPositionProvider>().To<SpiralSequenceRandomPositionProvider>().AsSingle();
             Container.Bind<IGridPositionCalculator>().To<GridPositionCalculator>().AsSingle();
             
 #if DEBUG
