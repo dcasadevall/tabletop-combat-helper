@@ -15,9 +15,11 @@ namespace Units {
 
         public Unit(UnitId unitId, IUnitData unitData) {
             UnitId = unitId;
-            
-            foreach (var data in unitData.Pets) {
-                _petUnits.Add(new Unit(new UnitId(), data));
+
+            if (unitData.Pets != null) {
+                foreach (var data in unitData.Pets) {
+                    _petUnits.Add(new Unit(new UnitId(), data));
+                }
             }
         }
     }
