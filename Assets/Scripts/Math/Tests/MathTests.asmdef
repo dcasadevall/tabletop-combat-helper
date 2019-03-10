@@ -1,0 +1,20 @@
+{
+    "name": "MathTests",
+    "references": [
+        "Zenject-TestFramework",
+        "ApplicationAssembly",
+        "Zenject"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

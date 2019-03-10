@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Units.Serialized;
 using UnityEngine;
 
 namespace Units {
@@ -12,12 +13,12 @@ namespace Units {
             }
         }
 
-        private Transform _transform;
-        
-        public Unit(UnitId unitId, IUnit[] pets, Transform transform) {
+        public Unit(UnitId unitId, IUnitData unitData) {
             UnitId = unitId;
-            _petUnits.AddRange(pets);
-            _transform = transform;
+            
+            foreach (var data in unitData.Pets) {
+                _petUnits.Add(new Unit(new UnitId(), data));
+            }
         }
     }
 }

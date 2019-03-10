@@ -73,15 +73,15 @@ namespace Units {
         private void SpawnUnit(IUnitData unitData, Vector2 tilePosition) {
             _logger.Log(LoggedFeature.Units, "Spawning: {0}", unitData.Name);
             UnitBehaviour unitBehaviour = _unitBehaviourPool.Spawn(unitData);
-            // Unit unit = new Unit(new UnitId(), unitBehaviour.transform);
             
             // Temp code to set position. In the future, we will start the unit in the grid.
             Vector2 worldPosition =
                 _gridPositionCalculator.GetTileCenterWorldPosition(_grid, (int) tilePosition.x, (int) tilePosition.y);
             unitBehaviour.transform.position =
                 new Vector3(worldPosition.x, worldPosition.y, unitBehaviour.transform.position.z);
-            
-            // _gridUnitManager.PlaceUnitAtTile()
+
+            IUnit unit = new Unit(new UnitId(), unitData);
+            _gridUnitManager.PlaceUnitAtTile(unit.UnitId, (int) tilePosition.x, (int) tilePosition.y);
             NetworkServer.Spawn(unitBehaviour.gameObject);
         }
     }
