@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using Grid;
+using Grid.Positioning;
+using Math;
+using UnityEngine;
+using Zenject;
 
 namespace Prototype {
     /// <summary>
@@ -10,6 +14,15 @@ namespace Prototype {
         // GHETTO remove
         public static bool isDragging = false;
         private Vector3 offset;
+        
+        private IGrid _grid;
+        private IGridPositionCalculator _gridPositionCalculator;
+
+        [Inject]
+        public void Construct(IGrid grid, IGridPositionCalculator gridPositionCalculator) {
+            _grid = grid;
+            _gridPositionCalculator = gridPositionCalculator;
+        }
 
         private void OnMouseDown() {
             offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
@@ -20,14 +33,24 @@ namespace Prototype {
         }
 
         private void OnMouseDrag() {
-            Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
-            Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
-            transform.position = curPosition;
             isDragging = true;
-
             if (Input.GetKeyUp(KeyCode.R)) {
                 transform.Rotate(Vector3.forward, 90);
             }
+            
+            Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
+            Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
+            IntVector2? gridCoordinates = _gridPositionCalculator.GetTileContainingWorldPosition(_grid, curPosition);
+            
+            if (gridCoordinates == null) {
+                return;
+            }
+            
+            Vector2 positionInGrid =
+                _gridPositionCalculator.GetTileCenterWorldPosition(_grid,
+                                                                   gridCoordinates.Value.x,
+                                                                   gridCoordinates.Value.y);
+            transform.position = new Vector3(positionInGrid.x, positionInGrid.y, transform.position.z);
         }
     }
 }
