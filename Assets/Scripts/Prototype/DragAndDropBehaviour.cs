@@ -48,8 +48,7 @@ namespace Prototype {
             
             Vector2 positionInGrid =
                 _gridPositionCalculator.GetTileCenterWorldPosition(_grid,
-                                                                   gridCoordinates.Value.x,
-                                                                   gridCoordinates.Value.y);
+                                                                   gridCoordinates.Value);
             transform.position = new Vector3(positionInGrid.x, positionInGrid.y, transform.position.z);
         }
     }
