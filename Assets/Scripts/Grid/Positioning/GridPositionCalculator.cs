@@ -5,18 +5,18 @@ using UnityEngine;
 namespace Grid.Positioning {
     public class GridPositionCalculator : IGridPositionCalculator {
         /// <inheritdoc />
-        public Vector2 GetTileCenterWorldPosition(IGrid grid, int x, int y) {
-            float xPosition = grid.WorldSpaceBounds().x + grid.TileSize / 2.0f + grid.TileSize * x;
-            float yPosition = grid.WorldSpaceBounds().y + grid.TileSize / 2.0f + grid.TileSize * y;
+        public Vector2 GetTileCenterWorldPosition(IGrid grid, IntVector2 tileCoords) {
+            float xPosition = grid.WorldSpaceBounds().x + grid.TileSize / 2.0f + grid.TileSize * tileCoords.x;
+            float yPosition = grid.WorldSpaceBounds().y + grid.TileSize / 2.0f + grid.TileSize * tileCoords.y;
             
             return new Vector2(xPosition, yPosition);
         }
 
         /// <inheritdoc />
-        public Vector2 GetTileClosestToCenter(IGrid grid) {
+        public IntVector2 GetTileClosestToCenter(IGrid grid) {
             uint xTile = grid.NumTilesX / 2;
             uint yTile = grid.NumTilesX / 2;
-            return new Vector2(xTile, yTile);
+            return IntVector2.Of((int)xTile, (int)yTile);
         }
 
         /// <inheritdoc />

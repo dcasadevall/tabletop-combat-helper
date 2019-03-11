@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace Math.Tests {
     [TestFixture]
@@ -67,6 +68,18 @@ namespace Math.Tests {
             IntVector2 second = IntVector2.Of(secondX, secondY);
             IntVector2 division = IntVector2.Of(dividedX, dividedY);
             Assert.AreEqual(division, first / second);
+        }
+
+        [TestCase(0f, 0f, 2f, 2f, 1, 1, true)]
+        [TestCase(0f, 0f, 2f, 2f, 1, 2, false)]
+        [TestCase(0f, 0f, 2f, 2.0001f, 1, 2, true)]
+        [TestCase(-5f, 1f, 6f, 10f, 0, 10, true)]
+        public void TestRectContainsPoint(float minX, float minY, float width, float height, int pointX,
+                                          int pointY, bool shouldContainPoint) {
+            Rect rect = new Rect(minX, minY, width, height);
+            IntVector2 point = IntVector2.Of(pointX, pointY);
+            
+            Assert.AreEqual(shouldContainPoint, rect.Contains(point));
         }
 
         [Test]

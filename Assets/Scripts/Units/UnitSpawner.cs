@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Grid;
 using Grid.Positioning;
 using Logging;
+using Math;
 using Units.Serialized;
 using Units.UI;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Units {
             _unitPickerViewController.SpawnUnitClicked += HandleSpawnUnitClicked;
 
             // Spawn 
-            Vector2[] tilePositions =
+            IntVector2[] tilePositions =
                 _randomGridPositionProvider.GetRandomUniquePositions(_grid,
                                                                      _unitSpawnSettings
                                                                          .MaxInitialUnitSpawnDistanceToCenter,
@@ -63,16 +64,16 @@ namespace Units {
 
         private void HandleSpawnUnitClicked(IUnitData unitData) {
             _unitPickerViewController.Hide();
-            SpawnUnit(unitData, Vector3.zero);
+            SpawnUnit(unitData, IntVector2.Zero);
         }
 
-        private void SpawnUnit(IUnitData unitData, Vector2 tilePosition) {
+        private void SpawnUnit(IUnitData unitData, IntVector2 tileCoords) {
             _logger.Log(LoggedFeature.Units, "Spawning: {0}", unitData.Name);
 
             IUnit unit = new Unit(unitData);
             foreach (var unitInHierarchy in unit.GetUnitsInHierarchy()) {
                 _unitBehaviourPool.Spawn(unitInHierarchy);
-                _gridUnitManager.PlaceUnitAtTile(unitInHierarchy, (int) tilePosition.x, (int) tilePosition.y);
+                _gridUnitManager.PlaceUnitAtTile(unitInHierarchy, tileCoords);
             }
         }
     }

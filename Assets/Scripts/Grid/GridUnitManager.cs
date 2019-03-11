@@ -28,20 +28,20 @@ namespace Grid {
             }
         }
         
-        public IUnit[] GetUnitsAtTile(int x, int y) {
-            return _tiles[x, y].ToArray();
+        public IUnit[] GetUnitsAtTile(IntVector2 tileCoords) {
+            return _tiles[tileCoords.x, tileCoords.y].ToArray();
         }
 
-        public bool PlaceUnitAtTile(IUnit unit, int x, int y) {
+        public bool PlaceUnitAtTile(IUnit unit, IntVector2 tileCoords) {
             if (_unitMap.ContainsKey(unit.UnitId)) {
-                _tiles[x % _grid.NumTilesX, y / _grid.NumTilesY].Remove(unit);
+                _tiles[tileCoords.x % _grid.NumTilesX, tileCoords.y / _grid.NumTilesY].Remove(unit);
                 _unitMap.Remove(unit.UnitId);
             }
 
-            int tileIndex = (int)(System.Math.Max(0, y - 1) * _grid.NumTilesX + _grid.NumTilesY);
+            int tileIndex = (int)(System.Math.Max(0, tileCoords.y - 1) * _grid.NumTilesX + _grid.NumTilesY);
             _unitMap.Add(unit.UnitId, tileIndex);
 
-            UnitPlacedAtTile.Invoke(unit, IntVector2.Of(x, y));
+            UnitPlacedAtTile.Invoke(unit, tileCoords);
             return true;
         }
     }
