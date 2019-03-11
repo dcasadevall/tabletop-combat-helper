@@ -15,7 +15,7 @@ namespace Units.Serialized {
         public UnitData[] pets;
         public IUnitData[] Pets {
             get {
-                return pets;
+                return pets ?? new IUnitData[0];
             }
         }
 

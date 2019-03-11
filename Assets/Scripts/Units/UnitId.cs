@@ -33,8 +33,26 @@ namespace Units {
             return _guid.ToString();
         }
 
+        #region Operators
         public static implicit operator string(UnitId unitId) {
             return unitId.ToString();
         }
+        
+        public static bool operator ==(UnitId lhs, UnitId rhs) {
+            if (ReferenceEquals(lhs, null)) {
+                return rhs == null;
+            }
+
+            if (ReferenceEquals(rhs, null)) {
+                return false;
+            }
+            
+            return lhs._guid.Equals(rhs._guid);
+        }
+
+        public static bool operator !=(UnitId lhs, UnitId rhs) {
+            return !(lhs == rhs);
+        }
+        #endregion
     }
 }

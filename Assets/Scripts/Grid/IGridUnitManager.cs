@@ -1,4 +1,5 @@
 
+using Math;
 using Units;
 
 namespace Grid {
@@ -7,6 +8,12 @@ namespace Grid {
     /// as well as moving those units or querying for their position.
     /// </summary>
     public interface IGridUnitManager {
+        /// <summary>
+        /// Event called whenever a unit is placed on a tile.
+        /// This may be due to initial spawn, or when a unit is moved from one tile to another.
+        /// </summary>
+        event System.Action<UnitId, IntVector2> UnitPlacedAtTile;
+        
         /// <summary>
         /// Gets all the units in the tile at the given x and y coordinate.
         /// Order is undetermined.
