@@ -38,7 +38,9 @@ namespace Grid.Positioning {
          */
         private int GetTileContainingWorldPosition(IGrid grid, float worldPosition, Axis axis, uint start,
                                                    uint end) {
-            if (worldPosition < start || worldPosition > end) {
+            float startWorldPosition = GetTileOriginWorldPosition(grid, start, axis);
+            float endWorldPosition = GetTileOriginWorldPosition(grid, end, axis);
+            if (worldPosition < startWorldPosition || worldPosition > endWorldPosition) {
                 return -1;
             }
 
