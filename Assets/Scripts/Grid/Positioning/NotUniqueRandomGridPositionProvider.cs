@@ -1,3 +1,4 @@
+using Math;
 using Math.Random;
 using UnityEngine;
 
@@ -17,20 +18,20 @@ namespace Grid.Positioning {
             _gridPositionCalculator = gridPositionCalculator;
         }
         
-        public Vector2[] GetRandomUniquePositions(IGrid grid, int maxDistanceFromCenter, int numTilesToGenerate) {
-            Vector2[] tiles = new Vector2[numTilesToGenerate];
-            Vector2 centerPosition = _gridPositionCalculator.GetTileClosestToCenter(grid);
+        public IntVector2[] GetRandomUniquePositions(IGrid grid, int maxDistanceFromCenter, int numTilesToGenerate) {
+            IntVector2[] tiles = new IntVector2[numTilesToGenerate];
+            IntVector2 centerPosition = _gridPositionCalculator.GetTileClosestToCenter(grid);
             
             for (int i = 0; i < numTilesToGenerate; i++) {
-                int xPosition = (int) centerPosition.x +
+                int xPosition = centerPosition.x +
                                 _randomProvider.GetRandomIntegerInRange(-maxDistanceFromCenter, maxDistanceFromCenter + 1);
-                int yPosition = (int) centerPosition.y +
+                int yPosition = centerPosition.y +
                                 _randomProvider.GetRandomIntegerInRange(-maxDistanceFromCenter, maxDistanceFromCenter + 1);
             
                 xPosition = System.Math.Min((int)grid.NumTilesX - 1, System.Math.Max(0, xPosition));
                 yPosition = System.Math.Min((int)grid.NumTilesY - 1, System.Math.Max(0, yPosition));
                 
-                tiles[i] = new Vector2(xPosition, yPosition);
+                tiles[i] = IntVector2.Of(xPosition, yPosition);
             }
 
             return tiles;
