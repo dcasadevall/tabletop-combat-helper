@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using Units.Serialized;
-using UnityEngine;
 
 namespace Units {
     public class Unit : IUnit {
         public UnitId UnitId { get; }
+        public IUnitData UnitData { get; }
 
         private List<IUnit> _petUnits = new List<IUnit>();
         public IUnit[] PetUnits {
@@ -12,14 +12,16 @@ namespace Units {
                 return _petUnits.ToArray();
             }
         }
+        
+        public Unit(IUnitData unitData) : this(new UnitId(), unitData) {
+        }
 
         public Unit(UnitId unitId, IUnitData unitData) {
             UnitId = unitId;
+            UnitData = unitData;
 
-            if (unitData.Pets != null) {
-                foreach (var data in unitData.Pets) {
-                    _petUnits.Add(new Unit(new UnitId(), data));
-                }
+            foreach (var petData in unitData.Pets) {
+                _petUnits.Add(new Unit(petData));
             }
         }
     }

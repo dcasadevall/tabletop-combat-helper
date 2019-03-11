@@ -6,7 +6,6 @@ using Logging;
 using Units.Serialized;
 using Units.UI;
 using UnityEngine;
-using UnityEngine.Networking;
 using Zenject;
 using ILogger = Logging.ILogger;
 
@@ -21,7 +20,6 @@ namespace Units {
         private IUnitPickerViewController _unitPickerViewController;
         private IRandomGridPositionProvider _randomGridPositionProvider;
         private IGrid _grid;
-        private IGridPositionCalculator _gridPositionCalculator;
         private IUnitSpawnSettings _unitSpawnSettings;
         private IGridUnitManager _gridUnitManager;
         private ILogger _logger;
@@ -29,7 +27,6 @@ namespace Units {
 
         public UnitSpawner(IUnitPickerViewController unitPickerVc, 
                            IGrid grid,
-                           IGridPositionCalculator gridPositionCalculator,
                            IRandomGridPositionProvider randomGridPositionProvider,
                            IGridUnitManager gridUnitManager,
                            IUnitSpawnSettings unitSpawnSettings,
@@ -37,7 +34,6 @@ namespace Units {
                            UnitBehaviour.Pool unitBehaviourPool) {
             _logger = logger;
             _grid = grid;
-            _gridPositionCalculator = gridPositionCalculator;
             _gridUnitManager = gridUnitManager;
             _randomGridPositionProvider = randomGridPositionProvider;
             _unitPickerViewController = unitPickerVc;
@@ -72,17 +68,12 @@ namespace Units {
 
         private void SpawnUnit(IUnitData unitData, Vector2 tilePosition) {
             _logger.Log(LoggedFeature.Units, "Spawning: {0}", unitData.Name);
-            UnitBehaviour unitBehaviour = _unitBehaviourPool.Spawn(unitData);
-            
-            // Temp code to set position. In the future, we will start the unit in the grid.
-            Vector2 worldPosition =
-                _gridPositionCalculator.GetTileCenterWorldPosition(_grid, (int) tilePosition.x, (int) tilePosition.y);
-            unitBehaviour.transform.position =
-                new Vector3(worldPosition.x, worldPosition.y, unitBehaviour.transform.position.z);
 
-            IUnit unit = new Unit(new UnitId(), unitData);
-            _gridUnitManager.PlaceUnitAtTile(unit.UnitId, (int) tilePosition.x, (int) tilePosition.y);
-            NetworkServer.Spawn(unitBehaviour.gameObject);
+            IUnit unit = new Unit(unitData);
+            foreach (var unitInHierarchy in unit.GetUnitsInHierarchy()) {
+                _unitBehaviourPool.Spawn(unitInHierarchy);
+                _gridUnitManager.PlaceUnitAtTile(unitInHierarchy, (int) tilePosition.x, (int) tilePosition.y);
+            }
         }
     }
 }
