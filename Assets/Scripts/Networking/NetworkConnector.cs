@@ -1,3 +1,6 @@
+using Logging;
+using UniRx;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace Networking {
@@ -10,14 +13,26 @@ namespace Networking {
     /// an interim lobby scene is loaded.
     /// </summary>
     public class NetworkConnector : IInitializable {
+        // TODO: Inject this
+        private const string kCombatSceneName = "CombatScene";
+
+        private ILogger _logger;
         private INetworkManager _networkManager;
+        private ZenjectSceneLoader _sceneLoader;
         
-        public NetworkConnector(INetworkManager networkManager) {
+        public NetworkConnector(INetworkManager networkManager, ZenjectSceneLoader zenjectSceneLoader, ILogger logger) {
             _networkManager = networkManager;
+            _sceneLoader = zenjectSceneLoader;
+            _logger = logger;
         }
         
         public void Initialize() {
-            _networkManager.Connect();
+            _networkManager.Connect().Subscribe(Observer.Create<NetworkConnectionResult>(result => {
+                _sceneLoader.LoadScene(kCombatSceneName, LoadSceneMode.Additive);
+            },
+            error => {
+                _logger .LogError(LoggedFeature .Network, "Connection error: {0}", error);
+            }));
         }
     }
 }

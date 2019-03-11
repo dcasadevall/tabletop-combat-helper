@@ -307,7 +307,7 @@ PrefabInstance:
     - target: {fileID: 3874603855073947825, guid: ab4364683af124da39a4cc5fecec50bf,
         type: 3}
       propertyPath: m_Name
-      value: Main Camera
+      value: Map Camera
       objectReference: {fileID: 0}
     - target: {fileID: 3874603855073947725, guid: ab4364683af124da39a4cc5fecec50bf,
         type: 3}
@@ -362,21 +362,6 @@ PrefabInstance:
     - target: {fileID: 3874603855073947725, guid: ab4364683af124da39a4cc5fecec50bf,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3874603855073947826, guid: ab4364683af124da39a4cc5fecec50bf,
-        type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3874603855073947826, guid: ab4364683af124da39a4cc5fecec50bf,
-        type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3874603855073947826, guid: ab4364683af124da39a4cc5fecec50bf,
-        type: 3}
-      propertyPath: m_BackGroundColor.b
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

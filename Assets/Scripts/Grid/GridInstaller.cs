@@ -4,13 +4,18 @@ using UnityEngine;
 using Zenject;
 
 namespace Grid {
-    public class GridInstaller : MonoInstaller {
+    internal class GridInstaller : MonoInstaller {
         public GameObject gridCellPrefab;
-        public GridData gridData;
+        
+        /// <summary>
+        /// Default GridData that will be injected if none is loaded using "WhenInjectedInto" via scene load
+        /// </summary>
+        [InjectOptional]
+        public IGridData gridData = new GridData();
         
         public override void InstallBindings() {
             Container.Bind<IGrid>().To<Grid>().AsSingle();
-            Container.Bind<IGridData>().To<GridData>().FromInstance(gridData);
+            Container.BindInstance(gridData).WhenInjectedInto<GridDataLoader>();
             Container.Bind<IInitializable>().To<GridDataLoader>().AsSingle();
             Container.Bind(typeof(IGridUnitManager), typeof(IInitializable)).To<GridUnitManager>().AsSingle();
             Container.Bind<IRandomGridPositionProvider>().To<SpiralSequenceRandomPositionProvider>().AsSingle();

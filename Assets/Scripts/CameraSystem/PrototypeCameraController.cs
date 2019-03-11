@@ -1,12 +1,13 @@
 using Drawing.UI;
+using Prototype;
 using UnityEngine;
 
-namespace Prototype {
+namespace CameraSystem {
     /// <summary>
     /// This prototype camera movement script needs to die soon
     /// </summary>
     [RequireComponent(typeof(Camera))]
-    public class PrototypeCameraController : MonoBehaviour {
+    public class PrototypeCameraController : MonoBehaviour, ICameraController {
         private Camera cam;
         [SerializeField]
         private RegionHandler regionHandler;

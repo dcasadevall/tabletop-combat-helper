@@ -55,12 +55,9 @@ MonoBehaviour:
   m_PlayerPrefab: {fileID: 0}
   m_AutoCreatePlayer: 0
   m_PlayerSpawnMethod: 0
-  m_OfflineScene: LobbyScene
-  m_OnlineScene: CombatScene
-  m_SpawnPrefabs:
-  - {fileID: 6926228958852073944, guid: f84ccccd2bec842a68b60fde5020904d, type: 3}
-  - {fileID: 4496928933794702788, guid: aecd00c57f549427fa3157e6fa478288, type: 3}
-  - {fileID: 6313489448253246766, guid: 3b62971b34b3746be87a5a587fc633c9, type: 3}
+  m_OfflineScene: 
+  m_OnlineScene: 
+  m_SpawnPrefabs: []
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:

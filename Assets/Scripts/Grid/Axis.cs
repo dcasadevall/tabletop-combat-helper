@@ -3,7 +3,7 @@ namespace Grid {
     /// <summary>
     /// Defines the 2 axis in a 2d grid.
     /// </summary>
-    public enum Axis {
+    internal enum Axis {
         X,
         Y
     }
