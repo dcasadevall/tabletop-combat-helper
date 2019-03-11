@@ -27,6 +27,25 @@ namespace Grid.Positioning.Tests {
             Assert.AreEqual(IntVector2.Of(expectedCoordX, expectedCoordY), position);
         }
         
+        [TestCase(1.0f, 1.0f, 4U, 4U, 3.99f, 3.99f, 2, 2)]
+        [TestCase(-1.0f, -2.5f, 4U, 4U, 0.01f, 0.01f, 1, 2)]
+        [TestCase(1.25f, 1.50f, 1U, 1U, 1.51f, 1.51f, 0, 0)]
+        public void TestGivenTileInGrid_OriginWorldPositionSet_GetTileContainingWorldPosition_ReturnsCoordinate(
+            float worldPositionX, float worldPositionY,
+            uint numTilesX, uint numTilesY, float x, float y, int expectedCoordX, int expectedCoordY) {
+            IGrid grid = Substitute.For<IGrid>();
+            grid.NumTilesX.Returns(numTilesX);
+            grid.NumTilesY.Returns(numTilesY);
+            grid.TileSize.Returns((uint)1);
+            grid.OriginWorldPosition.Returns(new Vector2(worldPositionX, worldPositionY));
+            
+            IGridPositionCalculator gridPositionCalculator = new GridPositionCalculator();
+            IntVector2? position = gridPositionCalculator.GetTileContainingWorldPosition(grid, new Vector2(x, y));
+            Assert.NotNull(position);
+            Assert.AreEqual(IntVector2.Of(expectedCoordX, expectedCoordY), position);
+        }
+        
+        
         [TestCase(4U, 4U, 4.01f, 4.01f)]
         [TestCase(4U, 4U, -0.01f, -0.01f)]
         [TestCase(1U, 1U, 1.01f, 1.01f)]
