@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.CoreModule:UnityEngine:ScriptableObject
   numTilesX: 20
   numTilesY: 20
+  centeredAtWorldZero: 1
+  originWorldPosition: {x: 0, y: 0}

@@ -29,16 +29,18 @@ namespace Grid {
             }
         }
 
-        private Rect _worldSpaceBounds = Rect.zero;
-        public Rect WorldSpaceBounds {
+        private Vector2 _originWorldPosition;
+        public Vector2 OriginWorldPosition {
             get {
-                return _worldSpaceBounds;
+                return _originWorldPosition;
             }
         }
 
         public void LoadGridData(IGridData gridData) {
             _numTilesX = System.Math.Max(1, gridData.NumTilesX);
             _numTilesY = System.Math.Max(1, gridData.NumTilesY);
+            _originWorldPosition = gridData.OriginWorldPosition ??
+                                   new Vector2(-_numTilesX * TileSize / 2.0f, -_numTilesY * TileSize / 2.0f);
         }
     }
 }

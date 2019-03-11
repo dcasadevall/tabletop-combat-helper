@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Grid.Serialized {
@@ -17,6 +18,18 @@ namespace Grid.Serialized {
         public uint NumTilesY {
             get {
                 return numTilesY;
+            }
+        }
+
+        public bool centeredAtWorldZero;
+        public Vector2 originWorldPosition;
+        public Vector2? OriginWorldPosition {
+            get {
+                if (centeredAtWorldZero) {
+                    return null;
+                }
+
+                return originWorldPosition;
             }
         }
     }

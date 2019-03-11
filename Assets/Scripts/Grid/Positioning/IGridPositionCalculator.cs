@@ -1,4 +1,5 @@
 
+using Math;
 using UnityEngine;
 
 namespace Grid.Positioning {
@@ -29,5 +30,14 @@ namespace Grid.Positioning {
          * 
          */
         Vector2 GetTileClosestToCenter(IGrid grid);
+
+        /// <summary>
+        /// Gets the tile (if any) containing the given world position.
+        /// Returns null if the given worldPosition is not contained in the grid.
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <param name="worldPosition"></param>
+        /// <returns></returns>
+        IntVector2? GetTileContainingWorldPosition(IGrid grid, Vector2 worldPosition);
     }
 }
