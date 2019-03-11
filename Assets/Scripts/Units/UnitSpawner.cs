@@ -24,7 +24,6 @@ namespace Units {
         private IGridUnitManager _gridUnitManager;
         private ILogger _logger;
         private UnitBehaviour.Pool _unitBehaviourPool;
-        private List<IUnit> _spawnedUnits = new List<IUnit>();
 
         public UnitSpawner(IUnitPickerViewController unitPickerVc, 
                            IGrid grid,
@@ -71,11 +70,9 @@ namespace Units {
             _logger.Log(LoggedFeature.Units, "Spawning: {0}", unitData.Name);
 
             IUnit unit = new Unit(unitData);
-            
             foreach (var unitInHierarchy in unit.GetUnitsInHierarchy()) {
                 _unitBehaviourPool.Spawn(unitInHierarchy);
-                _spawnedUnits.Add(unitInHierarchy);
-                _gridUnitManager.PlaceUnitAtTile(unitInHierarchy.UnitId, (int) tilePosition.x, (int) tilePosition.y);
+                _gridUnitManager.PlaceUnitAtTile(unitInHierarchy, (int) tilePosition.x, (int) tilePosition.y);
             }
         }
     }

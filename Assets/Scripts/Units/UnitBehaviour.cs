@@ -1,9 +1,6 @@
-using System.Collections.Generic;
 using Grid;
 using Grid.Positioning;
 using Math;
-using Prototype;
-using Units.Serialized;
 using UnityEngine;
 using Zenject;
 
@@ -37,8 +34,8 @@ namespace Units {
             _gridUnitManager.UnitPlacedAtTile += HandleUnitPlacedAtTile;
         }
 
-        private void HandleUnitPlacedAtTile(UnitId unitId, IntVector2 tileCoords) {
-            if (unitId != _unitId) {
+        private void HandleUnitPlacedAtTile(IUnit unit, IntVector2 tileCoords) {
+            if (unit.UnitId != _unitId) {
                 return;
             }
             

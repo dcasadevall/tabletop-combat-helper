@@ -12,7 +12,7 @@ namespace Grid {
         /// Event called whenever a unit is placed on a tile.
         /// This may be due to initial spawn, or when a unit is moved from one tile to another.
         /// </summary>
-        event System.Action<UnitId, IntVector2> UnitPlacedAtTile;
+        event System.Action<IUnit, IntVector2> UnitPlacedAtTile;
         
         /// <summary>
         /// Gets all the units in the tile at the given x and y coordinate.
@@ -21,7 +21,7 @@ namespace Grid {
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        UnitId[] GetUnitsAtTile(int x, int y);
+        IUnit[] GetUnitsAtTile(int x, int y);
         
         /// <summary>
         /// Places the given unit at the tile for the given x and y coordinates, if possible.
@@ -34,6 +34,6 @@ namespace Grid {
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        bool PlaceUnitAtTile(UnitId unit, int x, int y);
+        bool PlaceUnitAtTile(IUnit unit, int x, int y);
     }
 }
