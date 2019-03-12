@@ -7,7 +7,7 @@ using Zenject;
 namespace Map {
     public class MapSelectionLoader : IInitializable {
         // TODO: Inject this
-        private const string kLobbySceneName = "LobbyScene";
+        private const string kCombatSceneName = "CombatScene";
         
         private IMapSelectViewController _mapSelectViewController;
         private MapBehaviour.Factory _mapFactory;
@@ -31,7 +31,7 @@ namespace Map {
             _mapSelectViewController.Hide();
             
             _mapFactory.Create(mapData);
-            _sceneLoader.LoadScene(kLobbySceneName , LoadSceneMode.Additive, container => {
+            _sceneLoader.LoadScene(kCombatSceneName , LoadSceneMode.Additive, container => {
                 container.BindInstance(mapData.GridData).WhenInjectedInto<GridInstaller>();
             });
         }

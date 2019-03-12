@@ -14,7 +14,8 @@ namespace Networking {
     /// </summary>
     public class NetworkConnector : IInitializable {
         // TODO: Inject this
-        private const string kCombatSceneName = "CombatScene";
+        private const string kMapSelectionScene = "MapSelectionScene";
+        private const string kPlayerSelectionScene = "PlayerSelectionScene";
 
         private ILogger _logger;
         private INetworkManager _networkManager;
@@ -28,7 +29,11 @@ namespace Networking {
         
         public void Initialize() {
             _networkManager.Connect().Subscribe(Observer.Create<NetworkConnectionResult>(result => {
-                _sceneLoader.LoadScene(kCombatSceneName, LoadSceneMode.Additive);
+                if (result.isServer) {
+                    _sceneLoader.LoadScene(kMapSelectionScene, LoadSceneMode.Additive);
+                } else {
+                    _sceneLoader.LoadScene(kPlayerSelectionScene, LoadSceneMode.Additive);
+                }
             },
             error => {
                 _logger .LogError(LoggedFeature .Network, "Connection error: {0}", error);
