@@ -12,7 +12,7 @@ namespace Grid {
     ///
     /// If <see cref="IDebugSettings.ShowDebugGrid"/> is false, the <see cref="SpriteRenderer"/>s are not shown.
     /// </summary>
-    public class GridVisualizer : IInitializable, ITickable {
+    internal class GridVisualizer : IInitializable, ITickable {
         private IGrid _grid;
         private IDebugSettings _debugSettings;
         private IGridPositionCalculator _positionCalculator;

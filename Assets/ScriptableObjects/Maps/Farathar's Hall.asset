@@ -9,10 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c12ee14681f44e69447b8537a1eeeef, type: 3}
-  m_Name: FaratharsHallGridData
+  m_Script: {fileID: 11500000, guid: fa20cef74c994a22996dbb698db9ab4a, type: 3}
+  m_Name: Farathar's Hall
   m_EditorClassIdentifier: UnityEngine.CoreModule:UnityEngine:ScriptableObject
-  numTilesX: 20
-  numTilesY: 20
-  centeredAtWorldZero: 1
-  originWorldPosition: {x: 0, y: 0}
+  gridData:
+    numTilesX: 20
+    numTilesY: 20
+    centeredAtWorldZero: 1
+    originWorldPosition: {x: 0, y: 0}
+  name: Farathar's Hall
+  backgroundSprite: {fileID: 21300000, guid: 5b7d3d577e4ca4c3b92e039a351f754c, type: 3}

@@ -7,7 +7,7 @@ namespace Grid {
     /// <summary>
     /// Implementation of <see cref="IGridUnitManager"/> which uses an in memory map as a registry.
     /// </summary>
-    public class GridUnitManager : IGridUnitManager, IInitializable {
+    internal class GridUnitManager : IGridUnitManager, IInitializable {
         public event System.Action<IUnit, IntVector2> UnitPlacedAtTile = delegate {};
         
         private Dictionary<UnitId, int> _unitMap = new Dictionary<UnitId, int>();

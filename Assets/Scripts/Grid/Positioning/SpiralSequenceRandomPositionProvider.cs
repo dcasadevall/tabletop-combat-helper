@@ -9,7 +9,7 @@ namespace Grid.Positioning {
     /// It returns a list of random unique positions walking through the grid from the center outwards in a
     /// spiral pattern, deciding at every step to pick that position or not by a probability range (30%) 
     /// </summary>
-    public class SpiralSequenceRandomPositionProvider : IRandomGridPositionProvider {
+    internal class SpiralSequenceRandomPositionProvider : IRandomGridPositionProvider {
         private const float kTileChooseProbability = .3f;
         private const int kMaxTries = 100;
         private IRandomProvider _randomProvider;

@@ -1,4 +1,3 @@
-using System;
 using Grid.Serialized;
 using UnityEngine;
 
@@ -7,7 +6,7 @@ namespace Grid {
     /// <see cref="IGrid"/> implementation that simply stores the values given by <see cref="LoadGridData"/>.
     /// It also provides a set of default values.
     /// </summary>
-    public class Grid : IGrid {
+    internal class Grid : IGrid {
         private uint _numTilesX = 80;
         public uint NumTilesX {
             get {
