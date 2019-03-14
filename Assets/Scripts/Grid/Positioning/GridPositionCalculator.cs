@@ -14,8 +14,8 @@ namespace Grid.Positioning {
 
         /// <inheritdoc />
         public IntVector2 GetTileClosestToCenter(IGrid grid) {
-            uint xTile = grid.NumTilesX / 2;
-            uint yTile = grid.NumTilesX / 2;
+            uint xTile = (grid.NumTilesX - 1) / 2;
+            uint yTile = (grid.NumTilesY - 1) / 2;
             return IntVector2.Of((int)xTile, (int)yTile);
         }
 
