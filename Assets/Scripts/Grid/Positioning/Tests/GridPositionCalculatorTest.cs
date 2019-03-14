@@ -61,5 +61,35 @@ namespace Grid.Positioning.Tests {
             IGridPositionCalculator gridPositionCalculator = new GridPositionCalculator();
             Assert.IsNull(gridPositionCalculator.GetTileContainingWorldPosition(grid, new Vector2(x, y)));
         }
+
+        [TestCase(1U, 1U, 0, 0)]
+        [TestCase(3U, 3U, 1, 1)]
+        public void TestGivenOddGridSize_GetTileClosestToCenter_ReturnsCenterTile(uint numTilesX, uint numTilesY, int expectedTileX, int expectedTileY) {
+            TestGetTileClosestToCenter(numTilesX, numTilesY, expectedTileX, expectedTileY);
+        }
+
+        [TestCase(2U, 2U, 0, 0)]
+        [TestCase(4U, 4U, 1, 1)]
+        public void TestGivenEvenGridSize_GetTileClosestToCenter_ReturnsLowerBound(uint numTilesX, uint numTilesY, int expectedTileX, int expectedTileY) {
+            TestGetTileClosestToCenter(numTilesX, numTilesY, expectedTileX, expectedTileY);
+        }
+
+        [TestCase(2U, 1U, 0, 0)]
+        [TestCase(3U, 4U, 1, 1)]
+        [TestCase(5U, 8U, 2, 3)]
+        public void TestMixedGridSize_GetTileClosestToCenter_ReturnsLowerBoundWhenEven(uint numTilesX, uint numTilesY, int expectedTileX, int expectedTileY) {
+            TestGetTileClosestToCenter(numTilesX, numTilesY, expectedTileX, expectedTileY);
+        }
+
+        private void TestGetTileClosestToCenter(uint numTilesX, uint numTilesY, int expectedTileX, int expectedTileY) {
+            IGrid grid = Substitute.For<IGrid>();
+            grid.NumTilesX.Returns(numTilesX);
+            grid.NumTilesY.Returns(numTilesY);
+            grid.TileSize.Returns(1U); 
+            
+            IGridPositionCalculator gridPositionCalculator = new GridPositionCalculator();
+            IntVector2 tileClosestToCenter = gridPositionCalculator.GetTileClosestToCenter(grid);
+            Assert.AreEqual(IntVector2.Of(expectedTileX, expectedTileY), tileClosestToCenter);  
+        }
     }
 }
