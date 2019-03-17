@@ -2,6 +2,9 @@ using UnityEngine;
 using Zenject;
 
 namespace Map.Rendering {
+  /// <summary>
+  /// Responsible for rendering a single tile in the tile map.
+  /// </summary>
   public class TileRendererBehaviour : MonoBehaviour, ITileRenderer {
     public class Pool : MonoMemoryPool<Sprite, TileRendererBehaviour> {
       protected override void Reinitialize(Sprite sprite, TileRendererBehaviour tileRendererBehaviour) {

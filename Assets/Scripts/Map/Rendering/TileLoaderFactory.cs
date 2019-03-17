@@ -2,6 +2,10 @@ using System.ComponentModel;
 using Zenject;
 
 namespace Map.Rendering {
+    /// <summary>
+    /// A factory used to choose the <see cref="ITileLoader"/> based on the current <see cref="MapTileType"/> in
+    /// context.
+    /// </summary>
     public class TileLoaderFactory : IFactory<ITileLoader> {
         private readonly IMapData _mapData;
         private readonly RandomizedRepeatedTileLoader _randomizedRepeatedTileLoader;

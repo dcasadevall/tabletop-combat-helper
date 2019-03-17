@@ -8,24 +8,25 @@ using UnityEngine;
 using ILogger = Logging.ILogger;
 
 namespace Map.Rendering {
+    /// <summary>
+    /// Randomly place tiles in the context's <see cref="IMapData"/> into the grid.
+    /// Tiles may be rotated randomly
+    /// </summary>
     public class RandomizedRepeatedTileLoader : ITileLoader {
         private readonly IRandomProvider _randomProvider;
         private readonly ILogger _logger;
         private readonly IMapData _mapData;
-        private readonly IGrid _grid;
         private readonly IGridPositionCalculator _positionCalculator;
         private readonly TileRendererBehaviour.Pool _tileRendererPool;
 
         public RandomizedRepeatedTileLoader(IRandomProvider randomProvider, 
                                             ILogger logger,
                                             IMapData mapData,
-                                            IGrid grid,
                                             IGridPositionCalculator positionCalculator,
                                             TileRendererBehaviour.Pool tileRendererPool) {
             _randomProvider = randomProvider;
             _logger = logger;
             _mapData = mapData;
-            _grid = grid;
             _positionCalculator = positionCalculator;
             _tileRendererPool = tileRendererPool;
         }
