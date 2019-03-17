@@ -1,5 +1,6 @@
 using Grid;
 using Grid.Serialized;
+using Map.Rendering;
 using Map.UI;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -10,13 +11,11 @@ namespace Map {
         private const string kCombatSceneName = "CombatScene";
         
         private IMapSelectViewController _mapSelectViewController;
-        private MapBehaviour.Factory _mapFactory;
         private readonly ZenjectSceneLoader _sceneLoader;
 
-        public MapSelectionLoader(IMapSelectViewController mapSelectViewController, MapBehaviour.Factory mapFactory,
+        public MapSelectionLoader(IMapSelectViewController mapSelectViewController,
                                   ZenjectSceneLoader sceneLoader) {
             _mapSelectViewController = mapSelectViewController;
-            _mapFactory = mapFactory;
             _sceneLoader = sceneLoader;
             
             _mapSelectViewController.LoadMapClicked += HandleLoadMapClicked;
@@ -30,9 +29,8 @@ namespace Map {
             _mapSelectViewController.LoadMapClicked -= HandleLoadMapClicked;
             _mapSelectViewController.Hide();
             
-            _mapFactory.Create(mapData);
             _sceneLoader.LoadScene(kCombatSceneName , LoadSceneMode.Additive, container => {
-                container.BindInstance(mapData).WithId("LoadedMap").WhenInjectedInto<MapInstaller>();
+                container.BindInstance(mapData).WhenInjectedInto<MapRenderingInstaller>();
                 container.BindInstance(mapData.GridData).WhenInjectedInto<GridInstaller>();
             });
         }

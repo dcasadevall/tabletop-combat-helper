@@ -9,5 +9,6 @@ namespace Map {
         String Name { get; }
         Sprite[] Sprites { get; }
         MapTileType MapTileType { get; }
+        int PixelsPerUnit { get; }
     }
 }

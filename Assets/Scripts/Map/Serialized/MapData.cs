@@ -31,5 +31,11 @@ namespace Map.Serialized {
                 return generationType;
             }
         }
+
+        public int PixelsPerUnit {
+            get {
+                return 200;
+            }
+        }
     }
 }
