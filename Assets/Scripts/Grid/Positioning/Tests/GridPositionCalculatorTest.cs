@@ -2,10 +2,26 @@ using Math;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
+using Zenject;
 
 namespace Grid.Positioning.Tests {
     [TestFixture]
-    public class GridPositionCalculatorTest {
+    public class GridPositionCalculatorTest : ZenjectUnitTestFixture {
+        private IGrid _grid;
+        private IGridPositionCalculator _positionCalculator;
+        
+        [SetUp]
+        public void CommonInstall() {
+            _grid = Substitute.For<IGrid>();
+            _grid.TileSize.Returns(1U);
+
+            Container.Bind<IGridPositionCalculator>().To<GridPositionCalculator>().AsSingle();
+            Container.Bind<IGrid>().FromInstance(_grid);
+            Container.Inject(this);
+            
+            _positionCalculator = Container.Resolve<IGridPositionCalculator>();
+        }
+        
         [TestCase(4U, 4U, 3.99f, 3.99f, 3, 3)]
         [TestCase(4U, 4U, 0.01f, 0.01f, 0, 0)]
         [TestCase(1U, 1U, 0.99f, 0.99f, 0, 0)]
@@ -15,14 +31,11 @@ namespace Grid.Positioning.Tests {
         [TestCase(2U, 2U, 1.0f, 2.0f, 1, 1)] // 1.0 and 2.0f considered inside the 1 tile
         public void TestGivenTileInGrid_GetTileContainingWorldPosition_ReturnsCoordinate(
             uint numTilesX, uint numTilesY, float x, float y, int expectedCoordX, int expectedCoordY) {
-            IGrid grid = Substitute.For<IGrid>();
-            grid.NumTilesX.Returns(numTilesX);
-            grid.NumTilesY.Returns(numTilesY);
-            grid.TileSize.Returns((uint)1);
-            grid.OriginWorldPosition.Returns(new Vector2(0, 0));
+            _grid.NumTilesX.Returns(numTilesX);
+            _grid.NumTilesY.Returns(numTilesY);
+            _grid.OriginWorldPosition.Returns(new Vector2(0, 0));
             
-            IGridPositionCalculator gridPositionCalculator = new GridPositionCalculator();
-            IntVector2? position = gridPositionCalculator.GetTileContainingWorldPosition(grid, new Vector2(x, y));
+            IntVector2? position = _positionCalculator.GetTileContainingWorldPosition(new Vector2(x, y));
             Assert.NotNull(position);
             Assert.AreEqual(IntVector2.Of(expectedCoordX, expectedCoordY), position);
         }
@@ -33,14 +46,11 @@ namespace Grid.Positioning.Tests {
         public void TestGivenTileInGrid_OriginWorldPositionSet_GetTileContainingWorldPosition_ReturnsCoordinate(
             float worldPositionX, float worldPositionY,
             uint numTilesX, uint numTilesY, float x, float y, int expectedCoordX, int expectedCoordY) {
-            IGrid grid = Substitute.For<IGrid>();
-            grid.NumTilesX.Returns(numTilesX);
-            grid.NumTilesY.Returns(numTilesY);
-            grid.TileSize.Returns((uint)1);
-            grid.OriginWorldPosition.Returns(new Vector2(worldPositionX, worldPositionY));
+            _grid.NumTilesX.Returns(numTilesX);
+            _grid.NumTilesY.Returns(numTilesY);
+            _grid.OriginWorldPosition.Returns(new Vector2(worldPositionX, worldPositionY));
             
-            IGridPositionCalculator gridPositionCalculator = new GridPositionCalculator();
-            IntVector2? position = gridPositionCalculator.GetTileContainingWorldPosition(grid, new Vector2(x, y));
+            IntVector2? position = _positionCalculator.GetTileContainingWorldPosition(new Vector2(x, y));
             Assert.NotNull(position);
             Assert.AreEqual(IntVector2.Of(expectedCoordX, expectedCoordY), position);
         }
@@ -53,13 +63,10 @@ namespace Grid.Positioning.Tests {
         [TestCase(63U, 23U, -5.0f, 23.5f)]
         [TestCase(2U, 2U, 2.0001f, 2.00001f)]
         public void TestGivenTileNotInGrid_GetTileContainingWorldPosition_ReturnsNull(uint numTilesX, uint numTilesY, float x, float y) {
-            IGrid grid = Substitute.For<IGrid>();
-            grid.NumTilesX.Returns(numTilesX);
-            grid.NumTilesY.Returns(numTilesY);
-            grid.TileSize.Returns((uint)1);
+            _grid.NumTilesX.Returns(numTilesX);
+            _grid.NumTilesY.Returns(numTilesY);
             
-            IGridPositionCalculator gridPositionCalculator = new GridPositionCalculator();
-            Assert.IsNull(gridPositionCalculator.GetTileContainingWorldPosition(grid, new Vector2(x, y)));
+            Assert.IsNull(_positionCalculator.GetTileContainingWorldPosition(new Vector2(x, y)));
         }
 
         [TestCase(1U, 1U, 0, 0)]
@@ -82,13 +89,10 @@ namespace Grid.Positioning.Tests {
         }
 
         private void TestGetTileClosestToCenter(uint numTilesX, uint numTilesY, int expectedTileX, int expectedTileY) {
-            IGrid grid = Substitute.For<IGrid>();
-            grid.NumTilesX.Returns(numTilesX);
-            grid.NumTilesY.Returns(numTilesY);
-            grid.TileSize.Returns(1U); 
+            _grid.NumTilesX.Returns(numTilesX);
+            _grid.NumTilesY.Returns(numTilesY);
             
-            IGridPositionCalculator gridPositionCalculator = new GridPositionCalculator();
-            IntVector2 tileClosestToCenter = gridPositionCalculator.GetTileClosestToCenter(grid);
+            IntVector2 tileClosestToCenter = _positionCalculator.GetTileClosestToCenter();
             Assert.AreEqual(IntVector2.Of(expectedTileX, expectedTileY), tileClosestToCenter);  
         }
     }

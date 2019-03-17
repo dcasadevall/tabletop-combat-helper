@@ -12,17 +12,20 @@ namespace Grid.Positioning {
     internal class SpiralSequenceRandomPositionProvider : IRandomGridPositionProvider {
         private const float kTileChooseProbability = .3f;
         private const int kMaxTries = 100;
-        private IRandomProvider _randomProvider;
-        private IGridPositionCalculator _gridPositionCalculator;
+        private readonly IGrid _grid;
+        private readonly IRandomProvider _randomProvider;
+        private readonly IGridPositionCalculator _gridPositionCalculator;
 
-        public SpiralSequenceRandomPositionProvider(IGridPositionCalculator gridPositionCalculator, 
+        public SpiralSequenceRandomPositionProvider(IGrid grid,
+                                                    IGridPositionCalculator gridPositionCalculator, 
                                                     IRandomProvider randomProvider) {
+            _grid = grid;
             _randomProvider = randomProvider;
             _gridPositionCalculator = gridPositionCalculator;
         }
         
-        public IntVector2[] GetRandomUniquePositions(IGrid grid, int maxDistanceFromCenter, int numTilesToGenerate) {
-            IntVector2 spiralCenter = _gridPositionCalculator.GetTileClosestToCenter(grid);
+        public IntVector2[] GetRandomUniquePositions(int maxDistanceFromCenter, int numTilesToGenerate) {
+            IntVector2 spiralCenter = _gridPositionCalculator.GetTileClosestToCenter();
             IntVector2 spiralEndTile = IntVector2.Of(spiralCenter.x - numTilesToGenerate,
                                                      spiralCenter.y - numTilesToGenerate);
             LinkedList<IntVector2> availableTiles = new LinkedList<IntVector2>();
@@ -34,7 +37,7 @@ namespace Grid.Positioning {
                 currentPosition = IntVector2.Of(stretchStart.x, stretchStart.y);
                 for (int i = stretchStart.y; i > stretchStart.y - k; i--) {
                     currentPosition = IntVector2.Of(currentPosition.x, i);
-                    AddTileIfInsideGridBounds(availableTiles, grid, currentPosition);
+                    AddTileIfInsideGridBounds(availableTiles, currentPosition);
                 }
                 
                 //If at this point the position is (center.x - maxDistance, center.y - maxDistance) the spiral is
@@ -48,7 +51,7 @@ namespace Grid.Positioning {
                 currentPosition = IntVector2.Of(stretchStart.x, stretchStart.y);
                 for (int i = stretchStart.x; i < stretchStart.x + k; i++) {
                     currentPosition = IntVector2.Of(i, currentPosition.y);
-                    AddTileIfInsideGridBounds(availableTiles, grid, currentPosition);
+                    AddTileIfInsideGridBounds(availableTiles, currentPosition);
                 }
 
                 stretchStart = IntVector2.Of(currentPosition.x + 1, currentPosition.y);
@@ -57,7 +60,7 @@ namespace Grid.Positioning {
                 currentPosition = IntVector2.Of(stretchStart.x, stretchStart.y);
                 for (int i = stretchStart.y; i < stretchStart.y + k; i++) {
                     currentPosition = IntVector2.Of(currentPosition.x, i);
-                    AddTileIfInsideGridBounds(availableTiles, grid, currentPosition);
+                    AddTileIfInsideGridBounds(availableTiles, currentPosition);
                 }
 
                 stretchStart = IntVector2.Of(currentPosition.x, currentPosition.y + 1);
@@ -65,7 +68,7 @@ namespace Grid.Positioning {
                 currentPosition = IntVector2.Of(stretchStart.x, stretchStart.y);
                 for (int i = stretchStart.x; i > stretchStart.x - k; i--) {
                     currentPosition = IntVector2.Of(i, currentPosition.y);
-                    AddTileIfInsideGridBounds(availableTiles, grid, currentPosition);
+                    AddTileIfInsideGridBounds(availableTiles, currentPosition);
                 }
 
                 stretchStart = IntVector2.Of(currentPosition.x - 1, currentPosition.y);
@@ -75,8 +78,8 @@ namespace Grid.Positioning {
             return ChooseRandomPositionsFromAvailableTiles(availableTiles, numTilesToGenerate);
         }
 
-        private void AddTileIfInsideGridBounds(LinkedList<IntVector2> availableTiles, IGrid grid, IntVector2 tile) {
-            if (grid.TileBounds().Contains(tile)) {
+        private void AddTileIfInsideGridBounds(LinkedList<IntVector2> availableTiles, IntVector2 tile) {
+            if (_grid.TileBounds().Contains(tile)) {
                 availableTiles.AddLast(tile);
             }
         }

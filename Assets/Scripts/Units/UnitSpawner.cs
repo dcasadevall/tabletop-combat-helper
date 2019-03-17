@@ -20,21 +20,18 @@ namespace Units {
     public class UnitSpawner : IInitializable, ITickable {
         private IUnitPickerViewController _unitPickerViewController;
         private IRandomGridPositionProvider _randomGridPositionProvider;
-        private IGrid _grid;
         private IUnitSpawnSettings _unitSpawnSettings;
         private IGridUnitManager _gridUnitManager;
         private ILogger _logger;
         private UnitBehaviour.Pool _unitBehaviourPool;
 
         public UnitSpawner(IUnitPickerViewController unitPickerVc, 
-                           IGrid grid,
                            IRandomGridPositionProvider randomGridPositionProvider,
                            IGridUnitManager gridUnitManager,
                            IUnitSpawnSettings unitSpawnSettings,
                            ILogger logger, 
                            UnitBehaviour.Pool unitBehaviourPool) {
             _logger = logger;
-            _grid = grid;
             _gridUnitManager = gridUnitManager;
             _randomGridPositionProvider = randomGridPositionProvider;
             _unitPickerViewController = unitPickerVc;
@@ -47,8 +44,7 @@ namespace Units {
 
             // Spawn 
             IntVector2[] tilePositions =
-                _randomGridPositionProvider.GetRandomUniquePositions(_grid,
-                                                                     _unitSpawnSettings
+                _randomGridPositionProvider.GetRandomUniquePositions(_unitSpawnSettings
                                                                          .MaxInitialUnitSpawnDistanceToCenter,
                                                                      _unitSpawnSettings.PlayerUnits.Length);
             for (int i = 0; i < tilePositions.Length; i++) {

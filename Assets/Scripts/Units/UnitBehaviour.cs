@@ -39,7 +39,7 @@ namespace Units {
                 return;
             }
             
-            Vector2 worldPosition = _gridPositionCalculator.GetTileCenterWorldPosition(_grid, tileCoords);
+            Vector2 worldPosition = _gridPositionCalculator.GetTileCenterWorldPosition(tileCoords);
             transform.position = new Vector3(worldPosition.x, worldPosition.y, transform.position.z);
         }
 

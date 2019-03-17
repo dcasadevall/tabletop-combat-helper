@@ -48,8 +48,8 @@ namespace Map.Rendering {
                     tileRendererBehaviour.SpriteRenderer.flipX = _randomProvider.GetRandomIntegerInRange(0, 2) == 0;
                     tileRendererBehaviour.SpriteRenderer.flipY = _randomProvider.GetRandomIntegerInRange(0, 2) == 0;
                     tileRendererBehaviour.transform.position =
-                        _positionCalculator.GetTileOriginWorldPosition(_grid, IntVector2.Of(x, y)) +
-                        new Vector2(sprite.bounds.extents.x, sprite.bounds.extents.y) - Vector2.one;
+                        _positionCalculator.GetTileOriginWorldPosition(IntVector2.Of(x, y)) +
+                        new Vector2(sprite.bounds.extents.x, sprite.bounds.extents.y);
                     
                     
                     // Calculate how many units in X this unit generates (assume square for now).

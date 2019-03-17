@@ -11,19 +11,19 @@ namespace Grid.Positioning.Tests {
         [Inject]
         private NotUniqueRandomGridPositionProvider _randomGridPositionProvider;
 
-        private IGrid _grid;
         private IGridPositionCalculator _gridPositionCalculator;
         private AlwaysReturnSameWeightRandomProvider _randomProvider;
 
         [SetUp]
         public void CommonInstall() {
-            _grid = Substitute.For<IGrid>();
-            _grid.NumTilesX.Returns((uint)100);
-            _grid.NumTilesY.Returns((uint)100);
-            _grid.TileSize.Returns((uint)1);
+            IGrid grid = Substitute.For<IGrid>();
+            grid.NumTilesX.Returns((uint)100);
+            grid.NumTilesY.Returns((uint)100);
+            grid.TileSize.Returns((uint)1);
             _gridPositionCalculator = Substitute.For<IGridPositionCalculator>();
             _randomProvider = new AlwaysReturnSameWeightRandomProvider(0);
-            
+
+            Container.Bind<IGrid>().FromInstance(grid);
             Container.Bind<IGridPositionCalculator>().To<IGridPositionCalculator>()
                      .FromInstance(_gridPositionCalculator).AsTransient();
             Container.Bind<IRandomProvider>().To<AlwaysReturnSameWeightRandomProvider>().FromInstance(_randomProvider)
@@ -39,11 +39,11 @@ namespace Grid.Positioning.Tests {
         public void testGivenRandomPosition_GetsCenterPosition(int center, int selectedDistanceFromCenter, int expectedPosition) {
             IntVector2 centerPosition = IntVector2.Of(center, center);
             _randomProvider.SetReturnedWeight(selectedDistanceFromCenter);
-            _gridPositionCalculator.GetTileClosestToCenter(_grid)
+            _gridPositionCalculator.GetTileClosestToCenter()
                                    .Returns(centerPosition);
 
             IntVector2[] positions =
-                _randomGridPositionProvider.GetRandomUniquePositions(_grid, selectedDistanceFromCenter, 1);
+                _randomGridPositionProvider.GetRandomUniquePositions(selectedDistanceFromCenter, 1);
             Assert.AreEqual(IntVector2.One * expectedPosition,
                             positions[0]);
         }

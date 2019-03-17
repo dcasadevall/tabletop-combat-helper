@@ -15,12 +15,10 @@ namespace Prototype {
         public static bool isDragging = false;
         private Vector3 offset;
         
-        private IGrid _grid;
         private IGridPositionCalculator _gridPositionCalculator;
 
         [Inject]
-        public void Construct(IGrid grid, IGridPositionCalculator gridPositionCalculator) {
-            _grid = grid;
+        public void Construct(IGridPositionCalculator gridPositionCalculator) {
             _gridPositionCalculator = gridPositionCalculator;
         }
 
@@ -40,15 +38,14 @@ namespace Prototype {
             
             Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
             Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
-            IntVector2? gridCoordinates = _gridPositionCalculator.GetTileContainingWorldPosition(_grid, curPosition);
+            IntVector2? gridCoordinates = _gridPositionCalculator.GetTileContainingWorldPosition(curPosition);
             
             if (gridCoordinates == null) {
                 return;
             }
             
             Vector2 positionInGrid =
-                _gridPositionCalculator.GetTileCenterWorldPosition(_grid,
-                                                                   gridCoordinates.Value);
+                _gridPositionCalculator.GetTileCenterWorldPosition(gridCoordinates.Value);
             transform.position = new Vector3(positionInGrid.x, positionInGrid.y, transform.position.z);
         }
     }

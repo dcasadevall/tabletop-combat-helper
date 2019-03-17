@@ -48,7 +48,7 @@ namespace Grid {
             if (_cells[x, y] == null) {
                 _cells[x, y] = _factory.Create();
                 _cells[x, y].transform.position =
-                    _positionCalculator.GetTileCenterWorldPosition(_grid, IntVector2.Of(x, y));
+                    _positionCalculator.GetTileCenterWorldPosition(IntVector2.Of(x, y));
             }
 
             _cells[x, y].enabled = _debugSettings.ShowDebugGrid;
