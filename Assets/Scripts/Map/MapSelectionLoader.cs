@@ -31,7 +31,7 @@ namespace Map {
             
             _sceneLoader.LoadScene(kCombatSceneName , LoadSceneMode.Additive, container => {
                 container.Bind<IMapData>().FromInstance(mapData);
-                container.BindInstance(mapData.GridData).WhenInjectedInto<GridInstaller>();
+                container.Bind<IGridData>().FromInstance(mapData.GridData);
             });
         }
     }

@@ -7,15 +7,8 @@ namespace Grid {
     internal class GridInstaller : MonoInstaller {
         public GameObject gridCellPrefab;
         
-        /// <summary>
-        /// Default GridData that will be injected if none is loaded using "WhenInjectedInto" via scene load
-        /// </summary>
-        [InjectOptional]
-        public IGridData gridData = new GridData();
-        
         public override void InstallBindings() {
             Container.Bind<IGrid>().To<Grid>().AsSingle();
-            Container.BindInstance(gridData).WhenInjectedInto<GridDataLoader>();
             Container.Bind<IInitializable>().To<GridDataLoader>().AsSingle();
             Container.Bind(typeof(IGridUnitManager), typeof(IInitializable)).To<GridUnitManager>().AsSingle();
             Container.Bind<IRandomGridPositionProvider>().To<SpiralSequenceRandomPositionProvider>().AsSingle();
