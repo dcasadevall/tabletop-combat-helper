@@ -32,6 +32,7 @@ namespace Map {
             
             _mapFactory.Create(mapData);
             _sceneLoader.LoadScene(kCombatSceneName , LoadSceneMode.Additive, container => {
+                container.BindInstance(mapData).WithId("LoadedMap").WhenInjectedInto<MapInstaller>();
                 container.BindInstance(mapData.GridData).WhenInjectedInto<GridInstaller>();
             });
         }

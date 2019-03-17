@@ -1,4 +1,5 @@
 using CameraSystem;
+using Map.Rendering;
 using Prototype;
 using UnityEngine;
 using Zenject;
@@ -10,24 +11,25 @@ namespace Map {
     public class MapBehaviour : MonoBehaviour {
 #pragma warning disable 649
         [SerializeField]
-        private SpriteRenderer _backgroundSprite;
-        [SerializeField]
         private RegionHandler _regionHandler;
 #pragma warning restore 649
 
+        private IMapRenderer _mapRenderer;
         private ICameraController _cameraController;
         
         public class Factory : PlaceholderFactory<IMapData, MapBehaviour> {
         }
 
         [Inject]
-        public void Construct(IMapData mapData, ICameraController cameraController) {
+        public void Construct(IMapData mapData, ICameraController cameraController,
+                              IMapRenderer mapRenderer) {
+            _mapRenderer = mapRenderer;
             _cameraController = cameraController;
             SetMapData(mapData);
         }
         
         private void SetMapData(IMapData mapData) {
-            _backgroundSprite.sprite = mapData.BackgroundSprite;
+            _mapRenderer.RenderMap(mapData);
             _cameraController.SetRegionHandler(_regionHandler);
         }
     }
