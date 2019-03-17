@@ -48,6 +48,7 @@ MonoBehaviour:
   _installerPrefabs:
   - {fileID: 7754144119156181451, guid: ea41255bd272b4e7a91ba7750a9c217a, type: 3}
   - {fileID: 8861999233176828879, guid: 9a1aa48aeee7f48dfac74eb1b5880823, type: 3}
+  - {fileID: 2001596227, guid: c6a9db96f3e8247e6b7bc24f2e060fc8, type: 3}
   _autoRun: 1
   _parentNewObjectsUnderSceneContext: 0
   _contractNames: []

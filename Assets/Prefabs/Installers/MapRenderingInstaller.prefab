@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1016049297788238906
+--- !u!1 &5388027887630225090
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8566320193600035485}
-  - component: {fileID: 2938870013231750587}
+  - component: {fileID: 8620436465962913240}
+  - component: {fileID: 2001596227}
   m_Layer: 0
-  m_Name: MapInstaller
+  m_Name: MapRenderingInstaller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8566320193600035485
+--- !u!4 &8620436465962913240
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1016049297788238906}
+  m_GameObject: {fileID: 5388027887630225090}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.47548398, y: -0.80477303, z: 0.04137883}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,22 +31,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2938870013231750587
+--- !u!114 &2001596227
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1016049297788238906}
+  m_GameObject: {fileID: 5388027887630225090}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52a8e3f1610d448eba85c02230914e8c, type: 3}
+  m_Script: {fileID: 11500000, guid: ea45e4e20c224a67852d308f9b535b0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSelectViewControllerPrefab: {fileID: 2571834939211621924, guid: 7a49f61fe897448c6807002b45d79c28,
+  defaultMapData: {fileID: 11400000, guid: 3ddfbdd824ded41f8b19d4713f2c8cc8, type: 2}
+  mapPrefab: {fileID: 4182120716770292423, guid: 85be60b81460146929d45fe40523fe6e,
     type: 3}
-  mapDatas:
-  - {fileID: 11400000, guid: 99bd98f4046f84229ac1ecfae2feb2f2, type: 2}
-  - {fileID: 11400000, guid: 46fec75a272f4490b837f47af4d08089, type: 2}
-  - {fileID: 11400000, guid: 3ddfbdd824ded41f8b19d4713f2c8cc8, type: 2}
-  - {fileID: 11400000, guid: a0f23619dc62844b68dd3827d90f6e3d, type: 2}
+  tilePrefab: {fileID: 8179877559245934663, guid: c9d7937d78e5a4936933212b9a31d66f,
+    type: 3}
+  mapCameraPrefab: {fileID: 3874603855073947825, guid: ab4364683af124da39a4cc5fecec50bf,
+    type: 3}

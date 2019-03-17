@@ -1,4 +1,5 @@
 using Grid.Serialized;
+using Map.Rendering;
 using UnityEngine;
 
 namespace Map.Serialized {
@@ -17,10 +18,23 @@ namespace Map.Serialized {
             }
         }
 
-        public Sprite backgroundSprite;
-        public Sprite BackgroundSprite {
+        public Sprite[] sprites;
+        public Sprite[] Sprites {
             get {
-                return backgroundSprite;
+                return sprites;
+            }
+        }
+
+        public MapTileType generationType;
+        public MapTileType MapTileType {
+            get {
+                return generationType;
+            }
+        }
+
+        public int PixelsPerUnit {
+            get {
+                return 1;
             }
         }
     }

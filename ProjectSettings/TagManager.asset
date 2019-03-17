@@ -48,3 +48,6 @@ TagManager:
   - name: Units
     uniqueID: 2632996201
     locked: 0
+  - name: Debug
+    uniqueID: 2247213765
+    locked: 0
