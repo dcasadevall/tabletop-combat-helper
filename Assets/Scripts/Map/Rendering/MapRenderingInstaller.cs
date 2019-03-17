@@ -23,7 +23,6 @@ namespace Map.Rendering {
             
             Container.Bind<ICameraController>().To<PrototypeCameraController>()
                      .FromComponentInNewPrefab(mapCameraPrefab).AsSingle();
-            
         }
 
         private void InstallMapRendererFactory(DiContainer container) {

@@ -30,8 +30,7 @@ namespace Map {
             _mapSelectViewController.Hide();
             
             _sceneLoader.LoadScene(kCombatSceneName , LoadSceneMode.Additive, container => {
-                container.BindInstance(mapData).WhenInjectedInto<TileLoaderFactory>();
-                container.BindInstance(mapData).WhenInjectedInto<MapRenderer>();
+                container.Bind<IMapData>().FromInstance(mapData);
                 container.BindInstance(mapData.GridData).WhenInjectedInto<GridInstaller>();
             });
         }
