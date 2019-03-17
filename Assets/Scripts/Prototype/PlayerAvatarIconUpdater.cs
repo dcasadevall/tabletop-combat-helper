@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 namespace Prototype {
     /// <summary>
@@ -10,15 +11,36 @@ namespace Prototype {
         public float zoomThreshold = 5;
         public SpriteRenderer iconRenderer;
         public SpriteRenderer[] unitRenderers;
+    
+        [SerializeField]
+        private Mode _mode = Mode.Mixed;
+        private enum Mode {
+            Mixed = 0,
+            AvatarIconOnly,
+            UnitOnly
+        }
 
-        private bool isEnabled = true;
+        private Camera _camera;
+
+        [Inject]
+        public void Construct(Camera camera) {
+            _camera = camera;
+        }
 
         private void Update() {
             if (Input.GetKeyUp(toggleKey)) {
-                isEnabled = !isEnabled;
+                _mode = (Mode)(((int)_mode + 1) % 3);
             }
 
-            bool isIconShown = Camera.main.orthographicSize >= zoomThreshold && isEnabled;
+            bool isIconShown = _camera.orthographicSize >= zoomThreshold;
+            if (_mode == Mode.UnitOnly) {
+                isIconShown = false;
+            }
+
+            if (_mode == Mode.AvatarIconOnly) {
+                isIconShown = true;
+            }
+            
             SetAvatarIcon(isIconShown);
         }
 

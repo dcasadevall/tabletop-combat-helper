@@ -16,14 +16,16 @@ namespace Prototype {
         private Vector3 offset;
         
         private IGridPositionCalculator _gridPositionCalculator;
+        private Camera _camera;
 
         [Inject]
-        public void Construct(IGridPositionCalculator gridPositionCalculator) {
+        public void Construct(IGridPositionCalculator gridPositionCalculator, Camera camera) {
+            _camera = camera;
             _gridPositionCalculator = gridPositionCalculator;
         }
 
         private void OnMouseDown() {
-            offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+            offset = gameObject.transform.position - _camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         }
 
         private void OnMouseUp() {
@@ -37,7 +39,7 @@ namespace Prototype {
             }
             
             Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
-            Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
+            Vector3 curPosition = _camera.ScreenToWorldPoint(curScreenPoint) + offset;
             IntVector2? gridCoordinates = _gridPositionCalculator.GetTileContainingWorldPosition(curPosition);
             
             if (gridCoordinates == null) {
