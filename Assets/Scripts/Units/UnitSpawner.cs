@@ -53,7 +53,7 @@ namespace Units {
         }
 
         public void Tick() {
-            if (Input.GetKeyUp(KeyCode.Space)) {
+            if (Input.GetKeyUp(KeyCode.U)) {
                 _unitPickerViewController.Show();
             }
         }
