@@ -34,7 +34,7 @@ namespace Map.Serialized {
 
         public int PixelsPerUnit {
             get {
-                return 200;
+                return 1;
             }
         }
     }

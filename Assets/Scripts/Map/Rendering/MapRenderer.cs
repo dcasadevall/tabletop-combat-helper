@@ -1,3 +1,4 @@
+using UnityEngine;
 using Zenject;
 
 namespace Map.Rendering {

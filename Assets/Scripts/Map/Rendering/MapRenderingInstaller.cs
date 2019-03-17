@@ -13,9 +13,13 @@ namespace Map.Rendering {
         public GameObject mapCameraPrefab;
         
         public override void InstallBindings() {
-            Container.Bind<IMapData>().FromInstance(defaultMapData).WhenInjectedInto<MapRenderer>();
-            Container.Bind<IMapData>().FromInstance(defaultMapData).WhenInjectedInto<TileLoaderFactory>();
             Container.Bind<IInitializable>().To<MapRenderer>().AsSingle();
+            // TODO: Figure out why this doesnt work
+/*            Container.Bind<IMapData>().FromInstance(defaultMapData)
+                     .WhenInjectedInto<MapRenderer>();
+            Container.Bind<IMapData>().FromInstance(defaultMapData)
+                     .WhenInjectedInto<TileLoaderFactory>();*/
+            
             Container.Bind<ITileLoader>()
                      .FromIFactory(x => x.To<TileLoaderFactory>().FromSubContainerResolve()
                                          .ByMethod(InstallMapRendererFactory).AsSingle()).AsSingle();

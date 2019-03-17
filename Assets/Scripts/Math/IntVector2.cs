@@ -23,6 +23,10 @@ namespace Math {
         public static IntVector2 Of(int x, int y) {
             return new IntVector2(x, y);
         }
+        
+        public static IntVector2 Of(uint x, uint y) {
+            return new IntVector2((int)x, (int)y);
+        }
 
         private IntVector2(int x, int y) {
             this.x = x;

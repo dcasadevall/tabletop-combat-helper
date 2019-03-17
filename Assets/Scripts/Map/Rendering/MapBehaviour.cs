@@ -21,13 +21,7 @@ namespace Map.Rendering {
         [Inject]
         public void Construct(IMapData mapData, ICameraController cameraController,
                               ITileLoader tileLoader) {
-            _tileLoader = tileLoader;
             _cameraController = cameraController;
-            SetMapData(mapData);
-        }
-        
-        private void SetMapData(IMapData mapData) {
-            _tileLoader.LoadTiles(mapData);
             _cameraController.SetRegionHandler(_regionHandler);
         }
     }

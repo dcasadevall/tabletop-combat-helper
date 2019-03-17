@@ -11,6 +11,11 @@ namespace Map.Rendering {
 
     [SerializeField]
     private SpriteRenderer _spriteRenderer;
+    public SpriteRenderer SpriteRenderer {
+      get {
+        return _spriteRenderer;
+      }
+    }
     
     private void SetSprite(Sprite sprite) {
       _spriteRenderer.sprite = sprite;
