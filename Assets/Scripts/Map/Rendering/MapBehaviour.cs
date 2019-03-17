@@ -12,6 +12,7 @@ namespace Map.Rendering {
         private RegionHandler _regionHandler;
 #pragma warning restore 649
 
+        private ITileLoader _tileLoader;
         private ICameraController _cameraController;
         
         public class Factory : PlaceholderFactory<IMapData, MapBehaviour> {
@@ -20,7 +21,13 @@ namespace Map.Rendering {
         [Inject]
         public void Construct(IMapData mapData, ICameraController cameraController,
                               ITileLoader tileLoader) {
+            _tileLoader = tileLoader;
             _cameraController = cameraController;
+            SetMapData(mapData);
+        }
+        
+        private void SetMapData(IMapData mapData) {
+            _tileLoader.LoadTiles(mapData);
             _cameraController.SetRegionHandler(_regionHandler);
         }
     }
