@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Zenject;
 
 namespace FreeDraw
 {
@@ -42,8 +43,12 @@ namespace FreeDraw
         Color32[] cur_colors;
         bool mouse_was_previously_held_down = false;
         bool no_drawing_on_current_drag = false;
+        private Camera _camera;
 
-
+        [Inject]
+        public void Construct(Camera camera) {
+            _camera = camera;
+        }
 
 //////////////////////////////////////////////////////////////////////////////
 // BRUSH TYPES. Implement your own here
@@ -143,7 +148,7 @@ namespace FreeDraw
             if (mouse_held_down && !no_drawing_on_current_drag)
             {
                 // Convert mouse coordinates to world coordinates
-                Vector2 mouse_world_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 mouse_world_position = _camera.ScreenToWorldPoint(Input.mousePosition);
 
                 // Check if the current mouse position overlaps our image
                 Collider2D hit = Physics2D.OverlapPoint(mouse_world_position, Drawing_Layers.value);
