@@ -16,7 +16,7 @@ namespace Map.Rendering {
                                          .ByMethod(InstallMapRendererFactory).AsSingle()).AsSingle();
             
             Container.Bind<MapBehaviour>().AsSingle();
-            Container.BindFactory<IMapData, MapBehaviour, MapBehaviour.Factory>().FromComponentInNewPrefab(mapPrefab)
+            Container.BindFactory<MapBehaviour, MapBehaviour.Factory>().FromComponentInNewPrefab(mapPrefab)
                      .AsSingle();
             Container.BindMemoryPool<TileRendererBehaviour, TileRendererBehaviour.Pool>().WithInitialSize(40)
                      .FromComponentInNewPrefab(tilePrefab).UnderTransformGroup("Tiles");

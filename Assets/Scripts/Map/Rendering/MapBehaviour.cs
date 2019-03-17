@@ -15,7 +15,7 @@ namespace Map.Rendering {
         private ITileLoader _tileLoader;
         private ICameraController _cameraController;
         
-        public class Factory : PlaceholderFactory<IMapData, MapBehaviour> {
+        public class Factory : PlaceholderFactory<MapBehaviour> {
         }
 
         [Inject]

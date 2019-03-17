@@ -11,6 +11,13 @@ namespace Grid.Positioning {
         /// <param name="tileCoords"></param>
         /// <returns></returns>
         Vector2 GetTileCenterWorldPosition(IGrid grid, IntVector2 tileCoords);
+
+        /// <summary>
+        /// Gets the world position of the tile origin (lower left corner).
+        /// </summary>
+        /// <param name="tilecoords"></param>
+        /// <returns></returns>
+        Vector2 GetTileOriginWorldPosition(IGrid grid, IntVector2 tileCoords);
         
         /**
          * Returns the tile that is closest to the center of the grid.

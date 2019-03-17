@@ -13,6 +13,13 @@ namespace Grid.Positioning {
         }
 
         /// <inheritdoc />
+        public Vector2 GetTileOriginWorldPosition(IGrid grid, IntVector2 tileCoords) {
+            float x = grid.WorldSpaceBounds().x + grid.TileSize + tileCoords.x;
+            float y = grid.WorldSpaceBounds().y + grid.TileSize + tileCoords.y;
+            return new Vector2(x, y);
+        }
+
+        /// <inheritdoc />
         public IntVector2 GetTileClosestToCenter(IGrid grid) {
             uint xTile = (grid.NumTilesX - 1) / 2;
             uint yTile = (grid.NumTilesY - 1) / 2;
@@ -62,13 +69,13 @@ namespace Grid.Positioning {
         }
 
         /**
-         * Helper method to obtain the world position at the tile origin (minx, miny)
+         * Helper method to obtain the world position at the tile origin (minx, miny), given an axis.
          */
         private float GetTileOriginWorldPosition(IGrid grid, uint coordinate, Axis axis) {
             if (axis == Axis.X) {
-                return grid.WorldSpaceBounds().x + grid.TileSize * coordinate;
+                return GetTileOriginWorldPosition(grid, IntVector2.One * coordinate).x;
             } else {
-                return grid.WorldSpaceBounds().y + grid.TileSize * coordinate;
+                return GetTileOriginWorldPosition(grid, IntVector2.One * coordinate).y;
             }
         }
     }

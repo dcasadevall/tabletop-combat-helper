@@ -89,6 +89,14 @@ namespace Math {
         public static IntVector2 operator *(int d, IntVector2 a) {
             return new IntVector2(a.x * d, a.y * d);
         }
+        
+        public static IntVector2 operator *(IntVector2 a, uint d) {
+            return new IntVector2(a.x * (int)d, a.y * (int)d);
+        }
+
+        public static IntVector2 operator *(uint d, IntVector2 a) {
+            return new IntVector2(a.x * (int)d, a.y * (int)d);
+        }
 
         public static IntVector2 operator /(IntVector2 a, int d) {
             return new IntVector2(a.x / d, a.y / d);
