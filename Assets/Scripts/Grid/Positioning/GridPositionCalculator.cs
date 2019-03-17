@@ -14,8 +14,8 @@ namespace Grid.Positioning {
 
         /// <inheritdoc />
         public Vector2 GetTileOriginWorldPosition(IGrid grid, IntVector2 tileCoords) {
-            float x = grid.WorldSpaceBounds().x + grid.TileSize + tileCoords.x;
-            float y = grid.WorldSpaceBounds().y + grid.TileSize + tileCoords.y;
+            float x = grid.WorldSpaceBounds().x + grid.TileSize * tileCoords.x;
+            float y = grid.WorldSpaceBounds().y + grid.TileSize * tileCoords.y;
             return new Vector2(x, y);
         }
 
