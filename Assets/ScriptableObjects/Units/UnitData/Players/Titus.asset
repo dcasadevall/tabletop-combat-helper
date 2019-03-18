@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Titus
   m_EditorClassIdentifier: UnityEngine.CoreModule:UnityEngine:ScriptableObject
   name: Titus
+  pets: []
   sprite: {fileID: 21300000, guid: 3836169f2c5c24cb3bd533bdf1b8e1c7, type: 3}
-  avatarSprite: {fileID: 21300000, guid: eb75d61a74cdc4667b7e68aa2fb7b0cc, type: 3}
+  avatarSprite: {fileID: 21300000, guid: 9488b0d6254984fba9ae716112a366c9, type: 3}

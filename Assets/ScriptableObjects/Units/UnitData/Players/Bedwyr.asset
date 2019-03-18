@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Bedwyr
   m_EditorClassIdentifier: UnityEngine.CoreModule:UnityEngine:ScriptableObject
   name: Bedwyr
+  pets: []
   sprite: {fileID: 21300000, guid: d880fac97d08c45b8822a77123c0a190, type: 3}
-  avatarSprite: {fileID: 21300000, guid: 1498a747b59ad494691dc3eaef0991ac, type: 3}
+  avatarSprite: {fileID: 21300000, guid: 0fbd10852b74344dc9efbbddf3a13c75, type: 3}
