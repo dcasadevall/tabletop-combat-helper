@@ -47,7 +47,7 @@ namespace CameraSystem {
 
             Vector3 newCameraPosition = Vector3.zero;
 
-            if (regionHandler != null && regionHandler.Regions.Count > 0) {
+            if (false && regionHandler != null && regionHandler.Regions.Count > 0) {
 
                 Region region = regionHandler.ActiveRegion;
 
