@@ -13,7 +13,10 @@ namespace Units {
         public override void InstallBindings() {
             Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(unitPickerViewController).AsSingle();
             Container.Bind<IUnitSpawnSettings>().To<UnitSpawnSettings>().FromInstance(unitSpawnSettingses).AsSingle();
-            Container.Bind<IUnitData>().To<UnitData>().AsSingle();
+            
+            foreach (var nonPlayerUnit in unitSpawnSettingses.NonPlayerUnits) {
+                Container.Bind<IUnitData>().FromInstance(nonPlayerUnit);
+            }
 
             // Prototype
             Container.BindMemoryPool<UnitBehaviour, UnitBehaviour.Pool>().WithInitialSize(10)
