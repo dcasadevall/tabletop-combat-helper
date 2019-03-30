@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Grid.Positioning;
 using Logging;
+using Math;
 using Units.Serialized;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,12 +16,16 @@ namespace Units.UI {
 #pragma warning disable 649
         [SerializeField]
         private Dropdown _dropdown;
+        
         [SerializeField]
         private Button _spawnButton;
+
+        [SerializeField]
+        private Transform _uiAnchor;
 #pragma warning restore 649
         
         private int _selectedIndex = 0;
-        
+
         private List<IUnitData> _unitDatas;
         private ILogger _logger;
 
@@ -73,7 +79,8 @@ namespace Units.UI {
                 options.Add(new Dropdown.OptionData(unitData.Name, unitData.Sprite));
             }
             _dropdown.AddOptions(options);
-            
+
+            _uiAnchor.position = Input.mousePosition;
             gameObject.SetActive(true);
         }
 
