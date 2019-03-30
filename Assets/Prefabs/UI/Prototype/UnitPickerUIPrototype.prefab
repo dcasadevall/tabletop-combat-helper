@@ -38,7 +38,7 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 50, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &451992314
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -621,7 +621,7 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &2097773386020854106
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1337,6 +1337,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dropdown: {fileID: 2097773386020854100}
   _spawnButton: {fileID: 451992312}
+  _uiAnchor: {fileID: 5767509956231960202}
 --- !u!114 &7703454664304256254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1390,7 +1391,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 202.82, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7024016808823976471
 MonoBehaviour:
@@ -1406,7 +1407,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 0
-    m_Right: 0
+    m_Right: 31
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4

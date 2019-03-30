@@ -13,6 +13,7 @@ namespace Grid {
             Container.Bind(typeof(IGridUnitManager), typeof(IInitializable)).To<GridUnitManager>().AsSingle();
             Container.Bind<IRandomGridPositionProvider>().To<SpiralSequenceRandomPositionProvider>().AsSingle();
             Container.Bind<IGridPositionCalculator>().To<GridPositionCalculator>().AsSingle();
+            Container.Bind<IGridInputManager>().To<GridInputManager>().AsSingle();
             
 #if DEBUG
             // ITicker and IInitializer

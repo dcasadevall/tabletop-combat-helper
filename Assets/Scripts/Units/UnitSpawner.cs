@@ -22,17 +22,21 @@ namespace Units {
         private IRandomGridPositionProvider _randomGridPositionProvider;
         private IUnitSpawnSettings _unitSpawnSettings;
         private IGridUnitManager _gridUnitManager;
+        private readonly IGridInputManager _gridInputManager;
         private ILogger _logger;
         private UnitBehaviour.Pool _unitBehaviourPool;
+        private IntVector2? _selectedTile;
 
         public UnitSpawner(IUnitPickerViewController unitPickerVc, 
                            IRandomGridPositionProvider randomGridPositionProvider,
                            IGridUnitManager gridUnitManager,
+                           IGridInputManager gridInputManager,
                            IUnitSpawnSettings unitSpawnSettings,
                            ILogger logger, 
                            UnitBehaviour.Pool unitBehaviourPool) {
             _logger = logger;
             _gridUnitManager = gridUnitManager;
+            _gridInputManager = gridInputManager;
             _randomGridPositionProvider = randomGridPositionProvider;
             _unitPickerViewController = unitPickerVc;
             _unitBehaviourPool = unitBehaviourPool;
@@ -54,13 +58,14 @@ namespace Units {
 
         public void Tick() {
             if (Input.GetKeyUp(KeyCode.U)) {
+                _selectedTile = _gridInputManager.GetTileAtMousePosition();
                 _unitPickerViewController.Show();
             }
         }
 
         private void HandleSpawnUnitClicked(IUnitData unitData) {
             _unitPickerViewController.Hide();
-            SpawnUnit(unitData, IntVector2.Zero);
+            SpawnUnit(unitData, _selectedTile ?? IntVector2.Zero);
         }
 
         private void SpawnUnit(IUnitData unitData, IntVector2 tileCoords) {
