@@ -11,11 +11,14 @@ using ILogger = Logging.ILogger;
 
 namespace Units.UI {
     public class UnitPickerViewController : MonoBehaviour, IUnitPickerViewController {
-        public event Action<IUnitData> SpawnUnitClicked = delegate {};
+        public event Action<IUnitData, int> SpawnUnitClicked = delegate {};
 
 #pragma warning disable 649
         [SerializeField]
         private Dropdown _dropdown;
+        
+        [SerializeField]
+        private Dropdown _unitAmountDropdown;
         
         [SerializeField]
         private Button _spawnButton;
@@ -59,7 +62,7 @@ namespace Units.UI {
                 return;
             }
             
-            SpawnUnitClicked.Invoke(_unitDatas[_selectedIndex]);
+            SpawnUnitClicked.Invoke(_unitDatas[_selectedIndex], _unitAmountDropdown.value + 1);
         }
 
         public void Show() {
@@ -73,19 +76,39 @@ namespace Units.UI {
                 return;
             }
 
+            // Initialize unit dropdown
             _dropdown.ClearOptions();
             List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
             foreach (var unitData in _unitDatas) {
                 options.Add(new Dropdown.OptionData(unitData.Name, unitData.Sprite));
             }
             _dropdown.AddOptions(options);
+            
+            // initialize unit count dropdown
+            _unitAmountDropdown.ClearOptions();
+            options = new List<Dropdown.OptionData>();
+            for (int i = 1; i < 10; i++) {
+                options.Add(new Dropdown.OptionData(i.ToString()));
+            }
+            _unitAmountDropdown.AddOptions(options);
 
+            // Set UI anchored to wherever the mouse is.
             _uiAnchor.position = Input.mousePosition;
+            
+            // Show the UI
             gameObject.SetActive(true);
         }
 
         public void Hide() {
             gameObject.SetActive(false);
+        }
+
+        private void Update() {
+            for (int i = 1; i < 10; ++i) {
+                if (Input.GetKeyDown("" + i)) {
+                    _unitAmountDropdown.value = i - 1;
+                }
+            }
         }
 
         private void HandleOnValueChanged(int selectedIndex) {

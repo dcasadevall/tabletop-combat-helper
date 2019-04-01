@@ -39,11 +39,9 @@ namespace Grid.Positioning.Tests {
         public void testGivenRandomPosition_GetsCenterPosition(int center, int selectedDistanceFromCenter, int expectedPosition) {
             IntVector2 centerPosition = IntVector2.Of(center, center);
             _randomProvider.SetReturnedWeight(selectedDistanceFromCenter);
-            _gridPositionCalculator.GetTileClosestToCenter()
-                                   .Returns(centerPosition);
 
             IntVector2[] positions =
-                _randomGridPositionProvider.GetRandomUniquePositions(selectedDistanceFromCenter, 1);
+                _randomGridPositionProvider.GetRandomUniquePositions(centerPosition, selectedDistanceFromCenter, 1);
             Assert.AreEqual(IntVector2.One * expectedPosition,
                             positions[0]);
         }
