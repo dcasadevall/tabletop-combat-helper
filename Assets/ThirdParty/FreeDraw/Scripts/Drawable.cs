@@ -37,7 +37,7 @@ namespace FreeDraw
         Sprite drawable_sprite;
         Texture2D drawable_texture;
 
-        Vector2 previous_drag_position;
+        Vector2? previous_drag_position;
         Color[] clean_colours_array;
         Color transparent;
         Color32[] cur_colors;
@@ -64,29 +64,7 @@ namespace FreeDraw
 
             // 2. Make sure our variable for pixel array is updated in this frame
             cur_colors = drawable_texture.GetPixels32();
-
-            ////////////////////////////////////////////////////////////////
-            // FILL IN CODE BELOW HERE
-
-            // Do we care about the user left clicking and dragging?
-            // If you don't, simply set the below if statement to be:
-            //if (true)
-
-            // If you do care about dragging, use the below if/else structure
-            if (previous_drag_position == Vector2.zero)
-            {
-                // THIS IS THE FIRST CLICK
-                // FILL IN WHATEVER YOU WANT TO DO HERE
-                // Maybe mark multiple pixels to colour?
-                MarkPixelsToColour(pixel_pos, Pen_Width, Pen_Colour);
-            }
-            else
-            {
-                // THE USER IS DRAGGING
-                // Should we do stuff between the previous mouse position and the current one?
-                ColourBetween(previous_drag_position, pixel_pos, Pen_Width, Pen_Colour);
-            }
-            ////////////////////////////////////////////////////////////////
+            MarkPixelsToColour(pixel_pos, Pen_Width, Pen_Colour);
 
             // 3. Actually apply the changes we marked earlier
             // Done here to be more efficient
@@ -108,7 +86,7 @@ namespace FreeDraw
 
             cur_colors = drawable_texture.GetPixels32();
 
-            if (previous_drag_position == Vector2.zero)
+            if (previous_drag_position == null)
             {
                 // If this is the first time we've ever dragged on this image, simply colour the pixels at our mouse position
                 MarkPixelsToColour(pixel_pos, Pen_Width, Pen_Colour);
@@ -116,7 +94,7 @@ namespace FreeDraw
             else
             {
                 // Colour in a line from where we were on the last update call
-                ColourBetween(previous_drag_position, pixel_pos, Pen_Width, Pen_Colour);
+                ColourBetween(previous_drag_position.Value, pixel_pos, Pen_Width, Pen_Colour);
             }
             ApplyMarkedPixelChanges();
 
@@ -162,7 +140,7 @@ namespace FreeDraw
                 else
                 {
                     // We're not over our destination texture
-                    previous_drag_position = Vector2.zero;
+                    previous_drag_position = null;
                     if (!mouse_was_previously_held_down)
                     {
                         // This is a new drag where the user is left clicking off the canvas
@@ -174,7 +152,7 @@ namespace FreeDraw
             // Mouse is released
             else if (!mouse_held_down)
             {
-                previous_drag_position = Vector2.zero;
+                previous_drag_position = null;
                 no_drawing_on_current_drag = false;
             }
             mouse_was_previously_held_down = mouse_held_down;
