@@ -11,6 +11,7 @@ namespace Drawing.UI {
         public static bool isDrawing = false;
         public GameObject startPaintingButton;
         public GameObject stopPaintingButton;
+        public GameObject clearButton;
         public GameObject drawingTools;
         public BoxCollider2D drawableCollider;
 
@@ -21,6 +22,7 @@ namespace Drawing.UI {
         public void StartPainting() {
             startPaintingButton.SetActive(false);
             stopPaintingButton.SetActive(true);
+            clearButton.SetActive(true);
             drawingTools.SetActive(true);
             drawableCollider.enabled = true;
             isDrawing = true;
@@ -29,6 +31,7 @@ namespace Drawing.UI {
         public void StopPainting() {
             startPaintingButton.SetActive(true);
             stopPaintingButton.SetActive(false);
+            clearButton.SetActive(false);
             drawingTools.SetActive(false);
             drawableCollider.enabled = false;
             isDrawing = false;
