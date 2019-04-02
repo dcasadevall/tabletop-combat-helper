@@ -7,7 +7,9 @@ namespace CameraSystem {
         private GameObject _cameraPrefab;
         
         public override void InstallBindings() {
-            Container.Bind<Camera>().FromComponentInNewPrefab(_cameraPrefab).AsSingle();
+            Container.Bind(typeof(Camera), typeof(ICameraController)).FromComponentInNewPrefab(_cameraPrefab)
+                     .AsSingle();
+            
             Container.Bind<IInitializable>().To<CameraInitializer>().AsSingle();
         }
     }

@@ -7,7 +7,6 @@ namespace Map.Rendering {
     public class MapRenderingInstaller : MonoInstaller {
         public GameObject mapPrefab;
         public GameObject tilePrefab;
-        public GameObject mapCameraPrefab;
         
         public override void InstallBindings() {
             Container.Bind<IInitializable>().To<MapRenderer>().AsSingle();
@@ -20,9 +19,6 @@ namespace Map.Rendering {
                      .AsSingle();
             Container.BindMemoryPool<TileRendererBehaviour, TileRendererBehaviour.Pool>().WithInitialSize(40)
                      .FromComponentInNewPrefab(tilePrefab).UnderTransformGroup("Tiles");
-            
-            Container.Bind<ICameraController>().To<PrototypeCameraController>()
-                     .FromComponentInNewPrefab(mapCameraPrefab).AsSingle();
         }
 
         private void InstallMapRendererFactory(DiContainer container) {
