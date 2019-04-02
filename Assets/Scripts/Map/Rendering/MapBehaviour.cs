@@ -1,4 +1,7 @@
+using System.Linq;
 using CameraSystem;
+using Grid;
+using Math;
 using UnityEngine;
 using Zenject;
 
@@ -12,6 +15,7 @@ namespace Map.Rendering {
         private RegionHandler _regionHandler;
 #pragma warning restore 649
 
+        private IGrid _grid;
         private ITileLoader _tileLoader;
         private ICameraController _cameraController;
         
@@ -19,10 +23,21 @@ namespace Map.Rendering {
         }
 
         [Inject]
-        public void Construct(IMapData mapData, ICameraController cameraController,
+        public void Construct(IMapData mapData, IGrid grid, ICameraController cameraController,
                               ITileLoader tileLoader) {
+            _grid = grid;
             _cameraController = cameraController;
+        }
+
+        private void Start() {
+            Rect gridBounds = _grid.WorldSpaceBounds();
+            _regionHandler.Regions.Clear();
+            _regionHandler.AddRegion(Vector2.zero);
+            _regionHandler.Regions.First().p0 = gridBounds.min;
+            _regionHandler.Regions.First().p1 = gridBounds.max;
+            
             _cameraController.SetRegionHandler(_regionHandler);
+            _regionHandler.Validate();
         }
     }
 }
