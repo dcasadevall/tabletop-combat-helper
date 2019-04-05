@@ -1,4 +1,6 @@
 using System.Collections;
+using Drawing;
+using Drawing.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Zenject;
@@ -16,7 +18,7 @@ namespace FreeDraw
         // PEN COLOUR
         public static Color Pen_Colour = Color.red;     // Change these to change the default drawing settings
         // PEN WIDTH (actually, it's a radius, in pixels)
-        public static int Pen_Width = 3;
+        public static int Pen_Width = 1;
 
 
         public delegate void Brush_Function(Vector2 world_position);
@@ -33,8 +35,8 @@ namespace FreeDraw
 
         // Used to reference THIS specific file without making all methods static
         public static Drawable drawable;
-        // MUST HAVE READ/WRITE enabled set in the file editor of Unity
-        Sprite drawable_sprite;
+        // MUST HAVE READ/WRITE enabled set in the fil_drawable_spritee editor of Unity
+        private Sprite _drawableSprite;
         Texture2D drawable_texture;
 
         Vector2? previous_drag_position;
@@ -44,9 +46,18 @@ namespace FreeDraw
         bool mouse_was_previously_held_down = false;
         bool no_drawing_on_current_drag = false;
         private Camera _camera;
+        
+        [SerializeField]
+        private SpriteRenderer _drawableSpriteRenderer;
+
+        [SerializeField]
+        private Collider2D _collider;
+        
+        private IDrawingInputManager _drawingInputManager;
 
         [Inject]
-        public void Construct(Camera camera) {
+        public void Construct(Camera camera, IDrawingInputManager drawingInputManager) {
+            _drawingInputManager = drawingInputManager;
             _camera = camera;
         }
 
@@ -193,7 +204,7 @@ namespace FreeDraw
             for (int x = center_x - pen_thickness; x <= center_x + pen_thickness; x++)
             {
                 // Check if the X wraps around the image, so we don't draw pixels on the other side of the image
-                if (x >= (int)drawable_sprite.rect.width || x < 0)
+                if (x >= (int)_drawableSprite.rect.width || x < 0)
                     continue;
 
                 for (int y = center_y - pen_thickness; y <= center_y + pen_thickness; y++)
@@ -205,7 +216,7 @@ namespace FreeDraw
         public void MarkPixelToChange(int x, int y, Color color)
         {
             // Need to transform x and y coordinates to flat coordinates of array
-            int array_pos = y * (int)drawable_sprite.rect.width + x;
+            int array_pos = y * (int)_drawableSprite.rect.width + x;
 
             // Check if this is a valid position
             if (array_pos > cur_colors.Length || array_pos < 0)
@@ -248,9 +259,9 @@ namespace FreeDraw
             Vector3 local_pos = transform.InverseTransformPoint(world_position);
 
             // Change these to coordinates of pixels
-            float pixelWidth = drawable_sprite.rect.width;
-            float pixelHeight = drawable_sprite.rect.height;
-            float unitsToPixels = pixelWidth / drawable_sprite.bounds.size.x * transform.localScale.x;
+            float pixelWidth = _drawableSprite.rect.width;
+            float pixelHeight = _drawableSprite.rect.height;
+            float unitsToPixels = pixelWidth / _drawableSprite.bounds.size.x * transform.localScale.x;
 
             // Need to center our coordinates
             float centered_x = local_pos.x * unitsToPixels + pixelWidth / 2;
@@ -278,17 +289,34 @@ namespace FreeDraw
             // DEFAULT BRUSH SET HERE
             current_brush = PenBrush;
 
-            drawable_sprite = this.GetComponent<SpriteRenderer>().sprite;
-            drawable_texture = drawable_sprite.texture;
+            _drawableSprite = _drawableSpriteRenderer.sprite;
+            drawable_texture = _drawableSprite.texture;
 
             // Initialize clean pixels to use
-            clean_colours_array = new Color[(int)drawable_sprite.rect.width * (int)drawable_sprite.rect.height];
+            clean_colours_array = new Color[(int)_drawableSprite.rect.width * (int)_drawableSprite.rect.height];
             for (int x = 0; x < clean_colours_array.Length; x++)
                 clean_colours_array[x] = Reset_Colour;
 
             // Should we reset our canvas image when we hit play in the editor?
             if (Reset_Canvas_On_Play)
                 ResetCanvas();
+
+            _drawingInputManager.DrawingEnabled += HandleDrawingEnabled;
+            _drawingInputManager.DrawingDisabled += HandleDrawingDisabled;
+
+            if (_drawingInputManager.IsDrawing) {
+                HandleDrawingEnabled();
+            } else {
+                HandleDrawingDisabled();
+            }
+        }
+
+        private void HandleDrawingEnabled() {
+            _collider.enabled = true;
+        }
+        
+        private void HandleDrawingDisabled() {
+            _collider.enabled = false;
         }
     }
 }

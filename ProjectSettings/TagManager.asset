@@ -15,7 +15,7 @@ TagManager:
   - 
   - 
   - Units
-  - 
+  - Drawing
   - 
   - 
   - 
@@ -44,6 +44,9 @@ TagManager:
     locked: 0
   - name: Background
     uniqueID: 3828787579
+    locked: 0
+  - name: Drawing
+    uniqueID: 1294008691
     locked: 0
   - name: Units
     uniqueID: 2632996201

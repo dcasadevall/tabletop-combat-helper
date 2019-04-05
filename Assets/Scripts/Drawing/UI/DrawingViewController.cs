@@ -1,21 +1,28 @@
-﻿using FreeDraw;
+﻿using System;
+using FreeDraw;
 using UnityEngine;
+using Zenject;
 
 namespace Drawing.UI {
     /// <summary>
     /// ViewController to manage the painting view. This should be injected, but for now, just have it manage
     /// itself through unity's lifecycle.
     /// </summary>
-    public class DrawingViewController : MonoBehaviour {
+    public class DrawingViewController : MonoBehaviour, IDrawingViewController {
         // TODO: Inject this
-        public static bool isDrawing = false;
         public GameObject startPaintingButton;
         public GameObject stopPaintingButton;
         public GameObject clearButton;
         public GameObject drawingTools;
-        public BoxCollider2D drawableCollider;
 
-        public void Awake() {
+        private IDrawingInputManagerInternal _drawingInputManager;
+
+        [Inject]
+        public void Construct(IDrawingInputManagerInternal drawingInputManager) {
+            _drawingInputManager = drawingInputManager;
+        }
+
+        private void Start() {
             StopPainting();
         }
 
@@ -24,8 +31,8 @@ namespace Drawing.UI {
             stopPaintingButton.SetActive(true);
             clearButton.SetActive(true);
             drawingTools.SetActive(true);
-            drawableCollider.enabled = true;
-            isDrawing = true;
+
+            _drawingInputManager.IsEnabled = true;
         }
         
         public void StopPainting() {
@@ -33,8 +40,12 @@ namespace Drawing.UI {
             stopPaintingButton.SetActive(false);
             clearButton.SetActive(false);
             drawingTools.SetActive(false);
-            drawableCollider.enabled = false;
-            isDrawing = false;
+            
+            _drawingInputManager.IsEnabled = false;
+        }
+
+        public void Clear() {
+            
         }
     }
 }

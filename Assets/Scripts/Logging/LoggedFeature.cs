@@ -16,6 +16,7 @@ namespace Logging {
         public static LoggedFeature Map => new LoggedFeature("Map");
         public static LoggedFeature Network => new LoggedFeature("Network");
         public static LoggedFeature Grid => new LoggedFeature("Grid");
+        public static LoggedFeature Drawing => new LoggedFeature("Drawing");
         
         private static readonly HashSet<LoggedFeature> _features = new HashSet<LoggedFeature>();
         public static IEnumerable<LoggedFeature> LoggedFeatures => _features;
