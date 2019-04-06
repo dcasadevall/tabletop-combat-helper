@@ -21,13 +21,13 @@ namespace CameraSystem {
 
         private DiContainer _container;
         private Camera _camera;
-        private IDrawingInputManager _drawingInputManager;
+        private IDrawingViewController _drawingViewController;
 
         [Inject]
         public void Construct(Camera camera,
-                              IDrawingInputManager drawingInputManager) {
+                              IDrawingViewController drawingViewController) {
             _camera = camera;
-            _drawingInputManager = drawingInputManager;
+            _drawingViewController = drawingViewController;
         }
 
         private Vector3 lastPosition;
@@ -99,7 +99,7 @@ namespace CameraSystem {
                 return;
             }
 
-            if (_drawingInputManager.IsDrawing) {
+            if (_drawingViewController.IsDrawing) {
                 return;
             }
 

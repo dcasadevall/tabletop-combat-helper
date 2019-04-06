@@ -53,11 +53,11 @@ namespace FreeDraw
         [SerializeField]
         private Collider2D _collider;
         
-        private IDrawingInputManager _drawingInputManager;
+        private IDrawingViewController _drawingViewController;
 
         [Inject]
-        public void Construct(Camera camera, IDrawingInputManager drawingInputManager) {
-            _drawingInputManager = drawingInputManager;
+        public void Construct(Camera camera, IDrawingViewController drawingViewController) {
+            _drawingViewController = drawingViewController;
             _camera = camera;
         }
 
@@ -301,10 +301,10 @@ namespace FreeDraw
             if (Reset_Canvas_On_Play)
                 ResetCanvas();
 
-            _drawingInputManager.DrawingEnabled += HandleDrawingEnabled;
-            _drawingInputManager.DrawingDisabled += HandleDrawingDisabled;
+            _drawingViewController.DrawingEnabled += HandleDrawingEnabled;
+            _drawingViewController.DrawingDisabled += HandleDrawingDisabled;
 
-            if (_drawingInputManager.IsDrawing) {
+            if (_drawingViewController.IsDrawing) {
                 HandleDrawingEnabled();
             } else {
                 HandleDrawingDisabled();

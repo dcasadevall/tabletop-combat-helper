@@ -1,6 +1,4 @@
-using System;
 using Grid;
-using Grid.Positioning;
 using Math;
 using UnityEngine;
 using Zenject;
@@ -10,29 +8,8 @@ namespace Drawing {
     /// Handles mouse input and forwards events to the <see cref="IDrawableTile"/>s pertinent to the
     /// currently hovered tile.
     /// </summary>
-    public class DrawingInputManager : ITickable, IDrawingInputManager, IDrawingInputManagerInternal {
-        public event Action DrawingEnabled = delegate {};
-        public event Action DrawingDisabled = delegate {};
-        
-        public bool IsDrawing { get; private set; }
-
-        public bool IsEnabled {
-            get {
-                return _isEnabled;
-            }
-            set {
-                if (value == _isEnabled) {
-                    return;
-                }
-                
-                _isEnabled = value;
-                if (_isEnabled) {
-                    DrawingEnabled.Invoke();
-                } else {
-                    DrawingDisabled.Invoke();
-                }
-            }
-        }
+    public class DrawingInputManager : ITickable, IDrawingInputManager {
+        public bool IsEnabled { get; set; }
 
         private readonly IGridInputManager _gridInputManager;
         private readonly IDrawableTileRegistry _drawableTileRegistry;
@@ -54,7 +31,6 @@ namespace Drawing {
             }
             
             if (Input.GetMouseButtonDown(0)) {
-                IsDrawing = true;
                 IDrawableTile drawableTile = _drawableTileRegistry.GetDrawableTileAtCoordinates(tileAtMouse.Value);
                 drawableTile.HandleMouseDown();
             }
@@ -65,7 +41,6 @@ namespace Drawing {
             }
 
             if (Input.GetMouseButtonUp(0)) {
-                IsDrawing = false;
                 IDrawableTile drawableTile = _drawableTileRegistry.GetDrawableTileAtCoordinates(tileAtMouse.Value);
                 drawableTile.HandleMouseUp();
             }

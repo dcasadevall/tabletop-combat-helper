@@ -9,16 +9,21 @@ namespace Drawing.UI {
     /// itself through unity's lifecycle.
     /// </summary>
     public class DrawingViewController : MonoBehaviour, IDrawingViewController {
+        public event Action DrawingEnabled = delegate {};
+        public event Action DrawingDisabled = delegate {};
+        
+        public bool IsDrawing { get; private set; }
+
         // TODO: Inject this
         public GameObject startPaintingButton;
         public GameObject stopPaintingButton;
         public GameObject clearButton;
         public GameObject drawingTools;
 
-        private IDrawingInputManagerInternal _drawingInputManager;
+        private IDrawingInputManager _drawingInputManager;
 
         [Inject]
-        public void Construct(IDrawingInputManagerInternal drawingInputManager) {
+        public void Construct(IDrawingInputManager drawingInputManager) {
             _drawingInputManager = drawingInputManager;
         }
 
@@ -32,7 +37,9 @@ namespace Drawing.UI {
             clearButton.SetActive(true);
             drawingTools.SetActive(true);
 
+            IsDrawing = true;
             _drawingInputManager.IsEnabled = true;
+            DrawingEnabled.Invoke();
         }
         
         public void StopPainting() {
@@ -41,7 +48,9 @@ namespace Drawing.UI {
             clearButton.SetActive(false);
             drawingTools.SetActive(false);
             
+            IsDrawing = false;
             _drawingInputManager.IsEnabled = false;
+            DrawingDisabled.Invoke();
         }
 
         public void Clear() {

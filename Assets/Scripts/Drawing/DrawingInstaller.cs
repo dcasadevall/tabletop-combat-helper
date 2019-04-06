@@ -17,10 +17,6 @@ namespace Drawing {
         private DrawbleSpriteSettings _settings;
 
         public override void InstallBindings() {
-            // This needs to be copied to subcontainers for the DrawingViewController to pick it up
-            Container.Bind<DrawingInputManager>().AsSingle().CopyIntoAllSubContainers();
-            Container.Bind(typeof(ITickable), typeof(IDrawingInputManager)).To<DrawingInputManager>().FromResolve();
-            
             // Facade. Only expose IDrawingInputManagerInternal to IDrawingViewController.
             // Also, non lazily instantiate the VC so it immediately shows up.
             Container.Bind<IDrawingViewController>().FromSubContainerResolve()
@@ -38,7 +34,7 @@ namespace Drawing {
         }
 
         private void BindDrawingViewController(DiContainer container) {
-            container.Bind<IDrawingInputManagerInternal>().To<DrawingInputManager>().FromResolve();
+            container.Bind(typeof(ITickable), typeof(IDrawingInputManager)).To<DrawingInputManager>().AsSingle();
             container.Bind<IDrawingViewController>().To<DrawingViewController>()
                      .FromComponentInNewPrefab(_drawingViewController).AsSingle();
         }
