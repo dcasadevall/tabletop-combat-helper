@@ -21,6 +21,7 @@ namespace Drawing {
             // Also, non lazily instantiate the VC so it immediately shows up.
             Container.Bind<IDrawingViewController>().FromSubContainerResolve()
                      .ByMethod(BindDrawingViewController)
+                     .WithKernel()
                      .AsSingle()
                      .NonLazy();
             
@@ -34,7 +35,10 @@ namespace Drawing {
         }
 
         private void BindDrawingViewController(DiContainer container) {
-            container.Bind(typeof(ITickable), typeof(IDrawingInputManager)).To<DrawingInputManager>().AsSingle();
+            // container.Bind(typeof(ITickable), typeof(IDrawingInputManager)).To<DrawingInputManager>().AsSingle();
+            container.Bind<DrawingInputManager>().AsSingle();
+            container.Bind<IDrawingInputManager>().To<DrawingInputManager>().FromResolve();
+            container.Bind<ITickable>().To<DrawingInputManager>().FromResolve();
             container.Bind<IDrawingViewController>().To<DrawingViewController>()
                      .FromComponentInNewPrefab(_drawingViewController).AsSingle();
         }
