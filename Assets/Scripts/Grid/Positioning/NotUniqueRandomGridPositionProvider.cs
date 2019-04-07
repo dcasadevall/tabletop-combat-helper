@@ -11,24 +11,21 @@ namespace Grid.Positioning {
     public class NotUniqueRandomGridPositionProvider : IRandomGridPositionProvider {
         private readonly IGrid _grid;
         private readonly IRandomProvider _randomProvider;
-        private readonly IGridPositionCalculator _gridPositionCalculator;
 
         public NotUniqueRandomGridPositionProvider(IGrid grid,
-                                                   IGridPositionCalculator gridPositionCalculator,
                                                    IRandomProvider randomProvider) {
             _grid = grid;
             _randomProvider = randomProvider;
-            _gridPositionCalculator = gridPositionCalculator;
         }
-        
-        public IntVector2[] GetRandomUniquePositions(int maxDistanceFromCenter, int numTilesToGenerate) {
+
+        public IntVector2[] GetRandomUniquePositions(IntVector2 startTile, int maxDistanceFromCenter,
+                                                     int numTilesToGenerate) {
             IntVector2[] tiles = new IntVector2[numTilesToGenerate];
-            IntVector2 centerPosition = _gridPositionCalculator.GetTileClosestToCenter();
             
             for (int i = 0; i < numTilesToGenerate; i++) {
-                int xPosition = centerPosition.x +
+                int xPosition = startTile.x +
                                 _randomProvider.GetRandomIntegerInRange(-maxDistanceFromCenter, maxDistanceFromCenter + 1);
-                int yPosition = centerPosition.y +
+                int yPosition = startTile.y +
                                 _randomProvider.GetRandomIntegerInRange(-maxDistanceFromCenter, maxDistanceFromCenter + 1);
             
                 xPosition = System.Math.Min((int)_grid.NumTilesX - 1, System.Math.Max(0, xPosition));

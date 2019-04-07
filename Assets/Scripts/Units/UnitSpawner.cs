@@ -18,16 +18,18 @@ namespace Units {
     /// <see cref="UnitBehaviour"/>s are initialized with the newly created <see cref="IUnit"/>.
     /// </summary>
     public class UnitSpawner : IInitializable, ITickable {
-        private IUnitPickerViewController _unitPickerViewController;
-        private IRandomGridPositionProvider _randomGridPositionProvider;
-        private IUnitSpawnSettings _unitSpawnSettings;
-        private IGridUnitManager _gridUnitManager;
+        private readonly IUnitPickerViewController _unitPickerViewController;
+        private readonly IGridPositionCalculator _gridPositionCalculator;
+        private readonly IRandomGridPositionProvider _randomGridPositionProvider;
+        private readonly IUnitSpawnSettings _unitSpawnSettings;
+        private readonly IGridUnitManager _gridUnitManager;
         private readonly IGridInputManager _gridInputManager;
-        private ILogger _logger;
-        private UnitBehaviour.Pool _unitBehaviourPool;
+        private readonly ILogger _logger;
+        private readonly UnitBehaviour.Pool _unitBehaviourPool;
         private IntVector2? _selectedTile;
 
         public UnitSpawner(IUnitPickerViewController unitPickerVc, 
+                           IGridPositionCalculator gridPositionCalculator,
                            IRandomGridPositionProvider randomGridPositionProvider,
                            IGridUnitManager gridUnitManager,
                            IGridInputManager gridInputManager,
@@ -39,6 +41,7 @@ namespace Units {
             _gridInputManager = gridInputManager;
             _randomGridPositionProvider = randomGridPositionProvider;
             _unitPickerViewController = unitPickerVc;
+            _gridPositionCalculator = gridPositionCalculator;
             _unitBehaviourPool = unitBehaviourPool;
             _unitSpawnSettings = unitSpawnSettings;
         }
@@ -47,8 +50,10 @@ namespace Units {
             _unitPickerViewController.SpawnUnitClicked += HandleSpawnUnitClicked;
 
             // Spawn 
+            IntVector2 startPosition = _gridPositionCalculator.GetTileClosestToCenter();
             IntVector2[] tilePositions =
-                _randomGridPositionProvider.GetRandomUniquePositions(_unitSpawnSettings
+                _randomGridPositionProvider.GetRandomUniquePositions(startPosition,
+                                                                     _unitSpawnSettings
                                                                          .MaxInitialUnitSpawnDistanceToCenter,
                                                                      _unitSpawnSettings.PlayerUnits.Length);
             for (int i = 0; i < tilePositions.Length; i++) {
@@ -63,9 +68,16 @@ namespace Units {
             }
         }
 
-        private void HandleSpawnUnitClicked(IUnitData unitData) {
+        private void HandleSpawnUnitClicked(IUnitData unitData, int numUnits) {
             _unitPickerViewController.Hide();
-            SpawnUnit(unitData, _selectedTile ?? IntVector2.Zero);
+            IntVector2[] tilePositions =
+                _randomGridPositionProvider.GetRandomUniquePositions(_selectedTile ?? IntVector2.Zero,
+                                                                     1,
+                                                                     numUnits);
+           
+            foreach (var tilePosition in tilePositions) {
+                SpawnUnit(unitData, tilePosition);
+            }
         }
 
         private void SpawnUnit(IUnitData unitData, IntVector2 tileCoords) {

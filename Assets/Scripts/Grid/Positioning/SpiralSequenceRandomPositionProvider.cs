@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Math;
 using Math.Random;
-using UnityEngine;
 
 namespace Grid.Positioning {
     /// <summary>
@@ -14,24 +13,21 @@ namespace Grid.Positioning {
         private const int kMaxTries = 100;
         private readonly IGrid _grid;
         private readonly IRandomProvider _randomProvider;
-        private readonly IGridPositionCalculator _gridPositionCalculator;
 
         public SpiralSequenceRandomPositionProvider(IGrid grid,
-                                                    IGridPositionCalculator gridPositionCalculator, 
                                                     IRandomProvider randomProvider) {
             _grid = grid;
             _randomProvider = randomProvider;
-            _gridPositionCalculator = gridPositionCalculator;
         }
-        
-        public IntVector2[] GetRandomUniquePositions(int maxDistanceFromCenter, int numTilesToGenerate) {
-            IntVector2 spiralCenter = _gridPositionCalculator.GetTileClosestToCenter();
-            IntVector2 spiralEndTile = IntVector2.Of(spiralCenter.x - numTilesToGenerate,
-                                                     spiralCenter.y - numTilesToGenerate);
+
+        public IntVector2[] GetRandomUniquePositions(IntVector2 startTile, int maxDistanceFromCenter,
+                                                     int numTilesToGenerate) {
+            IntVector2 spiralEndTile = IntVector2.Of(startTile.x - numTilesToGenerate,
+                                                     startTile.y - numTilesToGenerate);
             LinkedList<IntVector2> availableTiles = new LinkedList<IntVector2>();
             
             int k = 1;
-            IntVector2 currentPosition, stretchStart = spiralCenter;
+            IntVector2 currentPosition, stretchStart = startTile;
 
             do {
                 currentPosition = IntVector2.Of(stretchStart.x, stretchStart.y);
