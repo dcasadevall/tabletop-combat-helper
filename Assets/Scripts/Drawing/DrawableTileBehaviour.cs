@@ -39,11 +39,6 @@ namespace Drawing {
         private IDrawingViewController _drawingViewController;
         private ITexturePainter _texturePainter;
         
-        /// <summary>
-        /// The pixel coordinates of the last pixel that was painted in this "drag" gesture.
-        /// </summary>
-        private Vector2 _previousPixelCoords;
-
         [Inject]
         public void Construct(IDrawingViewController drawingViewController, ITexturePainter texturePainter) {
             _drawingViewController = drawingViewController;
@@ -58,15 +53,11 @@ namespace Drawing {
         public void HandleMouseDown(Vector2 point) {
             Vector2 pixelCoords = GetLocalToPixelCoordinates(point);
             _texturePainter.PaintPixel(_spriteRenderer.sprite, pixelCoords, _drawingViewController.PaintParams);
-
-            _previousPixelCoords = pixelCoords;
         }
 
         public void HandleMouseDrag(Vector2 point) {
             Vector2 pixelCoords = GetLocalToPixelCoordinates(point);
             _texturePainter.PaintPixel(_spriteRenderer.sprite, pixelCoords, _drawingViewController.PaintParams);
-
-            _previousPixelCoords = pixelCoords;
         }
 
         public void HandleMouseUp(Vector2 point) {
