@@ -64,7 +64,6 @@ namespace Drawing {
 
         public void HandleMouseDrag(Vector2 point) {
             Vector2 pixelCoords = GetLocalToPixelCoordinates(point);
-            // _texturePainter.PaintBetweenPixels(_previousPixelCoords, pixelCoords, _drawingViewController.PaintParams);
             _texturePainter.PaintPixel(_spriteRenderer.sprite, pixelCoords, _drawingViewController.PaintParams);
 
             _previousPixelCoords = pixelCoords;
