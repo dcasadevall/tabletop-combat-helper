@@ -20,13 +20,14 @@ namespace Drawing.UI {
         public bool IsDrawing { get; private set; }
         public TexturePaintParams PaintParams { get; private set; }
 
-        // TODO: Inject this
-        public GameObject startPaintingButton;
-        public GameObject stopPaintingButton;
-        public GameObject clearButton;
-        public GameObject drawingTools;
-        public Slider brushSizeSlider;
-        public Slider transparencySlider;
+        [SerializeField]
+        private GameObject _startPaintingButton;
+        [SerializeField]
+        private GameObject _stopPaintingButton;
+        [SerializeField]
+        private GameObject _drawingTools;
+        [SerializeField]
+        private Slider _brushSizeSlider;
 
         private IDrawingInputManager _drawingInputManager;
         private IDrawableTileRegistry _drawableTileRegistry;
@@ -73,10 +74,9 @@ namespace Drawing.UI {
                 return;
             }
             
-            startPaintingButton.SetActive(false);
-            stopPaintingButton.SetActive(true);
-            clearButton.SetActive(true);
-            drawingTools.SetActive(true);
+            _startPaintingButton.SetActive(false);
+            _stopPaintingButton.SetActive(true);
+            _drawingTools.SetActive(true);
 
             DrawingEnabled.Invoke();
         }
@@ -89,47 +89,19 @@ namespace Drawing.UI {
             _inputLock.Unlock(_lockId.Value);
             _lockId = null;
             
-            startPaintingButton.SetActive(true);
-            stopPaintingButton.SetActive(false);
-            clearButton.SetActive(false);
-            drawingTools.SetActive(false);
+            _startPaintingButton.SetActive(true);
+            _stopPaintingButton.SetActive(false);
+            _drawingTools.SetActive(false);
             
             DrawingDisabled.Invoke();
         }
 
-        #region Brush Setters
-        public void SetWhite() {
-            SetColor(Color.white);
+        public void SetColor(Color color) {
+            PaintParams = TexturePaintParams.MakeWithColor(color, (int)_brushSizeSlider.value);
         }
-        
-        public void SetGray() {
-            SetColor(Color.gray);
-        }
-        
-        public void SetBlack() {
-            SetColor(Color.black);
-        }
-        
-        public void SetRed() {
-            SetColor(Color.red);
-        }
-        
-        public void SetBlue() {
-            SetColor(Color.blue);
-        }
-        
-        public void SetGreen() {
-            SetColor(Color.green);
-        }
-        
-        private void SetColor(Color color) {
-            color.a = transparencySlider.value;
-            PaintParams = TexturePaintParams.MakeWithColor(color, (int)brushSizeSlider.value);
-        }
-        #endregion
-        
+
         public void SetEraser() {
-            PaintParams = TexturePaintParams.MakeEraser((int)brushSizeSlider.value);
+            PaintParams = TexturePaintParams.MakeEraser((int)_brushSizeSlider.value);
         }
 
         public void Clear() {
