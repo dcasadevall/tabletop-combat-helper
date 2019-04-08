@@ -21,8 +21,8 @@ namespace Drawing.UI {
         public TexturePaintParams PaintParams { get; private set; }
 
         // TODO: Inject this
-        public GameObject startPaintingText;
-        public GameObject stopPaintingText;
+        public GameObject startPaintingButton;
+        public GameObject stopPaintingButton;
         public GameObject clearButton;
         public GameObject drawingTools;
         public Slider brushSizeSlider;
@@ -73,8 +73,8 @@ namespace Drawing.UI {
                 return;
             }
             
-            startPaintingText.SetActive(false);
-            stopPaintingText.SetActive(true);
+            startPaintingButton.SetActive(false);
+            stopPaintingButton.SetActive(true);
             clearButton.SetActive(true);
             drawingTools.SetActive(true);
 
@@ -89,8 +89,8 @@ namespace Drawing.UI {
             _inputLock.Unlock(_lockId.Value);
             _lockId = null;
             
-            startPaintingText.SetActive(true);
-            stopPaintingText.SetActive(false);
+            startPaintingButton.SetActive(true);
+            stopPaintingButton.SetActive(false);
             clearButton.SetActive(false);
             drawingTools.SetActive(false);
             
