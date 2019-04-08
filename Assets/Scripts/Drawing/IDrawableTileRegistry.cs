@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using Math;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Drawing {
     /// <summary>
@@ -14,5 +17,21 @@ namespace Drawing {
         /// </summary>
         /// <returns></returns>
         IDrawableTile GetDrawableTileAtCoordinates(IntVector2 tileCoords);
+
+        /// <summary>
+        /// Returns all drawable tiles that have been drawn on so far.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IDrawableTile> GetAllTiles();
+
+        /// <summary>
+        /// Given a world position, return the local position relative to the coordinates of the tile
+        /// containing this world position.
+        ///
+        /// Returns null if no tile contains the given world position.
+        /// </summary>
+        /// <param name="worldPosition"></param>
+        /// <returns></returns>
+        Vector2? GetLocalPosition(Vector2 worldPosition);
     }
 }

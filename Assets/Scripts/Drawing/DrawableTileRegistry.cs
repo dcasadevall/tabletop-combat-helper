@@ -49,14 +49,25 @@ namespace Drawing {
             IntVector2 bottomLeftTileCoords = GetBottomLeftGridTileCoords(tileCoords);
             Vector2 tileOrigin = _gridPositionCalculator.GetTileOriginWorldPosition(bottomLeftTileCoords);
             Vector2 tileCenter = GetCenterWorldPositionWithOrigin(tileOrigin);
-            _logger.Log(LoggedFeature.Drawing,
-                        "Spawning new tile at coords: {0}. World position: {1}. Tile World Position: {2}",
-                        drawableCoords,
-                        tileOrigin,
-                        tileCenter);
             
             _tiles[drawableCoords] = _drawableTilePool.Spawn(tileCenter);
             return _tiles[drawableCoords];
+        }
+
+        public IEnumerable<IDrawableTile> GetAllTiles() {
+            return _tiles.Values;
+        }
+
+        public Vector2? GetLocalPosition(Vector2 worldPosition) {
+            IntVector2? tileCoords = _gridPositionCalculator.GetTileContainingWorldPosition(worldPosition);
+            if (tileCoords == null) {
+                _logger.Log(LoggedFeature.Drawing, "TileCoords not found for world position: {0}", worldPosition);
+                return null;
+            }
+
+            IntVector2 bottomLeftTileCoords = GetBottomLeftGridTileCoords(tileCoords.Value);
+            Vector2 tileOrigin = _gridPositionCalculator.GetTileOriginWorldPosition(bottomLeftTileCoords);
+            return worldPosition - tileOrigin;
         }
 
         IntVector2 GetDrawableTilePositionForTile(IntVector2 tileCoords) {

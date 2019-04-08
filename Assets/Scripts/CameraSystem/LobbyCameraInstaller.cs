@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Zenject;
 
 namespace CameraSystem {
@@ -7,9 +8,10 @@ namespace CameraSystem {
         private GameObject _cameraPrefab;
         
         public override void InstallBindings() {
-            Container.Bind<Camera>().FromComponentInNewPrefab(_cameraPrefab)
+            Container.Bind(typeof(Camera), typeof(EventSystem)).FromComponentInNewPrefab(_cameraPrefab)
                      .AsSingle()
                      .NonLazy();
+            
         }
     }
 }
