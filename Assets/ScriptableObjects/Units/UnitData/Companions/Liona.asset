@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Liona
   m_EditorClassIdentifier: UnityEngine.CoreModule:UnityEngine:ScriptableObject
   name: Liona
+  pets: []
   sprite: {fileID: 21300000, guid: 51f23d90383834fc4a4cf611d4fdceca, type: 3}
-  avatarSprite: {fileID: 21300000, guid: f4982fbd7448b4117bf6281159fad833, type: 3}
+  avatarSprite: {fileID: 21300000, guid: 7ae87e9c17e024f378d954e58b0ead87, type: 3}

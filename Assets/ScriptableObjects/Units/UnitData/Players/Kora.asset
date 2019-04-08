@@ -16,4 +16,4 @@ MonoBehaviour:
   pets:
   - {fileID: 11400000, guid: ed0e30f9be4104fb1803ba7986cd86da, type: 2}
   sprite: {fileID: 21300000, guid: d3d9a33e6ceb74a4882ef36ab29707d9, type: 3}
-  avatarSprite: {fileID: 21300000, guid: 17c3604b67b9b477ca2223c0fe5c047a, type: 3}
+  avatarSprite: {fileID: 21300000, guid: 3cbe6854633d34d2bb92a8611d515468, type: 3}

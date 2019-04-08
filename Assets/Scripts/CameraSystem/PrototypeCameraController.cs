@@ -1,6 +1,9 @@
+using System;
+using Drawing;
 using Drawing.UI;
-using Prototype;
+using InputSystem;
 using UnityEngine;
+using Zenject;
 
 namespace CameraSystem {
     /// <summary>
@@ -8,7 +11,6 @@ namespace CameraSystem {
     /// </summary>
     [RequireComponent(typeof(Camera))]
     public class PrototypeCameraController : MonoBehaviour, ICameraController {
-        private Camera cam;
         [SerializeField]
         private RegionHandler regionHandler;
         [SerializeField]
@@ -18,8 +20,16 @@ namespace CameraSystem {
         private float smoothTime;
         private Vector3 positionToMoveTo;
 
-        void Start() {
-            cam = GetComponent<Camera>();
+        private DiContainer _container;
+        private Camera _camera;
+        private IInputLock _inputLock;
+        private Guid? _lockId;
+
+        [Inject]
+        public void Construct(Camera camera,
+                              IInputLock inputLock) {
+            _camera = camera;
+            _inputLock = inputLock;
         }
 
         private Vector3 lastPosition;
@@ -43,7 +53,7 @@ namespace CameraSystem {
             }
 
             positionToMoveTo = transform.position;
-            float cameraAspectSize = cam.orthographicSize * cam.aspect;
+            float cameraAspectSize = _camera.orthographicSize * _camera.aspect;
 
             Vector3 newCameraPosition = Vector3.zero;
 
@@ -62,11 +72,11 @@ namespace CameraSystem {
 
                 // The same logic but this time for the vertical axis. If the active region is smaller in height than the height of the camera, the camera stays fixed in the
                 // center of the region.
-                if (region.Height < cam.orthographicSize * 2) {
+                if (region.Height < _camera.orthographicSize * 2) {
                     newCameraPosition.y = region.p1.y + region.Height / 2;
                 }
                 else {
-                    newCameraPosition.y = Mathf.Clamp(positionToMoveTo.y, region.p1.y + cam.orthographicSize, region.p0.y - cam.orthographicSize);
+                    newCameraPosition.y = Mathf.Clamp(positionToMoveTo.y, region.p1.y + _camera.orthographicSize, region.p0.y - _camera.orthographicSize);
                 }
 
                 if (!region.Contains(positionToMoveTo)) {
@@ -87,14 +97,14 @@ namespace CameraSystem {
                 transform.position = newCameraPosition;
             }
 
-            if (DragAndDropBehaviour.isDragging) {
+            // Check for lock. Do nothing if not acquired.
+            if (!_inputLock.IsLocked) {
+                _lockId = _inputLock.Lock();
+            }
+            if (_lockId == null) {
                 return;
             }
 
-            if (DrawingViewController.isDrawing) {
-                return;
-            }
-            
             // Panning with mouse
             float mouseSensitivity = 0.02f;
             if (Input.GetMouseButtonDown(0)) {
@@ -106,12 +116,15 @@ namespace CameraSystem {
                 transform.Translate(-delta.x * mouseSensitivity, -delta.y * mouseSensitivity, 0);
                 lastPosition = Input.mousePosition;
             }
+            
+            _inputLock.Unlock(_lockId.Value);
+            _lockId = null;
         }
 
         private void LateUpdate() {
             float sizeMin = 2f;
             float sizeMax = 35f;
-            cam.orthographicSize = Mathf.Clamp(cam.orthographicSize - Input.mouseScrollDelta.y, sizeMin, sizeMax);
+            _camera.orthographicSize = Mathf.Clamp(_camera.orthographicSize - Input.mouseScrollDelta.y, sizeMin, sizeMax);
         }
 
         // Call this function to switch to a completely different region handler
