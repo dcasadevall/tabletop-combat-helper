@@ -1,5 +1,4 @@
-﻿using Prototype;
-using Units.Serialized;
+﻿using Units.Serialized;
 using Units.UI;
 using UnityEngine;
 using Zenject;

@@ -1,7 +1,10 @@
 ﻿using System;
+using InputSystem;
+using Logging;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using ILogger = Logging.ILogger;
 
 namespace Drawing.UI {
     /// <summary>
@@ -9,6 +12,8 @@ namespace Drawing.UI {
     /// itself through unity's lifecycle.
     /// </summary>
     public class DrawingViewController : MonoBehaviour, IDrawingViewController {
+        private static Color kDefaultColor = Color.red;
+        
         public event Action DrawingEnabled = delegate {};
         public event Action DrawingDisabled = delegate {};
         
@@ -25,21 +30,27 @@ namespace Drawing.UI {
 
         private IDrawingInputManager _drawingInputManager;
         private IDrawableTileRegistry _drawableTileRegistry;
+        private IInputLock _inputLock;
+        private ILogger _logger;
+        private Guid? _lockId;
 
         [Inject]
-        public void Construct(IDrawingInputManager drawingInputManager, IDrawableTileRegistry drawableTileRegistry) {
+        public void Construct(IDrawingInputManager drawingInputManager, IDrawableTileRegistry drawableTileRegistry,
+                              IInputLock inputLock, ILogger logger) {
             _drawingInputManager = drawingInputManager;
             _drawableTileRegistry = drawableTileRegistry;
+            _inputLock = inputLock;
+            _logger = logger;
         }
 
         private void Start() {
-            StopPainting();
+            SetColor(kDefaultColor);
         }
 
         // TODO: This is only needed because we can't seem to bind lifecycle events via facade,
         // even with "withKernel()"
         private void Update() {
-            if (!IsDrawing) {
+            if (_lockId == null) {
                 return;
             }
             
@@ -56,6 +67,12 @@ namespace Drawing.UI {
         }
 
         private void StartPainting() {
+            _lockId = _inputLock.Lock();
+            if (_lockId == null) {
+                _logger.LogError(LoggedFeature.Drawing, "Failed to acquire input lock.");
+                return;
+            }
+            
             startPaintingText.SetActive(false);
             stopPaintingText.SetActive(true);
             clearButton.SetActive(true);
@@ -65,6 +82,13 @@ namespace Drawing.UI {
         }
         
         private void StopPainting() {
+            if (_lockId == null) {
+                _logger.LogError(LoggedFeature.Drawing, "Stopped painting without input lock.");
+                return;
+            }
+            _inputLock.Unlock(_lockId.Value);
+            _lockId = null;
+            
             startPaintingText.SetActive(true);
             stopPaintingText.SetActive(false);
             clearButton.SetActive(false);

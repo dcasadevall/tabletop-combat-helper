@@ -53,12 +53,8 @@ namespace Drawing {
             // This may lazily instantiate the tile used to draw, so it is important that it happens before the raycast.
             IDrawableTile drawableTile = _drawableTileRegistry.GetDrawableTileAtCoordinates(tileAtMouse.Value);
             Vector2 mouseWorldPoint = _camera.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D raycastHit = Physics2D.Raycast(mouseWorldPoint, Vector2.zero);
+            RaycastHit2D raycastHit = Physics2D.Raycast(mouseWorldPoint, Vector2.zero, LayerMask.NameToLayer(kDrawingLayerName));
             if (raycastHit.collider == null) {
-                return;
-            }
-
-            if (raycastHit.collider.gameObject.layer != LayerMask.NameToLayer(kDrawingLayerName)) {
                 return;
             }
             

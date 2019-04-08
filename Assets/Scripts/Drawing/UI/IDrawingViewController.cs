@@ -5,7 +5,6 @@ namespace Drawing.UI {
         event System.Action DrawingEnabled;
         event System.Action DrawingDisabled;
         
-        bool IsDrawing { get; }
         TexturePaintParams PaintParams { get; }
     }
 }

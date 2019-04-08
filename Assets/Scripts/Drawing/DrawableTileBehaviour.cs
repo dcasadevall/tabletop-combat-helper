@@ -24,6 +24,7 @@ namespace Drawing {
                 }
                 
                 tile.Reinitialize(position, sprite);
+                tile.Clear();
             }
 
             protected override void OnDespawned(DrawableTileBehaviour tile) {

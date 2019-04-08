@@ -1,12 +1,12 @@
 using UnityEngine;
 using Zenject;
 
-namespace Prototype {
+namespace Units {
     /// <summary>
     /// Simple Monobehaviour to show / hide an avatar icon based on the camera zoom.
     /// It can be globally disabled with the "I" key
     /// </summary>
-    public class PlayerAvatarIconUpdater : MonoBehaviour {
+    public class UnitIconUpdater : MonoBehaviour {
         public KeyCode toggleKey = KeyCode.I;
         public float zoomThreshold = 5;
         public SpriteRenderer iconRenderer;

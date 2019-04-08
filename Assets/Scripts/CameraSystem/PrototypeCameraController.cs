@@ -1,6 +1,7 @@
+using System;
 using Drawing;
 using Drawing.UI;
-using Prototype;
+using InputSystem;
 using UnityEngine;
 using Zenject;
 
@@ -21,13 +22,14 @@ namespace CameraSystem {
 
         private DiContainer _container;
         private Camera _camera;
-        private IDrawingViewController _drawingViewController;
+        private IInputLock _inputLock;
+        private Guid? _lockId;
 
         [Inject]
         public void Construct(Camera camera,
-                              IDrawingViewController drawingViewController) {
+                              IInputLock inputLock) {
             _camera = camera;
-            _drawingViewController = drawingViewController;
+            _inputLock = inputLock;
         }
 
         private Vector3 lastPosition;
@@ -95,11 +97,11 @@ namespace CameraSystem {
                 transform.position = newCameraPosition;
             }
 
-            if (DragAndDropBehaviour.isDragging) {
-                return;
+            // Check for lock. Do nothing if not acquired.
+            if (!_inputLock.IsLocked) {
+                _lockId = _inputLock.Lock();
             }
-
-            if (_drawingViewController.IsDrawing) {
+            if (_lockId == null) {
                 return;
             }
 
@@ -114,6 +116,9 @@ namespace CameraSystem {
                 transform.Translate(-delta.x * mouseSensitivity, -delta.y * mouseSensitivity, 0);
                 lastPosition = Input.mousePosition;
             }
+            
+            _inputLock.Unlock(_lockId.Value);
+            _lockId = null;
         }
 
         private void LateUpdate() {
