@@ -19,7 +19,6 @@ namespace InputSystem {
         private Vector3 offset;
 
         private ICommandQueue _commandQueue;
-        private ICommand<MoveUnitData> _moveUnitCommand;
         private IGridPositionCalculator _gridPositionCalculator;
         private IInputLock _inputLock;
         private Guid? _lockId;
@@ -27,12 +26,11 @@ namespace InputSystem {
         private UnitId _unitId;
 
         [Inject]
-        public void Construct(ICommand<MoveUnitData> moveUnitCommand, ICommandQueue commandQueue,
+        public void Construct(ICommandQueue commandQueue,
                               IGridPositionCalculator gridPositionCalculator, IInputLock inputLock,
                               Camera camera) {
             _camera = camera;
             _commandQueue = commandQueue;
-            _moveUnitCommand = moveUnitCommand;
             _inputLock = inputLock;
             _gridPositionCalculator = gridPositionCalculator;
         }
@@ -83,7 +81,7 @@ namespace InputSystem {
             }
 
             MoveUnitData moveUnitData = new MoveUnitData(_unitId, gridCoordinates.Value);
-            _commandQueue.Enqueue(_moveUnitCommand, moveUnitData);
+            _commandQueue.Enqueue(moveUnitData);
         }
     }
 }

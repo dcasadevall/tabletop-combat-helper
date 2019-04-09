@@ -1,9 +1,7 @@
 using CommandSystem;
 
 namespace Drawing.Commands {
-    public class ClearAllPixelsCommand : ICommand {
-        public const string Id = "ClearAllPixels";
-        
+    public class ClearAllPixelsCommand : ICommand<ClearAllPixelsCommandData> {
         private readonly IDrawableTileRegistry _drawableTileRegistry;
         private readonly ITexturePainter _texturePainter;
 
@@ -12,7 +10,7 @@ namespace Drawing.Commands {
             _texturePainter = texturePainter;
         }
         
-        public void Run() {
+        public void Run(ClearAllPixelsCommandData commandData) {
             foreach (var drawableTile in _drawableTileRegistry.GetAllTiles()) {
                 _texturePainter.EraseAllPixels(drawableTile.Sprite);
             }

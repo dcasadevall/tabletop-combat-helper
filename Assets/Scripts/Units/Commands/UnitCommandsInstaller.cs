@@ -1,9 +1,12 @@
 using CommandSystem;
+using CommandSystem.Installers;
 using Zenject;
 
 namespace Units.Commands {
-    public class UnitCommandsInstaller : Installer {
-        public override void InstallBindings() {
+    public class UnitCommandsInstaller : CommandsInstaller {
+        public UnitCommandsInstaller(CommandFactory commandFactory) : base(commandFactory) { }
+        
+        protected override void InstallCommandBindings() {
             Container.Bind<IMutableUnitRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<SpawnUnitCommand>();
             Container.Bind<ICommand<SpawnUnitData>>().To<SpawnUnitCommand>().AsSingle();
         }

@@ -41,8 +41,8 @@ namespace Units.Commands {
             _logger.Log(LoggedFeature.Units, "Spawning: {0}", unitData.Name);
             
             IUnit unit = new Unit(unitData);
-            _unitRegistry.RegisterUnit(unit);
             foreach (var unitInHierarchy in unit.GetUnitsInHierarchy()) {
+                _unitRegistry.RegisterUnit(unitInHierarchy);
                 _unitBehaviourPool.Spawn(unitInHierarchy);
                 _gridUnitManager.PlaceUnitAtTile(unitInHierarchy, data.tileCoords);
             }
