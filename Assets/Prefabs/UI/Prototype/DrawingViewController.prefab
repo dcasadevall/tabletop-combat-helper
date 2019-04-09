@@ -895,6 +895,7 @@ MonoBehaviour:
   _startPaintingButton: {fileID: 1062446383262479800}
   _stopPaintingButton: {fileID: 8506528975113432203}
   _drawingTools: {fileID: 3391000208998474791}
+  _colorPicker: {fileID: 594810294401320664}
   _brushSizeSlider: {fileID: 917968327180996684}
 --- !u!1 &2993197857304628652
 GameObject:
@@ -1231,9 +1232,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5260441920747977788}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 7691832317851621601}
+        m_MethodName: SetBrush
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2485,3 +2486,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 594810294394882140}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &594810294401320664 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 11423364, guid: 916ee089a0d7b63419075f91e1c657ec,
+    type: 3}
+  m_PrefabInstance: {fileID: 594810294394882140}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8262e4a8322117f4da079921eaa72834, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

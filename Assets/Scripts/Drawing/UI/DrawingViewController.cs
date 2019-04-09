@@ -27,6 +27,8 @@ namespace Drawing.UI {
         [SerializeField]
         private GameObject _drawingTools;
         [SerializeField]
+        private ColorPicker _colorPicker;
+        [SerializeField]
         private Slider _brushSizeSlider;
 
         private IDrawingInputManager _drawingInputManager;
@@ -94,6 +96,10 @@ namespace Drawing.UI {
             _drawingTools.SetActive(false);
             
             DrawingDisabled.Invoke();
+        }
+
+        public void SetBrush() {
+            PaintParams = TexturePaintParams.MakeWithColor(_colorPicker.CurrentColor, (int)_brushSizeSlider.value);
         }
 
         public void SetColor(Color color) {
