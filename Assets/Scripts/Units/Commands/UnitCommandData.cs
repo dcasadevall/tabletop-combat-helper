@@ -21,13 +21,13 @@ namespace Units.Commands {
         public UnitCommandData(SerializationInfo info, StreamingContext context) {
             unitIndex = info.GetUInt32("unitIndex");
             unitType = (UnitType)info.GetUInt32("unitType");
-            unitId = new UnitId(info, context);
+            unitId = (UnitId) info.GetValue("unitId", typeof(UnitId));
         }
         
         public void GetObjectData(SerializationInfo info, StreamingContext context) {
             info.AddValue("unitIndex", unitIndex);
             info.AddValue("unitType", (int)unitType);
-            unitId.GetObjectData(info, context);
+            info.AddValue("unitId", unitId);
         }
         #endregion 
     }

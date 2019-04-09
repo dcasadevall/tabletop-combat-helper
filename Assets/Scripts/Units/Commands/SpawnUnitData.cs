@@ -15,13 +15,13 @@ namespace Units.Commands {
         
         #region ISerializable
         public SpawnUnitData(SerializationInfo info, StreamingContext context) {
-            unitCommandData = new UnitCommandData(info, context);
-            tileCoords = new IntVector2(info, context);
+            unitCommandData = (UnitCommandData)info.GetValue("unitCommandData", typeof(UnitCommandData));
+            tileCoords = (IntVector2)info.GetValue("tileCoords", typeof(IntVector2));
         }
         
         public void GetObjectData(SerializationInfo info, StreamingContext context) {
-            unitCommandData.GetObjectData(info, context);
-            tileCoords.GetObjectData(info, context);
+            info.AddValue("unitCommandData", unitCommandData);
+            info.AddValue("tileCoords", tileCoords);
         }
         #endregion 
     }

@@ -1,7 +1,6 @@
 using System.Runtime.Serialization;
 using Math;
 using Units;
-using Units.Commands;
 
 namespace Grid.Commands {
     public class MoveUnitData : ISerializable {
@@ -15,13 +14,13 @@ namespace Grid.Commands {
         
         #region ISerializable
         public MoveUnitData(SerializationInfo info, StreamingContext context) {
-            unitId = new UnitId(info, context);
-            tileCoords = new IntVector2(info, context);
+            unitId = (UnitId)info.GetValue("unitId", typeof(UnitId));
+            tileCoords = (IntVector2) info.GetValue("tileCoords", typeof(IntVector2));
         }
         
         public void GetObjectData(SerializationInfo info, StreamingContext context) {
-            unitId.GetObjectData(info, context);
-            tileCoords.GetObjectData(info, context);
+            info.AddValue("unitId", unitId);
+            info.AddValue("tileCoords", tileCoords);
         }
         #endregion 
     }
