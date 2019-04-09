@@ -1,6 +1,11 @@
 ﻿using System;
+using CommandSystem;
+using Grid.Commands;
 using Grid.Positioning;
 using Math;
+using Units;
+using Units.Commands;
+using Units.Serialized;
 using UnityEngine;
 using Zenject;
 
@@ -11,19 +16,34 @@ namespace InputSystem {
     /// </summary>
     [RequireComponent(typeof(BoxCollider2D))]
     public class DragAndDropBehaviour : MonoBehaviour {
-        private Vector3 offset;
+        public event System.Action<Vector2> GridPositionChanged = delegate {};
         
+        private Vector3 offset;
+
+        private ICommandQueue _commandQueue;
+        private ICommand<MoveUnitData> _moveUnitCommand;
+        private IUnitDataIndexResolver _unitDataIndexResolver;
         private IGridPositionCalculator _gridPositionCalculator;
         private IInputLock _inputLock;
         private Guid? _lockId;
         private Camera _camera;
+        private IUnit _unit;
 
         [Inject]
-        public void Construct(IGridPositionCalculator gridPositionCalculator, IInputLock inputLock,
+        public void Construct(ICommand<MoveUnitData> moveUnitCommand, ICommandQueue commandQueue,
+                              IUnitDataIndexResolver unitDataIndexResolver,
+                              IGridPositionCalculator gridPositionCalculator, IInputLock inputLock,
                               Camera camera) {
             _camera = camera;
+            _commandQueue = commandQueue;
+            _moveUnitCommand = moveUnitCommand;
+            _unitDataIndexResolver = unitDataIndexResolver;
             _inputLock = inputLock;
             _gridPositionCalculator = gridPositionCalculator;
+        }
+
+        public void SetUnit(IUnit unit) {
+            _unit = unit;
         }
 
         private void OnDestroy() {
@@ -67,9 +87,10 @@ namespace InputSystem {
                 return;
             }
             
-            Vector2 positionInGrid =
-                _gridPositionCalculator.GetTileCenterWorldPosition(gridCoordinates.Value);
-            transform.position = new Vector3(positionInGrid.x, positionInGrid.y, transform.position.z);
+            uint unitIndex = _unitDataIndexResolver.ResolveUnitIndex()
+            UnitCommandData unitCommandData = new UnitCommandData();
+            MoveUnitData moveUnitData = new MoveUnitData();
+            _commandQueue.Enqueue(_moveUnitCommand, );
         }
     }
 }

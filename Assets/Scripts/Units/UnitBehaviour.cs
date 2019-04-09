@@ -1,5 +1,6 @@
 using Grid;
 using Grid.Positioning;
+using InputSystem;
 using Math;
 using UnityEngine;
 using Zenject;
@@ -17,7 +18,10 @@ namespace Units {
         [SerializeField]
         private SpriteRenderer _spriteRenderer;
         [SerializeField]
-        private SpriteRenderer _avatarIconRenderer; 
+        private SpriteRenderer _avatarIconRenderer;
+        // TODO: This will go away with unit selection
+        [SerializeField]
+        private DragAndDropBehaviour _dragAndDropBehaviour;
 #pragma warning restore 649
 
         private UnitId _unitId;

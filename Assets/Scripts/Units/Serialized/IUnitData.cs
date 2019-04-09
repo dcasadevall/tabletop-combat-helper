@@ -11,6 +11,11 @@ namespace Units.Serialized {
         string Name { get; }
         
         /// <summary>
+        /// Type of the unit (Player vs NonPlayer).
+        /// </summary>
+        UnitType UnitType { get; }
+        
+        /// <summary>
         /// An array containing the unit data for pets that are permanent to this unit.
         /// This means the pets found in this array will always spawn with this unit.
         /// </summary>
