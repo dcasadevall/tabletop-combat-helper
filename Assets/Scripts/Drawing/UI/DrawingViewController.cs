@@ -109,6 +109,10 @@ namespace Drawing.UI {
         public void SetEraser() {
             PaintParams = TexturePaintParams.MakeEraser((int)_brushSizeSlider.value);
         }
+        
+        public void HandleBrushSizeSliderValueChanged() {
+            PaintParams = TexturePaintParams.MakeWithColor(PaintParams.color, (int)_brushSizeSlider.value);
+        }
 
         public void Clear() {
             foreach (var drawableTile in _drawableTileRegistry.GetAllTiles()) {
