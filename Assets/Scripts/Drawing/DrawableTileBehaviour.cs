@@ -36,12 +36,10 @@ namespace Drawing {
         [SerializeField]
         private SpriteRenderer _spriteRenderer;
 
-        private IDrawingViewController _drawingViewController;
         private ITexturePainter _texturePainter;
         
         [Inject]
-        public void Construct(IDrawingViewController drawingViewController, ITexturePainter texturePainter) {
-            _drawingViewController = drawingViewController;
+        public void Construct(ITexturePainter texturePainter) {
             _texturePainter = texturePainter;
         }
 
@@ -50,30 +48,14 @@ namespace Drawing {
             _spriteRenderer.sprite = sprite;
         }
 
-        public void HandleMouseDown(Vector2 point) {
-            Vector2 pixelCoords = GetLocalToPixelCoordinates(point);
-            _texturePainter.PaintPixel(_spriteRenderer.sprite, pixelCoords, _drawingViewController.PaintParams);
+        public Sprite Sprite {
+            get {
+                return _spriteRenderer.sprite;
+            }
         }
 
-        public void HandleMouseDrag(Vector2 point) {
-            Vector2 pixelCoords = GetLocalToPixelCoordinates(point);
-            _texturePainter.PaintPixel(_spriteRenderer.sprite, pixelCoords, _drawingViewController.PaintParams);
-        }
-
-        public void HandleMouseUp(Vector2 point) {
-        }
-
-        public void Clear() {
+        private void Clear() {
             _texturePainter.EraseAllPixels(_spriteRenderer.sprite);
-        }
-
-        private Vector2 GetLocalToPixelCoordinates(Vector2 localPosition) {
-            // Scale based on PixelsPerUnit in the sprite.
-            float scaledX = localPosition.x * _spriteRenderer.sprite.pixelsPerUnit;
-            float scaledY = localPosition.y * _spriteRenderer.sprite.pixelsPerUnit;
-
-            // Round to nearest pixel
-            return new Vector2(Mathf.RoundToInt(scaledX), Mathf.RoundToInt(scaledY));
         }
     }
 }

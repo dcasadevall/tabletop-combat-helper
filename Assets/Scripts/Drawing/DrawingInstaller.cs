@@ -1,4 +1,6 @@
 using System;
+using CommandSystem;
+using Drawing.Commands;
 using Drawing.UI;
 using Grid;
 using Grid.Serialized;
@@ -33,6 +35,10 @@ namespace Drawing {
             Container.Bind<IDrawableTileRegistry>().To<DrawableTileRegistry>().AsSingle();
             Container.Bind<DrawbleSpriteSettings>().FromInstance(_settings).AsSingle();
             Container.Bind<IFactory<int, Sprite>>().To<DrawableSpriteFactory>().AsSingle();
+            
+            // Commands
+            Container.Bind<ICommand>().WithId(ClearAllPixelsCommand.Id).To<ClearAllPixelsCommand>().AsSingle();
+            Container.Bind<ICommand<PaintPixelData>>().To<PaintPixelCommand>().AsSingle();
         }
 
         private void BindDrawingViewController(DiContainer container) {
