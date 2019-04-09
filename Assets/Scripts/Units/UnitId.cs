@@ -1,11 +1,13 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace Units {
     /// <summary>
     /// Id used to globally identifier a <see cref="Units.IUnit"/>.
     /// It should be unique across the application.
     /// </summary>
-    public class UnitId {
+    [Serializable]
+    public class UnitId : ISerializable {
         private readonly Guid _guid;
 
         public UnitId() {
@@ -15,7 +17,18 @@ namespace Units {
         public UnitId(Guid guid) {
             _guid = guid;
         }
+        
+        #region ISerializable
+        public UnitId(SerializationInfo info, StreamingContext context) {
+            _guid = new Guid(info.GetString("guid"));
+        }
+        
+        public void GetObjectData(SerializationInfo info, StreamingContext context) {
+            info.AddValue("guid", _guid.ToString());
+        }
+        #endregion
 
+        #region Object overrides
         public override bool Equals(Object obj) {
             if (!(obj is UnitId)) {
                 return false;
@@ -32,6 +45,7 @@ namespace Units {
         public override string ToString() {
             return _guid.ToString();
         }
+        #endregion
 
         #region Operators
         public static implicit operator string(UnitId unitId) {

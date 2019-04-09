@@ -1,10 +1,13 @@
 using System;
+using System.Runtime.Serialization;
+using UnityEngine;
 
 namespace Math {
     /// <summary>
     /// A struct used to represent 2d vectors of integer numbers.
     /// </summary>
-    public struct IntVector2 : IEquatable<IntVector2> {
+    [Serializable]
+    public struct IntVector2 : IEquatable<IntVector2>, ISerializable {
         public readonly int x;
         public readonly int y;
 
@@ -20,6 +23,10 @@ namespace Math {
             }
         }
 
+        public static IntVector2 Of(Vector2 vector2) {
+            return Of((int) vector2.x, (int) vector2.y);
+        }
+        
         public static IntVector2 Of(int x, int y) {
             return new IntVector2(x, y);
         }
@@ -32,6 +39,18 @@ namespace Math {
             this.x = x;
             this.y = y;
         }
+        
+        #region ISerializable
+        public IntVector2(SerializationInfo info, StreamingContext context) {
+            x = info.GetInt32("x");
+            y = info.GetInt32("y");
+        }
+        
+        public void GetObjectData(SerializationInfo info, StreamingContext context) {
+            info.AddValue("x", x);
+            info.AddValue("y", y);
+        }
+        #endregion
         
         /// <summary>
         ///   <para>Returns a nicely formatted string for this vector.</para>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Grid.Positioning;
 using Logging;
 using Math;
+using Units.Commands;
 using Units.Serialized;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ using ILogger = Logging.ILogger;
 
 namespace Units.UI {
     public class UnitPickerViewController : MonoBehaviour, IUnitPickerViewController {
-        public event Action<IUnitData, int> SpawnUnitClicked = delegate {};
+        public event SpawnUnitClickedDelegate SpawnUnitClicked = delegate {};
 
 #pragma warning disable 649
         [SerializeField]
@@ -27,14 +28,16 @@ namespace Units.UI {
         private Transform _uiAnchor;
 #pragma warning restore 649
         
-        private int _selectedIndex = 0;
+        private uint _selectedIndex = 0;
 
-        private List<IUnitData> _unitDatas;
+        private IUnitData[] _unitDatas;
+        private IUnitDataIndexResolver _unitDataIndexResolver;
         private ILogger _logger;
 
         [Inject]
-        public void Construct(List<IUnitData> unitDatas, ILogger logger) {
-            _unitDatas = unitDatas;
+        public void Construct(IUnitSpawnSettings unitSpawnSettings, IUnitDataIndexResolver unitDataIndexResolver, ILogger logger) {
+            _unitDatas = unitSpawnSettings.GetUnits(UnitType.NonPlayer);
+            _unitDataIndexResolver = unitDataIndexResolver;
             _logger = logger;
         }
 
@@ -57,12 +60,13 @@ namespace Units.UI {
         }
 
         private void HandleOnSpawnButtonClicked() {
-            if (_selectedIndex < 0 || _selectedIndex >= _unitDatas.Count) {
-                _logger.LogError(LoggedFeature.Units, "Invalid selected index: {0}", _selectedIndex.ToString());
+            IUnitData unitData = _unitDataIndexResolver.ResolveUnitData(UnitType.NonPlayer, _selectedIndex);
+            if (unitData == null) {
+                _logger.LogError(LoggedFeature.Units, "Invalid unit index: {0}", _selectedIndex);
                 return;
             }
             
-            SpawnUnitClicked.Invoke(_unitDatas[_selectedIndex], _unitAmountDropdown.value + 1);
+            SpawnUnitClicked.Invoke(unitData, UnitType.NonPlayer, _unitAmountDropdown.value + 1);
         }
 
         public void Show() {
@@ -112,7 +116,7 @@ namespace Units.UI {
         }
 
         private void HandleOnValueChanged(int selectedIndex) {
-            _selectedIndex = selectedIndex;
+            _selectedIndex = (uint)selectedIndex;
         }
     }
 }

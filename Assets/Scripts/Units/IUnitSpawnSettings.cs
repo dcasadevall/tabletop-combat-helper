@@ -1,4 +1,5 @@
 
+using System;
 using Units.Serialized;
 
 namespace Units {
@@ -19,5 +20,19 @@ namespace Units {
         /// How far initial units can spawn from the center at most.
         /// </summary>
         int MaxInitialUnitSpawnDistanceToCenter { get; }
+    }
+
+    public static class IUnitSpawnSettingsExtensions {
+        public static IUnitData[] GetUnits(this IUnitSpawnSettings unitSpawnSettings, UnitType unitType) {
+            if (unitType == UnitType.Player) {
+                return unitSpawnSettings.PlayerUnits;
+            }
+
+            if (unitType == UnitType.NonPlayer) {
+                return unitSpawnSettings.NonPlayerUnits;
+            }
+
+            throw new ArgumentException(string.Format("Unsupported unit type: {0}", unitType));
+        }
     }
 }

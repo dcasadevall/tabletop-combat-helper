@@ -1,3 +1,4 @@
+using Math;
 using UnityEngine;
 
 namespace Drawing {
@@ -5,7 +6,7 @@ namespace Drawing {
     /// Implementors of this interface will handle painting over a readWrite enabled Sprite.
     /// </summary>
     public interface ITexturePainter {
-        void PaintPixel(Sprite sprite, Vector2 pixel, TexturePaintParams paintParams);
+        void PaintPixel(Sprite sprite, IntVector2 pixel, TexturePaintParams paintParams);
         void EraseAllPixels(Sprite sprite);
     }
 }
