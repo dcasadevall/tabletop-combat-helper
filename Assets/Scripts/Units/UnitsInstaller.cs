@@ -15,10 +15,9 @@ namespace Units {
             Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(unitPickerViewController).AsSingle();
             Container.Bind<IUnitSpawnSettings>().To<UnitSpawnSettings>().FromInstance(unitSpawnSettingses).AsSingle();
             Container.Bind<IUnitDataIndexResolver>().To<UnitDataIndexResolver>().AsSingle();
-            
-            // Subcontainer in commandsInstaller needs this
-            // TODO: UnitRegistry should not have to be exposed.
-            Container.Bind<UnitRegistry>().AsSingle().CopyIntoAllSubContainers();
+
+            // TODO: Avoid having to expose UnitRegistry.
+            Container.Bind<UnitRegistry>().AsSingle();
             Container.Bind<IUnitRegistry>().To<UnitRegistry>().FromResolve();
 
             // Prototype

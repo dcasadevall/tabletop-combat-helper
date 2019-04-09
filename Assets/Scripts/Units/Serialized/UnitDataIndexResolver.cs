@@ -10,8 +10,8 @@ namespace Units.Serialized {
             _logger = logger;
         }
         
-        public uint? ResolveUnitIndex(UnitType unitType, IUnitData unitData) {
-            IUnitData[] unitDatas = _unitSpawnSettings.GetUnits(unitType);
+        public uint? ResolveUnitIndex(IUnitData unitData) {
+            IUnitData[] unitDatas = _unitSpawnSettings.GetUnits(unitData.UnitType);
             for (var i = unitDatas.Length - 1; i >= 0; i--) {
                 if (unitDatas[i] == unitData) {
                     return (uint)i;

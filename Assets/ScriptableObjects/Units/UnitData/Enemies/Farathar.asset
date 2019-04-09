@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Farathar
   m_EditorClassIdentifier: 
   name: Farathar
+  unitType: 1
+  pets: []
   sprite: {fileID: 21300000, guid: 442bfce803c2b4b3cb9e75dabc1e8470, type: 3}
   avatarSprite: {fileID: 21300000, guid: 464aa2e89d4964a36af22e0ce7591ac6, type: 3}

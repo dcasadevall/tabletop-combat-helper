@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Las
   m_EditorClassIdentifier: 
   name: Las
+  unitType: 1
   pets: []
   sprite: {fileID: 21300000, guid: 985855c0c1de649f79512f03e23a5600, type: 3}
   avatarSprite: {fileID: 21300000, guid: 985855c0c1de649f79512f03e23a5600, type: 3}

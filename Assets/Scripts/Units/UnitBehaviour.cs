@@ -49,6 +49,7 @@ namespace Units {
             _unitId = unit.UnitId;
             _spriteRenderer.sprite = unit.UnitData.Sprite;
             _avatarIconRenderer.sprite = unit.UnitData.AvatarSprite; 
+            _dragAndDropBehaviour.SetUnitId(unit.UnitId);
             _gridUnitManager.UnitPlacedAtTile += HandleUnitPlacedAtTile;
         }
         

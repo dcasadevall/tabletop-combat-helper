@@ -66,7 +66,7 @@ namespace Units.UI {
                 return;
             }
             
-            SpawnUnitClicked.Invoke(unitData, UnitType.NonPlayer, _unitAmountDropdown.value + 1);
+            SpawnUnitClicked.Invoke(unitData, _unitAmountDropdown.value + 1);
         }
 
         public void Show() {

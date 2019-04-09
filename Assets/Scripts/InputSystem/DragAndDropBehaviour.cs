@@ -16,34 +16,29 @@ namespace InputSystem {
     /// </summary>
     [RequireComponent(typeof(BoxCollider2D))]
     public class DragAndDropBehaviour : MonoBehaviour {
-        public event System.Action<Vector2> GridPositionChanged = delegate {};
-        
         private Vector3 offset;
 
         private ICommandQueue _commandQueue;
         private ICommand<MoveUnitData> _moveUnitCommand;
-        private IUnitDataIndexResolver _unitDataIndexResolver;
         private IGridPositionCalculator _gridPositionCalculator;
         private IInputLock _inputLock;
         private Guid? _lockId;
         private Camera _camera;
-        private IUnit _unit;
+        private UnitId _unitId;
 
         [Inject]
         public void Construct(ICommand<MoveUnitData> moveUnitCommand, ICommandQueue commandQueue,
-                              IUnitDataIndexResolver unitDataIndexResolver,
                               IGridPositionCalculator gridPositionCalculator, IInputLock inputLock,
                               Camera camera) {
             _camera = camera;
             _commandQueue = commandQueue;
             _moveUnitCommand = moveUnitCommand;
-            _unitDataIndexResolver = unitDataIndexResolver;
             _inputLock = inputLock;
             _gridPositionCalculator = gridPositionCalculator;
         }
 
-        public void SetUnit(IUnit unit) {
-            _unit = unit;
+        public void SetUnitId(UnitId unitId) {
+            _unitId = unitId;
         }
 
         private void OnDestroy() {
@@ -86,11 +81,9 @@ namespace InputSystem {
             if (gridCoordinates == null) {
                 return;
             }
-            
-            uint unitIndex = _unitDataIndexResolver.ResolveUnitIndex()
-            UnitCommandData unitCommandData = new UnitCommandData();
-            MoveUnitData moveUnitData = new MoveUnitData();
-            _commandQueue.Enqueue(_moveUnitCommand, );
+
+            MoveUnitData moveUnitData = new MoveUnitData(_unitId, gridCoordinates.Value);
+            _commandQueue.Enqueue(_moveUnitCommand, moveUnitData);
         }
     }
 }
