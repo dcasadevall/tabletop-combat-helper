@@ -1,3 +1,5 @@
+using CommandSystem;
+using Drawing.Commands;
 using Grid;
 using Logging;
 using Math;
@@ -17,6 +19,8 @@ namespace Drawing {
         private readonly Camera _camera;
         private readonly EventSystem _eventSystem;
         private readonly ILogger _logger;
+        private readonly ICommand<PaintPixelData> _paintPixelCommand;
+        private readonly ICommandQueue _commandQueue;
         private readonly IGridInputManager _gridInputManager;
         private readonly IDrawableTileRegistry _drawableTileRegistry;
         private bool _isEnabled;
@@ -24,16 +28,20 @@ namespace Drawing {
         public DrawingInputManager(Camera camera, 
                                    EventSystem eventSystem,
                                    ILogger logger,
+                                   ICommand<PaintPixelData> paintPixelCommand,
+                                   ICommandQueue commandQueue,
                                    IGridInputManager gridInputManager,
                                    IDrawableTileRegistry drawableTileRegistry) {
             _camera = camera;
             _eventSystem = eventSystem;
             _logger = logger;
+            _paintPixelCommand = paintPixelCommand;
+            _commandQueue = commandQueue;
             _gridInputManager = gridInputManager;
             _drawableTileRegistry = drawableTileRegistry;
         }
 
-        public void Tick() {
+        public void Tick(TexturePaintParams paintParams) {
             // Are we inside the grid?
             IntVector2? tileAtMouse = _gridInputManager.GetTileAtMousePosition();
             if (tileAtMouse == null) {
@@ -41,7 +49,7 @@ namespace Drawing {
             }
             
             // We we clicked?
-            if (!Input.GetMouseButtonDown(0) && !Input.GetMouseButton(0) && !Input.GetMouseButtonUp(0)) {
+            if (!Input.GetMouseButtonDown(0) && !Input.GetMouseButton(0)) {
                 return;
             }
             
@@ -66,18 +74,19 @@ namespace Drawing {
                                  drawableTile);
                 return;
             }
-            
-            if (Input.GetMouseButtonDown(0)) {
-                drawableTile.HandleMouseDown(localPosition.Value);
-            }
 
-            if (Input.GetMouseButton(0)) {
-                drawableTile.HandleMouseDrag(localPosition.Value);
-            }
+            Vector2 pixelPosition = GetLocalToPixelCoordinates(drawableTile.Sprite, localPosition.Value);
+            PaintPixelData paintPixelData = new PaintPixelData(tileAtMouse.Value, pixelPosition, paintParams);
+            _commandQueue.Enqueue(_paintPixelCommand, paintPixelData);
+        }
+        
+        private Vector2 GetLocalToPixelCoordinates(Sprite sprite, Vector2 localPosition) {
+            // Scale based on PixelsPerUnit in the sprite.
+            float scaledX = localPosition.x * sprite.pixelsPerUnit;
+            float scaledY = localPosition.y * sprite.pixelsPerUnit;
 
-            if (Input.GetMouseButtonUp(0)) {
-                drawableTile.HandleMouseUp(localPosition.Value);
-            }
+            // Round to nearest pixel
+            return new Vector2(Mathf.RoundToInt(scaledX), Mathf.RoundToInt(scaledY));
         }
     }
 }

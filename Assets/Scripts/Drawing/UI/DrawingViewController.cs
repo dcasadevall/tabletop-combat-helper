@@ -1,4 +1,6 @@
 ﻿using System;
+using CommandSystem;
+using Drawing.Commands;
 using InputSystem;
 using Logging;
 using UnityEngine;
@@ -29,17 +31,22 @@ namespace Drawing.UI {
         [SerializeField]
         private Slider _brushSizeSlider;
 
+        private ICommand _clearAllPixelsCommand;
+        private ICommandQueue _commandQueue;
         private IDrawingInputManager _drawingInputManager;
-        private IDrawableTileRegistry _drawableTileRegistry;
         private IInputLock _inputLock;
         private ILogger _logger;
         private Guid? _lockId;
 
         [Inject]
-        public void Construct(IDrawingInputManager drawingInputManager, IDrawableTileRegistry drawableTileRegistry,
+        public void Construct([Inject(Id = ClearAllPixelsCommand.Id)]
+                              ICommand clearAllPixelsCommand,
+                              ICommandQueue commandQueue,
+                              IDrawingInputManager drawingInputManager, 
                               IInputLock inputLock, ILogger logger) {
+            _clearAllPixelsCommand = clearAllPixelsCommand;
+            _commandQueue = commandQueue;
             _drawingInputManager = drawingInputManager;
-            _drawableTileRegistry = drawableTileRegistry;
             _inputLock = inputLock;
             _logger = logger;
         }
@@ -55,7 +62,7 @@ namespace Drawing.UI {
                 return;
             }
             
-            _drawingInputManager.Tick();
+            _drawingInputManager.Tick(PaintParams);
         }
 
         public void TogglePainting() {
@@ -105,9 +112,7 @@ namespace Drawing.UI {
         }
 
         public void Clear() {
-            foreach (var drawableTile in _drawableTileRegistry.GetAllTiles()) {
-                drawableTile.Clear();
-            }
+            _commandQueue.Enqueue(_clearAllPixelsCommand);
         }
     }
 }
