@@ -11,13 +11,18 @@ namespace Units.Commands {
     /// </summary>
     public class SpawnUnitCommand : ICommand<SpawnUnitData> {
         private readonly IUnitSpawnSettings _unitSpawnSettings;
+        private readonly IMutableUnitRegistry _unitRegistry;
         private readonly IGridUnitManager _gridUnitManager;
         private readonly UnitBehaviour.Pool _unitBehaviourPool;
         private readonly ILogger _logger;
 
-        public SpawnUnitCommand(IUnitSpawnSettings unitSpawnSettings, IGridUnitManager gridUnitManager,
-                                UnitBehaviour.Pool unitBehaviourPool, ILogger logger) {
+        public SpawnUnitCommand(IUnitSpawnSettings unitSpawnSettings, 
+                                IMutableUnitRegistry unitRegistry,
+                                IGridUnitManager gridUnitManager,
+                                UnitBehaviour.Pool unitBehaviourPool, 
+                                ILogger logger) {
             _unitSpawnSettings = unitSpawnSettings;
+            _unitRegistry = unitRegistry;
             _gridUnitManager = gridUnitManager;
             _unitBehaviourPool = unitBehaviourPool;
             _logger = logger;
@@ -36,6 +41,7 @@ namespace Units.Commands {
             _logger.Log(LoggedFeature.Units, "Spawning: {0}", unitData.Name);
             
             IUnit unit = new Unit(unitData);
+            _unitRegistry.RegisterUnit(unit);
             foreach (var unitInHierarchy in unit.GetUnitsInHierarchy()) {
                 _unitBehaviourPool.Spawn(unitInHierarchy);
                 _gridUnitManager.PlaceUnitAtTile(unitInHierarchy, data.tileCoords);

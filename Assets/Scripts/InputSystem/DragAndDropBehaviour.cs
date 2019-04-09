@@ -1,6 +1,11 @@
 ﻿using System;
+using CommandSystem;
+using Grid.Commands;
 using Grid.Positioning;
 using Math;
+using Units;
+using Units.Commands;
+using Units.Serialized;
 using UnityEngine;
 using Zenject;
 
@@ -12,18 +17,28 @@ namespace InputSystem {
     [RequireComponent(typeof(BoxCollider2D))]
     public class DragAndDropBehaviour : MonoBehaviour {
         private Vector3 offset;
-        
+
+        private ICommandQueue _commandQueue;
+        private ICommand<MoveUnitData> _moveUnitCommand;
         private IGridPositionCalculator _gridPositionCalculator;
         private IInputLock _inputLock;
         private Guid? _lockId;
         private Camera _camera;
+        private UnitId _unitId;
 
         [Inject]
-        public void Construct(IGridPositionCalculator gridPositionCalculator, IInputLock inputLock,
+        public void Construct(ICommand<MoveUnitData> moveUnitCommand, ICommandQueue commandQueue,
+                              IGridPositionCalculator gridPositionCalculator, IInputLock inputLock,
                               Camera camera) {
             _camera = camera;
+            _commandQueue = commandQueue;
+            _moveUnitCommand = moveUnitCommand;
             _inputLock = inputLock;
             _gridPositionCalculator = gridPositionCalculator;
+        }
+
+        public void SetUnitId(UnitId unitId) {
+            _unitId = unitId;
         }
 
         private void OnDestroy() {
@@ -66,10 +81,9 @@ namespace InputSystem {
             if (gridCoordinates == null) {
                 return;
             }
-            
-            Vector2 positionInGrid =
-                _gridPositionCalculator.GetTileCenterWorldPosition(gridCoordinates.Value);
-            transform.position = new Vector3(positionInGrid.x, positionInGrid.y, transform.position.z);
+
+            MoveUnitData moveUnitData = new MoveUnitData(_unitId, gridCoordinates.Value);
+            _commandQueue.Enqueue(_moveUnitCommand, moveUnitData);
         }
     }
 }

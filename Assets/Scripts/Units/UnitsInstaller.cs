@@ -16,6 +16,10 @@ namespace Units {
             Container.Bind<IUnitSpawnSettings>().To<UnitSpawnSettings>().FromInstance(unitSpawnSettingses).AsSingle();
             Container.Bind<IUnitDataIndexResolver>().To<UnitDataIndexResolver>().AsSingle();
 
+            // TODO: Avoid having to expose UnitRegistry.
+            Container.Bind<UnitRegistry>().AsSingle();
+            Container.Bind<IUnitRegistry>().To<UnitRegistry>().FromResolve();
+
             // Prototype
             Container.BindMemoryPool<UnitBehaviour, UnitBehaviour.Pool>().WithInitialSize(10)
                      .FromComponentInNewPrefab(unitPrefab).UnderTransformGroup("UnitPool");
@@ -25,6 +29,7 @@ namespace Units {
             
             // Commands installer
             Container.Install<UnitCommandsInstaller>();
+
         }
     }
 }

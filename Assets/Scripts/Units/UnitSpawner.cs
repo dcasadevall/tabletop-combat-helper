@@ -63,7 +63,7 @@ namespace Units {
                                                                          .MaxInitialUnitSpawnDistanceToCenter,
                                                                      playerUnits.Length);
             for (int i = 0; i < tilePositions.Length; i++) {
-                SpawnUnit(playerUnits[i], UnitType.Player, tilePositions[i]);
+                SpawnUnit(playerUnits[i], tilePositions[i]);
             }
         }
 
@@ -74,7 +74,7 @@ namespace Units {
             }
         }
 
-        private void HandleSpawnUnitClicked(IUnitData unitData, UnitType unitType, int numUnits) {
+        private void HandleSpawnUnitClicked(IUnitData unitData, int numUnits) {
             _unitPickerViewController.Hide();
             IntVector2[] tilePositions =
                 _randomGridPositionProvider.GetRandomUniquePositions(_selectedTile ?? IntVector2.Zero,
@@ -82,12 +82,12 @@ namespace Units {
                                                                      numUnits);
            
             foreach (var tilePosition in tilePositions) {
-                SpawnUnit(unitData, unitType, tilePosition);
+                SpawnUnit(unitData, tilePosition);
             }
         }
 
-        private void SpawnUnit(IUnitData unitData, UnitType unitType, IntVector2 tileCoords) {
-            uint? unitIndex = _unitDataIndexResolver.ResolveUnitIndex(unitType, unitData);
+        private void SpawnUnit(IUnitData unitData, IntVector2 tileCoords) {
+            uint? unitIndex = _unitDataIndexResolver.ResolveUnitIndex(unitData);
             if (unitIndex == null) {
                 _logger.LogError(LoggedFeature.Units,
                                  "Error Spawning unit with name: {0}. Index not resolved.",
@@ -95,7 +95,7 @@ namespace Units {
                 return;
             }
             
-            UnitCommandData unitCommandData = new UnitCommandData(new UnitId(), unitIndex.Value, unitType);
+            UnitCommandData unitCommandData = new UnitCommandData(new UnitId(), unitIndex.Value, unitData.UnitType);
             SpawnUnitData spawnUnitData = new SpawnUnitData(unitCommandData, tileCoords);
             _commandQueue.Enqueue(_spawnUnitCommand, spawnUnitData);
         }

@@ -12,6 +12,13 @@ namespace Units.Serialized {
             }
         }
 
+        public UnitType unitType;
+        public UnitType UnitType {
+            get {
+                return unitType;
+            }
+        }
+
         public UnitData[] pets;
         public IUnitData[] Pets {
             get {
@@ -27,7 +34,6 @@ namespace Units.Serialized {
         }
 
         public Sprite avatarSprite;
-
         public Sprite AvatarSprite {
             get {
                 return avatarSprite;

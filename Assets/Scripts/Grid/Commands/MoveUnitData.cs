@@ -5,22 +5,22 @@ using Units.Commands;
 
 namespace Grid.Commands {
     public class MoveUnitData : ISerializable {
-        public readonly UnitCommandData unitCommandData;
+        public readonly UnitId unitId;
         public readonly IntVector2 tileCoords;
 
-        public MoveUnitData(UnitCommandData unitCommandData, IntVector2 tileCoords) {
-            this.unitCommandData = unitCommandData;
+        public MoveUnitData(UnitId unitId, IntVector2 tileCoords) {
+            this.unitId = unitId;
             this.tileCoords = tileCoords;
         }
         
         #region ISerializable
         public MoveUnitData(SerializationInfo info, StreamingContext context) {
-            unitCommandData = new UnitCommandData(info, context);
+            unitId = new UnitId(info, context);
             tileCoords = new IntVector2(info, context);
         }
         
         public void GetObjectData(SerializationInfo info, StreamingContext context) {
-            unitCommandData.GetObjectData(info, context);
+            unitId.GetObjectData(info, context);
             tileCoords.GetObjectData(info, context);
         }
         #endregion 

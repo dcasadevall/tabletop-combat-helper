@@ -8,13 +8,14 @@ namespace Units.Serialized {
         /// <summary>
         /// Returns the index associated with the given unit data, or null if such index cannot be resolved.
         /// </summary>
-        /// <param name="unitType"></param>
         /// <param name="unitData"></param>
         /// <returns></returns>
-        uint? ResolveUnitIndex(UnitType unitType, IUnitData unitData);
+        uint? ResolveUnitIndex(IUnitData unitData);
+
         /// <summary>
         /// Returns the unit data associated with the given index, or null if such index cannot be resolved to a unit.
         /// </summary>
+        /// <param name="unitType"></param>
         /// <param name="unitIndex"></param>
         /// <returns></returns>
         IUnitData ResolveUnitData(UnitType unitType, uint unitIndex);

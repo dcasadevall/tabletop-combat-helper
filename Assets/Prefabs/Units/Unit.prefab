@@ -249,6 +249,7 @@ MonoBehaviour:
   iconRenderer: {fileID: 1217125120907250110}
   unitRenderers:
   - {fileID: 2552359911937879012}
+  _mode: 0
 --- !u!114 &6421655629006317665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,3 +264,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteRenderer: {fileID: 2552359911937879012}
   _avatarIconRenderer: {fileID: 1217125120907250110}
+  _dragAndDropBehaviour: {fileID: 1962121774428703022}
