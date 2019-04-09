@@ -23,12 +23,10 @@ namespace Units {
         private UnitId _unitId;
         private IGridUnitManager _gridUnitManager;
         private IGridPositionCalculator _gridPositionCalculator;
-        private IGrid _grid;
 
         [Inject]
         public void Construct(IGrid grid, IGridUnitManager gridUnitManager,
                               IGridPositionCalculator gridPositionCalculator) {
-            _grid = grid;
             _gridUnitManager = gridUnitManager;
             _gridPositionCalculator = gridPositionCalculator;
             _gridUnitManager.UnitPlacedAtTile += HandleUnitPlacedAtTile;

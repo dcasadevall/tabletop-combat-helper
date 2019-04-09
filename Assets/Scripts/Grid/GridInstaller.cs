@@ -1,5 +1,5 @@
+using Grid.Commands;
 using Grid.Positioning;
-using Grid.Serialized;
 using UnityEngine;
 using Zenject;
 
@@ -22,6 +22,8 @@ namespace Grid {
                      .FromComponentInNewPrefab(gridCellPrefab)
                      .UnderTransformGroup("Cells");
 #endif
+            
+            Container.Install<GridCommandsInstaller>();
         } 
     }
 }

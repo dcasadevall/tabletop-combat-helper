@@ -76,7 +76,7 @@ namespace Drawing {
             }
 
             Vector2 pixelPosition = GetLocalToPixelCoordinates(drawableTile.Sprite, localPosition.Value);
-            PaintPixelData paintPixelData = new PaintPixelData(tileAtMouse.Value, pixelPosition, paintParams);
+            PaintPixelData paintPixelData = new PaintPixelData(tileAtMouse.Value, IntVector2.Of(pixelPosition), paintParams);
             _commandQueue.Enqueue(_paintPixelCommand, paintPixelData);
         }
         

@@ -37,8 +37,7 @@ namespace Drawing {
             Container.Bind<IFactory<int, Sprite>>().To<DrawableSpriteFactory>().AsSingle();
             
             // Commands
-            Container.Bind<ICommand>().WithId(ClearAllPixelsCommand.Id).To<ClearAllPixelsCommand>().AsSingle();
-            Container.Bind<ICommand<PaintPixelData>>().To<PaintPixelCommand>().AsSingle();
+            Container.Install<DrawingCommandsInstaller>();
         }
 
         private void BindDrawingViewController(DiContainer container) {

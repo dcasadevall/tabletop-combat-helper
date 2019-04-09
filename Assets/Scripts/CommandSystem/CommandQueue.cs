@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace CommandSystem {
     /// <summary>
     /// Implementation of <see cref="ICommandQueue"/> that instantly runs the given commands.
@@ -7,7 +9,7 @@ namespace CommandSystem {
             command.Run();
         }
 
-        public void Enqueue<T>(ICommand<T> command, T data) {
+        public void Enqueue<TData>(ICommand<TData> command, TData data) where TData : ISerializable {
             command.Run(data);
         }
     }

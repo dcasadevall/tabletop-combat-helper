@@ -1,6 +1,7 @@
+using System.Runtime.Serialization;
 
 namespace CommandSystem {
-    public interface ICommand<TData> {
+    public interface ICommand<in TData> where TData : ISerializable {
         void Run(TData data);
     }
 

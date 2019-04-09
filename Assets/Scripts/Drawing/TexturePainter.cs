@@ -1,21 +1,18 @@
+using Math;
 using UnityEngine;
 
 namespace Drawing {
     public class TexturePainter : ITexturePainter {
-        public void PaintPixel(Sprite sprite, Vector2 pixel, TexturePaintParams paintParams) {
+        public void PaintPixel(Sprite sprite, IntVector2 pixel, TexturePaintParams paintParams) {
             Color32[] colors = sprite.texture.GetPixels32();
 
-            // Figure out how many pixels we need to colour in each direction (x and y)
-            int centerX = (int)pixel.x;
-            int centerY = (int)pixel.y;
-
-            for (int x = centerX - paintParams.brushThickness; x <= centerX + paintParams.brushThickness; x++) {
+            for (int x = pixel.x - paintParams.brushThickness; x <= pixel.x + paintParams.brushThickness; x++) {
                 // Check if the X wraps around the image, so we don't draw pixels on the other side of the image
                 if (x >= (int) sprite.rect.width || x < 0) {
                     continue;
                 }
 
-                for (int y = centerY - paintParams.brushThickness; y <= centerY + paintParams.brushThickness; y++) {
+                for (int y = pixel.y - paintParams.brushThickness; y <= pixel.y + paintParams.brushThickness; y++) {
                     PaintPixel(sprite, colors, x, y, paintParams.color);
                 }
             }

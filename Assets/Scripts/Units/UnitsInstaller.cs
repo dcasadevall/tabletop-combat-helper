@@ -1,4 +1,6 @@
-﻿using Units.Serialized;
+﻿using CommandSystem;
+using Units.Commands;
+using Units.Serialized;
 using Units.UI;
 using UnityEngine;
 using Zenject;
@@ -12,10 +14,7 @@ namespace Units {
         public override void InstallBindings() {
             Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(unitPickerViewController).AsSingle();
             Container.Bind<IUnitSpawnSettings>().To<UnitSpawnSettings>().FromInstance(unitSpawnSettingses).AsSingle();
-            
-            foreach (var nonPlayerUnit in unitSpawnSettingses.NonPlayerUnits) {
-                Container.Bind<IUnitData>().FromInstance(nonPlayerUnit);
-            }
+            Container.Bind<IUnitDataIndexResolver>().To<UnitDataIndexResolver>().AsSingle();
 
             // Prototype
             Container.BindMemoryPool<UnitBehaviour, UnitBehaviour.Pool>().WithInitialSize(10)
@@ -23,6 +22,9 @@ namespace Units {
 
             // Prototype: Bind ITicker and IInitializable to the UnitsSpawner
             Container.BindInterfacesTo<UnitSpawner>().AsSingle();
+            
+            // Commands installer
+            Container.Install<UnitCommandsInstaller>();
         }
     }
 }
