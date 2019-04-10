@@ -2,7 +2,11 @@ using System;
 using System.Runtime.Serialization;
 
 namespace CommandSystem {
+    public delegate void CommandQueued(Type type, ISerializable data);
+    
     public interface ICommandQueue {
+        event CommandQueued commandQueued; 
+        
         void Enqueue<TData>(TData data) where TData : ISerializable;
     }
 

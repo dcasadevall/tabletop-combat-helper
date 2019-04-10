@@ -3,6 +3,7 @@ using Drawing;
 using Drawing.UI;
 using InputSystem;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Zenject;
 
 namespace CameraSystem {
@@ -22,13 +23,16 @@ namespace CameraSystem {
 
         private DiContainer _container;
         private Camera _camera;
+        private EventSystem _eventSystem;
         private IInputLock _inputLock;
         private Guid? _lockId;
 
         [Inject]
         public void Construct(Camera camera,
+                              EventSystem eventSystem,
                               IInputLock inputLock) {
             _camera = camera;
+            _eventSystem = eventSystem;
             _inputLock = inputLock;
         }
 
@@ -95,6 +99,11 @@ namespace CameraSystem {
                 transform.position = Vector3.Lerp(transform.position, newCameraPosition, smoothTime);
             } else {
                 transform.position = newCameraPosition;
+            }
+
+            // Check if we are hovering UI
+            if (_eventSystem.IsPointerOverGameObject()) {
+                return;
             }
 
             // Check for lock. Do nothing if not acquired.
