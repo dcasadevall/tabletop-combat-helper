@@ -33,7 +33,6 @@ namespace Drawing.UI {
         [SerializeField]
         private Slider _brushSizeSlider;
 
-        private ICommand _clearAllPixelsCommand;
         private ICommandQueue _commandQueue;
         private IDrawingInputManager _drawingInputManager;
         private IInputLock _inputLock;
@@ -41,12 +40,9 @@ namespace Drawing.UI {
         private Guid? _lockId;
 
         [Inject]
-        public void Construct([Inject(Id = ClearAllPixelsCommand.Id)]
-                              ICommand clearAllPixelsCommand,
-                              ICommandQueue commandQueue,
+        public void Construct(ICommandQueue commandQueue,
                               IDrawingInputManager drawingInputManager, 
                               IInputLock inputLock, ILogger logger) {
-            _clearAllPixelsCommand = clearAllPixelsCommand;
             _commandQueue = commandQueue;
             _drawingInputManager = drawingInputManager;
             _inputLock = inputLock;
@@ -122,7 +118,7 @@ namespace Drawing.UI {
         }
 
         public void Clear() {
-            _commandQueue.Enqueue(_clearAllPixelsCommand);
+            _commandQueue.Enqueue<ClearAllPixelsCommandData>();
         }
     }
 }

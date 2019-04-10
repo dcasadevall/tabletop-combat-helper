@@ -19,7 +19,6 @@ namespace Drawing {
         private readonly Camera _camera;
         private readonly EventSystem _eventSystem;
         private readonly ILogger _logger;
-        private readonly ICommand<PaintPixelData> _paintPixelCommand;
         private readonly ICommandQueue _commandQueue;
         private readonly IGridInputManager _gridInputManager;
         private readonly IDrawableTileRegistry _drawableTileRegistry;
@@ -28,14 +27,12 @@ namespace Drawing {
         public DrawingInputManager(Camera camera, 
                                    EventSystem eventSystem,
                                    ILogger logger,
-                                   ICommand<PaintPixelData> paintPixelCommand,
                                    ICommandQueue commandQueue,
                                    IGridInputManager gridInputManager,
                                    IDrawableTileRegistry drawableTileRegistry) {
             _camera = camera;
             _eventSystem = eventSystem;
             _logger = logger;
-            _paintPixelCommand = paintPixelCommand;
             _commandQueue = commandQueue;
             _gridInputManager = gridInputManager;
             _drawableTileRegistry = drawableTileRegistry;
@@ -77,7 +74,7 @@ namespace Drawing {
 
             Vector2 pixelPosition = GetLocalToPixelCoordinates(drawableTile.Sprite, localPosition.Value);
             PaintPixelData paintPixelData = new PaintPixelData(tileAtMouse.Value, IntVector2.Of(pixelPosition), paintParams);
-            _commandQueue.Enqueue(_paintPixelCommand, paintPixelData);
+            _commandQueue.Enqueue(paintPixelData);
         }
         
         private Vector2 GetLocalToPixelCoordinates(Sprite sprite, Vector2 localPosition) {

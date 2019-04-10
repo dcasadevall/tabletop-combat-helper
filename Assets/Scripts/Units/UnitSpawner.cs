@@ -27,7 +27,6 @@ namespace Units {
         private readonly ILogger _logger;
         private readonly IGridInputManager _gridInputManager;
         private readonly IUnitDataIndexResolver _unitDataIndexResolver;
-        private readonly ICommand<SpawnUnitData> _spawnUnitCommand;
         private readonly ICommandQueue _commandQueue;
         private IntVector2? _selectedTile;
 
@@ -36,13 +35,11 @@ namespace Units {
                            IRandomGridPositionProvider randomGridPositionProvider,
                            IGridInputManager gridInputManager,
                            IUnitDataIndexResolver unitDataIndexResolver,
-                           ICommand<SpawnUnitData> spawnUnitCommand,
                            ICommandQueue commandQueue,
                            IUnitSpawnSettings unitSpawnSettings,
                            ILogger logger) {
             _gridInputManager = gridInputManager;
             _unitDataIndexResolver = unitDataIndexResolver;
-            _spawnUnitCommand = spawnUnitCommand;
             _commandQueue = commandQueue;
             _randomGridPositionProvider = randomGridPositionProvider;
             _unitPickerViewController = unitPickerVc;
@@ -97,7 +94,7 @@ namespace Units {
             
             UnitCommandData unitCommandData = new UnitCommandData(new UnitId(), unitIndex.Value, unitData.UnitType);
             SpawnUnitData spawnUnitData = new SpawnUnitData(unitCommandData, tileCoords);
-            _commandQueue.Enqueue(_spawnUnitCommand, spawnUnitData);
+            _commandQueue.Enqueue(spawnUnitData);
         }
     }
 }
