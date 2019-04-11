@@ -33,5 +33,20 @@ namespace Grid {
         /// <param name="tileCoords"></param>
         /// <returns></returns>
         bool PlaceUnitAtTile(IUnit unit, IntVector2 tileCoords);
+
+        /// <summary>
+        /// Removes the given unit from the grid.
+        /// 
+        /// Returns true if the unit was successfully removed, and false otherwise.
+        /// </summary>
+        /// <param name="unit"></param>
+        bool RemoveUnit(IUnit unit);
+        
+        /// <summary>
+        /// Returns the tile coordinates of the given unit in the grid, or null if such unit is not in the grid.
+        /// </summary>
+        /// <param name="unit"></param>
+        /// <returns></returns>
+        IntVector2? GetUnitCoords(IUnit unit);
     }
 }

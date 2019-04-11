@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Logging;
 using Math;
 using Units;
 using Zenject;
@@ -12,10 +13,12 @@ namespace Grid {
         
         private Dictionary<UnitId, int> _unitMap = new Dictionary<UnitId, int>();
         private List<IUnit>[,] _tiles;
-        private IGrid _grid;
+        private readonly IGrid _grid;
+        private readonly ILogger _logger;
 
-        public GridUnitManager(IGrid grid) {
+        public GridUnitManager(IGrid grid, ILogger logger) {
             _grid = grid;
+            _logger = logger;
         }
         
         public void Initialize() {
@@ -43,6 +46,29 @@ namespace Grid {
 
             UnitPlacedAtTile.Invoke(unit, tileCoords);
             return true;
+        }
+
+        public bool RemoveUnit(IUnit unit) {
+            if (!_unitMap.ContainsKey(unit.UnitId)) {
+                _logger.LogError(LoggedFeature.Grid, "Unit not found in grid: {0}", unit.UnitId);
+                return false;
+            }
+
+            int tileIndex = _unitMap[unit.UnitId];
+            _tiles[tileIndex % _grid.NumTilesX, tileIndex / _grid.NumTilesY].Remove(unit);
+            _unitMap.Remove(unit.UnitId);
+
+            return true;
+        }
+        
+        public IntVector2? GetUnitCoords(IUnit unit) {
+            if (!_unitMap.ContainsKey(unit.UnitId)) {
+                _logger.LogError(LoggedFeature.Grid, "Unit not found in grid: {0}", unit.UnitId);
+                return null;
+            }
+            
+            int tileIndex = _unitMap[unit.UnitId];
+            return IntVector2.Of((int)(tileIndex % _grid.NumTilesX), (int)(tileIndex / _grid.NumTilesY));
         }
     }
 }

@@ -25,8 +25,9 @@ namespace Drawing {
                      .ByMethod(BindDrawingViewController)
                      .AsSingle()
                      .NonLazy();
-            
-            Container.Bind<ITexturePainter>().To<TexturePainter>().AsSingle();
+
+            Container.Bind<ITexturePainter>().To<TexturePainter>().FromSubContainerResolve()
+                     .ByMethod(BindTexturePainter).AsSingle();
             
             //Pooling
             Container.BindMemoryPool<DrawableTileBehaviour, DrawableTileBehaviour.Pool>().WithInitialSize(5)
@@ -44,6 +45,12 @@ namespace Drawing {
             container.Bind<IDrawingInputManager>().To<DrawingInputManager>().AsSingle();
             container.Bind<IDrawingViewController>().To<DrawingViewController>()
                      .FromComponentInNewPrefab(_drawingViewController).AsSingle();
+        }
+        
+        private void BindTexturePainter(DiContainer container) {
+            container.Bind<TexturePainter>().AsSingle();
+            container.BindIFactory<Sprite, ISpriteState, IFactory<Sprite, ISpriteState>>().To<SpriteState.Factory>()
+                     .AsSingle();
         }
     }
 }

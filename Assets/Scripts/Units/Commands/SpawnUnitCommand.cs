@@ -47,5 +47,14 @@ namespace Units.Commands {
                 _gridUnitManager.PlaceUnitAtTile(unitInHierarchy, data.tileCoords);
             }
         }
+
+        public void Undo(SpawnUnitData data) {
+            IUnit unit = _unitRegistry.GetUnit(data.unitCommandData.unitId);
+            foreach (var unitInHierarchy in unit.GetUnitsInHierarchy()) {
+                _unitRegistry.UnregisterUnit(unitInHierarchy.UnitId);
+                _unitBehaviourPool.Despawn(unitInHierarchy.UnitId);
+                _gridUnitManager.RemoveUnit(unitInHierarchy);
+            }
+        }
     }
 }
