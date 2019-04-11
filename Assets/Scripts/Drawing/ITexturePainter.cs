@@ -8,5 +8,6 @@ namespace Drawing {
     public interface ITexturePainter {
         void PaintPixel(Sprite sprite, IntVector2 pixel, TexturePaintParams paintParams);
         void EraseAllPixels(Sprite sprite);
+        ISpriteState SaveState(Sprite sprite);
     }
 }

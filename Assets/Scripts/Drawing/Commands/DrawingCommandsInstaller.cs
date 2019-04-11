@@ -7,8 +7,11 @@ namespace Drawing.Commands {
         public DrawingCommandsInstaller(CommandFactory commandFactory) : base(commandFactory) { }
         
         protected override void InstallCommandBindings() {
-            Container.Bind<ICommand<ClearAllPixelsCommandData>>().To<ClearAllPixelsCommand>().AsSingle();
-            Container.Bind<ICommand<PaintPixelData>>().To<PaintPixelCommand>().AsSingle();
+            // These two commands preserve state to be able to Undo().
+            // i.e: They keep the state of the pixel before painting it.
+            // As such, we want to use transient, so different instances are created in the command queue.
+            Container.Bind<ICommand<ClearAllPixelsCommandData>>().To<ClearAllPixelsCommand>().AsTransient();
+            Container.Bind<ICommand<PaintPixelData>>().To<PaintPixelCommand>().AsTransient();
         }
     }
 }

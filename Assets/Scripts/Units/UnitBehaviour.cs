@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using Grid;
 using Grid.Positioning;
 using InputSystem;
+using Logging;
 using Math;
 using UnityEngine;
+using ILogger = Logging.ILogger;
 using Zenject;
 
 namespace Units {
@@ -58,13 +61,31 @@ namespace Units {
         }
         
         public class Pool : MonoMemoryPool<IUnit, UnitBehaviour> {
+            Dictionary<UnitId, UnitBehaviour> _unitBehaviours = new Dictionary<UnitId, UnitBehaviour>();
+            private readonly ILogger _logger;
+
+            public Pool(ILogger logger) {
+                _logger = logger;
+            }
+            
             protected override void Reinitialize(IUnit unit, UnitBehaviour unitBehaviour) {
+                _unitBehaviours[unit.UnitId] = unitBehaviour;
                 unitBehaviour.SetUnit(unit);
             }
 
             protected override void OnDespawned(UnitBehaviour unitBehaviour) {
                 unitBehaviour.HandleDespawn();
                 base.OnDespawned(unitBehaviour);
+            }
+
+            public void Despawn(UnitId unitId) {
+                if (!_unitBehaviours.ContainsKey(unitId)) {
+                    _logger.LogError(LoggedFeature.Units, "Despawn called on unitId not found: {0}", unitId);
+                    return;
+                }
+                
+                Despawn(_unitBehaviours[unitId]);
+                _unitBehaviours.Remove(unitId);
             }
         }
     }

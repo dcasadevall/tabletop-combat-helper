@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using Logging;
 
@@ -10,7 +11,7 @@ namespace Units {
         public UnitRegistry(ILogger logger) {
             _logger = logger;
         }
-        
+
         public IEnumerable<IUnit> GetAllUnits() {
             return _unitMap.Values;
         }
@@ -26,6 +27,15 @@ namespace Units {
 
         public void RegisterUnit(IUnit unit) {
             _unitMap[unit.UnitId] = unit;
+        }
+        
+        public void UnregisterUnit(UnitId unitId) {
+            if (!_unitMap.ContainsKey(unitId)) {
+                _logger.LogError(LoggedFeature.Units, "Unit not found in registry: {0}", unitId);
+                return;
+            }
+            
+            _unitMap.Remove(unitId);
         }
     }
 }

@@ -1,8 +1,15 @@
 using Math;
 using UnityEngine;
+using Zenject;
 
 namespace Drawing {
     public class TexturePainter : ITexturePainter {
+        private readonly IFactory<Sprite, ISpriteState> _spriteStateFactory;
+
+        public TexturePainter(IFactory<Sprite, ISpriteState> spriteStateFactory) {
+            _spriteStateFactory = spriteStateFactory;
+        }
+        
         public void PaintPixel(Sprite sprite, IntVector2 pixel, TexturePaintParams paintParams) {
             Color32[] colors = sprite.texture.GetPixels32();
 
@@ -25,7 +32,11 @@ namespace Drawing {
             sprite.texture.SetPixels(new Color[(int)sprite.rect.width * (int)sprite.rect.height]);
             sprite.texture.Apply();
         }
-        
+
+        public ISpriteState SaveState(Sprite sprite) {
+            return _spriteStateFactory.Create(sprite);
+        }
+
         #region Helper methods
         private void PaintPixel(Sprite sprite, Color32[] colors, int x, int y, Color color) {
             // Need to transform x and y coordinates to flat coordinates of array
