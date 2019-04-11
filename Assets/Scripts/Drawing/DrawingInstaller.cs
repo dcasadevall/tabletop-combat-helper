@@ -1,6 +1,9 @@
 using System;
 using CommandSystem;
 using Drawing.Commands;
+using Drawing.DrawableTiles;
+using Drawing.Input;
+using Drawing.TexturePainter;
 using Drawing.UI;
 using Grid;
 using Grid.Serialized;
@@ -26,7 +29,7 @@ namespace Drawing {
                      .AsSingle()
                      .NonLazy();
 
-            Container.Bind<ITexturePainter>().To<TexturePainter>().FromSubContainerResolve()
+            Container.Bind<ITexturePainter>().To<TexturePainter.TexturePainter>().FromSubContainerResolve()
                      .ByMethod(BindTexturePainter).AsSingle();
             
             //Pooling
@@ -48,7 +51,7 @@ namespace Drawing {
         }
         
         private void BindTexturePainter(DiContainer container) {
-            container.Bind<TexturePainter>().AsSingle();
+            container.Bind<TexturePainter.TexturePainter>().AsSingle();
             container.BindFactory<Sprite, ISpriteState, SpriteState.Factory>().To<SpriteState>()
                      .AsSingle();
         }

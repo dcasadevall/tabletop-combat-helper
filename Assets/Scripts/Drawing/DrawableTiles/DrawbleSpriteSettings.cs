@@ -1,6 +1,6 @@
 using System;
 
-namespace Drawing {
+namespace Drawing.DrawableTiles {
     [Serializable]
     public class DrawbleSpriteSettings {
         /// <summary>

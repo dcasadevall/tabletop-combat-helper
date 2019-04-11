@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using Math;
 using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
 
-namespace Drawing {
+namespace Drawing.DrawableTiles {
     /// <summary>
     /// Keeps track of <see cref="IDrawableTile"/>s in each tile on the <see cref="Grid.IGrid"/>.
     /// Creates new <see cref="IDrawableTile"/> when necessary.

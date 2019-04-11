@@ -1,3 +1,4 @@
+using Drawing.TexturePainter;
 using UnityEngine;
 
 namespace Drawing.UI {

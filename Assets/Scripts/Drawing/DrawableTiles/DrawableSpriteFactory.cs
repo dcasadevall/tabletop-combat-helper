@@ -3,7 +3,7 @@ using UnityEngine;
 using Zenject;
 using ILogger = Logging.ILogger;
 
-namespace Drawing {
+namespace Drawing.DrawableTiles {
     public class DrawableSpriteFactory : IFactory<int, Sprite> {
         private readonly DrawbleSpriteSettings _drawbleSpriteSettings;
         private readonly ILogger _logger;

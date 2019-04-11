@@ -1,7 +1,7 @@
 using Math;
 using UnityEngine;
 
-namespace Drawing {
+namespace Drawing.TexturePainter {
     /// <summary>
     /// Implementors of this interface will handle painting over a readWrite enabled Sprite.
     /// </summary>

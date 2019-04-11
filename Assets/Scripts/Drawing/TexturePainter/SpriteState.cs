@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace Drawing {
+namespace Drawing.TexturePainter {
     /// <summary>
     /// Simple class used to save / restore state of a sprite before and after drawing on it.
     /// </summary>

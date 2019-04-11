@@ -1,5 +1,7 @@
 using CommandSystem;
 using Drawing.Commands;
+using Drawing.DrawableTiles;
+using Drawing.TexturePainter;
 using Grid;
 using Logging;
 using Math;
@@ -8,7 +10,7 @@ using UnityEngine.EventSystems;
 using ILogger = Logging.ILogger;
 using Vector2 = UnityEngine.Vector2;
 
-namespace Drawing {
+namespace Drawing.Input {
     /// <summary>
     /// Handles mouse input and forwards events to the <see cref="IDrawableTile"/>s pertinent to the
     /// currently hovered tile.
@@ -46,7 +48,7 @@ namespace Drawing {
             }
             
             // We we clicked?
-            if (!Input.GetMouseButtonDown(0) && !Input.GetMouseButton(0)) {
+            if (!UnityEngine.Input.GetMouseButtonDown(0) && !UnityEngine.Input.GetMouseButton(0)) {
                 return;
             }
             
@@ -57,7 +59,7 @@ namespace Drawing {
             
             // This may lazily instantiate the tile used to draw, so it is important that it happens before the raycast.
             IDrawableTile drawableTile = _drawableTileRegistry.GetDrawableTileAtCoordinates(tileAtMouse.Value);
-            Vector2 mouseWorldPoint = _camera.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mouseWorldPoint = _camera.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
             RaycastHit2D raycastHit = Physics2D.Raycast(mouseWorldPoint, Vector2.zero, LayerMask.NameToLayer(kDrawingLayerName));
             if (raycastHit.collider == null) {
                 return;

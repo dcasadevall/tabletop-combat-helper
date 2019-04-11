@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 using UnityEngine;
 
-namespace Drawing {
+namespace Drawing.TexturePainter {
     [Serializable]
     public struct TexturePaintParams : ISerializable {
         public readonly Color color;

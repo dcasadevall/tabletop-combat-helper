@@ -8,7 +8,7 @@ using UnityEngine;
 using Zenject;
 using ILogger = Logging.ILogger;
 
-namespace Drawing {
+namespace Drawing.DrawableTiles {
     public class DrawableTileRegistry : IDrawableTileRegistry {
         private Dictionary<IntVector2, IDrawableTile> _tiles = new Dictionary<IntVector2, IDrawableTile>();
 

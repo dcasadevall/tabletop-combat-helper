@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Drawing {
+namespace Drawing.DrawableTiles {
     /// <summary>
     /// An individual drawable tile that will hold the read / write sprite to be used with paint commands.
     /// It is instantiated by the <see cref="IDrawableTileRegistry"/> if needed.

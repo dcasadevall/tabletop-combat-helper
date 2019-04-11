@@ -1,8 +1,7 @@
 using Math;
 using UnityEngine;
-using Zenject;
 
-namespace Drawing {
+namespace Drawing.TexturePainter {
     public class TexturePainter : ITexturePainter {
         private readonly SpriteState.Factory _spriteStateFactory;
 

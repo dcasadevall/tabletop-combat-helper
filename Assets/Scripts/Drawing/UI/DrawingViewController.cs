@@ -1,6 +1,8 @@
 ﻿using System;
 using CommandSystem;
 using Drawing.Commands;
+using Drawing.Input;
+using Drawing.TexturePainter;
 using InputSystem;
 using Logging;
 using UnityEngine;

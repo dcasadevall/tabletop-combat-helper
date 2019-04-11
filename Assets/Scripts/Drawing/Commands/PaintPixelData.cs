@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using Drawing.TexturePainter;
 using Math;
 using UnityEngine;
 

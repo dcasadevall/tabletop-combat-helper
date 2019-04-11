@@ -1,8 +1,9 @@
-using Drawing.UI;
+using Drawing.Input;
+using Drawing.TexturePainter;
 using UnityEngine;
 using Zenject;
 
-namespace Drawing {
+namespace Drawing.DrawableTiles {
     /// <summary>
     /// Holds the sprite reference to be used when <see cref="IDrawableTile"/> receives callbacks
     /// from the <see cref="DrawingInputManager"/>.

@@ -1,4 +1,6 @@
 using CommandSystem;
+using Drawing.DrawableTiles;
+using Drawing.TexturePainter;
 
 namespace Drawing.Commands {
     public class PaintPixelCommand : ICommand<PaintPixelData> {
