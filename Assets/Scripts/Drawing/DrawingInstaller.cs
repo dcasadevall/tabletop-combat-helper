@@ -49,7 +49,7 @@ namespace Drawing {
         
         private void BindTexturePainter(DiContainer container) {
             container.Bind<TexturePainter>().AsSingle();
-            container.BindIFactory<Sprite, ISpriteState, IFactory<Sprite, ISpriteState>>().To<SpriteState.Factory>()
+            container.BindFactory<Sprite, ISpriteState, SpriteState.Factory>().To<SpriteState>()
                      .AsSingle();
         }
     }

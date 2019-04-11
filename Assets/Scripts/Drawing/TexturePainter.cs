@@ -4,9 +4,9 @@ using Zenject;
 
 namespace Drawing {
     public class TexturePainter : ITexturePainter {
-        private readonly IFactory<Sprite, ISpriteState> _spriteStateFactory;
+        private readonly SpriteState.Factory _spriteStateFactory;
 
-        public TexturePainter(IFactory<Sprite, ISpriteState> spriteStateFactory) {
+        public TexturePainter(SpriteState.Factory spriteStateFactory) {
             _spriteStateFactory = spriteStateFactory;
         }
         
