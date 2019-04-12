@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using CommandSystem;
 using Logging;
-using UnityEngine;
 using Util;
 using Zenject;
 using ILogger = Logging.ILogger;
@@ -17,9 +16,7 @@ namespace Replays.Playback {
         private readonly ICommandQueue _commandQueue;
         private readonly ICommandFactory _commandFactory;
         private readonly IClock _clock;
-        private readonly ILogger _logger;
 
-        private TimeSpan _clippingOffset;
         private TimeSpan _startingTimeSpan;
         private bool _isPlaying;
         private bool _isPaused;
@@ -34,7 +31,7 @@ namespace Replays.Playback {
                     return 0;
                 }
 
-                TimeSpan totalTimeSpan = _futureCommands.Last.Value.ExecutionTime - _pastCommands.First.Value.ExecutionTime;
+                TimeSpan totalTimeSpan = _futureCommands.Last.Value.ReplayTime - _pastCommands.First.Value.ReplayTime;
                 TimeSpan timeSinceStarted = _clock.Now - _startingTimeSpan;
                 return (float)(timeSinceStarted.TotalSeconds / totalTimeSpan.TotalSeconds);
             }
@@ -45,11 +42,11 @@ namespace Replays.Playback {
         private TimeSpan FirstTimeSpan {
             get {
                 if (_pastCommands.Count > 0) {
-                    return _pastCommands.First.Value.ExecutionTime;
+                    return _pastCommands.First.Value.ReplayTime;
                 }
 
                 if (_futureCommands.Count > 0) {
-                    return _futureCommands.First.Value.ExecutionTime;
+                    return _futureCommands.First.Value.ReplayTime;
                 }
                 
                 return TimeSpan.Zero;
@@ -62,7 +59,7 @@ namespace Replays.Playback {
                     return TimeSpan.Zero;
                 }
                 
-                return _futureCommands.First.Value.ExecutionTime - FirstTimeSpan + _clippingOffset;
+                return _futureCommands.First.Value.ReplayTime - FirstTimeSpan;
             }
         }
 
@@ -75,17 +72,16 @@ namespace Replays.Playback {
         /// <summary>
         /// Queue containing commands that have been executed up to this point
         /// </summary>
-        private readonly LinkedList<ICommandSnapshot> _pastCommands = new LinkedList<ICommandSnapshot>();
+        private readonly LinkedList<ReplaySnapshot> _pastCommands = new LinkedList<ReplaySnapshot>();
         
         /// <summary>
         /// Queue containing commands that have not yet been executed, but will be executed as the playback continues.
         /// </summary>
-        private readonly LinkedList<ICommandSnapshot> _futureCommands = new LinkedList<ICommandSnapshot>();
+        private readonly LinkedList<ReplaySnapshot> _futureCommands = new LinkedList<ReplaySnapshot>();
 
-        public ReplayPlaybackManager(ICommandQueue commandQueue, IClock clock, ILogger logger) {
+        public ReplayPlaybackManager(ICommandQueue commandQueue, IClock clock) {
             _commandQueue = commandQueue;
             _clock = clock;
-            _logger = logger;
             
             // We do this here and not as part of IInitializable to avoid race condition issues.
             _commandQueue.AddListener(this);
@@ -101,8 +97,24 @@ namespace Replays.Playback {
                 ExecuteNextCommand();
             }
 
-            // Enqueue the command snapshot.
-            _pastCommands.AddLast(commandSnapshot);
+            TimeSpan timeFromPreviousCommand = GetClippedTimeFromPreviousCommand(commandSnapshot);
+            ReplaySnapshot replaySnapshot = new ReplaySnapshot(commandSnapshot, timeFromPreviousCommand);
+            _pastCommands.AddLast(replaySnapshot);
+        }
+
+        private TimeSpan GetClippedTimeFromPreviousCommand(ICommandSnapshot commandSnapshot) {
+            if (_pastCommands.Count == 0) {
+                return TimeSpan.Zero;
+            }
+
+            TimeSpan timeFromPreviousCommand = commandSnapshot.ExecutionTime - 
+                                               _pastCommands.Last.Value.CommandSnapshot.ExecutionTime;
+
+            if (timeFromPreviousCommand > kMaxTimeBetweenCommands) {
+                return kMaxTimeBetweenCommands;
+            }
+
+            return timeFromPreviousCommand;
         }
 
         public void Tick() {
@@ -119,13 +131,6 @@ namespace Replays.Playback {
                 return;
             }
             
-            // "Accelerate" playback by fast forwarding to a minimum span before the net command
-            if (NextCommandTime - TimeSincePlaybackStarted > kMaxTimeBetweenCommands) {
-                TimeSpan addedOffset = (NextCommandTime - _clock.Now) - kMaxTimeBetweenCommands;
-                _clippingOffset += addedOffset;
-                _logger.Log(LoggedFeature.Replays, "Adding Clipping offset: {0}", addedOffset);
-            }
-            
             if (TimeSincePlaybackStarted < NextCommandTime) {
                 return;
             }
@@ -137,7 +142,6 @@ namespace Replays.Playback {
         public void Play() {
             if (!_isPlaying) {
                 _startingTimeSpan = _clock.Now;
-                _clippingOffset = TimeSpan.Zero;
 
                 while (_pastCommands.Count > 0) {
                     UndoPreviousCommand();
@@ -172,7 +176,7 @@ namespace Replays.Playback {
         }
 
         private void ExecuteNextCommand() {
-            ICommandSnapshot futureSnapshot = _futureCommands.First.Value;
+            ICommandSnapshot futureSnapshot = _futureCommands.First.Value.CommandSnapshot;
             futureSnapshot.Redo();
             
             _pastCommands.AddLast(_futureCommands.First.Value);
@@ -180,7 +184,7 @@ namespace Replays.Playback {
         }
 
         private void UndoPreviousCommand() {
-            ICommandSnapshot pastSnapshot = _pastCommands.Last.Value;
+            ICommandSnapshot pastSnapshot = _pastCommands.Last.Value.CommandSnapshot;
             pastSnapshot.Undo();
 
             _futureCommands.AddFirst(_pastCommands.Last.Value);
