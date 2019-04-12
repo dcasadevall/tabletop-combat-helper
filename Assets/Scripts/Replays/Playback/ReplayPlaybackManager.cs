@@ -6,7 +6,7 @@ using Util;
 using Zenject;
 
 namespace Replays.Playback {
-    public class ReplayPlaybackManager : ITickable, IInitializable, IReplayPlaybackManager, ICommandQueueListener {
+    public class ReplayPlaybackManager : ITickable, IReplayPlaybackManager, ICommandQueueListener {
         private readonly ICommandQueue _commandQueue;
         private readonly ICommandFactory _commandFactory;
         private readonly IClock _clock;
@@ -57,15 +57,15 @@ namespace Replays.Playback {
         /// </summary>
         private readonly LinkedList<CommandSnapshot> _futureCommands = new LinkedList<CommandSnapshot>();
 
-        public ReplayPlaybackManager(ICommandQueue commandQueue, IClock clock) {
-            _commandQueue = commandQueue;
+        public ReplayPlaybackManager(ICommandQueue commandQueue, IClock clock, IInstantiator instantiator) {
+            // Listen for commands in the global command queue,
+            // but create our own command queue to execute commands internally (and avoid listening to them)
+            commandQueue.AddListener(this);
+            _commandQueue = instantiator.Instantiate<InstantCommandQueue>();
+            
             _clock = clock;
         }
         
-        public void Initialize() {
-            _commandQueue.AddListener(this);
-        }
-
         public void HandleCommandQueued<TData>(TData data) where TData : ISerializable {
             // Make sure we do not have commands in future before we queue up past commands.
             // This is a safety net.
@@ -137,7 +137,7 @@ namespace Replays.Playback {
             // Execute the command directly, without going through the command queue.
             // This avoids the command queue event being triggered again
             CommandSnapshot futureSnapshot = _futureCommands.First.Value;
-            futureSnapshot.command.Run(futureSnapshot.data);
+            _commandQueue.Enqueue(futureSnapshot.data);
             
             _pastCommands.AddLast(_futureCommands.First);
             _futureCommands.RemoveFirst();

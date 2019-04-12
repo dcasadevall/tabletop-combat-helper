@@ -2,6 +2,7 @@ using System.Runtime.Serialization;
 
 namespace CommandSystem {
     public interface ICommandQueue {
+        void AddListener(ICommandQueueListener listener);
         void Enqueue<TData>(TData data) where TData : ISerializable;
     }
     

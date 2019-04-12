@@ -7,7 +7,7 @@ namespace CommandSystem {
     /// <summary>
     /// Implementation of <see cref="ICommandQueue"/> that instantly runs the given commands.
     /// </summary>
-    public class InstantCommandQueue : ICommandQueue, ICommandQueueNotifier {
+    public class InstantCommandQueue : ICommandQueue {
         private readonly ICommandFactory _commandFactory;
         private readonly ILogger _logger;
         private readonly List<ICommandQueueListener> _listeners = new List<ICommandQueueListener>();

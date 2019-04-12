@@ -8,7 +8,7 @@ namespace Units.Commands {
         
         protected override void InstallCommandBindings() {
             Container.Bind<IMutableUnitRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<SpawnUnitCommand>();
-            Container.Bind<SpawnUnitCommand>().AsSingle();
+            Container.Bind<ICommand<SpawnUnitData>>().To<SpawnUnitCommand>().AsSingle();
         }
     }
 }

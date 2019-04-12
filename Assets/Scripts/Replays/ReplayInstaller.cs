@@ -1,4 +1,3 @@
-using CommandSystem.Installers;
 using Replays.Playback;
 using Replays.UI;
 using UnityEngine;
@@ -19,14 +18,7 @@ namespace Replays {
             Container.Bind<IRootReplayViewController>().To<RootReplayViewController>()
                      .FromComponentInNewPrefab(_replayRootVcPrefab).AsSingle().NonLazy();
 
-            Container.BindInterfacesTo<ReplayPlaybackManager>().FromSubContainerResolve()
-                     .ByMethod(BindReplayPlaybackManager)
-                     .WithKernel();
-        }
-
-        private void BindReplayPlaybackManager(DiContainer container) {
-            container.BindInterfacesTo<ReplayPlaybackManager>().AsSingle();
-            container.Install<CommandSystemInstaller>();
+            Container.BindInterfacesTo<ReplayPlaybackManager>().AsSingle();
         }
     }
 }

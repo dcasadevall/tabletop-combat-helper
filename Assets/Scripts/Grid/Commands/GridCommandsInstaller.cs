@@ -8,7 +8,7 @@ namespace Grid.Commands {
         
         protected override void InstallCommandBindings() {
             // We bind this command as transient so it can store state for Undo()
-            Container.Bind<MoveUnitCommand>().AsTransient();
+            Container.Bind<ICommand<MoveUnitData>>().To<MoveUnitCommand>().AsTransient();
         }
     }
 }
