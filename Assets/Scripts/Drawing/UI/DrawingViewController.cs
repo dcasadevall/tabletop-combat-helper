@@ -120,7 +120,7 @@ namespace Drawing.UI {
         }
 
         public void Clear() {
-            _commandQueue.Enqueue<ClearAllPixelsCommand, ClearAllPixelsCommandData>();
+            _commandQueue.Enqueue<ClearAllPixelsCommandData>();
         }
     }
 }

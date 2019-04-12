@@ -18,7 +18,7 @@ namespace CommandSystem {
             _containers.Add(container);
         }
         
-        public ICommand<TData> Create<TCommand, TData>() where TCommand : ICommand<TData> where TData : ISerializable {
+        public ICommand<TData> Create<TData>() where TData : ISerializable {
             foreach (var diContainer in _containers) {
                 ICommand<TData> command = diContainer.TryResolve<ICommand<TData>>();
                 if (command != null) {
@@ -27,20 +27,6 @@ namespace CommandSystem {
             }
 
             _logger.LogError(LoggedFeature.CommandSystem, "Command not found in registered contexts: {0}", typeof(ICommand<TData>));
-            return null;
-        }
-        
-        public ICommand<ISerializable> Create(Type dataType) {
-            foreach (var diContainer in _containers) {
-                try {
-                    Type resolvedType = diContainer.ResolveType(dataType);
-                    if (resolvedType != null) {
-                        return (ICommand<ISerializable>) diContainer.Instantiate(resolvedType);
-                    }
-                } catch (Exception e) { }
-            }
-
-            _logger.LogError(LoggedFeature.CommandSystem, "Command not found in registered contexts: {0}", dataType);
             return null;
         }
     }

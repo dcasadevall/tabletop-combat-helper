@@ -6,7 +6,7 @@ using Util;
 using Zenject;
 
 namespace Replays.Playback {
-    public class ReplayPlaybackManager : ITickable, IInitializable, IReplayPlaybackManager {
+    public class ReplayPlaybackManager : ITickable, IInitializable, IReplayPlaybackManager, ICommandQueueListener {
         private readonly ICommandQueue _commandQueue;
         private readonly ICommandFactory _commandFactory;
         private readonly IClock _clock;
@@ -63,10 +63,10 @@ namespace Replays.Playback {
         }
         
         public void Initialize() {
-            _commandQueue.commandQueued += HandleCommandQueued;
+            _commandQueue.AddListener(this);
         }
 
-        private void HandleCommandQueued(ICommand<ISerializable> command, ISerializable data) {
+        public void HandleCommandQueued<TData>(TData data) where TData : ISerializable {
             // Make sure we do not have commands in future before we queue up past commands.
             // This is a safety net.
             // One should explicitly call Stop() or EraseFuture(), before any new command is queued.
@@ -77,7 +77,7 @@ namespace Replays.Playback {
             }
 
             // Enqueue the command snapshot.
-            CommandSnapshot commandSnapshot = new CommandSnapshot(command, data, _clock.Now);
+            CommandSnapshot commandSnapshot = new CommandSnapshot(data, _clock.Now);
             _pastCommands.AddLast(commandSnapshot);
         }
 
