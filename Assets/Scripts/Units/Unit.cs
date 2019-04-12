@@ -13,16 +13,10 @@ namespace Units {
             }
         }
         
-        public Unit(IUnitData unitData) : this(new UnitId(), unitData) {
-        }
-
-        public Unit(UnitId unitId, IUnitData unitData) {
+        public Unit(UnitId unitId, IUnitData unitData, IUnit[] petUnits) {
             UnitId = unitId;
             UnitData = unitData;
-
-            foreach (var petData in unitData.Pets) {
-                _petUnits.Add(new Unit(petData));
-            }
+            _petUnits.AddRange(petUnits);
         }
     }
 }

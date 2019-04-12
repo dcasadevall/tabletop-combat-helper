@@ -13,6 +13,8 @@ namespace Replays.Playback {
         /// </summary>
         private static TimeSpan kMaxTimeBetweenCommands = TimeSpan.FromSeconds(1);
         
+        public event Action PlaybackInterrupted = delegate {};
+        
         private readonly ICommandQueue _commandQueue;
         private readonly ICommandFactory _commandFactory;
         private readonly IClock _clock;
@@ -20,6 +22,7 @@ namespace Replays.Playback {
         private TimeSpan _startingTimeSpan;
         private bool _isPlaying;
         private bool _isPaused;
+
 
         public float Progress {
             get {
@@ -31,9 +34,8 @@ namespace Replays.Playback {
                     return 0;
                 }
 
-                TimeSpan totalTimeSpan = _futureCommands.Last.Value.ReplayTime - _pastCommands.First.Value.ReplayTime;
-                TimeSpan timeSinceStarted = _clock.Now - _startingTimeSpan;
-                return (float)(timeSinceStarted.TotalSeconds / totalTimeSpan.TotalSeconds);
+                int totalCommandCount = _pastCommands.Count + _futureCommands.Count;
+                return (_pastCommands.Count / (float)totalCommandCount);
             }
         }
         
@@ -95,6 +97,10 @@ namespace Replays.Playback {
             // TODO: Use seek
             while (_futureCommands.Count > 0) {
                 ExecuteNextCommand();
+
+                if (_futureCommands.Count == 0) {
+                    PlaybackInterrupted.Invoke();
+                }
             }
 
             TimeSpan timeFromPreviousCommand = GetClippedTimeFromPreviousCommand(commandSnapshot);
@@ -127,7 +133,7 @@ namespace Replays.Playback {
             }
             
             if (_futureCommands.Count == 0) {
-                Pause();
+                Stop();
                 return;
             }
             

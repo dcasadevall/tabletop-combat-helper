@@ -1,6 +1,12 @@
 namespace Replays.Playback {
     public interface IReplayPlaybackManager {
         /// <summary>
+        /// Called whenever a new command is queued while playback is going on. This should interrupt the current
+        /// playback.
+        /// </summary>
+        event System.Action PlaybackInterrupted;
+        
+        /// <summary>
         /// Gets the current progress relative to all commands to be played.
         /// From 0 to 1
         /// </summary>

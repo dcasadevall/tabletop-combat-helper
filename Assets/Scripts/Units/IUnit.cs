@@ -26,22 +26,4 @@ namespace Units {
         /// </summary>
         IUnit[] PetUnits { get; }
     }
-
-    public static class UnitExtensions {
-        /// <summary>
-        /// Returns all descendants from this unit, as well as this unit.
-        /// This includes all pet units, and all pet units of those pet units, etc..
-        /// </summary>
-        /// <param name="unit"></param>
-        /// <returns></returns>
-        public static List<IUnit> GetUnitsInHierarchy(this IUnit unit) {
-            List<IUnit> unitsInHierarchy = new List<IUnit>();
-            unitsInHierarchy.Add(unit);
-            foreach (var petUnit in unit.PetUnits) {
-                unitsInHierarchy.AddRange(petUnit.GetUnitsInHierarchy());
-            }
-
-            return unitsInHierarchy;
-        }
-    }
 }

@@ -11,17 +11,20 @@ namespace Units.Commands {
     /// </summary>
     public class SpawnUnitCommand : ICommand<SpawnUnitData> {
         private readonly IUnitSpawnSettings _unitSpawnSettings;
+        private readonly IUnitDataIndexResolver _unitDataIndexResolver;
         private readonly IMutableUnitRegistry _unitRegistry;
         private readonly IGridUnitManager _gridUnitManager;
         private readonly UnitBehaviour.Pool _unitBehaviourPool;
         private readonly ILogger _logger;
 
         public SpawnUnitCommand(IUnitSpawnSettings unitSpawnSettings, 
+                                IUnitDataIndexResolver unitDataIndexResolver,
                                 IMutableUnitRegistry unitRegistry,
                                 IGridUnitManager gridUnitManager,
                                 UnitBehaviour.Pool unitBehaviourPool, 
                                 ILogger logger) {
             _unitSpawnSettings = unitSpawnSettings;
+            _unitDataIndexResolver = unitDataIndexResolver;
             _unitRegistry = unitRegistry;
             _gridUnitManager = gridUnitManager;
             _unitBehaviourPool = unitBehaviourPool;
@@ -40,21 +43,31 @@ namespace Units.Commands {
             IUnitData unitData = unitDatas[(int)data.unitCommandData.unitIndex];
             _logger.Log(LoggedFeature.Units, "Spawning: {0}", unitData.Name);
             
-            IUnit unit = new Unit(data.unitCommandData.unitId, unitData);
-            foreach (var unitInHierarchy in unit.GetUnitsInHierarchy()) {
-                _unitRegistry.RegisterUnit(unitInHierarchy);
-                _unitBehaviourPool.Spawn(unitInHierarchy);
-                _gridUnitManager.PlaceUnitAtTile(unitInHierarchy, data.tileCoords);
+            // First, spawn the pets recursively.
+            IUnit[] pets = new IUnit[data.unitCommandData.pets.Length];
+            for (var i = 0; i < data.unitCommandData.pets.Length; i++) {
+                Run(new SpawnUnitData(data.unitCommandData.pets[i], data.tileCoords));
+                pets[i] = _unitRegistry.GetUnit(data.unitCommandData.pets[i].unitId);
             }
+            
+            // Now, spawn the unit itself.
+            IUnit unit = new Unit(data.unitCommandData.unitId, unitData, pets);
+            _unitRegistry.RegisterUnit(unit);
+            _unitBehaviourPool.Spawn(unit);
+            _gridUnitManager.PlaceUnitAtTile(unit, data.tileCoords);
         }
 
         public void Undo(SpawnUnitData data) {
-            IUnit unit = _unitRegistry.GetUnit(data.unitCommandData.unitId);
-            foreach (var unitInHierarchy in unit.GetUnitsInHierarchy()) {
-                _unitRegistry.UnregisterUnit(unitInHierarchy.UnitId);
-                _unitBehaviourPool.Despawn(unitInHierarchy.UnitId);
-                _gridUnitManager.RemoveUnit(unitInHierarchy);
+            // First, despawn the pets recursively.
+            for (var i = 0; i < data.unitCommandData.pets.Length; i++) {
+                Undo(new SpawnUnitData(data.unitCommandData.pets[i], data.tileCoords));
             }
+            
+            // Now the unit itself.
+            IUnit unit = _unitRegistry.GetUnit(data.unitCommandData.unitId);
+            _unitRegistry.UnregisterUnit(unit.UnitId);
+            _unitBehaviourPool.Despawn(unit.UnitId);
+            _gridUnitManager.RemoveUnit(unit);
         }
     }
 }

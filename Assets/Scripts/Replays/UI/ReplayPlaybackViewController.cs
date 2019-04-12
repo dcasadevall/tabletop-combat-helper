@@ -27,6 +27,11 @@ namespace Replays.UI {
         public void Construct(IInputLock inputLock, IReplayPlaybackManager playbackManager) {
             _inputLock = inputLock;
             _playbackManager = playbackManager;
+            _playbackManager.PlaybackInterrupted += HandlePlaybackInterrupted;
+        }
+
+        private void HandlePlaybackInterrupted() {
+            HandleCancelReplayButtonPressed();
         }
 
         private void Start() {
@@ -35,6 +40,10 @@ namespace Replays.UI {
 
         private void Update() {
             _scrubSlider.value = _playbackManager.Progress;
+
+            if (_playbackManager.Progress.Equals(1.0f)) {
+                _animator.SetBool(_isPlayingBoolName, false);
+            }
         }
         
         public void Show() {
@@ -78,6 +87,8 @@ namespace Replays.UI {
             if (_lockId != null) {
                 _inputLock.Unlock(_lockId.Value);
             }
+            
+            _playbackManager.Seek(_scrubSlider.value);
         }
     }
 }
