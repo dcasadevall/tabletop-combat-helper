@@ -1,3 +1,4 @@
+using Replays.Playback;
 using Replays.UI;
 using UnityEngine;
 using Zenject;
@@ -16,6 +17,8 @@ namespace Replays {
             
             Container.Bind<IRootReplayViewController>().To<RootReplayViewController>()
                      .FromComponentInNewPrefab(_replayRootVcPrefab).AsSingle().NonLazy();
+
+            Container.BindInterfacesTo<ReplayPlaybackManager>().AsSingle();
         }
     }
 }

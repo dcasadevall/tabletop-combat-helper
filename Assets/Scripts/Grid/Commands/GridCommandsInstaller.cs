@@ -3,7 +3,7 @@ using CommandSystem.Installers;
 using Zenject;
 
 namespace Grid.Commands {
-    public class GridCommandsInstaller : CommandsInstaller {
+    public class GridCommandsInstaller : AbstractCommandsInstaller {
         public GridCommandsInstaller(CommandFactory commandFactory) : base(commandFactory) { }
         
         protected override void InstallCommandBindings() {

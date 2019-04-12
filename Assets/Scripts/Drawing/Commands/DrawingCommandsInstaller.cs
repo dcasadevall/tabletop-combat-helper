@@ -3,7 +3,7 @@ using CommandSystem.Installers;
 using Zenject;
 
 namespace Drawing.Commands {
-    public class DrawingCommandsInstaller : CommandsInstaller {
+    public class DrawingCommandsInstaller : AbstractCommandsInstaller {
         public DrawingCommandsInstaller(CommandFactory commandFactory) : base(commandFactory) { }
         
         protected override void InstallCommandBindings() {

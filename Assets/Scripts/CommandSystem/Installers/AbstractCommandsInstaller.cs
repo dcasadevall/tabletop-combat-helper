@@ -6,10 +6,10 @@ namespace CommandSystem.Installers {
     /// It ensures that the <see cref="CommandFactory"/> has visibility over the scene context in order to resolve
     /// such commands.
     /// </summary>
-    public abstract class CommandsInstaller : Installer {
+    public abstract class AbstractCommandsInstaller : Installer {
         private readonly CommandFactory _commandFactory;
 
-        public CommandsInstaller(CommandFactory commandFactory) {
+        public AbstractCommandsInstaller(CommandFactory commandFactory) {
             _commandFactory = commandFactory;
         }
         

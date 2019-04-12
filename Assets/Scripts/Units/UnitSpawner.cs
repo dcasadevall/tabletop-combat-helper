@@ -26,7 +26,7 @@ namespace Units {
         private readonly IUnitSpawnSettings _unitSpawnSettings;
         private readonly ILogger _logger;
         private readonly IGridInputManager _gridInputManager;
-        private readonly IUnitDataIndexResolver _unitDataIndexResolver;
+        private readonly IFactory<IUnitData, UnitCommandData> _unitCommandDataFactory;
         private readonly ICommandQueue _commandQueue;
         private IntVector2? _selectedTile;
 
@@ -34,12 +34,12 @@ namespace Units {
                            IGridPositionCalculator gridPositionCalculator,
                            IRandomGridPositionProvider randomGridPositionProvider,
                            IGridInputManager gridInputManager,
-                           IUnitDataIndexResolver unitDataIndexResolver,
+                           IFactory<IUnitData, UnitCommandData> unitCommandDataFactory,
                            ICommandQueue commandQueue,
                            IUnitSpawnSettings unitSpawnSettings,
                            ILogger logger) {
             _gridInputManager = gridInputManager;
-            _unitDataIndexResolver = unitDataIndexResolver;
+            _unitCommandDataFactory = unitCommandDataFactory;
             _commandQueue = commandQueue;
             _randomGridPositionProvider = randomGridPositionProvider;
             _unitPickerViewController = unitPickerVc;
@@ -84,15 +84,7 @@ namespace Units {
         }
 
         private void SpawnUnit(IUnitData unitData, IntVector2 tileCoords) {
-            uint? unitIndex = _unitDataIndexResolver.ResolveUnitIndex(unitData);
-            if (unitIndex == null) {
-                _logger.LogError(LoggedFeature.Units,
-                                 "Error Spawning unit with name: {0}. Index not resolved.",
-                                 unitData.Name);
-                return;
-            }
-            
-            UnitCommandData unitCommandData = new UnitCommandData(new UnitId(), unitIndex.Value, unitData.UnitType);
+            UnitCommandData unitCommandData = _unitCommandDataFactory.Create(unitData);
             SpawnUnitData spawnUnitData = new SpawnUnitData(unitCommandData, tileCoords);
             _commandQueue.Enqueue(spawnUnitData);
         }

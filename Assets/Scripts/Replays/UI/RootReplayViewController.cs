@@ -17,9 +17,6 @@ namespace Replays.UI {
             _replayPlaybackViewController = replayPlaybackViewController;
         }
         
-        public void HandleSaveReplayButtonPressed() {
-        }
-
         public void HandleReplayPlaybackButtonPressed() {
             _animator.SetBool(_replayPlaybackOpenBoolName, true);
             _replayPlaybackViewController.CancelReplayButtonPressed += HandleCancelReplayButtonPressed;
