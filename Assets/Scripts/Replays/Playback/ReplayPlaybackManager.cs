@@ -66,7 +66,7 @@ namespace Replays.Playback {
             _clock = clock;
         }
         
-        public void HandleCommandQueued<TData>(TData data) where TData : ISerializable {
+        public void HandleCommandQueued<TData>(ICommand<TData> command, TData data) where TData : ISerializable {
             // Make sure we do not have commands in future before we queue up past commands.
             // This is a safety net.
             // One should explicitly call Stop() or EraseFuture(), before any new command is queued.
@@ -104,6 +104,10 @@ namespace Replays.Playback {
         public void Play() {
             if (!_isPlaying) {
                 _startingTimeSpan = _clock.Now;
+
+                while (_pastCommands.Count > 0) {
+                    UndoPreviousCommand();
+                }
             }
             
             _isPlaying = true;
@@ -138,6 +142,14 @@ namespace Replays.Playback {
             // This avoids the command queue event being triggered again
             CommandSnapshot futureSnapshot = _futureCommands.First.Value;
             _commandQueue.Enqueue(futureSnapshot.data);
+            
+            _pastCommands.AddLast(_futureCommands.First);
+            _futureCommands.RemoveFirst();
+        }
+
+        private void UndoPreviousCommand() {
+            CommandSnapshot pastSnapshot = _pastCommands.Last.Value;
+            _commandQueue.Enqueue(pastSnapshot.GetType(), pastSnapshot.data);
             
             _pastCommands.AddLast(_futureCommands.First);
             _futureCommands.RemoveFirst();

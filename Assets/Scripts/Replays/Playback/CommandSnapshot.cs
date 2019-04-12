@@ -4,6 +4,7 @@ using CommandSystem;
 
 namespace Replays.Playback {
     public class CommandSnapshot {
+        public readonly ICommand<> command;
         public readonly ISerializable data;
         public readonly TimeSpan timeSpan;
         

@@ -29,8 +29,9 @@ namespace CommandSystem {
                 return;
             }
             
+            UndoableCommand<TData> undoableCommand = new UndoableCommand<TData>(command, data);
             foreach (var commandQueueListener in _listeners) {
-                commandQueueListener.HandleCommandQueued(data);
+                commandQueueListener.HandleCommandQueued(data, undoableCommand);
             }
             command.Run(data);
         }

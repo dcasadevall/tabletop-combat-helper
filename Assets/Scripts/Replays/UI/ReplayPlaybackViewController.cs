@@ -45,6 +45,7 @@ namespace Replays.UI {
         }
         
         public void Show() {
+            HandlePlayButtonPressed();
             gameObject.SetActive(true);
         }
 
