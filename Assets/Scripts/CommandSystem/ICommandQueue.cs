@@ -2,17 +2,19 @@ using System;
 using System.Runtime.Serialization;
 
 namespace CommandSystem {
-    public delegate void CommandQueued(Type type, ISerializable data);
+    public delegate void CommandQueued(ICommand<ISerializable> command, ISerializable data);
     
     public interface ICommandQueue {
-        event CommandQueued commandQueued; 
-        
-        void Enqueue<TData>(TData data) where TData : ISerializable;
-    }
+        event CommandQueued commandQueued;
 
-    public static class ICommandQueueExtensions {
-        public static void Enqueue<TData>(this ICommandQueue commandQueue) where TData : ISerializable, new() {
-            commandQueue.Enqueue(new TData());
+        void Enqueue<TCommand, TData>(TData data) where TData : ISerializable
+                                                  where TCommand : ICommand<TData>;
+    }
+    
+    public static class CommandQueueExtensions {
+        public static void Enqueue<TCommand, TData>(this ICommandQueue commandQueue) where TData : ISerializable, new() 
+                                                                                     where TCommand : ICommand<TData> {
+            commandQueue.Enqueue<TCommand, TData>(new TData());
         }
     }
 }

@@ -15,9 +15,9 @@ namespace CommandSystem.Installers {
             // This assumes we have injected the CommandFactory via "WhenInjectedTo" onto this installer.
             Container.Bind<ICommandFactory>().To<CommandFactory>().FromInstance(_commandFactory);
             
-            // This guarantees that CommandFactory is only exposed to installers derived from CommandsInstaller
+            // This guarantees that CommandFactory is only exposed to installers derived from AbstractCommandsInstaller
             Container.Bind<CommandFactory>().FromInstance(_commandFactory)
-                     .When(context => context.ObjectType.IsSubclassOf(typeof(CommandsInstaller)));
+                     .When(context => context.ObjectType.IsSubclassOf(typeof(AbstractCommandsInstaller)));
         }
     }
 }

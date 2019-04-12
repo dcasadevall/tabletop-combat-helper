@@ -94,7 +94,7 @@ namespace Units {
             
             UnitCommandData unitCommandData = new UnitCommandData(new UnitId(), unitIndex.Value, unitData.UnitType);
             SpawnUnitData spawnUnitData = new SpawnUnitData(unitCommandData, tileCoords);
-            _commandQueue.Enqueue(spawnUnitData);
+            _commandQueue.Enqueue<SpawnUnitCommand, SpawnUnitData>(spawnUnitData);
         }
     }
 }

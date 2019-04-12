@@ -1,5 +1,6 @@
 using System;
 using InputSystem;
+using Replays.Playback;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -26,15 +27,21 @@ namespace Replays.UI {
         private Animator _animator;
 
         private IInputLock _inputLock;
+        private IReplayPlaybackManager _playbackManager;
         private Guid? _lockId;
 
         [Inject]
-        public void Construct(IInputLock inputLock) {
+        public void Construct(IInputLock inputLock, IReplayPlaybackManager playbackManager) {
             _inputLock = inputLock;
+            _playbackManager = playbackManager;
         }
 
         private void Start() {
             Hide();
+        }
+
+        private void Update() {
+            _scrubSlider.value = _playbackManager.Progress;
         }
         
         public void Show() {
@@ -46,11 +53,13 @@ namespace Replays.UI {
         }
 
         public void HandlePlayButtonPressed() {
+            _playbackManager.Play();
             _animator.SetBool(_isPlayingBoolName, true);
             PlayButtonPressed.Invoke();
         }
         
         public void HandlePauseButtonPressed() {
+            _playbackManager.Pause();
             _animator.SetBool(_isPlayingBoolName, false);
             PauseButtonPressed.Invoke();
         }
@@ -59,11 +68,15 @@ namespace Replays.UI {
             ForwardButtonPressed.Invoke();
         }
 
+        public void HandleSaveReplayButtonPressed() {
+        }
+
         public void HandleEjectButtonPressed() {
             EjectButtonPressed.Invoke();
         }
         
         public void HandleCancelReplayButtonPressed() {
+            _playbackManager.Stop();
             CancelReplayButtonPressed.Invoke();
         }
 
