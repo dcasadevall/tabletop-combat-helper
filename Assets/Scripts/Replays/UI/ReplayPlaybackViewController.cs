@@ -10,13 +10,6 @@ namespace Replays.UI {
     public class ReplayPlaybackViewController : MonoBehaviour, IReplayPlaybackViewController {
         public event Action CancelReplayButtonPressed = delegate {};
 
-        public event Action PlayButtonPressed = delegate {};
-        public event Action PauseButtonPressed = delegate {};
-        public event Action ForwardButtonPressed = delegate {};
-        public event Action EjectButtonPressed = delegate {};
-        
-        public event Action<float> ScrubSliderDragged = delegate {};
-        
         [SerializeField]
         private Slider _scrubSlider;
 
@@ -45,7 +38,6 @@ namespace Replays.UI {
         }
         
         public void Show() {
-            HandlePlayButtonPressed();
             gameObject.SetActive(true);
         }
 
@@ -56,26 +48,19 @@ namespace Replays.UI {
         public void HandlePlayButtonPressed() {
             _playbackManager.Play();
             _animator.SetBool(_isPlayingBoolName, true);
-            PlayButtonPressed.Invoke();
         }
         
         public void HandlePauseButtonPressed() {
             _playbackManager.Pause();
             _animator.SetBool(_isPlayingBoolName, false);
-            PauseButtonPressed.Invoke();
         }
 
         public void HandleForwardButtonPressed() {
-            ForwardButtonPressed.Invoke();
         }
 
         public void HandleSaveReplayButtonPressed() {
         }
 
-        public void HandleEjectButtonPressed() {
-            EjectButtonPressed.Invoke();
-        }
-        
         public void HandleCancelReplayButtonPressed() {
             _playbackManager.Stop();
             CancelReplayButtonPressed.Invoke();
@@ -93,8 +78,6 @@ namespace Replays.UI {
             if (_lockId != null) {
                 _inputLock.Unlock(_lockId.Value);
             }
-            
-            ScrubSliderDragged.Invoke(_scrubSlider.value);
         }
     }
 }

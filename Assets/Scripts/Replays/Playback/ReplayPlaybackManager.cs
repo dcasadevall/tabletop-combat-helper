@@ -1,15 +1,25 @@
 using System;
 using System.Collections.Generic;
 using CommandSystem;
+using Logging;
+using UnityEngine;
 using Util;
 using Zenject;
+using ILogger = Logging.ILogger;
 
 namespace Replays.Playback {
-    public class ReplayPlaybackManager : ITickable, IInitializable, IReplayPlaybackManager, ICommandQueueListener {
+    public class ReplayPlaybackManager : ITickable, IReplayPlaybackManager, ICommandQueueListener {
+        /// <summary>
+        /// This keeps the replay dynamic. It clips any excessive idle time between commands.
+        /// </summary>
+        private static TimeSpan kMaxTimeBetweenCommands = TimeSpan.FromSeconds(1);
+        
         private readonly ICommandQueue _commandQueue;
         private readonly ICommandFactory _commandFactory;
         private readonly IClock _clock;
+        private readonly ILogger _logger;
 
+        private TimeSpan _clippingOffset;
         private TimeSpan _startingTimeSpan;
         private bool _isPlaying;
         private bool _isPaused;
@@ -45,6 +55,22 @@ namespace Replays.Playback {
                 return TimeSpan.Zero;
             }
         }
+
+        private TimeSpan NextCommandTime {
+            get {
+                if (_futureCommands.Count == 0) {
+                    return TimeSpan.Zero;
+                }
+                
+                return _futureCommands.First.Value.ExecutionTime - FirstTimeSpan + _clippingOffset;
+            }
+        }
+
+        private TimeSpan TimeSincePlaybackStarted {
+            get {
+                return _clock.Now - _startingTimeSpan;
+            }
+        }
         
         /// <summary>
         /// Queue containing commands that have been executed up to this point
@@ -56,15 +82,15 @@ namespace Replays.Playback {
         /// </summary>
         private readonly LinkedList<ICommandSnapshot> _futureCommands = new LinkedList<ICommandSnapshot>();
 
-        public ReplayPlaybackManager(ICommandQueue commandQueue, IClock clock) {
+        public ReplayPlaybackManager(ICommandQueue commandQueue, IClock clock, ILogger logger) {
             _commandQueue = commandQueue;
             _clock = clock;
-        }
-
-        public void Initialize() {
+            _logger = logger;
+            
+            // We do this here and not as part of IInitializable to avoid race condition issues.
             _commandQueue.AddListener(this);
         }
-        
+
         public void HandleCommandQueued(ICommandSnapshot commandSnapshot) {
             // Make sure we do not have commands in future before we queue up past commands.
             // This is a safety net.
@@ -93,9 +119,14 @@ namespace Replays.Playback {
                 return;
             }
             
-            TimeSpan timeSinceStarted = _clock.Now - _startingTimeSpan;
-            TimeSpan nextCommandTime = _futureCommands.First.Value.ExecutionTime - FirstTimeSpan;
-            if (timeSinceStarted < nextCommandTime) {
+            // "Accelerate" playback by fast forwarding to a minimum span before the net command
+            if (NextCommandTime - TimeSincePlaybackStarted > kMaxTimeBetweenCommands) {
+                TimeSpan addedOffset = (NextCommandTime - _clock.Now) - kMaxTimeBetweenCommands;
+                _clippingOffset += addedOffset;
+                _logger.Log(LoggedFeature.Replays, "Adding Clipping offset: {0}", addedOffset);
+            }
+            
+            if (TimeSincePlaybackStarted < NextCommandTime) {
                 return;
             }
             
@@ -106,6 +137,7 @@ namespace Replays.Playback {
         public void Play() {
             if (!_isPlaying) {
                 _startingTimeSpan = _clock.Now;
+                _clippingOffset = TimeSpan.Zero;
 
                 while (_pastCommands.Count > 0) {
                     UndoPreviousCommand();
@@ -140,21 +172,19 @@ namespace Replays.Playback {
         }
 
         private void ExecuteNextCommand() {
-            // Execute the command directly, without going through the command queue.
-            // This avoids the command queue event being triggered again
             ICommandSnapshot futureSnapshot = _futureCommands.First.Value;
             futureSnapshot.Redo();
             
-            _pastCommands.AddLast(_futureCommands.First);
+            _pastCommands.AddLast(_futureCommands.First.Value);
             _futureCommands.RemoveFirst();
         }
 
         private void UndoPreviousCommand() {
             ICommandSnapshot pastSnapshot = _pastCommands.Last.Value;
-            pastSnapshot.Redo();
-            
-            _pastCommands.AddLast(_futureCommands.First);
-            _futureCommands.RemoveFirst();
+            pastSnapshot.Undo();
+
+            _futureCommands.AddFirst(_pastCommands.Last.Value);
+            _pastCommands.RemoveLast();
         }
     }
 }

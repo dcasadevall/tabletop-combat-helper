@@ -40,7 +40,7 @@ namespace Units.Commands {
             IUnitData unitData = unitDatas[(int)data.unitCommandData.unitIndex];
             _logger.Log(LoggedFeature.Units, "Spawning: {0}", unitData.Name);
             
-            IUnit unit = new Unit(unitData);
+            IUnit unit = new Unit(data.unitCommandData.unitId, unitData);
             foreach (var unitInHierarchy in unit.GetUnitsInHierarchy()) {
                 _unitRegistry.RegisterUnit(unitInHierarchy);
                 _unitBehaviourPool.Spawn(unitInHierarchy);
