@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Logging;
+using Util;
 
 namespace CommandSystem {
     /// <summary>
@@ -9,11 +10,13 @@ namespace CommandSystem {
     /// </summary>
     public class InstantCommandQueue : ICommandQueue {
         private readonly ICommandFactory _commandFactory;
+        private readonly IClock _clock;
         private readonly ILogger _logger;
         private readonly List<ICommandQueueListener> _listeners = new List<ICommandQueueListener>();
 
-        public InstantCommandQueue(ICommandFactory commandFactory, ILogger logger) {
+        public InstantCommandQueue(ICommandFactory commandFactory, IClock clock, ILogger logger) {
             _commandFactory = commandFactory;
+            _clock = clock;
             _logger = logger;
         }
 
@@ -22,18 +25,23 @@ namespace CommandSystem {
         }
 
         public void Enqueue<TData>(TData data) where TData : ISerializable {
+            // Create the command.
             ICommand<TData> command = _commandFactory.Create<TData>();
             if (command == null) {
                 _logger.LogError(LoggedFeature.CommandSystem,
                                  "Command is not bound. Have you created an AbstractCommandsInstaller for your system?");
                 return;
             }
-            
-            UndoableCommand<TData> undoableCommand = new UndoableCommand<TData>(command, data);
-            foreach (var commandQueueListener in _listeners) {
-                commandQueueListener.HandleCommandQueued(data, undoableCommand);
-            }
+
+            // Execute the command.
             command.Run(data);
+            
+            // Notify listeners.
+            CommandSnapshot commandSnapshot =
+                new CommandSnapshot(() => command.Run(data), () => command.Undo(data), data, _clock.Now);
+            foreach (var commandQueueListener in _listeners) {
+                commandQueueListener.HandleCommandQueued(commandSnapshot);
+            }
         }
     }
 }

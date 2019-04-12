@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using CommandSystem;
 using Util;
 using Zenject;
 
 namespace Replays.Playback {
-    public class ReplayPlaybackManager : ITickable, IReplayPlaybackManager, ICommandQueueListener {
+    public class ReplayPlaybackManager : ITickable, IInitializable, IReplayPlaybackManager, ICommandQueueListener {
         private readonly ICommandQueue _commandQueue;
         private readonly ICommandFactory _commandFactory;
         private readonly IClock _clock;
@@ -25,7 +24,7 @@ namespace Replays.Playback {
                     return 0;
                 }
 
-                TimeSpan totalTimeSpan = _futureCommands.Last.Value.timeSpan - _pastCommands.First.Value.timeSpan;
+                TimeSpan totalTimeSpan = _futureCommands.Last.Value.ExecutionTime - _pastCommands.First.Value.ExecutionTime;
                 TimeSpan timeSinceStarted = _clock.Now - _startingTimeSpan;
                 return (float)(timeSinceStarted.TotalSeconds / totalTimeSpan.TotalSeconds);
             }
@@ -36,11 +35,11 @@ namespace Replays.Playback {
         private TimeSpan FirstTimeSpan {
             get {
                 if (_pastCommands.Count > 0) {
-                    return _pastCommands.First.Value.timeSpan;
+                    return _pastCommands.First.Value.ExecutionTime;
                 }
 
                 if (_futureCommands.Count > 0) {
-                    return _futureCommands.First.Value.timeSpan;
+                    return _futureCommands.First.Value.ExecutionTime;
                 }
                 
                 return TimeSpan.Zero;
@@ -50,23 +49,23 @@ namespace Replays.Playback {
         /// <summary>
         /// Queue containing commands that have been executed up to this point
         /// </summary>
-        private readonly LinkedList<CommandSnapshot> _pastCommands = new LinkedList<CommandSnapshot>();
+        private readonly LinkedList<ICommandSnapshot> _pastCommands = new LinkedList<ICommandSnapshot>();
         
         /// <summary>
         /// Queue containing commands that have not yet been executed, but will be executed as the playback continues.
         /// </summary>
-        private readonly LinkedList<CommandSnapshot> _futureCommands = new LinkedList<CommandSnapshot>();
+        private readonly LinkedList<ICommandSnapshot> _futureCommands = new LinkedList<ICommandSnapshot>();
 
-        public ReplayPlaybackManager(ICommandQueue commandQueue, IClock clock, IInstantiator instantiator) {
-            // Listen for commands in the global command queue,
-            // but create our own command queue to execute commands internally (and avoid listening to them)
-            commandQueue.AddListener(this);
-            _commandQueue = instantiator.Instantiate<InstantCommandQueue>();
-            
+        public ReplayPlaybackManager(ICommandQueue commandQueue, IClock clock) {
+            _commandQueue = commandQueue;
             _clock = clock;
         }
+
+        public void Initialize() {
+            _commandQueue.AddListener(this);
+        }
         
-        public void HandleCommandQueued<TData>(ICommand<TData> command, TData data) where TData : ISerializable {
+        public void HandleCommandQueued(ICommandSnapshot commandSnapshot) {
             // Make sure we do not have commands in future before we queue up past commands.
             // This is a safety net.
             // One should explicitly call Stop() or EraseFuture(), before any new command is queued.
@@ -77,12 +76,15 @@ namespace Replays.Playback {
             }
 
             // Enqueue the command snapshot.
-            CommandSnapshot commandSnapshot = new CommandSnapshot(data, _clock.Now);
             _pastCommands.AddLast(commandSnapshot);
         }
 
         public void Tick() {
             if (!_isPlaying) {
+                return;
+            }
+
+            if (_isPaused) {
                 return;
             }
             
@@ -92,7 +94,7 @@ namespace Replays.Playback {
             }
             
             TimeSpan timeSinceStarted = _clock.Now - _startingTimeSpan;
-            TimeSpan nextCommandTime = _futureCommands.First.Value.timeSpan - FirstTimeSpan;
+            TimeSpan nextCommandTime = _futureCommands.First.Value.ExecutionTime - FirstTimeSpan;
             if (timeSinceStarted < nextCommandTime) {
                 return;
             }
@@ -140,16 +142,16 @@ namespace Replays.Playback {
         private void ExecuteNextCommand() {
             // Execute the command directly, without going through the command queue.
             // This avoids the command queue event being triggered again
-            CommandSnapshot futureSnapshot = _futureCommands.First.Value;
-            _commandQueue.Enqueue(futureSnapshot.data);
+            ICommandSnapshot futureSnapshot = _futureCommands.First.Value;
+            futureSnapshot.Redo();
             
             _pastCommands.AddLast(_futureCommands.First);
             _futureCommands.RemoveFirst();
         }
 
         private void UndoPreviousCommand() {
-            CommandSnapshot pastSnapshot = _pastCommands.Last.Value;
-            _commandQueue.Enqueue(pastSnapshot.GetType(), pastSnapshot.data);
+            ICommandSnapshot pastSnapshot = _pastCommands.Last.Value;
+            pastSnapshot.Redo();
             
             _pastCommands.AddLast(_futureCommands.First);
             _futureCommands.RemoveFirst();
