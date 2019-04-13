@@ -8,7 +8,7 @@ using ILogger = Logging.ILogger;
 
 namespace Map.UI {
     public class MapSelectViewController : MonoBehaviour, IMapSelectViewController {
-       public event Action<IMapData> LoadMapClicked = delegate {};
+       public event Action<int> LoadMapClicked = delegate {};
 
 #pragma warning disable 649
         [SerializeField]
@@ -49,7 +49,7 @@ namespace Map.UI {
                 return;
             }
             
-            LoadMapClicked.Invoke(_mapDatas[_selectedIndex]);
+            LoadMapClicked.Invoke(_selectedIndex);
         }
 
         public void Show() {

@@ -7,6 +7,10 @@ namespace CommandSystem {
     /// </summary>
     public interface ICommandSnapshot {
         /// <summary>
+        /// If true, the command executed cannot be undone, and is part of the initial game state.
+        /// </summary>
+        bool IsInitialGameState { get; }
+        /// <summary>
         /// The serializable data used to run the command.
         /// </summary>
         ISerializable Data { get; }

@@ -16,6 +16,12 @@ namespace Units.Commands {
         private readonly IGridUnitManager _gridUnitManager;
         private readonly UnitBehaviour.Pool _unitBehaviourPool;
         private readonly ILogger _logger;
+        
+        public bool IsInitialGameStateCommand {
+            get {
+                return true;
+            }
+        }
 
         public SpawnUnitCommand(IUnitSpawnSettings unitSpawnSettings, 
                                 IUnitDataIndexResolver unitDataIndexResolver,
@@ -58,16 +64,7 @@ namespace Units.Commands {
         }
 
         public void Undo(SpawnUnitData data) {
-            // First, despawn the pets recursively.
-            for (var i = 0; i < data.unitCommandData.pets.Length; i++) {
-                Undo(new SpawnUnitData(data.unitCommandData.pets[i], data.tileCoords));
-            }
-            
-            // Now the unit itself.
-            IUnit unit = _unitRegistry.GetUnit(data.unitCommandData.unitId);
-            _unitRegistry.UnregisterUnit(unit.UnitId);
-            _unitBehaviourPool.Despawn(unit.UnitId);
-            _gridUnitManager.RemoveUnit(unit);
+            // Not supported (This is an initial gamestate command)
         }
     }
 }

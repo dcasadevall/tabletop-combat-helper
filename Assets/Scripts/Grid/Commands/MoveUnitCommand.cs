@@ -14,6 +14,12 @@ namespace Grid.Commands {
         
         // This state is of transient scope, so we can preserve state for Undo()
         private IntVector2? _previousCoords;
+        
+        public bool IsInitialGameStateCommand {
+            get {
+                return false;
+            }
+        }
 
         public MoveUnitCommand(IGridUnitManager gridUnitManager, IUnitRegistry unitRegistry, ILogger logger) {
             _gridUnitManager = gridUnitManager;

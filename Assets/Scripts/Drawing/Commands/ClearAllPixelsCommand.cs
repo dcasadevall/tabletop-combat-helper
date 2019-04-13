@@ -10,12 +10,18 @@ namespace Drawing.Commands {
         
         // This command is bound as Transient Scope, so we can hold state to restore on Undo()
         private Dictionary<IDrawableTile, ISpriteState> _spriteStates = new Dictionary<IDrawableTile, ISpriteState>();
+        
+        public bool IsInitialGameStateCommand {
+            get {
+                return false;
+            }
+        }
 
         public ClearAllPixelsCommand(IDrawableTileRegistry drawableTileRegistry, ITexturePainter texturePainter) {
             _drawableTileRegistry = drawableTileRegistry;
             _texturePainter = texturePainter;
         }
-        
+
         public void Run(ClearAllPixelsCommandData commandData) {
             foreach (var drawableTile in _drawableTileRegistry.GetAllTiles()) {
                 // Save state of this tile and add it to the command state for Undo()

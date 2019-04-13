@@ -35,10 +35,15 @@ namespace CommandSystem {
 
             // Execute the command.
             command.Run(data);
-            
+
             // Notify listeners.
             CommandSnapshot commandSnapshot =
-                new CommandSnapshot(() => command.Run(data), () => command.Undo(data), data, _clock.Now);
+                new CommandSnapshot(() => command.Run(data),
+                                    () => command.Undo(data),
+                                    command.IsInitialGameStateCommand,
+                                    data,
+                                    _clock.Now);
+            
             foreach (var commandQueueListener in _listeners) {
                 commandQueueListener.HandleCommandQueued(commandSnapshot);
             }

@@ -1,7 +1,8 @@
 ﻿
 namespace Map.UI {
     public interface IMapSelectViewController {
-        event System.Action<IMapData> LoadMapClicked;
+        event System.Action<int> LoadMapClicked;
+        
         void Show();
         void Hide(); 
     }
