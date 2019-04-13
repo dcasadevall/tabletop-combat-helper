@@ -8,5 +8,10 @@ namespace Util {
     /// as well as abstracting floating point issues.
     /// </summary>
     TimeSpan Now { get; }
+
+    /// <summary>
+    /// Time since last frame in <see cref="TimeSpan"/> format.
+    /// </summary>
+    TimeSpan Delta { get; }
   }
 }

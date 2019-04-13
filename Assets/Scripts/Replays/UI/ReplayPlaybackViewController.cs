@@ -22,6 +22,8 @@ namespace Replays.UI {
         private IInputLock _inputLock;
         private IReplayPlaybackManager _playbackManager;
         private Guid? _lockId;
+        private bool _wasPausedBeforeDragging;
+        private bool _wasPlayingBeforeDragging;
 
         [Inject]
         public void Construct(IInputLock inputLock, IReplayPlaybackManager playbackManager) {
@@ -46,9 +48,12 @@ namespace Replays.UI {
             if (_playbackManager.Progress.Equals(1.0f)) {
                 _animator.SetBool(_isPlayingBoolName, false);
             }
+
+            _animator.SetBool(_isPlayingBoolName, _playbackManager.IsPlaying && !_playbackManager.IsPaused);
         }
         
         public void Show() {
+            _playbackManager.Seek(1.0f);
             gameObject.SetActive(true);
         }
 
@@ -58,12 +63,10 @@ namespace Replays.UI {
 
         public void HandlePlayButtonPressed() {
             _playbackManager.Play();
-            _animator.SetBool(_isPlayingBoolName, true);
         }
         
         public void HandlePauseButtonPressed() {
             _playbackManager.Pause();
-            _animator.SetBool(_isPlayingBoolName, false);
         }
 
         public void HandleForwardButtonPressed() {
@@ -83,16 +86,23 @@ namespace Replays.UI {
             }
 
             _lockId = _inputLock.Lock();
+            _wasPausedBeforeDragging = _playbackManager.IsPaused;
+            _wasPlayingBeforeDragging = _playbackManager.IsPlaying;
         }
 
         public void HandleSliderDrag(BaseEventData baseEventData) {
             _playbackManager.Seek(_scrubSlider.value); 
+            _playbackManager.Pause();
         }
 
         public void HandleSliderDragEnd(BaseEventData baseEventData) {
             if (_lockId != null) {
                 _inputLock.Unlock(_lockId.Value);
                 _lockId = null;
+            }
+
+            if (!_wasPausedBeforeDragging && _wasPlayingBeforeDragging) {
+                _playbackManager.Play();
             }
         }
     }

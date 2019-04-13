@@ -20,58 +20,52 @@ namespace Replays.Playback {
         private readonly ICommandFactory _commandFactory;
         private readonly IClock _clock;
 
-        private TimeSpan _startingTimeSpan;
+        private TimeSpan _currentTime;
+        
         private bool _isPlaying;
-        private bool _isPaused;
+        public bool IsPlaying {
+            get {
+                return _isPlaying;
+            }
+        }
 
+        private bool _isPaused;
+        public bool IsPaused {
+            get {
+                return _isPaused;
+            }
+        }
 
         public float Progress {
             get {
-                if (_futureCommands.Count == 0) {
+                if (TotalTime == TimeSpan.Zero) {
                     return 1;
                 }
                 
-                if (_pastCommands.Count == 0) {
-                    return 0;
-                }
-
-                int totalCommandCount = _pastCommands.Count + _futureCommands.Count;
-                return (_pastCommands.Count / (float)totalCommandCount);
+                return (float) (_currentTime.TotalSeconds / TotalTime.TotalSeconds);
             }
         }
         
         public uint PlaybackSpeed { get; set; }
 
-        private TimeSpan FirstTimeSpan {
+        private TimeSpan TotalTime {
             get {
-                if (_pastCommands.Count > 0) {
-                    return _pastCommands.First.Value.ReplayTime;
-                }
-
-                if (_futureCommands.Count > 0) {
-                    return _futureCommands.First.Value.ReplayTime;
-                }
-                
-                return TimeSpan.Zero;
-            }
-        }
-
-        private TimeSpan NextCommandTime {
-            get {
-                if (_futureCommands.Count == 0) {
+                if (_futureCommands.Count == 0 && _pastCommands.Count == 0) {
                     return TimeSpan.Zero;
                 }
-                
-                return _futureCommands.First.Value.ReplayTime - FirstTimeSpan;
+
+                if (_futureCommands.Count == 0) {
+                    return _pastCommands.Last.Value.ReplayTime - _pastCommands.First.Value.ReplayTime;
+                }
+
+                if (_pastCommands.Count == 0) {
+                    return _futureCommands.Last.Value.ReplayTime - _futureCommands.First.Value.ReplayTime;
+                }
+
+                return _futureCommands.Last.Value.ReplayTime - _pastCommands.First.Value.ReplayTime;
             }
         }
 
-        private TimeSpan TimeSincePlaybackStarted {
-            get {
-                return _clock.Now - _startingTimeSpan;
-            }
-        }
-        
         /// <summary>
         /// Queue containing commands that have been executed up to this point
         /// </summary>
@@ -114,14 +108,16 @@ namespace Replays.Playback {
                 return TimeSpan.Zero;
             }
 
+            TimeSpan previousExecutionTime = _pastCommands.Last.Value.CommandSnapshot.ExecutionTime;
+            TimeSpan previousReplayTime = _pastCommands.Last.Value.ReplayTime;
             TimeSpan timeFromPreviousCommand = commandSnapshot.ExecutionTime - 
-                                               _pastCommands.Last.Value.CommandSnapshot.ExecutionTime;
+                                               previousExecutionTime;
 
             if (timeFromPreviousCommand > kMaxTimeBetweenCommands) {
-                return kMaxTimeBetweenCommands;
+                return kMaxTimeBetweenCommands + previousReplayTime;
             }
 
-            return timeFromPreviousCommand;
+            return timeFromPreviousCommand + previousReplayTime;
         }
 
         public void Tick() {
@@ -133,23 +129,32 @@ namespace Replays.Playback {
                 return;
             }
             
-            if (_futureCommands.Count == 0) {
+            if (_currentTime == TotalTime) {
                 Stop();
-                return;
             }
-            
-            if (TimeSincePlaybackStarted < NextCommandTime) {
-                return;
+
+            _currentTime += _clock.Delta;
+            ReplayCommandsAtCurrentTime();
+        }
+
+        /// <summary>
+        /// Replays or undoes any commands up to or prior to the current playback time.
+        /// Used during Play or Seek
+        /// </summary>
+        private void ReplayCommandsAtCurrentTime() {
+            while (_pastCommands.Count > 0 && _currentTime < _pastCommands.Last.Value.ReplayTime) {
+                UndoPreviousCommand();
             }
-            
-            // If we are here, we need to process the next command
-            RedoNextCommand();
+
+            while (_futureCommands.Count > 0 && _currentTime > _futureCommands.First.Value.ReplayTime) {
+                RedoNextCommand();
+            }
         }
 
         public void Play() {
             // Rewind to the very first frame if we are at the end.
             if (!_isPlaying && (Progress.Equals(0.0f) || Progress.Equals(1.0f))) {
-                _startingTimeSpan = _clock.Now;
+                _currentTime = _clock.Now;
                 Seek(0.0f);
             }
             
@@ -158,16 +163,8 @@ namespace Replays.Playback {
         }
 
         public void Seek(float progress) {
-            int totalCommands = _futureCommands.Count + _pastCommands.Count;
-            int commandToSeekTo = Mathf.RoundToInt(totalCommands * progress);
-            
-            while (_pastCommands.Count > 0 && commandToSeekTo < _pastCommands.Count) {
-                UndoPreviousCommand();
-            }
-
-            while (_futureCommands.Count > 0 && commandToSeekTo > _pastCommands.Count) {
-                RedoNextCommand();
-            }
+            _currentTime = TimeSpan.FromSeconds(TotalTime.TotalSeconds * progress);
+            ReplayCommandsAtCurrentTime();
         }
 
         public void Pause() {

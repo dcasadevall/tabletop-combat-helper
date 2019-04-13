@@ -7,6 +7,15 @@ namespace Replays.Playback {
         event System.Action PlaybackInterrupted;
         
         /// <summary>
+        /// True if the replay is being played (either paused or not).
+        /// This is different than IsPaused because we may not be actually playing altogether (i.e just running the game)
+        /// </summary>
+        bool IsPlaying { get; }
+        /// <summary>
+        /// True if the player is currently paused.
+        /// </summary>
+        bool IsPaused { get; }
+        /// <summary>
         /// Gets the current progress relative to all commands to be played.
         /// From 0 to 1
         /// </summary>

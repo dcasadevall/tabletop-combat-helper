@@ -7,5 +7,11 @@ namespace Util {
         return TimeSpan.FromSeconds(UnityEngine.Time.time);
       }
     }
+    
+    public TimeSpan Delta {
+      get {
+        return TimeSpan.FromSeconds(UnityEngine.Time.deltaTime);
+      }
+    }
   }
 }
