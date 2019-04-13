@@ -1,3 +1,4 @@
+using MapOverlay;
 using Replays.Playback;
 using Replays.UI;
 using UnityEngine;
@@ -8,15 +9,9 @@ namespace Replays {
         [SerializeField]
         private GameObject _replayPlaybackVcPrefab;
         
-        [SerializeField]
-        private GameObject _replayRootVcPrefab;
-
         public override void InstallBindings() {
             Container.Bind<IReplayPlaybackViewController>().To<ReplayPlaybackViewController>()
                      .FromComponentInNewPrefab(_replayPlaybackVcPrefab).AsSingle();
-            
-            Container.Bind<IRootReplayViewController>().To<RootReplayViewController>()
-                     .FromComponentInNewPrefab(_replayRootVcPrefab).AsSingle().NonLazy();
 
             Container.BindInterfacesTo<ReplayPlaybackManager>().AsSingle();
         }

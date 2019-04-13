@@ -26,8 +26,7 @@ namespace Drawing {
             // Also, non lazily instantiate the VC so it immediately shows up.
             Container.Bind<IDrawingViewController>().FromSubContainerResolve()
                      .ByMethod(BindDrawingViewController)
-                     .AsSingle()
-                     .NonLazy();
+                     .AsSingle();
 
             Container.Bind<ITexturePainter>().To<TexturePainter.TexturePainter>().FromSubContainerResolve()
                      .ByMethod(BindTexturePainter).AsSingle();

@@ -20,12 +20,12 @@ namespace Drawing.UI {
         
         public event Action DrawingEnabled = delegate {};
         public event Action DrawingDisabled = delegate {};
-        
+        public event Action CancelButtonPressed = delegate {};
+
         public bool IsDrawing { get; private set; }
         public TexturePaintParams PaintParams { get; private set; }
 
-        [SerializeField]
-        private GameObject _startPaintingButton;
+        // TODO: These should be shown / hidden via animator
         [SerializeField]
         private GameObject _stopPaintingButton;
         [SerializeField]
@@ -52,6 +52,7 @@ namespace Drawing.UI {
         }
 
         private void Start() {
+            Hide();
             SetColor(kDefaultColor);
         }
 
@@ -65,38 +66,27 @@ namespace Drawing.UI {
             _drawingInputManager.Tick(PaintParams);
         }
 
-        public void TogglePainting() {
-            IsDrawing = !IsDrawing;
-            if (IsDrawing) {
-                StartPainting();
-            } else {
-                StopPainting();
-            }
-        }
-
-        private void StartPainting() {
+        public void Show() {
             _lockId = _inputLock.Lock();
             if (_lockId == null) {
                 _logger.LogError(LoggedFeature.Drawing, "Failed to acquire input lock.");
                 return;
             }
-            
-            _startPaintingButton.SetActive(false);
+
+            IsDrawing = true;
             _stopPaintingButton.SetActive(true);
             _drawingTools.SetActive(true);
 
             DrawingEnabled.Invoke();
         }
         
-        private void StopPainting() {
-            if (_lockId == null) {
-                _logger.LogError(LoggedFeature.Drawing, "Stopped painting without input lock.");
-                return;
+        public void Hide() {
+            if (_lockId != null) {
+                _inputLock.Unlock(_lockId.Value);
+                _lockId = null;
             }
-            _inputLock.Unlock(_lockId.Value);
-            _lockId = null;
             
-            _startPaintingButton.SetActive(true);
+            IsDrawing = false;
             _stopPaintingButton.SetActive(false);
             _drawingTools.SetActive(false);
             
@@ -117,6 +107,10 @@ namespace Drawing.UI {
         
         public void HandleBrushSizeSliderValueChanged() {
             PaintParams = TexturePaintParams.MakeWithColor(PaintParams.color, (int)_brushSizeSlider.value);
+        }
+
+        public void HandleCancelButtonPressed() {
+            CancelButtonPressed.Invoke();
         }
 
         public void Clear() {
