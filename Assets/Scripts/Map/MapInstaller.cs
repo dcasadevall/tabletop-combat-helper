@@ -1,4 +1,5 @@
 ﻿using CameraSystem;
+using Map.Commands;
 using Map.Rendering;
 using Map.Serialized;
 using Map.UI;
@@ -18,6 +19,8 @@ namespace Map {
             foreach (var mapData in mapDatas) {
                 Container.Bind<IMapData>().To<MapData>().FromInstance(mapData);
             }
+            
+            Container.Install<MapCommandsInstaller>();
         }
     }
 }

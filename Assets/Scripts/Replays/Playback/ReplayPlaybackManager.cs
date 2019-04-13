@@ -108,6 +108,10 @@ namespace Replays.Playback {
                 return TimeSpan.Zero;
             }
 
+            if (_pastCommands.Last.Value.CommandSnapshot.IsInitialGameState) {
+                return TimeSpan.Zero;
+            }
+
             TimeSpan previousExecutionTime = _pastCommands.Last.Value.CommandSnapshot.ExecutionTime;
             TimeSpan previousReplayTime = _pastCommands.Last.Value.ReplayTime;
             TimeSpan timeFromPreviousCommand = commandSnapshot.ExecutionTime - 

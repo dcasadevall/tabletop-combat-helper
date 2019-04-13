@@ -9,6 +9,12 @@ namespace Drawing.Commands {
         
         // This command is bound as Transient Scope, so we can hold state to restore on Undo()
         private ISpriteState _spriteState;
+                
+        public bool IsInitialGameStateCommand {
+            get {
+                return false;
+            }
+        }
 
         public PaintPixelCommand(IDrawableTileRegistry drawableTileRegistry, ITexturePainter texturePainter) {
             _drawableTileRegistry = drawableTileRegistry;

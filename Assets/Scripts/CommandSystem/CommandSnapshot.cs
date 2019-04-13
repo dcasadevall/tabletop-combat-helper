@@ -5,26 +5,17 @@ namespace CommandSystem {
     public class CommandSnapshot : ICommandSnapshot {
         private readonly Action _doAction;
         private readonly Action _undoAction;
-        private readonly ISerializable _data;
-        private readonly TimeSpan _executionTime;
 
-        public ISerializable Data {
-            get {
-                return _data;
-            }
-        }
+        public bool IsInitialGameState { get; }
+        public ISerializable Data { get; }
+        public TimeSpan ExecutionTime { get; }
 
-        public TimeSpan ExecutionTime {
-            get {
-                return _executionTime;
-            }
-        }
-
-        public CommandSnapshot(Action doAction, Action undoAction, ISerializable data, TimeSpan executionTime) {
+        public CommandSnapshot(Action doAction, Action undoAction, bool isInitialGameState, ISerializable data, TimeSpan executionTime) {
             _doAction = doAction;
             _undoAction = undoAction;
-            _data = data;
-            _executionTime = executionTime;
+            Data = data;
+            ExecutionTime = executionTime;
+            IsInitialGameState = isInitialGameState;
         }
 
         public void Redo() {

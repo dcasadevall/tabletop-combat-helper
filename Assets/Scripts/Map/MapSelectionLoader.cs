@@ -1,23 +1,17 @@
-using Grid;
-using Grid.Serialized;
-using Map.Rendering;
+using CommandSystem;
+using Map.Commands;
 using Map.UI;
-using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace Map {
     public class MapSelectionLoader : IInitializable {
-        // TODO: Inject this
-        private const string kCombatSceneName = "CombatScene";
-        
         private IMapSelectViewController _mapSelectViewController;
-        private readonly ZenjectSceneLoader _sceneLoader;
+        private readonly ICommandQueue _commandQueue;
 
-        public MapSelectionLoader(IMapSelectViewController mapSelectViewController,
-                                  ZenjectSceneLoader sceneLoader) {
+        public MapSelectionLoader(IMapSelectViewController mapSelectViewController, ICommandQueue commandQueue) {
             _mapSelectViewController = mapSelectViewController;
-            _sceneLoader = sceneLoader;
-            
+            _commandQueue = commandQueue;
+
             _mapSelectViewController.LoadMapClicked += HandleLoadMapClicked;
         }
 
@@ -25,14 +19,12 @@ namespace Map {
             _mapSelectViewController.Show();
         }
         
-        private void HandleLoadMapClicked(IMapData mapData) {
+        private void HandleLoadMapClicked(int mapIndex) {
             _mapSelectViewController.LoadMapClicked -= HandleLoadMapClicked;
             _mapSelectViewController.Hide();
             
-            _sceneLoader.LoadScene(kCombatSceneName , LoadSceneMode.Additive, container => {
-                container.Bind<IMapData>().FromInstance(mapData);
-                container.Bind<IGridData>().FromInstance(mapData.GridData);
-            });
+            LoadMapCommandData commandData = new LoadMapCommandData((uint)mapIndex);
+            _commandQueue.Enqueue(commandData);
         }
     }
 }
