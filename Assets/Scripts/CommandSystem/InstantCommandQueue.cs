@@ -26,7 +26,7 @@ namespace CommandSystem {
         }
 
         public void Enqueue(Type commandType, ISerializable data) {
-            ICommand command = _commandFactory.Create(commandType);
+            ICommand<ISerializable> command = _commandFactory.Create(data.GetType());
             if (command == null) {
                 _logger.LogError(LoggedFeature.CommandSystem,
                                  "Command is not bound. Have you created an AbstractCommandsInstaller for your system?");

@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Logging;
-using UnityEngine;
 using Zenject;
 using ILogger = Logging.ILogger;
 
@@ -31,21 +29,6 @@ namespace CommandSystem {
             _logger.LogError(LoggedFeature.CommandSystem,
                              "Command not found in registered contexts: {0}",
                              typeof(ICommand<TData>));
-            return null;
-        }
-
-        public ICommand Create(Type commandType) {
-            foreach (var diContainer in _containers) {
-                try {
-                    Type resolvedType = diContainer.ResolveType(commandType);
-                    if (resolvedType != null) {
-                        // return new GenericCommandAdapter((ICommand)diContainer.Instantiate(resolvedType));
-                        return (ICommand) diContainer.Instantiate(resolvedType);
-                    }
-                } catch (Exception e) { }
-            }
-
-            _logger.LogError(LoggedFeature.CommandSystem, "Command not found in registered contexts: {0}", commandType);
             return null;
         }
     }
