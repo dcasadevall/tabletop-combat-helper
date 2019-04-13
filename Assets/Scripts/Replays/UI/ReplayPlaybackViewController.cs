@@ -77,7 +77,7 @@ namespace Replays.UI {
             CancelReplayButtonPressed.Invoke();
         }
 
-        public void HandleSliderDragBegin(BaseEventData pointerEventData) {
+        public void HandleSliderDragBegin(BaseEventData baseEventData) {
             if (_inputLock.IsLocked && _lockId == null) {
                 return;
             }
@@ -85,13 +85,15 @@ namespace Replays.UI {
             _lockId = _inputLock.Lock();
         }
 
-        public void HandleSliderDragEnd(BaseEventData pointerEventData) {
+        public void HandleSliderDrag(BaseEventData baseEventData) {
+            _playbackManager.Seek(_scrubSlider.value); 
+        }
+
+        public void HandleSliderDragEnd(BaseEventData baseEventData) {
             if (_lockId != null) {
                 _inputLock.Unlock(_lockId.Value);
                 _lockId = null;
             }
-            
-            _playbackManager.Seek(_scrubSlider.value);
         }
     }
 }
