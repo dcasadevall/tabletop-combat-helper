@@ -8,12 +8,15 @@ namespace CommandSystem {
 
         public bool IsInitialGameState { get; }
         public ISerializable Data { get; }
+        public Type Type { get; }
         public TimeSpan ExecutionTime { get; }
 
-        public CommandSnapshot(Action doAction, Action undoAction, bool isInitialGameState, ISerializable data, TimeSpan executionTime) {
+        public CommandSnapshot(Action doAction, Action undoAction, bool isInitialGameState, ISerializable data,
+                               Type type, TimeSpan executionTime) {
             _doAction = doAction;
             _undoAction = undoAction;
             Data = data;
+            Type = type;
             ExecutionTime = executionTime;
             IsInitialGameState = isInitialGameState;
         }

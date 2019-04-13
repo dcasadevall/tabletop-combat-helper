@@ -6,7 +6,9 @@ namespace Map.Commands {
         public MapCommandsInstaller(CommandFactory commandFactory) : base(commandFactory) { }
         
         protected override void InstallCommandBindings() {
-            Container.Bind<ICommand<LoadMapCommandData>>().To<LoadMapCommand>().AsSingle();
+            // We must expose the concrete command for the typed creation to work.
+            Container.Bind<LoadMapCommand>().AsSingle();
+            Container.Bind<ICommand<LoadMapCommandData>>().To<LoadMapCommand>().FromResolve();
         }
     }
 }

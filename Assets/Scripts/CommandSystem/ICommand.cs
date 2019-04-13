@@ -12,4 +12,7 @@ namespace CommandSystem {
         void Run(TData data);
         void Undo(TData data);
     }
+
+    public interface ICommand : ICommand<ISerializable> {
+    }
 }

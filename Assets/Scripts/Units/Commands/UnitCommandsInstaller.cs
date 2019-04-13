@@ -9,7 +9,10 @@ namespace Units.Commands {
         
         protected override void InstallCommandBindings() {
             Container.Bind<IMutableUnitRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<SpawnUnitCommand>();
-            Container.Bind<ICommand<SpawnUnitData>>().To<SpawnUnitCommand>().AsSingle();
+
+            // We must expose the concrete command for the typed creation to work.
+            Container.Bind<SpawnUnitCommand>().AsSingle();
+            Container.Bind<ICommand<SpawnUnitData>>().To<SpawnUnitCommand>().FromResolve();
             Container.Bind<IFactory<IUnitData, UnitCommandData>>().To<UnitCommandDataFactory>().AsSingle();
         }
     }

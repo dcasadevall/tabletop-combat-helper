@@ -1,12 +1,12 @@
 using System;
 using InputSystem;
-using Replays.Playback;
+using Replays.Persistence;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Replays.UI {
+namespace Replays.Playback.UI {
     public class ReplayPlaybackViewController : MonoBehaviour, IReplayPlaybackViewController {
         public event Action CancelReplayButtonPressed = delegate {};
 
@@ -21,14 +21,17 @@ namespace Replays.UI {
 
         private IInputLock _inputLock;
         private IReplayPlaybackManager _playbackManager;
+        private ICommandHistorySaver _commandHistorySaver;
         private Guid? _lockId;
         private bool _wasPausedBeforeDragging;
         private bool _wasPlayingBeforeDragging;
 
         [Inject]
-        public void Construct(IInputLock inputLock, IReplayPlaybackManager playbackManager) {
+        public void Construct(IInputLock inputLock, IReplayPlaybackManager playbackManager,
+                              ICommandHistorySaver commandHistorySaver) {
             _inputLock = inputLock;
             _playbackManager = playbackManager;
+            _commandHistorySaver = commandHistorySaver;
             _playbackManager.PlaybackInterrupted += HandlePlaybackInterrupted;
         }
 
@@ -73,6 +76,7 @@ namespace Replays.UI {
         }
 
         public void HandleSaveReplayButtonPressed() {
+            _commandHistorySaver.SaveCommandHistory("rubarb");
         }
 
         public void HandleCancelReplayButtonPressed() {

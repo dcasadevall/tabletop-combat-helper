@@ -1,6 +1,8 @@
+using System;
 using System.Runtime.Serialization;
 
 namespace Drawing.Commands {
+    [Serializable]
     public class ClearAllPixelsCommandData : ISerializable {
         public ClearAllPixelsCommandData() {
         }

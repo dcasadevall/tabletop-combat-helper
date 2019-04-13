@@ -15,6 +15,10 @@ namespace CommandSystem {
         /// </summary>
         ISerializable Data { get; }
         /// <summary>
+        /// The type of this command. Useful for serialization.
+        /// </summary>
+        Type Type { get; }
+        /// <summary>
         /// Time (from game start) at which this command was first executed.
         /// Note that calls to <see cref="Redo"/> do not alter this time.
         /// </summary>

@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using CommandSystem;
-using Logging;
-using UnityEngine;
 using Util;
 using Zenject;
-using ILogger = Logging.ILogger;
 
 namespace Replays.Playback {
     public class ReplayPlaybackManager : ITickable, IReplayPlaybackManager, ICommandQueueListener {
