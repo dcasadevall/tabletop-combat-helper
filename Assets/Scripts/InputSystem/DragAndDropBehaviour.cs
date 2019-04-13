@@ -1,5 +1,6 @@
 ﻿using System;
 using CommandSystem;
+using Grid;
 using Grid.Commands;
 using Grid.Positioning;
 using Math;
@@ -16,22 +17,28 @@ namespace InputSystem {
     /// </summary>
     [RequireComponent(typeof(BoxCollider2D))]
     public class DragAndDropBehaviour : MonoBehaviour {
-        private Vector3 offset;
-
         private ICommandQueue _commandQueue;
+        private IUnitRegistry _unitRegistry;
+        private IGridUnitManager _gridUnitManager;
         private IGridPositionCalculator _gridPositionCalculator;
         private IInputLock _inputLock;
         private Guid? _lockId;
         private Camera _camera;
         private UnitId _unitId;
+        private Vector3 _offset;
+        private IntVector2? _previousCoordinates;
 
         [Inject]
         public void Construct(ICommandQueue commandQueue,
+                              IUnitRegistry unitRegistry,
+                              IGridUnitManager gridUnitManager,
                               IGridPositionCalculator gridPositionCalculator, IInputLock inputLock,
                               Camera camera) {
             _camera = camera;
             _commandQueue = commandQueue;
             _inputLock = inputLock;
+            _unitRegistry = unitRegistry;
+            _gridUnitManager = gridUnitManager;
             _gridPositionCalculator = gridPositionCalculator;
         }
 
@@ -50,7 +57,9 @@ namespace InputSystem {
                 return;
             }
 
-            offset = gameObject.transform.position - _camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+            IUnit unit = _unitRegistry.GetUnit(_unitId);
+            _previousCoordinates = _gridUnitManager.GetUnitCoords(unit);
+            _offset = gameObject.transform.position - _camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         }
 
         private void OnMouseUp() {
@@ -73,13 +82,19 @@ namespace InputSystem {
             }
             
             Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
-            Vector3 curPosition = _camera.ScreenToWorldPoint(curScreenPoint) + offset;
+            Vector3 curPosition = _camera.ScreenToWorldPoint(curScreenPoint) + _offset;
             IntVector2? gridCoordinates = _gridPositionCalculator.GetTileContainingWorldPosition(curPosition);
             
             if (gridCoordinates == null) {
                 return;
             }
 
+            // Make sure we only send a move command if necessary (tile hasn't changed)
+            if (_previousCoordinates != null && _previousCoordinates.Value == gridCoordinates.Value) {
+                return;
+            }
+            _previousCoordinates = gridCoordinates;
+            
             MoveUnitData moveUnitData = new MoveUnitData(_unitId, gridCoordinates.Value);
             _commandQueue.Enqueue(moveUnitData);
         }

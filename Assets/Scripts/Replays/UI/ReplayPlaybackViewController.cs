@@ -39,7 +39,9 @@ namespace Replays.UI {
         }
 
         private void Update() {
-            _scrubSlider.value = _playbackManager.Progress;
+            if (_lockId == null) {
+                _scrubSlider.value = _playbackManager.Progress;
+            }
 
             if (_playbackManager.Progress.Equals(1.0f)) {
                 _animator.SetBool(_isPlayingBoolName, false);
@@ -86,6 +88,7 @@ namespace Replays.UI {
         public void HandleSliderDragEnd(BaseEventData pointerEventData) {
             if (_lockId != null) {
                 _inputLock.Unlock(_lockId.Value);
+                _lockId = null;
             }
             
             _playbackManager.Seek(_scrubSlider.value);

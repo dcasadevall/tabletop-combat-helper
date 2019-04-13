@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CommandSystem;
 using Logging;
+using UnityEngine;
 using Util;
 using Zenject;
 using ILogger = Logging.ILogger;
@@ -96,7 +97,7 @@ namespace Replays.Playback {
             // to be dumped.
             // TODO: Use seek
             while (_futureCommands.Count > 0) {
-                ExecuteNextCommand();
+                RedoNextCommand();
 
                 if (_futureCommands.Count == 0) {
                     PlaybackInterrupted.Invoke();
@@ -142,16 +143,14 @@ namespace Replays.Playback {
             }
             
             // If we are here, we need to process the next command
-            ExecuteNextCommand();
+            RedoNextCommand();
         }
 
         public void Play() {
-            if (!_isPlaying) {
+            // Rewind to the very first frame if we are at the end.
+            if (!_isPlaying && (Progress.Equals(0.0f) || Progress.Equals(1.0f))) {
                 _startingTimeSpan = _clock.Now;
-
-                while (_pastCommands.Count > 0) {
-                    UndoPreviousCommand();
-                }
+                Seek(0.0f);
             }
             
             _isPlaying = true;
@@ -159,7 +158,16 @@ namespace Replays.Playback {
         }
 
         public void Seek(float progress) {
-            throw new NotImplementedException();
+            int totalCommands = _futureCommands.Count + _pastCommands.Count;
+            int commandToSeekTo = Mathf.RoundToInt(totalCommands * progress);
+            
+            while (_pastCommands.Count > 0 && commandToSeekTo < _pastCommands.Count) {
+                UndoPreviousCommand();
+            }
+
+            while (_futureCommands.Count > 0 && commandToSeekTo > _pastCommands.Count) {
+                RedoNextCommand();
+            }
         }
 
         public void Pause() {
@@ -167,11 +175,7 @@ namespace Replays.Playback {
         }
 
         public void Stop() {
-            // TODO: Use seek
-            while (_futureCommands.Count > 0) {
-                ExecuteNextCommand();
-            }
-            
+            Seek(1.0f);
             _isPlaying = false;
         }
 
@@ -181,7 +185,7 @@ namespace Replays.Playback {
             }
         }
 
-        private void ExecuteNextCommand() {
+        private void RedoNextCommand() {
             ICommandSnapshot futureSnapshot = _futureCommands.First.Value.CommandSnapshot;
             futureSnapshot.Redo();
             

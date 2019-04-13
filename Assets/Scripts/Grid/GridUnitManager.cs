@@ -41,7 +41,7 @@ namespace Grid {
                 _unitMap.Remove(unit.UnitId);
             }
 
-            int tileIndex = (int)(System.Math.Max(0, tileCoords.y - 1) * _grid.NumTilesX + _grid.NumTilesY);
+            int tileIndex = (int)(System.Math.Max(0, tileCoords.y - 1) * _grid.NumTilesX + tileCoords.x);
             _unitMap.Add(unit.UnitId, tileIndex);
 
             UnitPlacedAtTile.Invoke(unit, tileCoords);
