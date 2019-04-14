@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using Logging;
 using Zenject;
 using ILogger = Logging.ILogger;
@@ -18,9 +18,9 @@ namespace CommandSystem {
             _containers.Add(container);
         }
 
-        public ICommand<TData> Create<TData>() where TData : ISerializable {
+        public ICommand Create<TCommand>() where TCommand : class, ICommand {
             foreach (var diContainer in _containers) {
-                ICommand<TData> command = diContainer.TryResolve<ICommand<TData>>();
+                TCommand command = diContainer.TryResolve<TCommand>();
                 if (command != null) {
                     return command;
                 }
@@ -28,7 +28,21 @@ namespace CommandSystem {
 
             _logger.LogError(LoggedFeature.CommandSystem,
                              "Command not found in registered contexts: {0}",
-                             typeof(ICommand<TData>));
+                             typeof(ICommand));
+            return null;
+        }
+
+        public ICommand Create(Type type) {
+            foreach (var diContainer in _containers) {
+                ICommand command = (ICommand)diContainer.TryResolve(type);
+                if (command != null) {
+                    return command;
+                }
+            }
+
+            _logger.LogError(LoggedFeature.CommandSystem,
+                             "Command not found in registered contexts: {0}",
+                             typeof(ICommand));
             return null;
         }
     }

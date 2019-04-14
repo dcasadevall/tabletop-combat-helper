@@ -5,12 +5,11 @@ namespace CommandSystem {
     public interface ICommandQueue {
         void AddListener(ICommandQueueListener listener);
         void Enqueue(Type commandType, ISerializable data);
-        void Enqueue<TData>(TData data) where TData : ISerializable;
     }
     
     public static class CommandQueueExtensions {
-        public static void Enqueue<TData>(this ICommandQueue commandQueue) where TData : ISerializable, new() {
-            commandQueue.Enqueue(new TData());
+        public static void Enqueue<TCommand>(this ICommandQueue commandQueue, ISerializable data) where TCommand : class, ICommand {
+            commandQueue.Enqueue(typeof(TCommand), data);
         }
     }
 }
