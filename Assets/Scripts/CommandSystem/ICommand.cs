@@ -9,7 +9,7 @@ namespace CommandSystem {
         /// </summary>
         bool IsInitialGameStateCommand { get; }
         
-        void Run(ISerializable data);
-        void Undo(ISerializable data);
+        void Run();
+        void Undo();
     }
 }

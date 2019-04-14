@@ -4,7 +4,7 @@ using Drawing.DrawableTiles;
 using Drawing.TexturePainter;
 
 namespace Drawing.Commands {
-    public class ClearAllPixelsCommand : ICommand<ClearAllPixelsCommandData> {
+    public class ClearAllPixelsCommand : ICommand {
         private readonly IDrawableTileRegistry _drawableTileRegistry;
         private readonly ITexturePainter _texturePainter;
         
@@ -22,7 +22,7 @@ namespace Drawing.Commands {
             _texturePainter = texturePainter;
         }
 
-        public void Run(ClearAllPixelsCommandData commandData) {
+        public void Run() {
             foreach (var drawableTile in _drawableTileRegistry.GetAllTiles()) {
                 // Save state of this tile and add it to the command state for Undo()
                 _spriteStates[drawableTile] = _texturePainter.SaveState(drawableTile.Sprite);
@@ -30,7 +30,7 @@ namespace Drawing.Commands {
             }
         }
 
-        public void Undo(ClearAllPixelsCommandData data) {
+        public void Undo() {
             // This assumes that the drawable tile lifecycle is perennial after it has been drawn once.
             foreach (var spriteState in _spriteStates) {
                 spriteState.Value.RestoreState(spriteState.Key.Sprite);

@@ -3,7 +3,8 @@ using Drawing.DrawableTiles;
 using Drawing.TexturePainter;
 
 namespace Drawing.Commands {
-    public class PaintPixelCommand : ICommand<PaintPixelData> {
+    public class PaintPixelCommand : ICommand {
+        private readonly PaintPixelData _data;
         private readonly IDrawableTileRegistry _drawableTileRegistry;
         private readonly ITexturePainter _texturePainter;
         
@@ -16,19 +17,21 @@ namespace Drawing.Commands {
             }
         }
 
-        public PaintPixelCommand(IDrawableTileRegistry drawableTileRegistry, ITexturePainter texturePainter) {
+        public PaintPixelCommand(PaintPixelData data, IDrawableTileRegistry drawableTileRegistry,
+                                 ITexturePainter texturePainter) {
+            _data = data;
             _drawableTileRegistry = drawableTileRegistry;
             _texturePainter = texturePainter;
         }
         
-        public void Run(PaintPixelData data) {
-            IDrawableTile drawableTile = _drawableTileRegistry.GetDrawableTileAtCoordinates(data._drawableTileCoords);
+        public void Run() {
+            IDrawableTile drawableTile = _drawableTileRegistry.GetDrawableTileAtCoordinates(_data._drawableTileCoords);
             _spriteState = _texturePainter.SaveState(drawableTile.Sprite);
-            _texturePainter.PaintPixel(drawableTile.Sprite, data._pixelPosition, data._paintParams);
+            _texturePainter.PaintPixel(drawableTile.Sprite, _data._pixelPosition, _data._paintParams);
         }
 
-        public void Undo(PaintPixelData data) {
-            IDrawableTile drawableTile = _drawableTileRegistry.GetDrawableTileAtCoordinates(data._drawableTileCoords);
+        public void Undo() {
+            IDrawableTile drawableTile = _drawableTileRegistry.GetDrawableTileAtCoordinates(_data._drawableTileCoords);
             _spriteState.RestoreState(drawableTile.Sprite);
         }
     }

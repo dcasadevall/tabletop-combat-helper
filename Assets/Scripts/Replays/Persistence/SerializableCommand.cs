@@ -9,22 +9,26 @@ namespace Replays.Persistence {
     [Serializable]
     public class SerializableCommand : ISerializable {
         public readonly ISerializable data;
-        public readonly Type type;
+        public readonly Type commandType;
+        public readonly Type dataType;
 
         public SerializableCommand(ICommandSnapshot commandSnapshot) {
             data = commandSnapshot.Data;
-            type = commandSnapshot.Type;
+            dataType = commandSnapshot.Data.GetType();
+            commandType = commandSnapshot.Command.GetType();
         }
 
         #region ISerializable
         public SerializableCommand(SerializationInfo info, StreamingContext context) {
             data = (ISerializable)info.GetValue("data", typeof(ISerializable));
-            type = (Type)info.GetValue("type", typeof(Type));
+            dataType = (Type)info.GetValue("dataType", typeof(Type));
+            commandType = (Type)info.GetValue("commandType", typeof(Type));
         }
         
         public void GetObjectData(SerializationInfo info, StreamingContext context) {
             info.AddValue("data", data);
-            info.AddValue("type", type);
+            info.AddValue("dataType", dataType);
+            info.AddValue("commandType", commandType);
         }
         #endregion  
     }

@@ -105,7 +105,7 @@ namespace Replays.Playback {
                 return TimeSpan.Zero;
             }
 
-            if (_pastCommands.Last.Value.CommandSnapshot.IsInitialGameState) {
+            if (_pastCommands.Last.Value.CommandSnapshot.Command.IsInitialGameStateCommand) {
                 return TimeSpan.Zero;
             }
 
@@ -185,7 +185,7 @@ namespace Replays.Playback {
 
         private void RedoNextCommand() {
             ICommandSnapshot futureSnapshot = _futureCommands.First.Value.CommandSnapshot;
-            futureSnapshot.Redo();
+            futureSnapshot.Command.Run();
             
             _pastCommands.AddLast(_futureCommands.First.Value);
             _futureCommands.RemoveFirst();
@@ -193,7 +193,7 @@ namespace Replays.Playback {
 
         private void UndoPreviousCommand() {
             ICommandSnapshot pastSnapshot = _pastCommands.Last.Value.CommandSnapshot;
-            pastSnapshot.Undo();
+            pastSnapshot.Command.Undo();
 
             _futureCommands.AddFirst(_pastCommands.Last.Value);
             _pastCommands.RemoveLast();

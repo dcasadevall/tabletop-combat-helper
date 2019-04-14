@@ -12,7 +12,6 @@ namespace Units.Commands {
 
             // We must expose the concrete command for the typed creation to work.
             Container.Bind<SpawnUnitCommand>().AsSingle();
-            Container.Bind<ICommand<SpawnUnitData>>().To<SpawnUnitCommand>().FromResolve();
             Container.Bind<IFactory<IUnitData, UnitCommandData>>().To<UnitCommandDataFactory>().AsSingle();
         }
     }

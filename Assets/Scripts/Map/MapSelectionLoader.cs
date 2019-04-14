@@ -24,7 +24,7 @@ namespace Map {
             _mapSelectViewController.Hide();
             
             LoadMapCommandData commandData = new LoadMapCommandData((uint)mapIndex);
-            _commandQueue.Enqueue(commandData);
+            _commandQueue.Enqueue<LoadMapCommand, LoadMapCommandData>(commandData);
         }
     }
 }

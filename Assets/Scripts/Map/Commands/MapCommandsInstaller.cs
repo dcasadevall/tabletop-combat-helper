@@ -8,7 +8,6 @@ namespace Map.Commands {
         protected override void InstallCommandBindings() {
             // We must expose the concrete command for the typed creation to work.
             Container.Bind<LoadMapCommand>().AsSingle();
-            Container.Bind<ICommand<LoadMapCommandData>>().To<LoadMapCommand>().FromResolve();
         }
     }
 }

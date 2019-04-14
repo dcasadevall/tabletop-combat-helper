@@ -1,9 +1,9 @@
 
 using System;
+using System.Runtime.Serialization;
 
 namespace CommandSystem {
     public interface ICommandFactory {
-        ICommand Create<TCommand>() where TCommand : class, ICommand;
-        ICommand Create(Type type);
+        ICommand Create(Type type, Type dataType, ISerializable data);
     }
 }

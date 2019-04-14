@@ -13,8 +13,6 @@ namespace Drawing.Commands {
             // Note: We must expose the concrete command for the typed creation to work.
             Container.Bind<ClearAllPixelsCommand>().AsTransient();
             Container.Bind<PaintPixelCommand>().AsTransient();
-            Container.Bind<ICommand<ClearAllPixelsCommandData>>().To<ClearAllPixelsCommand>().FromResolve();
-            Container.Bind<ICommand<PaintPixelData>>().To<PaintPixelCommand>().FromResolve();
         }
     }
 }

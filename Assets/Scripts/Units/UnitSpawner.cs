@@ -86,7 +86,7 @@ namespace Units {
         private void SpawnUnit(IUnitData unitData, IntVector2 tileCoords) {
             UnitCommandData unitCommandData = _unitCommandDataFactory.Create(unitData);
             SpawnUnitData spawnUnitData = new SpawnUnitData(unitCommandData, tileCoords);
-            _commandQueue.Enqueue(spawnUnitData);
+            _commandQueue.Enqueue<SpawnUnitCommand, SpawnUnitData>(spawnUnitData);
         }
     }
 }

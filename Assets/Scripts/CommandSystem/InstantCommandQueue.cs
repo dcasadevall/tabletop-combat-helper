@@ -25,8 +25,8 @@ namespace CommandSystem {
             _listeners.Add(listener);
         }
 
-        public void Enqueue(Type commandType, ISerializable data) {
-            ICommand command = _commandFactory.Create(data.GetType());
+        public void Enqueue(Type commandType, Type dataType, ISerializable data) {
+            ICommand command = _commandFactory.Create(commandType, dataType, data);
             if (command == null) {
                 _logger.LogError(LoggedFeature.CommandSystem,
                                  "Command is not bound. Have you created an AbstractCommandsInstaller for your system?");
@@ -34,43 +34,10 @@ namespace CommandSystem {
             }
 
             // Execute the command.
-            command.Run(data);
+            command.Run();
 
             // Notify listeners.
-            CommandSnapshot commandSnapshot =
-                new CommandSnapshot(() => command.Run(data),
-                                    () => command.Undo(data),
-                                    command.IsInitialGameStateCommand,
-                                    data,
-                                    command.GetType(),
-                                    _clock.Now);
-            
-            foreach (var commandQueueListener in _listeners) {
-                commandQueueListener.HandleCommandQueued(commandSnapshot);
-            }
-        }
-
-        public void Enqueue<TCommand>(ISerializable data) where TCommand : class,ICommand {
-            // Create the command.
-            ICommand command = _commandFactory.Create<TCommand>();
-            if (command == null) {
-                _logger.LogError(LoggedFeature.CommandSystem,
-                                 "Command is not bound. Have you created an AbstractCommandsInstaller for your system?");
-                return;
-            }
-
-            // Execute the command.
-            command.Run(data);
-
-            // Notify listeners.
-            CommandSnapshot commandSnapshot =
-                new CommandSnapshot(() => command.Run(data),
-                                    () => command.Undo(data),
-                                    command.IsInitialGameStateCommand,
-                                    data,
-                                    command.GetType(),
-                                    _clock.Now);
-            
+            CommandSnapshot commandSnapshot = new CommandSnapshot(command, data, _clock.Now);
             foreach (var commandQueueListener in _listeners) {
                 commandQueueListener.HandleCommandQueued(commandSnapshot);
             }
