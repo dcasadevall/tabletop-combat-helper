@@ -19,14 +19,14 @@ namespace CommandSystem {
             _containers.Add(container);
         }
 
-        public ICommand Create(Type type, Type dataType, ISerializable data) {
+        public ICommand Create(Type commandType, Type dataType, ISerializable data) {
             foreach (var container in _containers) {
-                if (!container.HasBinding(type)) {
+                if (!container.HasBinding(commandType)) {
                     continue;
                 }
                 
                 // TODO: Avoid using instantiate explicit here
-                ICommand command = (ICommand)container.InstantiateExplicit(type, new List<TypeValuePair> {
+                ICommand command = (ICommand)container.InstantiateExplicit(commandType, new List<TypeValuePair> {
                     new TypeValuePair(dataType, data)
                 });
                 

@@ -87,7 +87,7 @@ namespace Replays.Playback {
             // One should explicitly call Stop() or EraseFuture(), before any new command is queued.
             // to be dumped.
             // TODO: Use seek
-            while (_futureCommands.Count > 0) {
+            while (_isPlaying && _futureCommands.Count > 0) {
                 RedoNextCommand();
 
                 if (_futureCommands.Count == 0) {
@@ -143,7 +143,7 @@ namespace Replays.Playback {
         /// Used during Play or Seek
         /// </summary>
         private void ReplayCommandsAtCurrentTime() {
-            while (_pastCommands.Count > 0 && _currentTime < _pastCommands.Last.Value.ReplayTime) {
+            while (_pastCommands.Count > 0 && _currentTime <= _pastCommands.Last.Value.ReplayTime) {
                 UndoPreviousCommand();
             }
 
@@ -173,8 +173,8 @@ namespace Replays.Playback {
         }
 
         public void Stop() {
-            Seek(1.0f);
             _isPlaying = false;
+            Seek(1.0f);
         }
 
         public void EraseFuture() {

@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using CommandSystem;
+using EncounterSelection;
 using Grid.Serialized;
 using Logging;
+using Map.UI;
+using Replays.Persistence.UI;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -11,6 +14,8 @@ namespace Map.Commands {
         private readonly LoadMapCommandData _data;
         private readonly List<IMapData> _mapDatas;
         private readonly ILogger _logger;
+        private readonly IReplayLoaderViewController _replayLoaderViewController;
+        private readonly IMapSelectViewController _mapSelectViewController;
         private readonly ZenjectSceneLoader _sceneLoader;
 
         // TODO: Inject this
@@ -22,7 +27,8 @@ namespace Map.Commands {
             }
         }
 
-        public LoadMapCommand(LoadMapCommandData data, List<IMapData> mapDatas, ILogger logger, ZenjectSceneLoader sceneLoader) {
+        public LoadMapCommand(LoadMapCommandData data,
+                              List<IMapData> mapDatas, ILogger logger, ZenjectSceneLoader sceneLoader) {
             _data = data;
             _mapDatas = mapDatas;
             _logger = logger;
@@ -36,7 +42,6 @@ namespace Map.Commands {
             }
             
             IMapData mapData = _mapDatas[(int)_data.mapIndex];
-            
             _sceneLoader.LoadScene(kCombatSceneName , LoadSceneMode.Additive, container => {
                 container.Bind<IMapData>().FromInstance(mapData);
                 container.Bind<IGridData>().FromInstance(mapData.GridData);

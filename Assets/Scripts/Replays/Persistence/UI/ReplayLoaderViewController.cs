@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Logging;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +8,8 @@ using ILogger = Logging.ILogger;
 
 namespace Replays.Persistence.UI {
     public class ReplayLoaderViewController : MonoBehaviour, IReplayLoaderViewController {
+        public event Action<string> LoadReplayClicked = delegate {};
+        
         private ICommandHistoryLoader _commandHistoryLoader;
         private ILogger _logger;
 
@@ -44,9 +46,17 @@ namespace Replays.Persistence.UI {
             _loadReplayButton.onClick.AddListener(HandleLoadButtonPressed);
         }
 
+        public void Show() {
+            gameObject.SetActive(true);
+        }
+
+        public void Hide() {
+            gameObject.SetActive(false);
+        }
+
         public void HandleLoadButtonPressed() {
             string saveName = _dropdown.options[_dropdown.value].text;
-            _commandHistoryLoader.LoadCommandHistory(saveName);
+            LoadReplayClicked.Invoke(saveName);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Replays.Persistence.UI {
 
         public override void InstallBindings() {
             Container.Bind<IReplayLoaderViewController>().To<ReplayLoaderViewController>()
-                     .FromComponentInNewPrefab(_replayLoaderVcPrefab).AsSingle().NonLazy();
+                     .FromComponentInNewPrefab(_replayLoaderVcPrefab).AsSingle();
         }
     }
 }

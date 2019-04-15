@@ -81,10 +81,6 @@ namespace Replays.Persistence {
             
             SerializableCommand nextCommand = _pendingCommands.Dequeue(); 
             _commandQueue.Enqueue(nextCommand.commandType, nextCommand.dataType, nextCommand.data);
-
-            if (nextCommand.commandType == typeof(LoadMapCommand)) {
-                _timeToPop = _clock.Now + TimeSpan.FromSeconds(2);
-            }
         }
     }
 }

@@ -7,13 +7,16 @@ using Zenject;
 
 namespace Units {
     public class UnitsInstaller : MonoInstaller {
-        public UnitSpawnSettings unitSpawnSettingses;
-        public GameObject unitPickerViewController;
-        public GameObject unitPrefab;
+        [SerializeField]
+        public UnitSpawnSettings _unitSpawnSettings;
+        [SerializeField]
+        public GameObject _unitPickerViewController;
+        [SerializeField]
+        public GameObject _unitPrefab;
         
         public override void InstallBindings() {
-            Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(unitPickerViewController).AsSingle();
-            Container.Bind<IUnitSpawnSettings>().To<UnitSpawnSettings>().FromInstance(unitSpawnSettingses).AsSingle();
+            Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(_unitPickerViewController).AsSingle();
+            Container.Bind<IUnitSpawnSettings>().To<UnitSpawnSettings>().FromInstance(_unitSpawnSettings).AsSingle();
             Container.Bind<IUnitDataIndexResolver>().To<UnitDataIndexResolver>().AsSingle();
 
             // TODO: Avoid having to expose UnitRegistry.
@@ -22,7 +25,7 @@ namespace Units {
 
             // Prototype
             Container.BindMemoryPool<UnitBehaviour, UnitBehaviour.Pool>().WithInitialSize(10)
-                     .FromComponentInNewPrefab(unitPrefab).UnderTransformGroup("UnitPool");
+                     .FromComponentInNewPrefab(_unitPrefab).UnderTransformGroup("UnitPool");
 
             // Prototype: Bind ITicker and IInitializable to the UnitsSpawner
             Container.BindInterfacesTo<UnitSpawner>().AsSingle();

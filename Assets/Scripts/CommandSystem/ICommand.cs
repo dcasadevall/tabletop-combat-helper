@@ -1,4 +1,5 @@
-using System.Runtime.Serialization;
+
+using System;
 
 namespace CommandSystem {
     public interface ICommand {

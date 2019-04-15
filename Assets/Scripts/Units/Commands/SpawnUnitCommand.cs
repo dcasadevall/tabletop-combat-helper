@@ -21,7 +21,7 @@ namespace Units.Commands {
         
         public bool IsInitialGameStateCommand {
             get {
-                return true;
+                return _data.unitCommandData.unitType == UnitType.Player;
             }
         }
 
