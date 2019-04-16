@@ -14,16 +14,10 @@ using Zenject;
 using ILogger = Logging.ILogger;
 
 namespace Replays.Persistence {
-    public class CommandHistoryFileLoader : ICommandHistoryLoader, ITickable {
+    public class CommandHistoryFileLoader : ICommandHistoryLoader {
         private readonly PersistenceLayerSettings _settings;
         private readonly ICommandQueue _commandQueue;
-        private readonly IClock _clock;
         private readonly ILogger _logger;
-
-        /// <summary>
-        ///  GETTTTOOOOO remove
-        /// </summary>
-        private Queue<SerializableCommand> _pendingCommands = new Queue<SerializableCommand>();
 
         public IEnumerable<string> SavedCommandHistories {
             get {
@@ -37,11 +31,10 @@ namespace Replays.Persistence {
             }
         }
 
-        public CommandHistoryFileLoader(PersistenceLayerSettings settings, ICommandQueue commandQueue, IClock clock,
+        public CommandHistoryFileLoader(PersistenceLayerSettings settings, ICommandQueue commandQueue,
                                         ILogger logger) {
             _settings = settings;
             _commandQueue = commandQueue;
-            _clock = clock;
             _logger = logger;
         }
 
@@ -63,24 +56,8 @@ namespace Replays.Persistence {
 
         private void EnqueueCommandHistory(SerializableCommandHistory commandHistory) {
             foreach (var command in commandHistory.Commands) {
-                _pendingCommands.Enqueue(command);
+                _commandQueue.Enqueue(command.commandType, command.dataType, command.data);
             }
-        }
-
-        // THIS WHOLE THING IS HACKY AND NEEDS TO DIE.
-        // We need the concept of async commands
-        private TimeSpan _timeToPop = TimeSpan.Zero;
-        public void Tick() {
-            if (_pendingCommands.Count == 0) {
-                return;
-            }
-
-            if (_clock.Now < _timeToPop) {
-                return;
-            }
-            
-            SerializableCommand nextCommand = _pendingCommands.Dequeue(); 
-            _commandQueue.Enqueue(nextCommand.commandType, nextCommand.dataType, nextCommand.data);
         }
     }
 }
