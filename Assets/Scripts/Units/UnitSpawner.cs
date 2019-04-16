@@ -65,7 +65,7 @@ namespace Units {
                 _randomGridPositionProvider.GetRandomUniquePositions(startPosition,
                                                                      _unitSpawnSettings
                                                                          .MaxInitialUnitSpawnDistanceToCenter,
-                                                                     1);
+                                                                     playerUnits.Length);
             for (int i = 0; i < tilePositions.Length; i++) {
                 SpawnUnit(playerUnits[i], tilePositions[i]);
             }
