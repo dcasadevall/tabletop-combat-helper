@@ -2,6 +2,7 @@ using System;
 using CommandSystem;
 using Logging;
 using Math;
+using UniRx;
 using Units;
 
 namespace Grid.Commands {
@@ -31,15 +32,18 @@ namespace Grid.Commands {
             _logger = logger;
         }
 
-        public void Run() {
+        public IObservable<UniRx.Unit> Run() {
             IUnit unit = _unitRegistry.GetUnit(_data.unitId);
             if (unit == null) {
-                _logger.LogError(LoggedFeature.Units, "Unit not found in registry: {0}", _data.unitId);
-                return;
+                string errorMsg = string.Format("Unit not found in registry: {0}", _data.unitId);
+                _logger.LogError(LoggedFeature.Units, errorMsg);
+                return Observable.Throw<UniRx.Unit>(new Exception(errorMsg));
             }
 
             _previousCoords = _gridUnitManager.GetUnitCoords(unit);
             _gridUnitManager.PlaceUnitAtTile(unit, _data.tileCoords);
+
+            return Observable.ReturnUnit();
         }
 
         public void Undo() {

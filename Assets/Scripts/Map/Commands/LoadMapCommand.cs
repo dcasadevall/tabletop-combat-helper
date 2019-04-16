@@ -6,8 +6,12 @@ using Grid.Serialized;
 using Logging;
 using Map.UI;
 using Replays.Persistence.UI;
+using UniRx;
+using UniRx.Async;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
+using ILogger = Logging.ILogger;
 
 namespace Map.Commands {
     public class LoadMapCommand : ICommand {
@@ -35,17 +39,20 @@ namespace Map.Commands {
             _sceneLoader = sceneLoader;
         }
 
-        public void Run() {
+        public IObservable<Unit> Run() {
             if (_data.mapIndex > _mapDatas.Count) {
-                _logger.LogError(LoggedFeature.Map, "Invalid map index: {0}", _data.mapIndex);
-                return;
+                string errorMsg = string.Format("Invalid map index: {0}", _data.mapIndex);
+                _logger.LogError(LoggedFeature.Map, errorMsg);
+                return Observable.Throw<Unit>(new Exception(errorMsg));
             }
             
             IMapData mapData = _mapDatas[(int)_data.mapIndex];
-            _sceneLoader.LoadScene(kCombatSceneName , LoadSceneMode.Additive, container => {
+            AsyncOperation asyncOperation = _sceneLoader.LoadSceneAsync(kCombatSceneName , LoadSceneMode.Additive, container => {
                 container.Bind<IMapData>().FromInstance(mapData);
                 container.Bind<IGridData>().FromInstance(mapData.GridData);
             });
+
+            return asyncOperation.ToUniTask().ToObservable();
         }
 
         public void Undo() {
