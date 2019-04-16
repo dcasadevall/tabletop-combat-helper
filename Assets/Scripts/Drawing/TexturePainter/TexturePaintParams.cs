@@ -24,7 +24,7 @@ namespace Drawing.TexturePainter {
         #region ISerializable
         public TexturePaintParams(SerializationInfo info, StreamingContext context) {
             brushThickness = info.GetInt32("thickness");
-            ColorUtility.TryParseHtmlString(info.GetString("color"), out color);
+            ColorUtility.TryParseHtmlString($"#{info.GetString("color")}", out color);
         }
         
         public void GetObjectData(SerializationInfo info, StreamingContext context) {
