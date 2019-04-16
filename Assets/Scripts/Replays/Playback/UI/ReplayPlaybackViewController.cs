@@ -1,5 +1,6 @@
 using System;
 using InputSystem;
+using Map;
 using Replays.Persistence;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,6 +21,7 @@ namespace Replays.Playback.UI {
         private Animator _animator;
 
         private IInputLock _inputLock;
+        private IMapData _mapData;
         private IReplayPlaybackManager _playbackManager;
         private ICommandHistorySaver _commandHistorySaver;
         private Guid? _lockId;
@@ -27,9 +29,10 @@ namespace Replays.Playback.UI {
         private bool _wasPlayingBeforeDragging;
 
         [Inject]
-        public void Construct(IInputLock inputLock, IReplayPlaybackManager playbackManager,
+        public void Construct(IInputLock inputLock, IMapData mapData, IReplayPlaybackManager playbackManager,
                               ICommandHistorySaver commandHistorySaver) {
             _inputLock = inputLock;
+            _mapData = mapData;
             _playbackManager = playbackManager;
             _commandHistorySaver = commandHistorySaver;
             _playbackManager.PlaybackInterrupted += HandlePlaybackInterrupted;
@@ -76,7 +79,7 @@ namespace Replays.Playback.UI {
         }
 
         public void HandleSaveReplayButtonPressed() {
-            _commandHistorySaver.SaveCommandHistory("rubarb");
+            _commandHistorySaver.SaveCommandHistory(_mapData.Name);
         }
 
         public void HandleCancelReplayButtonPressed() {
