@@ -147,7 +147,7 @@ namespace Replays.Playback {
                 UndoPreviousCommand();
             }
 
-            while (_futureCommands.Count > 0 && _currentTime > _futureCommands.First.Value.ReplayTime) {
+            while (_futureCommands.Count > 0 && _currentTime >= _futureCommands.First.Value.ReplayTime) {
                 RedoNextCommand();
             }
         }
