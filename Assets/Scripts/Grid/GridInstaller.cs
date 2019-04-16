@@ -9,7 +9,6 @@ namespace Grid {
         
         public override void InstallBindings() {
             Container.Bind<IGrid>().To<Grid>().AsSingle();
-            Container.Bind<IInitializable>().To<GridDataLoader>().AsSingle();
             Container.Bind(typeof(IGridUnitManager), typeof(IInitializable)).To<GridUnitManager>().AsSingle();
             Container.Bind<IRandomGridPositionProvider>().To<SpiralSequenceRandomPositionProvider>().AsSingle();
             Container.Bind<IGridPositionCalculator>().To<GridPositionCalculator>().AsSingle();
