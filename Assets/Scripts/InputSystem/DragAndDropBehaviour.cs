@@ -96,7 +96,7 @@ namespace InputSystem {
             _previousCoordinates = gridCoordinates;
             
             MoveUnitData moveUnitData = new MoveUnitData(_unitId, gridCoordinates.Value);
-            _commandQueue.Enqueue(moveUnitData);
+            _commandQueue.Enqueue<MoveUnitCommand, MoveUnitData>(moveUnitData);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Networking {
     /// </summary>
     public class NetworkConnector : IInitializable {
         // TODO: Inject this
-        private const string kMapSelectionScene = "MapSelectionScene";
+        private const string kEnocunterSelectionSCene = "EncounterSelectionScene";
         private const string kPlayerSelectionScene = "PlayerSelectionScene";
 
         private ILogger _logger;
@@ -30,7 +30,7 @@ namespace Networking {
         public void Initialize() {
             _networkManager.Connect().Subscribe(Observer.Create<NetworkConnectionResult>(result => {
                 if (result.isServer) {
-                    _sceneLoader.LoadScene(kMapSelectionScene, LoadSceneMode.Additive);
+                    _sceneLoader.LoadScene(kEnocunterSelectionSCene, LoadSceneMode.Additive);
                 } else {
                     _sceneLoader.LoadScene(kPlayerSelectionScene, LoadSceneMode.Additive);
                 }

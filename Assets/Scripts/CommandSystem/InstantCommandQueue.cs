@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Logging;
+using Map.Commands;
 using Util;
 
 namespace CommandSystem {
@@ -24,9 +25,8 @@ namespace CommandSystem {
             _listeners.Add(listener);
         }
 
-        public void Enqueue<TData>(TData data) where TData : ISerializable {
-            // Create the command.
-            ICommand<TData> command = _commandFactory.Create<TData>();
+        public void Enqueue(Type commandType, Type dataType, ISerializable data) {
+            ICommand command = _commandFactory.Create(commandType, dataType, data);
             if (command == null) {
                 _logger.LogError(LoggedFeature.CommandSystem,
                                  "Command is not bound. Have you created an AbstractCommandsInstaller for your system?");
@@ -34,16 +34,10 @@ namespace CommandSystem {
             }
 
             // Execute the command.
-            command.Run(data);
+            command.Run();
 
             // Notify listeners.
-            CommandSnapshot commandSnapshot =
-                new CommandSnapshot(() => command.Run(data),
-                                    () => command.Undo(data),
-                                    command.IsInitialGameStateCommand,
-                                    data,
-                                    _clock.Now);
-            
+            CommandSnapshot commandSnapshot = new CommandSnapshot(command, data, _clock.Now);
             foreach (var commandQueueListener in _listeners) {
                 commandQueueListener.HandleCommandQueued(commandSnapshot);
             }

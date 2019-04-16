@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3937098722317639421}
   - component: {fileID: 3937098722317639418}
   m_Layer: 0
-  m_Name: MapSelectionContext
+  m_Name: EncounterSelectionContext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,7 +47,10 @@ MonoBehaviour:
   _monoInstallers: []
   _installerPrefabs:
   - {fileID: 2938870013231750587, guid: 94952a6d4d1dd4bd9836b03e7e04423c, type: 3}
+  - {fileID: 699061536405312128, guid: 128212c1017d748468ba172d04c5e4b0, type: 3}
+  - {fileID: 3507185049821988210, guid: 6f49324f21f2245b5ae1db3763330788, type: 3}
   _autoRun: 1
   _parentNewObjectsUnderSceneContext: 0
-  _contractNames: []
+  _contractNames:
+  - EncounterSelection
   _parentContractNames: []

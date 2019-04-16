@@ -36,7 +36,6 @@ namespace Units {
                               IGridPositionCalculator gridPositionCalculator) {
             _gridUnitManager = gridUnitManager;
             _gridPositionCalculator = gridPositionCalculator;
-            _gridUnitManager.UnitPlacedAtTile += HandleUnitPlacedAtTile;
         }
 
         private void HandleUnitPlacedAtTile(IUnit unit, IntVector2 tileCoords) {

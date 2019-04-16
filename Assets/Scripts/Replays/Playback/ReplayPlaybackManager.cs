@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using CommandSystem;
-using Logging;
-using UnityEngine;
 using Util;
 using Zenject;
-using ILogger = Logging.ILogger;
 
 namespace Replays.Playback {
     public class ReplayPlaybackManager : ITickable, IReplayPlaybackManager, ICommandQueueListener {
@@ -90,7 +87,7 @@ namespace Replays.Playback {
             // One should explicitly call Stop() or EraseFuture(), before any new command is queued.
             // to be dumped.
             // TODO: Use seek
-            while (_futureCommands.Count > 0) {
+            while (_isPlaying && _futureCommands.Count > 0) {
                 RedoNextCommand();
 
                 if (_futureCommands.Count == 0) {
@@ -108,7 +105,7 @@ namespace Replays.Playback {
                 return TimeSpan.Zero;
             }
 
-            if (_pastCommands.Last.Value.CommandSnapshot.IsInitialGameState) {
+            if (_pastCommands.Last.Value.CommandSnapshot.Command.IsInitialGameStateCommand) {
                 return TimeSpan.Zero;
             }
 
@@ -146,7 +143,7 @@ namespace Replays.Playback {
         /// Used during Play or Seek
         /// </summary>
         private void ReplayCommandsAtCurrentTime() {
-            while (_pastCommands.Count > 0 && _currentTime < _pastCommands.Last.Value.ReplayTime) {
+            while (_pastCommands.Count > 0 && _currentTime <= _pastCommands.Last.Value.ReplayTime) {
                 UndoPreviousCommand();
             }
 
@@ -176,8 +173,8 @@ namespace Replays.Playback {
         }
 
         public void Stop() {
-            Seek(1.0f);
             _isPlaying = false;
+            Seek(1.0f);
         }
 
         public void EraseFuture() {
@@ -188,7 +185,7 @@ namespace Replays.Playback {
 
         private void RedoNextCommand() {
             ICommandSnapshot futureSnapshot = _futureCommands.First.Value.CommandSnapshot;
-            futureSnapshot.Redo();
+            futureSnapshot.Command.Run();
             
             _pastCommands.AddLast(_futureCommands.First.Value);
             _futureCommands.RemoveFirst();
@@ -196,7 +193,7 @@ namespace Replays.Playback {
 
         private void UndoPreviousCommand() {
             ICommandSnapshot pastSnapshot = _pastCommands.Last.Value.CommandSnapshot;
-            pastSnapshot.Undo();
+            pastSnapshot.Command.Undo();
 
             _futureCommands.AddFirst(_pastCommands.Last.Value);
             _pastCommands.RemoveLast();

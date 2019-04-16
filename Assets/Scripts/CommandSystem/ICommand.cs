@@ -1,7 +1,8 @@
-using System.Runtime.Serialization;
+
+using System;
 
 namespace CommandSystem {
-    public interface ICommand<in TData> where TData : ISerializable {
+    public interface ICommand {
         /// <summary>
         /// Scene setup commands are those which can be used to setup an initial game state.
         /// Things like "loading a map" "spawning player units", etc.. that should not be Undone and
@@ -9,7 +10,7 @@ namespace CommandSystem {
         /// </summary>
         bool IsInitialGameStateCommand { get; }
         
-        void Run(TData data);
-        void Undo(TData data);
+        void Run();
+        void Undo();
     }
 }

@@ -1,5 +1,5 @@
 using Drawing.UI;
-using Replays.UI;
+using Replays.Playback.UI;
 using UnityEngine;
 using Zenject;
 

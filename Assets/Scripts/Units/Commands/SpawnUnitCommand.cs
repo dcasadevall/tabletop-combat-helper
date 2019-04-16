@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CommandSystem;
 using Grid;
@@ -9,9 +10,10 @@ namespace Units.Commands {
     /// Command used to spawn a unit and position it in the grid.
     /// We may want to consider decoupling those two actions, but this works for now.
     /// </summary>
-    public class SpawnUnitCommand : ICommand<SpawnUnitData> {
+    public class SpawnUnitCommand : ICommand {
+        private readonly SpawnUnitData _data;
+        private readonly ICommandFactory _commandFactory;
         private readonly IUnitSpawnSettings _unitSpawnSettings;
-        private readonly IUnitDataIndexResolver _unitDataIndexResolver;
         private readonly IMutableUnitRegistry _unitRegistry;
         private readonly IGridUnitManager _gridUnitManager;
         private readonly UnitBehaviour.Pool _unitBehaviourPool;
@@ -19,52 +21,79 @@ namespace Units.Commands {
         
         public bool IsInitialGameStateCommand {
             get {
-                return true;
+                return _data.unitCommandData.unitType == UnitType.Player;
             }
         }
 
-        public SpawnUnitCommand(IUnitSpawnSettings unitSpawnSettings, 
-                                IUnitDataIndexResolver unitDataIndexResolver,
+        public SpawnUnitCommand(SpawnUnitData data,
+                                ICommandFactory commandFactory,
+                                IUnitSpawnSettings unitSpawnSettings, 
                                 IMutableUnitRegistry unitRegistry,
                                 IGridUnitManager gridUnitManager,
                                 UnitBehaviour.Pool unitBehaviourPool, 
                                 ILogger logger) {
+            _data = data;
+            _commandFactory = commandFactory;
             _unitSpawnSettings = unitSpawnSettings;
-            _unitDataIndexResolver = unitDataIndexResolver;
             _unitRegistry = unitRegistry;
             _gridUnitManager = gridUnitManager;
             _unitBehaviourPool = unitBehaviourPool;
             _logger = logger;
         }
         
-        public void Run(SpawnUnitData data) {
-            IUnitData[] unitDatas = _unitSpawnSettings.GetUnits(data.unitCommandData.unitType);
-            if (data.unitCommandData.unitIndex >= unitDatas.Length) {
+        public void Run() {
+            IUnitData[] unitDatas = _unitSpawnSettings.GetUnits(_data.unitCommandData.unitType);
+            if (_data.unitCommandData.unitIndex >= unitDatas.Length) {
                 _logger.LogError(LoggedFeature.Units,
                                  "Unit Index not in unit datas range: {0}",
-                                 data.unitCommandData.unitIndex);
+                                 _data.unitCommandData.unitIndex);
                 return;
             }
 
-            IUnitData unitData = unitDatas[(int)data.unitCommandData.unitIndex];
+            IUnitData unitData = unitDatas[(int)_data.unitCommandData.unitIndex];
             _logger.Log(LoggedFeature.Units, "Spawning: {0}", unitData.Name);
             
             // First, spawn the pets recursively.
-            IUnit[] pets = new IUnit[data.unitCommandData.pets.Length];
-            for (var i = 0; i < data.unitCommandData.pets.Length; i++) {
-                Run(new SpawnUnitData(data.unitCommandData.pets[i], data.tileCoords));
-                pets[i] = _unitRegistry.GetUnit(data.unitCommandData.pets[i].unitId);
+            // We create commands that we execute directly, because
+            // we don't want to treat these as standalone commands (they are only ever children of this command)
+            IUnit[] pets = new IUnit[_data.unitCommandData.pets.Length];
+            for (var i = 0; i < _data.unitCommandData.pets.Length; i++) {
+                SpawnUnitData petSpawnUnitData = new SpawnUnitData(_data.unitCommandData.pets[i], _data.tileCoords);
+                ICommand petSpawnCommand = _commandFactory.Create(typeof(SpawnUnitCommand), typeof(SpawnUnitData), petSpawnUnitData);
+                petSpawnCommand.Run();
+                pets[i] = _unitRegistry.GetUnit(_data.unitCommandData.pets[i].unitId);
             }
             
             // Now, spawn the unit itself.
-            IUnit unit = new Unit(data.unitCommandData.unitId, unitData, pets);
+            IUnit unit = new Unit(_data.unitCommandData.unitId, unitData, pets);
             _unitRegistry.RegisterUnit(unit);
             _unitBehaviourPool.Spawn(unit);
-            _gridUnitManager.PlaceUnitAtTile(unit, data.tileCoords);
+            _gridUnitManager.PlaceUnitAtTile(unit, _data.tileCoords);
         }
 
-        public void Undo(SpawnUnitData data) {
-            // Not supported (This is an initial gamestate command)
+        public void Undo() {
+            // Undo is not supported if this is an initial game state command.
+            // We may want to consider splitting this command in two: Spawn initial unit / Spawn unit
+            if (IsInitialGameStateCommand) {
+                return;
+            }
+            
+            // Despawn pets first.
+            // We need to directly run the command since these are children of the parent spawn unit command,
+            // and should never be ran as standalone
+            for (var i = 0; i < _data.unitCommandData.pets.Length; i++) {
+                ICommand petSpawnCommand =
+                    _commandFactory.Create(typeof(SpawnUnitCommand),
+                                           typeof(SpawnUnitData),
+                                           _data.unitCommandData.pets[i]);
+                petSpawnCommand.Undo();
+            }
+            
+            // Now the unit itself.
+            IUnit unit = _unitRegistry.GetUnit(_data.unitCommandData.unitId);
+            _unitRegistry.UnregisterUnit(unit.UnitId);
+            _unitBehaviourPool.Despawn(unit.UnitId);
+            _gridUnitManager.RemoveUnit(unit);
         }
     }
 }

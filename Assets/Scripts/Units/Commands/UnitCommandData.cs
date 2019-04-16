@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.Serialization;
 using Math;
 using Units.Serialized;
@@ -6,6 +7,7 @@ namespace Units.Commands {
     /// <summary>
     /// Serializable data that is used for commands performed on a unit.
     /// </summary>
+    [Serializable]
     public class UnitCommandData : ISerializable {
         public readonly UnitId unitId;
         public readonly UnitType unitType;

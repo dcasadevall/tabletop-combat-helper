@@ -36,11 +36,6 @@ namespace Grid {
         /// The world position corresponding to the (0,0) coordinate of the grid.
         /// </summary>
         Vector2 OriginWorldPosition { get; }
-        /// <summary>
-        /// Loads the given <see cref="GridData"/>, setting values like grid dimensions.
-        /// </summary>
-        /// <param name="data"></param>
-        void LoadGridData(IGridData data);
     }
 
     public static class GridExtensions {

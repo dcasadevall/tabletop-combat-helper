@@ -1,6 +1,7 @@
 
 using Math;
 using Units;
+using Units.Serialized;
 
 namespace Grid {
     /// <summary>
@@ -13,6 +14,13 @@ namespace Grid {
         /// This may be due to initial spawn, or when a unit is moved from one tile to another.
         /// </summary>
         event System.Action<IUnit, IntVector2> UnitPlacedAtTile;
+
+        /// <summary>
+        /// Returns all the units of the given <see cref="UnitType"/> on the board.
+        /// </summary>
+        /// <param name="unitType"></param>
+        /// <returns></returns>
+        IUnit[] GetAllUnits(UnitType unitType);
         
         /// <summary>
         /// Gets all the units in the tile at the given tile coordinates.

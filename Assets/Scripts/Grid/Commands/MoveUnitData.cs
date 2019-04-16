@@ -1,8 +1,10 @@
+using System;
 using System.Runtime.Serialization;
 using Math;
 using Units;
 
 namespace Grid.Commands {
+    [Serializable]
     public class MoveUnitData : ISerializable {
         public readonly UnitId unitId;
         public readonly IntVector2 tileCoords;

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8861999233176828878
+--- !u!1 &3507185049821988209
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,44 +8,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5558126047093722976}
-  - component: {fileID: 8861999233176828879}
+  - component: {fileID: 3507185049821988211}
+  - component: {fileID: 3507185049821988210}
   m_Layer: 0
-  m_Name: UnitsInstaller
+  m_Name: EncounterSelectionInstaller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5558126047093722976
+--- !u!4 &3507185049821988211
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8861999233176828878}
+  m_GameObject: {fileID: 3507185049821988209}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.47548398, y: -0.80477303, z: 0.04137883}
+  m_LocalPosition: {x: 279.49884, y: 201.99808, z: -0.00012207031}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8861999233176828879
+--- !u!114 &3507185049821988210
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8861999233176828878}
+  m_GameObject: {fileID: 3507185049821988209}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cc89c817e276485b8891a1456b8e844, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c760f05a18543699db688949a2e57b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitSpawnSettingses: {fileID: 11400000, guid: 55638e91719f64442a3654ede41f33a3,
-    type: 2}
-  unitPickerViewController: {fileID: 2097773387127440756, guid: fcdcab687e0524b2ab31c5895a9905db,
-    type: 3}
-  unitPrefab: {fileID: 6313489448253246766, guid: 3b62971b34b3746be87a5a587fc633c9,
-    type: 3}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Logging;
 using Zenject;
+using ILogger = Logging.ILogger;
 
 namespace CommandSystem {
     public class CommandFactory : ICommandFactory {
@@ -17,16 +18,26 @@ namespace CommandSystem {
         public void RegisterSceneContainer(DiContainer container) {
             _containers.Add(container);
         }
-        
-        public ICommand<TData> Create<TData>() where TData : ISerializable {
-            foreach (var diContainer in _containers) {
-                ICommand<TData> command = diContainer.TryResolve<ICommand<TData>>();
+
+        public ICommand Create(Type commandType, Type dataType, ISerializable data) {
+            foreach (var container in _containers) {
+                if (!container.HasBinding(commandType)) {
+                    continue;
+                }
+                
+                // TODO: Avoid using instantiate explicit here
+                ICommand command = (ICommand)container.InstantiateExplicit(commandType, new List<TypeValuePair> {
+                    new TypeValuePair(dataType, data)
+                });
+                
                 if (command != null) {
                     return command;
                 }
             }
 
-            _logger.LogError(LoggedFeature.CommandSystem, "Command not found in registered contexts: {0}", typeof(ICommand<TData>));
+            _logger.LogError(LoggedFeature.CommandSystem,
+                             "Command not found in registered contexts: {0}",
+                             typeof(ICommand));
             return null;
         }
     }

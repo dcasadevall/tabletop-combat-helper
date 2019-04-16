@@ -1,4 +1,4 @@
-namespace Replays.UI {
+namespace Replays.Playback.UI {
     public interface IReplayPlaybackViewController {
         event System.Action CancelReplayButtonPressed;
         
