@@ -1,5 +1,6 @@
 
 using System;
+using UniRx;
 
 namespace CommandSystem {
     public interface ICommand {
@@ -10,7 +11,7 @@ namespace CommandSystem {
         /// </summary>
         bool IsInitialGameStateCommand { get; }
         
-        void Run();
+        IObservable<Unit> Run();
         void Undo();
     }
 }

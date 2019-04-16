@@ -1,6 +1,8 @@
+using System;
 using CommandSystem;
 using Drawing.DrawableTiles;
 using Drawing.TexturePainter;
+using UniRx;
 
 namespace Drawing.Commands {
     public class PaintPixelCommand : ICommand {
@@ -24,10 +26,12 @@ namespace Drawing.Commands {
             _texturePainter = texturePainter;
         }
         
-        public void Run() {
+        public IObservable<Unit> Run() {
             IDrawableTile drawableTile = _drawableTileRegistry.GetDrawableTileAtCoordinates(_data._drawableTileCoords);
             _spriteState = _texturePainter.SaveState(drawableTile.Sprite);
             _texturePainter.PaintPixel(drawableTile.Sprite, _data._pixelPosition, _data._paintParams);
+
+            return Observable.ReturnUnit();
         }
 
         public void Undo() {

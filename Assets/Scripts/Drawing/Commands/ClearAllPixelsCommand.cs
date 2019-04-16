@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using CommandSystem;
 using Drawing.DrawableTiles;
 using Drawing.TexturePainter;
+using UniRx;
 
 namespace Drawing.Commands {
     public class ClearAllPixelsCommand : ICommand {
@@ -22,12 +24,14 @@ namespace Drawing.Commands {
             _texturePainter = texturePainter;
         }
 
-        public void Run() {
+        public IObservable<Unit> Run() {
             foreach (var drawableTile in _drawableTileRegistry.GetAllTiles()) {
                 // Save state of this tile and add it to the command state for Undo()
                 _spriteStates[drawableTile] = _texturePainter.SaveState(drawableTile.Sprite);
                 _texturePainter.EraseAllPixels(drawableTile.Sprite);
             }
+
+            return Observable.ReturnUnit();
         }
 
         public void Undo() {

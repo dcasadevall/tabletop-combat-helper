@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CommandSystem;
 using Grid;
 using Logging;
+using UniRx;
 using Units.Serialized;
 
 namespace Units.Commands {
@@ -41,13 +42,12 @@ namespace Units.Commands {
             _logger = logger;
         }
         
-        public void Run() {
+        public IObservable<UniRx.Unit> Run() {
             IUnitData[] unitDatas = _unitSpawnSettings.GetUnits(_data.unitCommandData.unitType);
             if (_data.unitCommandData.unitIndex >= unitDatas.Length) {
-                _logger.LogError(LoggedFeature.Units,
-                                 "Unit Index not in unit datas range: {0}",
-                                 _data.unitCommandData.unitIndex);
-                return;
+                string errorMsg = string.Format("Unit Index not in unit datas range: {0}", _data.unitCommandData.unitIndex);
+                _logger.LogError(LoggedFeature.Units, errorMsg);
+                return Observable.Throw<UniRx.Unit>(new IndexOutOfRangeException(errorMsg));
             }
 
             IUnitData unitData = unitDatas[(int)_data.unitCommandData.unitIndex];
@@ -69,6 +69,8 @@ namespace Units.Commands {
             _unitRegistry.RegisterUnit(unit);
             _unitBehaviourPool.Spawn(unit);
             _gridUnitManager.PlaceUnitAtTile(unit, _data.tileCoords);
+
+            return Observable.ReturnUnit();
         }
 
         public void Undo() {
