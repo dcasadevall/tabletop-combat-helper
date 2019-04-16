@@ -72,7 +72,28 @@ namespace Units.Commands {
         }
 
         public void Undo() {
-            // Not supported (This is an initial gamestate command)
+            // Undo is not supported if this is an initial game state command.
+            // We may want to consider splitting this command in two: Spawn initial unit / Spawn unit
+            if (IsInitialGameStateCommand) {
+                return;
+            }
+            
+            // Despawn pets first.
+            // We need to directly run the command since these are children of the parent spawn unit command,
+            // and should never be ran as standalone
+            for (var i = 0; i < _data.unitCommandData.pets.Length; i++) {
+                ICommand petSpawnCommand =
+                    _commandFactory.Create(typeof(SpawnUnitCommand),
+                                           typeof(SpawnUnitData),
+                                           _data.unitCommandData.pets[i]);
+                petSpawnCommand.Undo();
+            }
+            
+            // Now the unit itself.
+            IUnit unit = _unitRegistry.GetUnit(_data.unitCommandData.unitId);
+            _unitRegistry.UnregisterUnit(unit.UnitId);
+            _unitBehaviourPool.Despawn(unit.UnitId);
+            _gridUnitManager.RemoveUnit(unit);
         }
     }
 }
