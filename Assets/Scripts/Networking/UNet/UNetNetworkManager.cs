@@ -6,28 +6,24 @@ using Zenject;
 namespace Networking.UNet {
     internal class UNetNetworkManager : INetworkManager, ITickable {
         private NetworkClient _networkClient;
-        private bool _connectionError;
         
         /// <summary>
-        /// Returns a <see cref="NetworkClient"/> for use with UNet implementations of our network interfaces.
-        /// If the network manager is not yet connected, or currently connecting, returns an Observable that
-        /// will complete once a connection is finished.
+        /// Returns a <see cref="NetworkClient"/>, or null if not yet connected.
+        /// This could return an observable, but we can assume that consumers will only access this after a connection
+        /// has been stablished.
         /// </summary>
-        internal IObservable<NetworkClient> NetworkClient {
+        internal NetworkClient NetworkClient {
             get {
-                if (_networkClient == null && _connectionError) {
-                    return Observable.Throw<NetworkClient>(new Exception("There was an error creating the network session."));
-                }
+                return _networkClient;
+            }
+        }
 
-                if (_networkClient == null) {
-                    return this.ObserveEveryValueChanged(manager => manager._networkClient);
-                }
-
-                return Observable.Return(_networkClient);
+        public bool IsConnected {
+            get {
+                return _networkClient != null;
             }
         }
         
-        public bool IsConnected { get; private set; }
         public bool IsServer { get; private set; }
         
         private INetworkSettings _networkSettings;
@@ -42,12 +38,10 @@ namespace Networking.UNet {
             
             NetworkConnectionResult result = ConnectSync(out _networkClient);
             if (_networkClient == null) {
-                _connectionError = true;
                 Exception exception = new Exception("Failed to connect to host using the given connection settings.");
                 return Observable.Throw<NetworkConnectionResult>(exception);
             }
 
-            IsConnected = true;
             IsServer = result.isServer;
             return Observable.Return(result);
         }
