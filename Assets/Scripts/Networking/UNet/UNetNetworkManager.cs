@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 using Zenject;
 
 namespace Networking.UNet {
-    internal class UNetNetworkManager : INetworkManager, ITickable {
+    internal class UNetNetworkManager : INetworkManager {
         private NetworkClient _networkClient;
         
         public bool IsConnected {
@@ -14,7 +14,14 @@ namespace Networking.UNet {
         }
 
         public bool IsServer { get; private set; }
-        
+
+        private Subject<int> _clientConnectedSubject = new Subject<int>();
+        public IObservable<int> ClientConnected {
+            get {
+                return _clientConnectedSubject.AsObservable();
+            }
+        }
+
         private INetworkSettings _networkSettings;
         public UNetNetworkManager(INetworkSettings networkSettings) {
             _networkSettings = networkSettings;
@@ -32,7 +39,12 @@ namespace Networking.UNet {
             }
 
             IsServer = result.isServer;
+            NetworkServer.RegisterHandler(MsgType.Connect, HandleClientConnected);
             return Observable.Return(result);
+        }
+
+        private void HandleClientConnected(NetworkMessage netmsg) {
+            _clientConnectedSubject.OnNext(netmsg.conn.connectionId);
         }
 
         /// <summary>
@@ -54,9 +66,6 @@ namespace Networking.UNet {
             }
 
             return new NetworkConnectionResult(isServer);
-        }
-
-        public void Tick() {
         }
     }
 }

@@ -18,6 +18,11 @@ namespace Networking {
         bool IsServer { get; }
         
         /// <summary>
+        /// An Observable that will receive events when a client connects, providing the connection id of such client.
+        /// </summary>
+        IObservable<int> ClientConnected { get; }
+
+        /// <summary>
         /// Attempts to connect to a new or existing network session.
         ///
         /// If no session exists in the path determined by <see cref="INetworkSettings"/>, a new one will be created.

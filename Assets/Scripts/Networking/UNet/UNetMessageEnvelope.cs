@@ -6,7 +6,7 @@ namespace Networking.UNet {
     /// This is not ideal, as we simply want to be able to send a byte payload to a specific client or all clients.
     /// Instead, we use this proxy message that contains an array of bytes.
     /// </summary>
-    internal class UNetMessageEnevlope : MessageBase {
+    internal class UNetMessageEnvelope : MessageBase {
         public const short kMessageType = MsgType.Highest + 1;
         private byte[] _payload;
         public byte[] Payload {
@@ -15,10 +15,10 @@ namespace Networking.UNet {
             }
         }
 
-        public UNetMessageEnevlope() {
+        public UNetMessageEnvelope() {
         }
 
-        public UNetMessageEnevlope(byte[] payload) {
+        public UNetMessageEnvelope(byte[] payload) {
             _payload = payload;
         }
 
