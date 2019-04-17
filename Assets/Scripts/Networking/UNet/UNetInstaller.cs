@@ -9,8 +9,6 @@ namespace Networking.UNet {
             Container.Bind(typeof(INetworkMessageHandler), typeof(IInitializable), typeof(IDisposable))
                      .To<UNetNetworkMessageHandler>()
                      .AsSingle();
-            Container.Bind(typeof(INetworkMessageQueue), typeof(IInitializable), typeof(IDisposable))
-                     .To<NetworkMessageQueue>().AsSingle();
         }
     }
 }
