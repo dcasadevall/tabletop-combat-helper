@@ -2,12 +2,19 @@ using Zenject;
 
 namespace EncounterSelection {
     public class EncounterSelectionInstaller : MonoInstaller {
+        public bool showEncounterSelectionView = true;
+        
         public override void InstallBindings() {
             EncounterSelectionContext context = new EncounterSelectionContext();
-            Container.Bind<EncounterSelectionContext>().FromInstance(context).AsSingle()
-                     .WhenInjectedInto<EncounterSelectionLoader>();
             Container.Bind<IEncounterSelectionContext>().To<EncounterSelectionContext>().FromInstance(context);
-            Container.Bind<IInitializable>().To<EncounterSelectionLoader>().AsSingle();
+
+            if (showEncounterSelectionView) {
+                Container.Bind<EncounterSelectionContext>().FromInstance(context).AsSingle()
+                         .WhenInjectedInto<EncounterSelectionLoader>();
+                Container.Bind<IInitializable>().To<EncounterSelectionLoader>().AsSingle();
+            } else {
+                context.EncounterType = EncounterType.Replay;
+            }
         }
     }
 }

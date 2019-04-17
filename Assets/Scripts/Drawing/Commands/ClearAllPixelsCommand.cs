@@ -19,7 +19,8 @@ namespace Drawing.Commands {
             }
         }
 
-        public ClearAllPixelsCommand(IDrawableTileRegistry drawableTileRegistry, ITexturePainter texturePainter) {
+        public ClearAllPixelsCommand(ClearAllPixelsCommandData data, DrawableTileRegistry drawableTileRegistry,
+                                     ITexturePainter texturePainter) {
             _drawableTileRegistry = drawableTileRegistry;
             _texturePainter = texturePainter;
         }

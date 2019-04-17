@@ -9,7 +9,7 @@ using Zenject;
 using NetworkMessage = UnityEngine.Networking.NetworkMessage;
 
 namespace Networking.UNet {
-    internal class UNetNetworkMessageHandler : IInitializable, INetworkMessageHandler {
+    internal class UNetNetworkMessageHandler : IInitializable, IDisposable, INetworkMessageHandler {
         private Subject<Messaging.NetworkMessage> _subject = new Subject<Messaging.NetworkMessage>();
 
         public IObservable<Messaging.NetworkMessage> NetworkMessageStream {
@@ -20,6 +20,7 @@ namespace Networking.UNet {
 
         private readonly INetworkManager _networkManager;
         private readonly ILogger _logger;
+        private CompositeDisposable _disposables = new CompositeDisposable();
 
         public UNetNetworkMessageHandler(INetworkManager networkManager, ILogger logger) {
             _networkManager = networkManager;
@@ -27,17 +28,23 @@ namespace Networking.UNet {
         }
 
         public void Initialize() {
-            _logger.Log(LoggedFeature.Network, "Initializing UNetNetworkMessageHandler");
-            NetworkManager.singleton.client.RegisterHandler(UNetMessageEnevlope.kMessageType, HandleUNetNetworkMessage);
+            var disposable = _networkManager.GetNetworkClientObservable().Subscribe(Observer.Create<NetworkClient>(client => {
+                _logger.Log(LoggedFeature.Network, "NetworkClient found. Initializing UNetNetworkMessageHandler");
+                client.RegisterHandler(UNetMessageEnevlope.kMessageType, HandleUNetNetworkMessage);
+            }));
+            
+            _disposables.Add(disposable);
         }
+        
+        public void Dispose() {
+            _disposables.Dispose();
+         }
 
         private void HandleUNetNetworkMessage(NetworkMessage unetMessage) {
             UNetMessageEnevlope messageEnvelope = unetMessage.ReadMessage<UNetMessageEnevlope>();
             using (var memoryStream = new MemoryStream()) {
                 var binaryFormatter = new BinaryFormatter();
-                memoryStream.Write(messageEnvelope.Payload,
-                                   0,
-                                   messageEnvelope.Payload.Length);
+                memoryStream.Write(messageEnvelope.Payload, 0, messageEnvelope.Payload.Length);
                 memoryStream.Seek(0, SeekOrigin.Begin);
                 Networking.Messaging.NetworkMessage networkMessage =
                     (Networking.Messaging.NetworkMessage) binaryFormatter.Deserialize(memoryStream);
@@ -47,6 +54,10 @@ namespace Networking.UNet {
         }
 
         public IObservable<Unit> BroadcastMessage(Messaging.NetworkMessage networkMessage) {
+            if (!_networkManager.IsConnected) {
+                return Observable.Throw<Unit>(new Exception("BroadcastMessage called when not connected."));
+            }
+            
             if (!_networkManager.IsServer) {
                 return Observable.Throw<Unit>(new Exception("BroadcastMessage called from client."));
             }

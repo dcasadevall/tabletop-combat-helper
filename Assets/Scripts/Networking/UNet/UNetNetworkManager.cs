@@ -7,23 +7,12 @@ namespace Networking.UNet {
     internal class UNetNetworkManager : INetworkManager, ITickable {
         private NetworkClient _networkClient;
         
-        /// <summary>
-        /// Returns a <see cref="NetworkClient"/>, or null if not yet connected.
-        /// This could return an observable, but we can assume that consumers will only access this after a connection
-        /// has been stablished.
-        /// </summary>
-        internal NetworkClient NetworkClient {
-            get {
-                return _networkClient;
-            }
-        }
-
         public bool IsConnected {
             get {
                 return _networkClient != null;
             }
         }
-        
+
         public bool IsServer { get; private set; }
         
         private INetworkSettings _networkSettings;

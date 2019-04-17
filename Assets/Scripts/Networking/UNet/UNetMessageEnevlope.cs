@@ -23,7 +23,7 @@ namespace Networking.UNet {
         }
 
         public override void Deserialize(NetworkReader reader) {
-            _payload = reader.ReadBytes(reader.Length);
+            _payload = reader.ReadBytesAndSize();;
         }
 
         public override void Serialize(NetworkWriter writer) {

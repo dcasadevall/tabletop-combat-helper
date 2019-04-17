@@ -61,6 +61,7 @@ MonoBehaviour:
   - Combat
   _parentContractNames:
   - EncounterSelection
+  - PlayerSelection
 --- !u!114 &5335652097620297570
 MonoBehaviour:
   m_ObjectHideFlags: 0
