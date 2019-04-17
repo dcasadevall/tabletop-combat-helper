@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/EncounterSelectionScene.unity
     guid: 777c695a624054a0987ce16fc2bf39d2
+  - enabled: 1
+    path: Assets/Scenes/PlayerSelectionScene.unity
+    guid: 418a8cfb15d9c4806acfc11080a5ecdd
   m_configObjects: {}
