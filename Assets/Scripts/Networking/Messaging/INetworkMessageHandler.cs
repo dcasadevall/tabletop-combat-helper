@@ -9,5 +9,6 @@ namespace Networking.Messaging {
         /// </summary>
         IObservable<NetworkMessage> NetworkMessageStream { get; }
         IObservable<Unit> BroadcastMessage(NetworkMessage networkMessage);
+        IObservable<Unit> SendMessage(NetworkMessage networkMessage, int clientId);
     }
 }

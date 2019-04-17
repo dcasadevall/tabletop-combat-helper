@@ -30,7 +30,7 @@ namespace Networking.UNet {
         public void Initialize() {
             var disposable = _networkManager.GetNetworkClientObservable().Subscribe(Observer.Create<NetworkClient>(client => {
                 _logger.Log(LoggedFeature.Network, "NetworkClient found. Initializing UNetNetworkMessageHandler");
-                client.RegisterHandler(UNetMessageEnevlope.kMessageType, HandleUNetNetworkMessage);
+                client.RegisterHandler(UNetMessageEnvelope.kMessageType, HandleUNetNetworkMessage);
             }));
             
             _disposables.Add(disposable);
@@ -41,7 +41,7 @@ namespace Networking.UNet {
          }
 
         private void HandleUNetNetworkMessage(NetworkMessage unetMessage) {
-            UNetMessageEnevlope messageEnvelope = unetMessage.ReadMessage<UNetMessageEnevlope>();
+            UNetMessageEnvelope messageEnvelope = unetMessage.ReadMessage<UNetMessageEnvelope>();
             using (var memoryStream = new MemoryStream()) {
                 var binaryFormatter = new BinaryFormatter();
                 memoryStream.Write(messageEnvelope.Payload, 0, messageEnvelope.Payload.Length);
@@ -62,19 +62,33 @@ namespace Networking.UNet {
                 return Observable.Throw<Unit>(new Exception("BroadcastMessage called from client."));
             }
 
-            bool success;
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-            using (var memoryStream = new MemoryStream()) {
-                binaryFormatter.Serialize(memoryStream, networkMessage);
-                UNetMessageEnevlope messageEnevlope = new UNetMessageEnevlope(memoryStream.ToArray());
-                success = NetworkServer.SendToAll(UNetMessageEnevlope.kMessageType, messageEnevlope);
-            }
-
+            UNetMessageEnvelope envelope = CreateMessageEnvelope(networkMessage);
+            bool success = NetworkServer.SendToAll(UNetMessageEnvelope.kMessageType, envelope);
+            
             if (!success) {
                 return Observable.Throw<Unit>(new Exception($"Error broadcasting message: {networkMessage}"));
             }
 
             return Observable.ReturnUnit();
+        }
+
+        public IObservable<Unit> SendMessage(Messaging.NetworkMessage networkMessage, int clientId) {
+            if (!_networkManager.IsConnected) {
+                return Observable.Throw<Unit>(new Exception("SendMessage called when not connected."));
+            }
+
+            UNetMessageEnvelope envelope = CreateMessageEnvelope(networkMessage);
+            NetworkServer.SendToClient(clientId, UNetMessageEnvelope.kMessageType, envelope);
+
+            return Observable.ReturnUnit();
+        }
+
+        private UNetMessageEnvelope CreateMessageEnvelope(Messaging.NetworkMessage networkMessage) {
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            using (var memoryStream = new MemoryStream()) {
+                binaryFormatter.Serialize(memoryStream, networkMessage);
+                return new UNetMessageEnvelope(memoryStream.ToArray());
+            } 
         }
     }
 }
