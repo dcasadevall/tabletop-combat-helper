@@ -6,10 +6,10 @@ using UniRx.Async;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Match;
 using UnityEngine.Networking.Types;
+using Zenject;
 
 namespace Networking.UNet {
     public class UNetMatchmakingNetworkManager : INetworkManager, IDisposable {
-        private readonly NetworkMatch _networkMatch;
         private readonly ILogger _logger;
 
         public bool IsConnected { get; private set; }
@@ -24,17 +24,20 @@ namespace Networking.UNet {
         /// If set, the id of the created / joined match.
         /// </summary>
         private NetworkID? _matchNetworkId;
+        
+        /// <summary>
+        /// If set, the network match used for matchmaking.
+        /// </summary>
+        private NetworkMatch _networkMatch;
 
         private Subject<int> _clientConnectedSubject = new Subject<int>();
-
         public IObservable<int> ClientConnected {
             get {
                 return _clientConnectedSubject.AsObservable();
             }
         }
 
-        public UNetMatchmakingNetworkManager(NetworkMatch networkMatch, ILogger logger) {
-            _networkMatch = networkMatch;
+        public UNetMatchmakingNetworkManager(ILogger logger) {
             _logger = logger;
         }
 
@@ -48,23 +51,29 @@ namespace Networking.UNet {
         /// </summary>
         /// <returns></returns>
         private async UniTask<NetworkConnectionResult> ConnectAsyncTask() {
-            var matchList = await NetworkRequests.ListMatches(_networkMatch);
             MatchInfo matchInfo;
+            NetworkClient networkClient;
+            NetworkManager networkManager = NetworkManager.singleton;
+            networkManager.StartMatchMaker();
+            _networkMatch = networkManager.matchMaker;
+            var matchList = await NetworkRequests.ListMatches(_networkMatch);
             if (matchList.Count == 0) {
-                IsServer = true;
                 matchInfo = await NetworkRequests.CreateMatch(_networkMatch, 10);
                 _logger.Log(LoggedFeature.Network, "Created match as server: {0}", matchInfo);
-                
-                // First player needs to create the match and then join it.
-                NetworkClient networkClient = new NetworkClient();
-                await UNetNetworkManagerUtils.ClientConnectToMatch(networkClient, matchInfo);
-                _logger.Log(LoggedFeature.Network, "Client connected to match: ", networkClient);
+
+                // First player needs to create the match and then start the host session.
+                networkClient = networkManager.StartHost(matchInfo);
+                IsServer = true;
             } else {
+                // Other players join the mach, then start the client.
                 matchInfo = await NetworkRequests.JoinMatch(_networkMatch, matchList[0]);
-                _logger.Log(LoggedFeature.Network, "Joining match as client: {0}", matchInfo);
+                _logger.Log(LoggedFeature.Network, "Joined match as client: {0}", matchInfo);
+
+                networkClient = networkManager.StartClient(matchInfo);
             }
 
-            
+            await UNetNetworkManagerUtils.GetClientConnectedObservable(networkClient);
+            _logger.Log(LoggedFeature.Network, "Connection established: {0}", networkClient.connection);
             _matchNetworkId = matchInfo.networkId;
             IsConnected = true;
             return new NetworkConnectionResult(IsServer);
@@ -73,7 +82,7 @@ namespace Networking.UNet {
         public void Dispose() {
             _connectTask?.Forget();
 
-            if (_matchNetworkId.HasValue && IsServer) {
+            if (_networkMatch != null && _matchNetworkId.HasValue && IsServer) {
                 _logger.Log(LoggedFeature.Network, "Destroying match with network id: {0}", _matchNetworkId.Value);
                 NetworkRequests.DestroyMatch(_networkMatch, _matchNetworkId.Value);
             }

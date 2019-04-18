@@ -19,11 +19,9 @@ namespace Networking.UNet {
         /// Connect to the given active match..
         /// The result is returned as an <see cref="IObservable{NetworkMessage}"/>.
         /// </summary>
-        /// <param name="matchInfo"></param>
         /// <param name="networkClient"></param>
         /// <returns></returns>
-        internal static IObservable<Unit> ClientConnectToMatch(NetworkClient networkClient, MatchInfo matchInfo) {
-            networkClient.Connect(matchInfo);
+        internal static IObservable<Unit> GetClientConnectedObservable(NetworkClient networkClient) {
             return networkClient.ObserveEveryValueChanged(client => client.isConnected)
                                 .FirstOrDefault(isConnected => isConnected).AsUnitObservable();
         }
