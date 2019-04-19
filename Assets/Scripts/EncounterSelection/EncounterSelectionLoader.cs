@@ -42,7 +42,7 @@ namespace EncounterSelection {
 
             _encounterSelectionContext.EncounterType = EncounterType.Combat;
             LoadMapCommandData commandData = new LoadMapCommandData((uint)mapIndex);
-            _commandQueue.Enqueue<LoadMapCommand, LoadMapCommandData>(commandData);
+            _commandQueue.Enqueue<LoadMapCommand, LoadMapCommandData>(commandData, CommandSource.Game);
         }
         
         private void HandleLoadReplayClicked(string saveName) {

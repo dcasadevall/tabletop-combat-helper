@@ -1,3 +1,4 @@
+using Networking.NetworkCommands;
 using Zenject;
 
 namespace EncounterSelection {
@@ -15,6 +16,9 @@ namespace EncounterSelection {
             } else {
                 context.EncounterType = EncounterType.Replay;
             }
+            
+            // Network commands are safe to be executed at this point.
+            Container.Install<NetworkCommandsInstaller>();
         }
     }
 }

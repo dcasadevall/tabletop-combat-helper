@@ -20,7 +20,6 @@ namespace Networking {
             Container.Bind<IRoomSettings>().To<RoomSettings>().FromInstance(roomSettings);
 
             Container.Install<PhotonInstaller>();
-            Container.Install<NetworkCommandsInstaller>();
         }
     }
 }

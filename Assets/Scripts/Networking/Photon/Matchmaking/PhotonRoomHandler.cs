@@ -31,7 +31,13 @@ namespace Networking.Photon.Matchmaking {
             PhotonNetwork.RemoveCallbackTarget(this);
             _playerJoinedRoomSubject?.Dispose();
         }
-        
+
+        public bool IsRoomHost {
+            get {
+                return PhotonNetwork.IsMasterClient;
+            }
+        }
+
         public IObservable<PhotonRoomJoinResult> JoinOrCreateRoom() {
             return JoinOrCreateRoomTask().ToObservable();
         }

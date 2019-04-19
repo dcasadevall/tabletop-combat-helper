@@ -13,7 +13,7 @@ namespace Networking.NetworkCommands {
         private readonly INetworkManager _networkManager;
         private readonly INetworkMessageHandler _networkMessageHandler;
         private readonly INetworkMessageSerializer _networkMessageSerializer;
-        private readonly List<NetworkMessage> _broadcastedCommands = new List<NetworkMessage>();
+        private readonly List<ICommandSnapshot> _enqueuedCommands = new List<ICommandSnapshot>();
 
         public NetworkCommandBroadcaster(ICommandQueue commandQueue,
                                          INetworkManager networkManager,
@@ -32,21 +32,32 @@ namespace Networking.NetworkCommands {
         }
 
         public void HandleCommandQueued(ICommandSnapshot commandSnapshot) {
+            // Record all commands we have queued, as they may need to be sent to other clients if
+            // we become the room host.
+            _enqueuedCommands.Add(commandSnapshot);
+            
+            // For now, every player will broadcast all commands (not just the server)
+            // So simply make sure we don't requeue commands that have been queued by other means.
+            if (commandSnapshot.Source != CommandSource.Game) {
+                return;
+            }
+            
+            _networkMessageHandler.BroadcastMessage(SerializeSnapshot(commandSnapshot));
+        }
+
+        private void HandleClientConnected(int clientId) {
             if (!_networkManager.IsServer) {
                 return;
             }
             
-            SerializableCommand serializableCommand = new SerializableCommand(commandSnapshot);
-            NetworkMessage networkMessage =
-                _networkMessageSerializer.Serialize(serializableCommand, MessageTags.kNetworkCommand);
-            _networkMessageHandler.BroadcastMessage(networkMessage);
-            _broadcastedCommands.Add(networkMessage);
-        }
-
-        private void HandleClientConnected(int clientId) {
-            foreach (var networkMessage in _broadcastedCommands) {
-                _networkMessageHandler.SendMessage(networkMessage, clientId);
+            foreach (var commandSnapshot in _enqueuedCommands) {
+                _networkMessageHandler.SendMessage(SerializeSnapshot(commandSnapshot), clientId);
             }
+        }
+        
+        private NetworkMessage SerializeSnapshot(ICommandSnapshot commandSnapshot) {
+            SerializableCommand serializableCommand = new SerializableCommand(commandSnapshot);
+            return _networkMessageSerializer.Serialize(serializableCommand, MessageTags.kNetworkCommand); 
         }
     }
 }
