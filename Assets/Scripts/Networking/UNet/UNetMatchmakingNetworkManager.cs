@@ -81,6 +81,7 @@ namespace Networking.UNet {
 
         public void Dispose() {
             _connectTask?.Forget();
+            _clientConnectedSubject?.Dispose();
 
             if (_networkMatch != null && _matchNetworkId.HasValue && IsServer) {
                 _logger.Log(LoggedFeature.Network, "Destroying match with network id: {0}", _matchNetworkId.Value);

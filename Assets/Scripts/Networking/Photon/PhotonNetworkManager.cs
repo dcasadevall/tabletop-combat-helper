@@ -14,10 +14,9 @@ namespace Networking.Photon {
         public bool IsConnected { get; private set; }
         public bool IsServer { get; private set; }
         
-        private Subject<int> _clientConnectedSubject = new Subject<int>();
         public IObservable<int> ClientConnected {
             get {
-                return _clientConnectedSubject.AsObservable();
+                return _roomHandler.PlayedJoinedRoomStream;
             }
         }
 

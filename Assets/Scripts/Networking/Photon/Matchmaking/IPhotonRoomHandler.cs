@@ -9,5 +9,10 @@ namespace Networking.Photon.Matchmaking {
         /// </summary>
         /// <returns></returns>
         IObservable<PhotonRoomJoinResult> JoinOrCreateRoom();
+
+        /// <summary>
+        /// A stream of actor numbers which receives values each time another player joins the current room we are in.
+        /// </summary>
+        IObservable<int> PlayedJoinedRoomStream { get; }
     }
 }

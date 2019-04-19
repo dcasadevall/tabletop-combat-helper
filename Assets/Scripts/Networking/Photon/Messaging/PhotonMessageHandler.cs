@@ -9,7 +9,6 @@ using Zenject;
 namespace Networking.Photon.Messaging {
     public class PhotonMessageHandler : INetworkMessageHandler, IInitializable, IDisposable {
         private Subject<NetworkMessage> _networkMessageSubject = new Subject<NetworkMessage>();
-
         public IObservable<NetworkMessage> NetworkMessageStream {
             get {
                 return _networkMessageSubject.AsObservable();
@@ -21,6 +20,7 @@ namespace Networking.Photon.Messaging {
         }
 
         public void Dispose() {
+            _networkMessageSubject?.Dispose();
             PhotonNetwork.NetworkingClient.EventReceived -= HandleEventReceived;
         }
 

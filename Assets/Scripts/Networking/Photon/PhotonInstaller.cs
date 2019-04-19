@@ -8,15 +8,17 @@ using Zenject;
 namespace Networking.Photon {
     public class PhotonInstaller : Installer {
         public override void InstallBindings() {
-            Container.BindInterfacesTo<PhotonRoomHandler>().AsSingle()
-                     .WhenInjectedInto<PhotonNetworkManager>();
-            Container.BindInterfacesTo<PhotonNetworkConnector>().AsSingle()
-                     .WhenInjectedInto<PhotonNetworkManager>();
-            Container.Bind<ServerSettings>().FromResources("PhotonServerSettings")
-                     .WhenInjectedInto<PhotonNetworkConnector>();
+            Container.Bind<INetworkManager>().To<PhotonNetworkManager>().FromSubContainerResolve()
+                     .ByMethod(BindPhotonNetworkManager).WithKernel().AsSingle();
 
-            Container.Bind<INetworkManager>().To<PhotonNetworkManager>().AsSingle();
             Container.BindInterfacesTo<PhotonMessageHandler>().AsSingle();
+        }
+
+        private void BindPhotonNetworkManager(DiContainer container) {
+            container.Bind<PhotonNetworkManager>().AsSingle();
+            container.BindInterfacesTo<PhotonRoomHandler>().AsSingle();
+            container.Bind<IPhotonNetworkConnector>().To<PhotonNetworkConnector>().AsSingle();
+            container.Bind<ServerSettings>().FromResources("PhotonServerSettings").AsSingle();
         }
     }
 }
