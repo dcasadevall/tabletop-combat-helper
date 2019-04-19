@@ -33,12 +33,14 @@ namespace Networking.NetworkCommands {
         }
 
         private void HandleMessageReceived(NetworkMessage networkMessage) {
-            if (_networkManager.IsServer) {
-                return;
-            }
-            
-            SerializableCommand serializableCommand = _messageSerializer.Deserialize<SerializableCommand>(networkMessage);
-            _commandQueue.Enqueue(serializableCommand.commandType, serializableCommand.dataType, serializableCommand.data);
+            // Note: We enqueue this command even as server, because we want clients to broadcast all their events
+            // (for now)
+            SerializableCommand serializableCommand =
+                _messageSerializer.Deserialize<SerializableCommand>(networkMessage);
+            _commandQueue.Enqueue(serializableCommand.commandType,
+                                  serializableCommand.dataType,
+                                  serializableCommand.data,
+                                  CommandSource.Network);
         }
     }
 }

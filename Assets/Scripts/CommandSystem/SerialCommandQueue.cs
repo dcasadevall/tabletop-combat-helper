@@ -30,8 +30,8 @@ namespace CommandSystem {
             _listeners.Add(listener);
         }
 
-        public void Enqueue(Type commandType, Type dataType, ISerializable data) {
-            _pendingCommands.Enqueue(new PendingCommand(commandType, dataType, data));
+        public void Enqueue(Type commandType, Type dataType, ISerializable data, CommandSource source) {
+            _pendingCommands.Enqueue(new PendingCommand(commandType, dataType, data, source));
         }
 
         public void Tick() {
@@ -49,7 +49,8 @@ namespace CommandSystem {
         private void ProcessNextCommand() {
             _processingCommand = true;
             PendingCommand pendingCommand = _pendingCommands.Dequeue();
-            ICommand command = _commandFactory.Create(pendingCommand.commandType, pendingCommand.dataType, pendingCommand.data);
+            ICommand command =
+                _commandFactory.Create(pendingCommand.commandType, pendingCommand.dataType, pendingCommand.data);
             if (command == null) {
                 _logger.LogError(LoggedFeature.CommandSystem,
                                  "Command is not bound. Have you created an AbstractCommandsInstaller for your system?");
@@ -59,9 +60,10 @@ namespace CommandSystem {
             IObservable<Unit> observable = command.Run();
             IObserver<Unit> observer = Observer.Create<Unit>(HandleCommandSuccess, HandleCommandError);
             observable.Subscribe(observer);
-            
+
             // Notify listeners
-            CommandSnapshot commandSnapshot = new CommandSnapshot(command, pendingCommand.data, _clock.Now);
+            CommandSnapshot commandSnapshot =
+                new CommandSnapshot(command, pendingCommand.data, _clock.Now, pendingCommand.source);
             foreach (var commandQueueListener in _listeners) {
                 commandQueueListener.HandleCommandQueued(commandSnapshot);
             }
@@ -70,7 +72,7 @@ namespace CommandSystem {
         private void HandleCommandSuccess(Unit unit) {
             _processingCommand = false;
         }
-        
+
         private void HandleCommandError(Exception exception) {
             _logger.LogError(LoggedFeature.CommandSystem, "Error executing command: {0}", exception);
             _processingCommand = false;
@@ -80,11 +82,13 @@ namespace CommandSystem {
             public readonly Type commandType;
             public readonly Type dataType;
             public readonly ISerializable data;
+            public readonly CommandSource source;
 
-            public PendingCommand(Type commandType, Type dataType, ISerializable data) {
+            public PendingCommand(Type commandType, Type dataType, ISerializable data, CommandSource source) {
                 this.commandType = commandType;
                 this.dataType = dataType;
                 this.data = data;
+                this.source = source;
             }
         }
     }

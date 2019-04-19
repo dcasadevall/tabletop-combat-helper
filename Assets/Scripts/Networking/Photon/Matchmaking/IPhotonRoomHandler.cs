@@ -4,6 +4,8 @@ using Photon.Realtime;
 
 namespace Networking.Photon.Matchmaking {
     internal interface IPhotonRoomHandler {
+        bool IsRoomHost { get; }
+        
         /// <summary>
         /// Joins or creates a new room with the <see cref="IRoomSettings"/> in the current context.
         /// </summary>

@@ -19,5 +19,11 @@ namespace CommandSystem {
         /// Note that calls to <see cref="ICommand.Run"/> do not alter this time.
         /// </summary>
         TimeSpan ExecutionTime { get; }
+        /// <summary>
+        /// The originator of this command. Useful for avoiding queuing conflicts.
+        /// I.e: one actor queues a command in response to another command, but does not want to queue a command
+        /// in response to its own commands.
+        /// </summary>
+        CommandSource Source { get; }
     }
 }

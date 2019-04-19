@@ -50,7 +50,7 @@ namespace Replays.Persistence {
 
         private void EnqueueCommandHistory(SerializableCommandHistory commandHistory) {
             foreach (var command in commandHistory.Commands) {
-                _commandQueue.Enqueue(command.commandType, command.dataType, command.data);
+                _commandQueue.Enqueue(command.commandType, command.dataType, command.data, CommandSource.SavedReplay);
             }
         }
     }

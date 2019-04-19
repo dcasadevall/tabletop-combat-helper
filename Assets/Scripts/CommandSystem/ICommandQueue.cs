@@ -4,19 +4,21 @@ using System.Runtime.Serialization;
 namespace CommandSystem {
     public interface ICommandQueue {
         void AddListener(ICommandQueueListener listener);
-        void Enqueue(Type commandType, Type dataType, ISerializable data);
+        void Enqueue(Type commandType, Type dataType, ISerializable data, CommandSource source);
     }
-    
+
     public static class CommandQueueExtensions {
-        public static void Enqueue<TCommand, TData>(this ICommandQueue commandQueue, ISerializable data)
+        public static void Enqueue<TCommand, TData>(this ICommandQueue commandQueue, ISerializable data,
+                                                    CommandSource source)
             where TCommand : class, ICommand
             where TData : ISerializable {
-            commandQueue.Enqueue(typeof(TCommand), typeof(TData), data);
+            commandQueue.Enqueue(typeof(TCommand), typeof(TData), data, source);
         }
 
-        public static void Enqueue<TCommand, TData>(this ICommandQueue commandQueue) where TCommand : class, ICommand 
-                                                                                     where TData : ISerializable, new() {
-            commandQueue.Enqueue(typeof(TCommand), typeof(TData), new TData());
+        public static void Enqueue<TCommand, TData>(this ICommandQueue commandQueue, CommandSource source)
+            where TCommand : class, ICommand
+            where TData : ISerializable, new() {
+            commandQueue.Enqueue(typeof(TCommand), typeof(TData), new TData(), source);
         }
     }
 }
