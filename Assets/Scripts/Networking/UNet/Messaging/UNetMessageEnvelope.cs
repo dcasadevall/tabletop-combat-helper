@@ -1,6 +1,6 @@
 using UnityEngine.Networking;
 
-namespace Networking.UNet {
+namespace Networking.UNet.Messaging {
     /// <summary>
     /// UNet requires us to send data via a message class which inherits from <see cref="MessageBase"/>.
     /// This is not ideal, as we simply want to be able to send a byte payload to a specific client or all clients.

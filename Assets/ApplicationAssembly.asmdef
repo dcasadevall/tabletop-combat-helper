@@ -3,7 +3,9 @@
     "references": [
         "UniRx",
         "UniRx.Async",
-        "Zenject"
+        "Zenject",
+        "PhotonUnityNetworking",
+        "PhotonRealtime"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

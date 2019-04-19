@@ -5,6 +5,7 @@
 -out:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Temp/UniRx.dll"
 -nostdlib
 -unsafe
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/ScriptAssemblies/UniRx.Async.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ARModule.dll"
@@ -68,7 +69,6 @@
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.XRModule.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/Managed/UnityEditor.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/Managed/Unity.Locator.dll"
--r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/ScriptAssemblies/UniRx.Async.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll"
@@ -98,6 +98,9 @@
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll"
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Photon/PhotonLibs/Photon3Unity3D.dll"
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Photon/PhotonLibs/WebSocket/websocket-sharp.dll"
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Photon/PhotonUnityNetworking/Code/Editor/Newtonsoft.Json.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/NetStandard/ref/2.0.0/netstandard.dll"
@@ -314,6 +317,9 @@
 -d:ENABLE_BURST_AOT
 -d:UNITY_TEAM_LICENSE
 -d:UNITY_PRO_LICENSE
+-d:PHOTON_UNITY_NETWORKING
+-d:PUN_2_0_OR_NEWER
+-d:PUN_2_OR_NEWER
 -d:CSHARP_7_OR_LATER
 -d:CSHARP_7_3_OR_NEWER
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Plugins/UniRx/Scripts/Asynchronous/WebRequestExtensions.cs"

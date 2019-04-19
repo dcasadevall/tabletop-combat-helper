@@ -43,3 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f7f8fa19f38445887431430f7d794ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settings:
+    _port: 7777
+    _address: localhost
+  roomSettings: {fileID: 11400000, guid: e3171a89f0d37457d982aeab66056786, type: 2}

@@ -8,11 +8,11 @@ using UnityEngine.Networking;
 using Zenject;
 using NetworkMessage = UnityEngine.Networking.NetworkMessage;
 
-namespace Networking.UNet {
+namespace Networking.UNet.Messaging {
     internal class UNetNetworkMessageHandler : IInitializable, IDisposable, INetworkMessageHandler {
-        private Subject<Messaging.NetworkMessage> _subject = new Subject<Messaging.NetworkMessage>();
+        private Subject<Networking.Messaging.NetworkMessage> _subject = new Subject<Networking.Messaging.NetworkMessage>();
 
-        public IObservable<Messaging.NetworkMessage> NetworkMessageStream {
+        public IObservable<Networking.Messaging.NetworkMessage> NetworkMessageStream {
             get {
                 return _subject.AsObservable();
             }
@@ -53,7 +53,7 @@ namespace Networking.UNet {
             }
         }
 
-        public IObservable<Unit> BroadcastMessage(Messaging.NetworkMessage networkMessage) {
+        public IObservable<Unit> BroadcastMessage(Networking.Messaging.NetworkMessage networkMessage) {
             if (!_networkManager.IsConnected) {
                 return Observable.Throw<Unit>(new Exception("BroadcastMessage called when not connected."));
             }
@@ -72,7 +72,7 @@ namespace Networking.UNet {
             return Observable.ReturnUnit();
         }
 
-        public IObservable<Unit> SendMessage(Messaging.NetworkMessage networkMessage, int clientId) {
+        public IObservable<Unit> SendMessage(Networking.Messaging.NetworkMessage networkMessage, int clientId) {
             if (!_networkManager.IsConnected) {
                 return Observable.Throw<Unit>(new Exception("SendMessage called when not connected."));
             }
@@ -83,7 +83,7 @@ namespace Networking.UNet {
             return Observable.ReturnUnit();
         }
 
-        private UNetMessageEnvelope CreateMessageEnvelope(Messaging.NetworkMessage networkMessage) {
+        private UNetMessageEnvelope CreateMessageEnvelope(Networking.Messaging.NetworkMessage networkMessage) {
             BinaryFormatter binaryFormatter = new BinaryFormatter();
             using (var memoryStream = new MemoryStream()) {
                 binaryFormatter.Serialize(memoryStream, networkMessage);
