@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 using Zenject;
 
 namespace Networking.UNet {
-    internal class UNetLocalHostNetworkManager : INetworkManager {
+    internal class UNetLocalHostNetworkManager : INetworkManager, IDisposable {
         private NetworkClient _networkClient;
         
         public bool IsConnected {
@@ -25,6 +25,10 @@ namespace Networking.UNet {
         private INetworkSettings _networkSettings;
         public UNetLocalHostNetworkManager(INetworkSettings networkSettings) {
             _networkSettings = networkSettings;
+        }
+
+        public void Dispose() {
+            _clientConnectedSubject?.Dispose();
         }
 
         public IObservable<NetworkConnectionResult> Connect() {

@@ -71,6 +71,8 @@
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/ScriptAssemblies/UniRx.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/ScriptAssemblies/UniRx.Async.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/ScriptAssemblies/Zenject.dll"
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/ScriptAssemblies/PhotonUnityNetworking.dll"
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/ScriptAssemblies/PhotonRealtime.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll"
@@ -95,6 +97,9 @@
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Plugins/NSubstitute/NSubstitute.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Plugins/NSubstitute/Castle.Core.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Plugins/NSubstitute/System.Threading.Tasks.Extensions.dll"
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Photon/PhotonUnityNetworking/Code/Editor/Newtonsoft.Json.dll"
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Photon/PhotonLibs/Photon3Unity3D.dll"
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Photon/PhotonLibs/WebSocket/websocket-sharp.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll"
@@ -316,6 +321,9 @@
 -d:ENABLE_BURST_AOT
 -d:UNITY_TEAM_LICENSE
 -d:UNITY_PRO_LICENSE
+-d:PHOTON_UNITY_NETWORKING
+-d:PUN_2_0_OR_NEWER
+-d:PUN_2_OR_NEWER
 -d:CSHARP_7_OR_LATER
 -d:CSHARP_7_3_OR_NEWER
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/CameraSystem/ICameraController.cs"
@@ -421,6 +429,8 @@
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Math/Random/UniformlyDistributedRandomProvider.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/INetworkManager.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/INetworkSettings.cs"
+-i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Matchmaking/IRoomSettings.cs"
+-i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Matchmaking/RoomSettings.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Messaging/INetworkMessageHandler.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Messaging/INetworkMessageSerializer.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Messaging/MessageTags.cs"
@@ -433,15 +443,24 @@
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/NetworkConnector.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/NetworkingInstaller.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/NetworkingLobbyInstaller.cs"
+-i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Photon/Connecting/IPhotonNetworkConnector.cs"
+-i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Photon/Connecting/PhotonNetworkConnector.cs"
+-i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Photon/Matchmaking/IPhotonRoomHandler.cs"
+-i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Photon/Matchmaking/PhotonRoomHandler.cs"
+-i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Photon/Matchmaking/PhotonRoomJoinResult.cs"
+-i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Photon/Matchmaking/RoomJoinException.cs"
+-i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Photon/Messaging/PhotonMessageHandler.cs"
+-i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Photon/PhotonInstaller.cs"
+-i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/Photon/PhotonNetworkManager.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/SerializableNetworkSettings.cs"
+-i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/UNet/Messaging/UNetMessageEnvelope.cs"
+-i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/UNet/Messaging/UNetNetworkMessageHandler.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/UNet/Requests/NetworkRequestCoroutineAdapter.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/UNet/Requests/NetworkRequests.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/UNet/UNetInstaller.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/UNet/UNetLocalHostNetworkManager.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/UNet/UNetMatchmakingNetworkManager.cs"
--i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/UNet/UNetMessageEnvelope.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/UNet/UNetNetworkManagerUtils.cs"
--i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Networking/UNet/UNetNetworkMessageHandler.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Replays/Persistence/CommandHistoryFileLoader.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Replays/Persistence/CommandHistorySaveInfo.cs"
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/Scripts/Replays/Persistence/CommandQueueFileSaver.cs"

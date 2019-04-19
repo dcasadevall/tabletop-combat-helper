@@ -96,6 +96,9 @@
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Plugins/NSubstitute/NSubstitute.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Plugins/NSubstitute/Castle.Core.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Plugins/NSubstitute/System.Threading.Tasks.Extensions.dll"
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Photon/PhotonUnityNetworking/Code/Editor/Newtonsoft.Json.dll"
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Photon/PhotonLibs/Photon3Unity3D.dll"
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Photon/PhotonLibs/WebSocket/websocket-sharp.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll"
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll"
@@ -320,6 +323,9 @@
 -d:ENABLE_BURST_AOT
 -d:UNITY_TEAM_LICENSE
 -d:UNITY_PRO_LICENSE
+-d:PHOTON_UNITY_NETWORKING
+-d:PUN_2_0_OR_NEWER
+-d:PUN_2_OR_NEWER
 -d:CSHARP_7_OR_LATER
 -d:CSHARP_7_3_OR_NEWER
 -i:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Assets/ThirdParty/Plugins/Zenject/OptionalExtras/TestFramework/SceneTestFixture.cs"
