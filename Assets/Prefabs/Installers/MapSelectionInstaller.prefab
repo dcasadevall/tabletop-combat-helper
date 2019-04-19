@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8566320193600035485}
   - component: {fileID: 2938870013231750587}
   m_Layer: 0
-  m_Name: MapInstaller
+  m_Name: MapSelectionInstaller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

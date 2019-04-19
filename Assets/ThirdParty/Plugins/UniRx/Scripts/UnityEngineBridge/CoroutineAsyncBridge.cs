@@ -32,7 +32,7 @@ namespace UniRx
         {
             yield return target;
             IsCompleted = true;
-            continuation();
+            continuation?.Invoke();
         }
 
         public void OnCompleted(Action continuation)

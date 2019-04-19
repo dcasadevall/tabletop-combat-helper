@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 using Zenject;
 
 namespace Networking.UNet {
-    internal class UNetNetworkManager : INetworkManager {
+    internal class UNetLocalHostNetworkManager : INetworkManager {
         private NetworkClient _networkClient;
         
         public bool IsConnected {
@@ -23,7 +23,7 @@ namespace Networking.UNet {
         }
 
         private INetworkSettings _networkSettings;
-        public UNetNetworkManager(INetworkSettings networkSettings) {
+        public UNetLocalHostNetworkManager(INetworkSettings networkSettings) {
             _networkSettings = networkSettings;
         }
 

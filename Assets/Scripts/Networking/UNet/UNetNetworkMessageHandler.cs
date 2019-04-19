@@ -28,7 +28,7 @@ namespace Networking.UNet {
         }
 
         public void Initialize() {
-            var disposable = _networkManager.GetNetworkClientObservable().Subscribe(Observer.Create<NetworkClient>(client => {
+            var disposable = UNetNetworkManagerUtils.GetNetworkClientObservable().Subscribe(Observer.Create<NetworkClient>(client => {
                 _logger.Log(LoggedFeature.Network, "NetworkClient found. Initializing UNetNetworkMessageHandler");
                 client.RegisterHandler(UNetMessageEnvelope.kMessageType, HandleUNetNetworkMessage);
             }));
