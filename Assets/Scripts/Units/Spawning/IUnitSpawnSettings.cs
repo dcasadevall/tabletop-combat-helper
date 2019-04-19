@@ -1,8 +1,7 @@
-
 using System;
 using Units.Serialized;
 
-namespace Units {
+namespace Units.Spawning {
     public interface IUnitSpawnSettings {
         /// <summary>
         /// Units that can be spawned after map is loaded and players are placed.

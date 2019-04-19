@@ -1,4 +1,5 @@
 using Logging;
+using Units.Spawning;
 
 namespace Units.Serialized {
     public class UnitDataIndexResolver : IUnitDataIndexResolver {

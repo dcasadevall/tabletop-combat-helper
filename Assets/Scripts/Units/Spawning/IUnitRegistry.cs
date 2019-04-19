@@ -1,7 +1,7 @@
 
 using System.Collections.Generic;
 
-namespace Units {
+namespace Units.Spawning {
     public interface IUnitRegistry {
         /// <summary>
         /// Returns all the currently spawned units.

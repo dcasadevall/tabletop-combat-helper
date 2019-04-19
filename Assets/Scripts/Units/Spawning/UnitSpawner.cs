@@ -1,19 +1,15 @@
-using System;
-using System.Collections.Generic;
 using CommandSystem;
 using EncounterSelection;
 using Grid;
 using Grid.Positioning;
-using Logging;
 using Math;
 using Units.Commands;
 using Units.Serialized;
 using Units.UI;
 using UnityEngine;
 using Zenject;
-using ILogger = Logging.ILogger;
 
-namespace Units {
+namespace Units.Spawning {
     /// <summary>
     /// Handles Spawning units in the world space.
     /// It uses the <see cref="UnitBehaviour.Pool"/> in order to spawn such units.

@@ -1,9 +1,7 @@
-
-using System;
 using System.Collections.Generic;
 using Logging;
 
-namespace Units {
+namespace Units.Spawning {
     public class UnitRegistry : IUnitRegistry, IMutableUnitRegistry {
         private readonly ILogger _logger;
         private Dictionary<UnitId, IUnit> _unitMap = new Dictionary<UnitId, IUnit>();
