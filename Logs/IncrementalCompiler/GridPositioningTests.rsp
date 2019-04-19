@@ -6,6 +6,8 @@
 -nostdlib
 -unsafe
 -r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/ScriptAssemblies/ApplicationAssembly.dll"
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/ScriptAssemblies/Zenject-TestFramework.dll"
+-r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/ScriptAssemblies/Zenject.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ARModule.dll"
@@ -69,8 +71,6 @@
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.XRModule.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/Managed/UnityEditor.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/Managed/Unity.Locator.dll"
--r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/ScriptAssemblies/Zenject-TestFramework.dll"
--r:"/Users/dcasadevallpino/Github/Tabletop Combat Helper/Library/ScriptAssemblies/Zenject.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll"
 -r:"/Applications/Unity/Hub/Editor/2018.3.2f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll"
