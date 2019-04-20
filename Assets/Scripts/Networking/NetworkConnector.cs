@@ -36,7 +36,8 @@ namespace Networking {
                 }
             },
             error => {
-                _logger .LogError(LoggedFeature .Network, "Connection error: {0}", error);
+                _logger .LogError(LoggedFeature .Network, "Connection error: {0}. Will continue offline.", error);
+                _sceneLoader.LoadScene(kEnocunterSelectionSCene, LoadSceneMode.Additive);
             }));
         }
     }
