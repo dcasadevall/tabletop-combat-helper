@@ -24,7 +24,10 @@ namespace Networking.Photon.Connecting {
             PhotonNetwork.NetworkingClient.ExpectedProtocol = _photonServerSettings.AppSettings.Protocol;
             PhotonNetwork.ConnectToRegion("usw");
             await Observable.EveryUpdate().Where(_ => PhotonNetwork.IsConnectedAndReady).FirstOrDefault()
-                            .Timeout(TimeSpan.FromSeconds(5));
+                            .Timeout(TimeSpan.FromSeconds(5)).CatchIgnore((Exception e) => {
+                                _logger.Log(LoggedFeature.Network, "Starting in offline mode. Connection Exception: {0}", e);
+                                PhotonNetwork.OfflineMode = true;
+                            });
         }
     }
 }
