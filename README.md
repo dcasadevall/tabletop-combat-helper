@@ -12,7 +12,12 @@ One ca
 There is a web admin page which will be used to load sprite / map data into the game, customizable per player.
 The project lives here:
 
-https://github.com/dcasadevall/tabletop-combat-helper-admin
+https://github.com/dcasadevall/tabletop-combat-helper-web-admin
+
+## Asset API
+
+There is a PHP / MySQL server as well, which hosts the different assets used in the tool.
+https://github.com/dcasadevall/tabletop-combat-helper-api
 
 ## Pending:
 
