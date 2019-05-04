@@ -42,7 +42,7 @@ namespace Drawing.TexturePainter {
             int arrayPos = y * (int)sprite.rect.width + x;
 
             // Check if this is a valid position
-            if (arrayPos > sprite.texture.GetPixels32().Length || arrayPos < 0) {
+            if (arrayPos > colors.Length || arrayPos < 0) {
                 return;
             }
 
