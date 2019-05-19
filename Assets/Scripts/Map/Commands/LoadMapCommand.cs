@@ -10,6 +10,7 @@ using UniRx;
 using UniRx.Async;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utils;
 using Zenject;
 using ILogger = Logging.ILogger;
 
@@ -47,12 +48,19 @@ namespace Map.Commands {
             }
             
             IMapData mapData = _mapDatas[(int)_data.mapIndex];
-            AsyncOperation asyncOperation = _sceneLoader.LoadSceneAsync(kCombatSceneName , LoadSceneMode.Additive, container => {
-                container.Bind<IMapData>().FromInstance(mapData);
-                container.Bind<IGridData>().FromInstance(mapData.GridData);
-            });
 
-            return asyncOperation.ToUniTask().ToObservable();
+            IObservable<float> allMapSectionsLoaded = Observable.Empty<float>();
+            foreach (var mapDataSection in mapData.Sections) {
+                AsyncOperation asyncOperation = _sceneLoader.LoadSceneAsync(kCombatSceneName , LoadSceneMode.Additive, container => {
+                    container.Bind<IMapData>().FromInstance(mapData);
+                    container.Bind<IMapSectionData>().FromInstance(mapDataSection);
+                    container.Bind<IGridData>().FromInstance(mapDataSection.GridData);
+                });
+
+                allMapSectionsLoaded = asyncOperation.ToObservable().Merge(allMapSectionsLoaded);
+            }
+
+            return allMapSectionsLoaded.Select(x => Unit.Default);
         }
 
         public void Undo() {

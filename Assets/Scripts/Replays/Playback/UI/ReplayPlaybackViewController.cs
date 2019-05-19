@@ -9,7 +9,7 @@ using Zenject;
 
 namespace Replays.Playback.UI {
     public class ReplayPlaybackViewController : MonoBehaviour, IReplayPlaybackViewController {
-        public event Action CancelReplayButtonPressed = delegate {};
+        public event Action CancelReplayButtonPressed = delegate { };
 
         [SerializeField]
         private Slider _scrubSlider;
@@ -57,7 +57,7 @@ namespace Replays.Playback.UI {
 
             _animator.SetBool(_isPlayingBoolName, _playbackManager.IsPlaying && !_playbackManager.IsPaused);
         }
-        
+
         public void Show() {
             _playbackManager.Seek(1.0f);
             gameObject.SetActive(true);
@@ -70,16 +70,15 @@ namespace Replays.Playback.UI {
         public void HandlePlayButtonPressed() {
             _playbackManager.Play();
         }
-        
+
         public void HandlePauseButtonPressed() {
             _playbackManager.Pause();
         }
 
-        public void HandleForwardButtonPressed() {
-        }
+        public void HandleForwardButtonPressed() { }
 
         public void HandleSaveReplayButtonPressed() {
-            _commandHistorySaver.SaveCommandHistory(_mapData.Name);
+            _commandHistorySaver.SaveCommandHistory(_mapData.MapName);
         }
 
         public void HandleCancelReplayButtonPressed() {
@@ -98,7 +97,7 @@ namespace Replays.Playback.UI {
         }
 
         public void HandleSliderDrag(BaseEventData baseEventData) {
-            _playbackManager.Seek(_scrubSlider.value); 
+            _playbackManager.Seek(_scrubSlider.value);
             _playbackManager.Pause();
         }
 

@@ -23,7 +23,7 @@ namespace Map.Rendering {
         }
 
         [Inject]
-        public void Construct(IMapData mapData, IGrid grid, ICameraController cameraController,
+        public void Construct(IMapSectionData mapSectionData, IGrid grid, ICameraController cameraController,
                               ITileLoader tileLoader) {
             _grid = grid;
             _cameraController = cameraController;
