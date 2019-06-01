@@ -1,3 +1,5 @@
+using CommandSystem;
+using Map.MapSections.Commands;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -10,37 +12,33 @@ namespace Map.MapSections.UI {
         [SerializeField]
         private Button _previousSectionButton;
 
-        private MapSectionContext _mapSectionContext;
+        private IMapSectionContext _mapSectionContext;
         private IMapData _mapData;
+        private ICommandQueue _commandQueue;
 
         [Inject]
-        public void Construct(MapSectionContext mapSectionContext, IMapData mapData) {
+        public void Construct(IMapSectionContext mapSectionContext, IMapData mapData, ICommandQueue commandQueue) {
             _nextSectionButton.onClick.AddListener(HandleNextSectionButtonCLicked);
             _previousSectionButton.onClick.AddListener(HandlePreviousSectionButtonCLicked);
 
             _mapSectionContext = mapSectionContext;
             _mapData = mapData;
-            
-            UpdateSectionButtons();
+            _commandQueue = commandQueue;
         }
 
-        private void UpdateSectionButtons() {
+        private void Update() {
             _previousSectionButton.interactable = _mapSectionContext.CurrentSectionIndex > 0;
             _nextSectionButton.interactable = _mapSectionContext.CurrentSectionIndex < _mapData.Sections.Length - 1;
         }
 
         private void HandleNextSectionButtonCLicked() {
-            _mapSectionContext.CurrentSectionIndex =
-                System.Math.Min(_mapData.Sections.Length - 1, _mapSectionContext.CurrentSectionIndex + 1);
-            
-            UpdateSectionButtons();
+            LoadMapSectionCommandData commandData = new LoadMapSectionCommandData(_mapSectionContext.CurrentSectionIndex + 1);
+            _commandQueue.Enqueue<LoadMapSectionCommand, LoadMapSectionCommandData>(commandData, CommandSource.Game);
         }
 
         private void HandlePreviousSectionButtonCLicked() {
-            _mapSectionContext.CurrentSectionIndex =
-                System.Math.Max(0, _mapSectionContext.CurrentSectionIndex - 1);
-            
-            UpdateSectionButtons();
+            LoadMapSectionCommandData commandData = new LoadMapSectionCommandData(_mapSectionContext.CurrentSectionIndex - 1);
+            _commandQueue.Enqueue<LoadMapSectionCommand, LoadMapSectionCommandData>(commandData, CommandSource.Game);
         }
     }
 }

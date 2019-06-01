@@ -1,5 +1,5 @@
 namespace Map.MapSections {
     public interface IMapSectionContext {
-        int CurrentSectionIndex { get; }
+        uint CurrentSectionIndex { get; }
     }
 }
