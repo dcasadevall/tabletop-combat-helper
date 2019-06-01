@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d953a8eb69a4c319efcdeba0e13a9cb, type: 3}
-  m_Name: Bedwyr
-  m_EditorClassIdentifier: UnityEngine.CoreModule:UnityEngine:ScriptableObject
-  name: Bedwyr
+  m_Name: Bererdethar
+  m_EditorClassIdentifier: 
+  name: Beredethar
+  unitType: 1
   pets: []
-  sprite: {fileID: 21300000, guid: d880fac97d08c45b8822a77123c0a190, type: 3}
-  avatarSprite: {fileID: 21300000, guid: 0fbd10852b74344dc9efbbddf3a13c75, type: 3}
+  sprite: {fileID: 21300000, guid: 7eff2a06fd24540de835c3d1fa28646b, type: 3}
+  avatarSprite: {fileID: 21300000, guid: fe1b1fc453fb4440790a75b610678301, type: 3}
