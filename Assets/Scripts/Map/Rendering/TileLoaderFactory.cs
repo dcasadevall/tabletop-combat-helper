@@ -12,11 +12,10 @@ namespace Map.Rendering {
         private readonly RandomizedRepeatedTileLoader _randomizedRepeatedTileLoader;
         private readonly SequentialUniqueTileLoader _sequentialUniqueTileLoader;
 
-        public TileLoaderFactory(IMapData mapData,
-                                 IMapSectionContext mapSectionContext,
+        public TileLoaderFactory(IMapSectionData mapSectionData,
                                  RandomizedRepeatedTileLoader randomizedRepeatedTileLoader,
                                  SequentialUniqueTileLoader sequentialUniqueTileLoader) {
-            _mapSectionData = mapData.Sections[mapSectionContext.CurrentSectionIndex];
+            _mapSectionData = mapSectionData;
             _randomizedRepeatedTileLoader = randomizedRepeatedTileLoader;
             _sequentialUniqueTileLoader = sequentialUniqueTileLoader;
         }

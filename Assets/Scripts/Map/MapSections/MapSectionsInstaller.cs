@@ -12,7 +12,8 @@ namespace Map.MapSections {
             Container.Bind<MapSectionSelectionViewController>().FromComponentInNewPrefab(_mapSelectionViewController)
                      .AsSingle().NonLazy();
             
-            Container.Install<MapSectionsCommandsInstaller>();
+            // MapSectionsCommands loaded in MapSelectionInstaller, since loading the map depends on loading a section.
+            // TODO: change structure of scenes instead.
         }
     }
 }

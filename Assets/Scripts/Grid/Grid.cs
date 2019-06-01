@@ -37,8 +37,7 @@ namespace Grid {
             }
         }
 
-        public Grid(IMapData mapData, IMapSectionContext mapSectionContext) {
-            IGridData gridData = mapData.Sections[mapSectionContext.CurrentSectionIndex].GridData;
+        public Grid(IGridData gridData) {
             _numTilesX = System.Math.Max(1, gridData.NumTilesX);
             _numTilesY = System.Math.Max(1, gridData.NumTilesY);
             _originWorldPosition = gridData.OriginWorldPosition ??

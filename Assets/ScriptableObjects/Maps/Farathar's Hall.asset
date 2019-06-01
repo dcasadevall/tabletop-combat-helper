@@ -23,3 +23,12 @@ MonoBehaviour:
     sprites:
     - {fileID: 21300000, guid: 5b7d3d577e4ca4c3b92e039a351f754c, type: 3}
     generationType: 1
+  - gridData:
+      numTilesX: 20
+      numTilesY: 20
+      centeredAtWorldZero: 1
+      originWorldPosition: {x: 0, y: 0}
+    sectionName: Floor 2
+    sprites:
+    - {fileID: 21300000, guid: 5b7d3d577e4ca4c3b92e039a351f754c, type: 3}
+    generationType: 1

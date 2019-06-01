@@ -24,14 +24,13 @@ namespace Drawing.DrawableTiles {
                                     IGrid grid,
                                     IGridPositionCalculator gridPositionCalculator,
                                     IFactory<int, Sprite> drawableSpriteFactory,
-                                    IMapSectionContext mapSectionContext,
-                                    IMapData mapData,
+                                    IMapSectionData mapSectionData,
                                     DrawableTileBehaviour.Pool drawableTilePool) {
             _logger = logger;
             _grid = grid;
             _gridPositionCalculator = gridPositionCalculator;
             _drawableSprite = drawableSpriteFactory.Create(0);
-            _mapSectionData = mapData.Sections[mapSectionContext.CurrentSectionIndex];
+            _mapSectionData = mapSectionData;
             _drawableTilePool = drawableTilePool;
         }
 

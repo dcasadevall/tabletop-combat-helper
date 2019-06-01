@@ -14,12 +14,11 @@ namespace Map.Rendering {
         private readonly TileRendererBehaviour.Pool _tileRendererPool;
 
         public SequentialUniqueTileLoader(ILogger logger,
-                                          IMapData mapData,
-                                          IMapSectionContext mapSectionContext,
+                                          IMapSectionData mapSectionData,
                                           IGridPositionCalculator positionCalculator,
                                           TileRendererBehaviour.Pool tileRendererPool) {
             _logger = logger;
-            _mapSectionData = mapData.Sections[mapSectionContext.CurrentSectionIndex];
+            _mapSectionData = mapSectionData;
             _positionCalculator = positionCalculator;
             _tileRendererPool = tileRendererPool;
         }

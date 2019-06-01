@@ -20,27 +20,46 @@ namespace InputSystem {
     public class DragAndDropBehaviour : MonoBehaviour {
         private ICommandQueue _commandQueue;
         private IUnitRegistry _unitRegistry;
-        private IGridUnitManager _gridUnitManager;
-        private IGridPositionCalculator _gridPositionCalculator;
         private IInputLock _inputLock;
         private Guid? _lockId;
         private Camera _camera;
         private UnitId _unitId;
         private Vector3 _offset;
         private IntVector2? _previousCoordinates;
+        private DiContainer _container;
+        
+        private IGridUnitManager _gridUnitManager;
+        private IGridUnitManager GridUnitManager {
+            get {
+                if (_gridUnitManager == null) {
+                    _gridUnitManager = _container.Resolve<IGridUnitManager>();
+                }
+
+                return _gridUnitManager;
+            }
+        }
+        
+        private IGridPositionCalculator _gridPositionCalculator;
+        private IGridPositionCalculator GridPositionCalculator {
+            get {
+                if (_gridPositionCalculator == null) {
+                    _gridPositionCalculator = _container.Resolve<IGridPositionCalculator>();
+                }
+
+                return _gridPositionCalculator;
+            }
+        }
 
         [Inject]
         public void Construct(ICommandQueue commandQueue,
+                              DiContainer container,
                               IUnitRegistry unitRegistry,
-                              IGridUnitManager gridUnitManager,
-                              IGridPositionCalculator gridPositionCalculator, IInputLock inputLock,
+                              IInputLock inputLock,
                               Camera camera) {
             _camera = camera;
             _commandQueue = commandQueue;
             _inputLock = inputLock;
             _unitRegistry = unitRegistry;
-            _gridUnitManager = gridUnitManager;
-            _gridPositionCalculator = gridPositionCalculator;
         }
 
         public void SetUnitId(UnitId unitId) {
@@ -59,7 +78,7 @@ namespace InputSystem {
             }
 
             IUnit unit = _unitRegistry.GetUnit(_unitId);
-            _previousCoordinates = _gridUnitManager.GetUnitCoords(unit);
+            _previousCoordinates = GridUnitManager.GetUnitCoords(unit);
             _offset = gameObject.transform.position - _camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         }
 
@@ -84,7 +103,7 @@ namespace InputSystem {
             
             Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
             Vector3 curPosition = _camera.ScreenToWorldPoint(curScreenPoint) + _offset;
-            IntVector2? gridCoordinates = _gridPositionCalculator.GetTileContainingWorldPosition(curPosition);
+            IntVector2? gridCoordinates = GridPositionCalculator.GetTileContainingWorldPosition(curPosition);
             
             if (gridCoordinates == null) {
                 return;

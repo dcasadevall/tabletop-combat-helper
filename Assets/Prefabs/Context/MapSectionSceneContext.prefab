@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5335652098889898628
+--- !u!1 &6177683463821511290
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,24 +8,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5335652098889898630}
-  - component: {fileID: 5335652098889898629}
-  - component: {fileID: 5335652097620297570}
-  - component: {fileID: 7415385764265286366}
+  - component: {fileID: 4446635996379177132}
+  - component: {fileID: 2901459981742678035}
+  - component: {fileID: 4290786720508437459}
   m_Layer: 0
-  m_Name: CombatSceneContext
+  m_Name: MapSectionSceneContext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5335652098889898630
+--- !u!4 &4446635996379177132
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5335652098889898628}
+  m_GameObject: {fileID: 6177683463821511290}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -33,13 +32,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5335652098889898629
+--- !u!114 &2901459981742678035
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5335652098889898628}
+  m_GameObject: {fileID: 6177683463821511290}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89715ad69b973a14899afa2c6730b30b, type: 3}
@@ -47,48 +46,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
   _monoInstallers:
-  - {fileID: 5335652097620297570}
-  - {fileID: 7415385764265286366}
+  - {fileID: 4290786720508437459}
   _installerPrefabs:
   - {fileID: 7754144119156181451, guid: ea41255bd272b4e7a91ba7750a9c217a, type: 3}
   - {fileID: 2001596227, guid: c6a9db96f3e8247e6b7bc24f2e060fc8, type: 3}
   - {fileID: 6237436456729835171, guid: 5437112e9f5bb4331a148d2d857e52a2, type: 3}
-  - {fileID: 9050599786994447955, guid: f924853f002724fea836c5583f205ab7, type: 3}
   - {fileID: 8706844254505784451, guid: c7c93ee6496f24ba29a6663c14e63c12, type: 3}
-  - {fileID: 9181911377699812332, guid: 17d580ea188c74b48935ad0a7014c36e, type: 3}
   _autoRun: 1
   _parentNewObjectsUnderSceneContext: 0
   _contractNames:
-  - Combat
+  - Map
   _parentContractNames:
+  - Encounter
   - EncounterSelection
   - PlayerSelection
---- !u!114 &5335652097620297570
+--- !u!114 &4290786720508437459
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5335652098889898628}
+  m_GameObject: {fileID: 6177683463821511290}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dad92edbb58a4e099ba2efcbdb1834d4, type: 3}
+  m_Script: {fileID: 11500000, guid: 84ccdb760b82943c99d3038f5a3e8b64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7415385764265286366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5335652098889898628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cc89c817e276485b8891a1456b8e844, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _unitSpawnSettings: {fileID: 11400000, guid: 55638e91719f64442a3654ede41f33a3, type: 2}
-  _unitPickerViewController: {fileID: 2097773387127440756, guid: fcdcab687e0524b2ab31c5895a9905db,
-    type: 3}
-  _unitPrefab: {fileID: 6313489448253246766, guid: 3b62971b34b3746be87a5a587fc633c9,
-    type: 3}

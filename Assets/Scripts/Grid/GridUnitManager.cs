@@ -16,12 +16,10 @@ namespace Grid {
         private Dictionary<UnitId, int> _unitMap = new Dictionary<UnitId, int>();
         private List<IUnit>[,] _tiles;
         private readonly IGrid _grid;
-        private readonly IUnitRegistry _unitRegistry;
         private readonly ILogger _logger;
 
-        public GridUnitManager(IGrid grid, IUnitRegistry unitRegistry, ILogger logger) {
+        public GridUnitManager(IGrid grid, ILogger logger) {
             _grid = grid;
-            _unitRegistry = unitRegistry;
             _logger = logger;
         }
         
@@ -35,11 +33,11 @@ namespace Grid {
             }
         }
 
-        public IUnit[] GetAllUnits(UnitType unitType) {
+        public IUnit[] GetAllUnits(UnitType unitType, IUnitRegistry unitRegistry) {
             List<IUnit> units = new List<IUnit>();
             foreach (var keyValuePair in _unitMap) {
                 UnitId unitId = keyValuePair.Key;
-                IUnit unit = _unitRegistry.GetUnit(unitId);
+                IUnit unit = unitRegistry.GetUnit(unitId);
                 if (unit.UnitData.UnitType == unitType) {
                     units.Add(unit);
                 }

@@ -22,13 +22,12 @@ namespace Map.Rendering {
 
         public RandomizedRepeatedTileLoader(IRandomProvider randomProvider, 
                                             ILogger logger,
-                                            IMapData mapData,
-                                            IMapSectionContext mapSectionContext,
+                                            IMapSectionData mapSectionData,
                                             IGridPositionCalculator positionCalculator,
                                             TileRendererBehaviour.Pool tileRendererPool) {
             _randomProvider = randomProvider;
             _logger = logger;
-            _mapSectionData = mapData.Sections[mapSectionContext.CurrentSectionIndex];
+            _mapSectionData = mapSectionData;
             _positionCalculator = positionCalculator;
             _tileRendererPool = tileRendererPool;
         }

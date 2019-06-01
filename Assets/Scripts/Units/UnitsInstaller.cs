@@ -27,13 +27,6 @@ namespace Units {
             // Prototype
             Container.BindMemoryPool<UnitBehaviour, UnitBehaviour.Pool>().WithInitialSize(10)
                      .FromComponentInNewPrefab(_unitPrefab).UnderTransformGroup("UnitPool");
-
-            // Prototype: Bind ITicker and IInitializable to the UnitsSpawner
-            Container.BindInterfacesTo<UnitSpawner>().AsSingle();
-            
-            // Commands installer
-            Container.Install<UnitCommandsInstaller>();
-
         }
     }
 }

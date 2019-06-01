@@ -1,4 +1,5 @@
 ﻿using Map.Commands;
+using Map.MapSections.Commands;
 using Map.Serialized;
 using Map.UI;
 using UnityEngine;
@@ -17,7 +18,9 @@ namespace Map.MapSelection {
                 Container.Bind<IMapData>().To<MapData>().FromInstance(mapData);
             }
             
+            // MapCommands directly invoke MapSectionsCommands, so they need to be loaded together.
             Container.Install<MapCommandsInstaller>();
+            Container.Install<MapSectionsCommandsInstaller>();
         }
     }
 }
