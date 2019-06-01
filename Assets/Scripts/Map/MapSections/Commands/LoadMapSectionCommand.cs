@@ -5,8 +5,10 @@ using Grid.Serialized;
 using Logging;
 using UniRx;
 using UniRx.Async;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
+using ILogger = Logging.ILogger;
 
 namespace Map.MapSections.Commands {
     public class LoadMapSectionCommand : ICommand {
@@ -53,30 +55,37 @@ namespace Map.MapSections.Commands {
                                                ArgumentException($"Section Index: [{_data.sectionIndex}] is out of bounds."));
             }
 
-            _previousSection = _mapSectionContext.CurrentSectionIndex;
-            _mapSectionContext.CurrentSectionIndex = _data.sectionIndex;
-            return LoadCurrentMapSection();
+            return LoadMapSection(_data.sectionIndex);
         }
 
         public void Undo() {
-            _mapSectionContext.CurrentSectionIndex = _previousSection;
-            LoadCurrentMapSection();
+            LoadMapSection(_previousSection);
         }
 
-        private IObservable<Unit> LoadCurrentMapSection() {
-            // TODO: For now, we keep just 1 current active scene and unload as we go.
-            // We should change this setup to disabling all game objects there instead.
-            Scene currentScene = SceneManager.GetSceneByName(kMapSectionScene);
-            if (currentScene.isLoaded) {
-                SceneManager.UnloadSceneAsync(currentScene);
+        private static Dictionary<uint, SceneState> _loadedScenes = new Dictionary<uint, SceneState>();
+
+        private IObservable<Unit> LoadMapSection(uint nextSection) {
+            _previousSection = _mapSectionContext.CurrentSectionIndex;
+            _mapSectionContext.CurrentSectionIndex = nextSection;
+            
+            if (_loadedScenes.ContainsKey(_previousSection)) {
+                _loadedScenes[_previousSection].Deactivate();
+            }
+
+            if (_loadedScenes.ContainsKey(nextSection)) {
+                _loadedScenes[nextSection].Reactivate();
+                return Observable.ReturnUnit();
             }
 
             IMapData mapData = _mapDatas[(int) _data.mapCommandData.mapIndex];
-            IMapSectionData mapSectionData = mapData.Sections[(int) _mapSectionContext.CurrentSectionIndex];
+            IMapSectionData mapSectionData = mapData.Sections[nextSection];
 
             return _sceneLoader.LoadSceneAsync(kMapSectionScene,
                                                LoadSceneMode.Additive,
                                                container => {
+                                                   _loadedScenes[nextSection] =
+                                                       new SceneState(SceneManager.GetSceneAt(SceneManager.sceneCount - 1));
+                                                   
                                                    container.Bind<IGridData>().FromInstance(mapSectionData.GridData);
                                                    container.Bind<IMapSectionData>().FromInstance(mapSectionData);
                                                }).ToUniTask().ToObservable();
