@@ -27,34 +27,15 @@ namespace Units {
         private DragAndDropBehaviour _dragAndDropBehaviour;
 #pragma warning restore 649
 
-        private DiContainer _container;
         private UnitId _unitId;
-
         private IGridUnitManager _gridUnitManager;
-        private IGridUnitManager GridUnitManager {
-            get {
-                if (_gridUnitManager == null) {
-                    _gridUnitManager = _container.Resolve<IGridUnitManager>();
-                }
-
-                return _gridUnitManager;
-            }
-        }
-
         private IGridPositionCalculator _gridPositionCalculator;
-        private IGridPositionCalculator GridPositionCalculator {
-            get {
-                if (_gridPositionCalculator == null) {
-                    _gridPositionCalculator = _container.Resolve<IGridPositionCalculator>();
-                }
-
-                return _gridPositionCalculator;
-            }
-        }
 
         [Inject]
-        public void Construct(DiContainer container) {
-            _container = container;
+        public void Construct(IGrid grid, IGridUnitManager gridUnitManager,
+                              IGridPositionCalculator gridPositionCalculator) {
+            _gridUnitManager = gridUnitManager;
+            _gridPositionCalculator = gridPositionCalculator;
         }
 
         private void HandleUnitPlacedAtTile(IUnit unit, IntVector2 tileCoords) {
@@ -62,7 +43,7 @@ namespace Units {
                 return;
             }
             
-            Vector2 worldPosition = GridPositionCalculator.GetTileCenterWorldPosition(tileCoords);
+            Vector2 worldPosition = _gridPositionCalculator.GetTileCenterWorldPosition(tileCoords);
             transform.position = new Vector3(worldPosition.x, worldPosition.y, transform.position.z);
         }
 
@@ -71,11 +52,11 @@ namespace Units {
             _spriteRenderer.sprite = unit.UnitData.Sprite;
             _avatarIconRenderer.sprite = unit.UnitData.AvatarSprite; 
             _dragAndDropBehaviour.SetUnitId(unit.UnitId);
-            GridUnitManager.UnitPlacedAtTile += HandleUnitPlacedAtTile;
+            _gridUnitManager.UnitPlacedAtTile += HandleUnitPlacedAtTile;
         }
         
         private void HandleDespawn() {
-            GridUnitManager.UnitPlacedAtTile -= HandleUnitPlacedAtTile;
+            _gridUnitManager.UnitPlacedAtTile -= HandleUnitPlacedAtTile;
         }
         
         public class Pool : MonoMemoryPool<IUnit, UnitBehaviour> {

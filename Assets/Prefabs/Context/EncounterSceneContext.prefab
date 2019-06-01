@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5335652098889898630}
   - component: {fileID: 5335652098889898629}
   - component: {fileID: 5335652097620297570}
-  - component: {fileID: 3243920459892734998}
   m_Layer: 0
   m_Name: EncounterSceneContext
   m_TagString: Untagged
@@ -48,7 +47,6 @@ MonoBehaviour:
   _scriptableObjectInstallers: []
   _monoInstallers:
   - {fileID: 5335652097620297570}
-  - {fileID: 3243920459892734998}
   _installerPrefabs:
   - {fileID: 9050599786994447955, guid: f924853f002724fea836c5583f205ab7, type: 3}
   - {fileID: 7713475859710784944, guid: 17d580ea188c74b48935ad0a7014c36e, type: 3}
@@ -71,20 +69,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dad92edbb58a4e099ba2efcbdb1834d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3243920459892734998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5335652098889898628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cc89c817e276485b8891a1456b8e844, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _unitSpawnSettings: {fileID: 11400000, guid: 55638e91719f64442a3654ede41f33a3, type: 2}
-  _unitPickerViewController: {fileID: 2097773387127440756, guid: fcdcab687e0524b2ab31c5895a9905db,
-    type: 3}
-  _unitPrefab: {fileID: 6313489448253246766, guid: 3b62971b34b3746be87a5a587fc633c9,
-    type: 3}
