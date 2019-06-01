@@ -1,4 +1,6 @@
 using Grid.Serialized;
+using Map;
+using Map.MapSections;
 using UnityEngine;
 
 namespace Grid {
@@ -35,7 +37,8 @@ namespace Grid {
             }
         }
 
-        public Grid(IGridData gridData) {
+        public Grid(IMapData mapData, IMapSectionContext mapSectionContext) {
+            IGridData gridData = mapData.Sections[mapSectionContext.CurrentSectionIndex].GridData;
             _numTilesX = System.Math.Max(1, gridData.NumTilesX);
             _numTilesY = System.Math.Max(1, gridData.NumTilesY);
             _originWorldPosition = gridData.OriginWorldPosition ??

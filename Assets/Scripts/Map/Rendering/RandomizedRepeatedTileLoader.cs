@@ -2,6 +2,7 @@ using System;
 using Grid;
 using Grid.Positioning;
 using Logging;
+using Map.MapSections;
 using Math;
 using Math.Random;
 using UnityEngine;
@@ -21,12 +22,13 @@ namespace Map.Rendering {
 
         public RandomizedRepeatedTileLoader(IRandomProvider randomProvider, 
                                             ILogger logger,
-                                            IMapSectionData mapSectionData,
+                                            IMapData mapData,
+                                            IMapSectionContext mapSectionContext,
                                             IGridPositionCalculator positionCalculator,
                                             TileRendererBehaviour.Pool tileRendererPool) {
             _randomProvider = randomProvider;
             _logger = logger;
-            _mapSectionData = mapSectionData;
+            _mapSectionData = mapData.Sections[mapSectionContext.CurrentSectionIndex];
             _positionCalculator = positionCalculator;
             _tileRendererPool = tileRendererPool;
         }

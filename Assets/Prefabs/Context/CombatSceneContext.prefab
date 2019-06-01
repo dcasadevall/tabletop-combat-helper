@@ -55,6 +55,7 @@ MonoBehaviour:
   - {fileID: 6237436456729835171, guid: 5437112e9f5bb4331a148d2d857e52a2, type: 3}
   - {fileID: 9050599786994447955, guid: f924853f002724fea836c5583f205ab7, type: 3}
   - {fileID: 8706844254505784451, guid: c7c93ee6496f24ba29a6663c14e63c12, type: 3}
+  - {fileID: 9181911377699812332, guid: 17d580ea188c74b48935ad0a7014c36e, type: 3}
   _autoRun: 1
   _parentNewObjectsUnderSceneContext: 0
   _contractNames:

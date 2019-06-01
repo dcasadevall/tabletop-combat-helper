@@ -1,6 +1,7 @@
 using System;
 using Grid.Positioning;
 using Logging;
+using Map.MapSections;
 using Math;
 using UnityEngine;
 using ILogger = Logging.ILogger;
@@ -13,11 +14,12 @@ namespace Map.Rendering {
         private readonly TileRendererBehaviour.Pool _tileRendererPool;
 
         public SequentialUniqueTileLoader(ILogger logger,
-                              IMapSectionData mapSectionData,
-                              IGridPositionCalculator positionCalculator,
-                              TileRendererBehaviour.Pool tileRendererPool) {
+                                          IMapData mapData,
+                                          IMapSectionContext mapSectionContext,
+                                          IGridPositionCalculator positionCalculator,
+                                          TileRendererBehaviour.Pool tileRendererPool) {
             _logger = logger;
-            _mapSectionData = mapSectionData;
+            _mapSectionData = mapData.Sections[mapSectionContext.CurrentSectionIndex];
             _positionCalculator = positionCalculator;
             _tileRendererPool = tileRendererPool;
         }

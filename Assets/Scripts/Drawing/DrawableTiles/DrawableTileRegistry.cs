@@ -3,6 +3,7 @@ using Grid;
 using Grid.Positioning;
 using Logging;
 using Map;
+using Map.MapSections;
 using Math;
 using UnityEngine;
 using Zenject;
@@ -23,13 +24,14 @@ namespace Drawing.DrawableTiles {
                                     IGrid grid,
                                     IGridPositionCalculator gridPositionCalculator,
                                     IFactory<int, Sprite> drawableSpriteFactory,
-                                    IMapSectionData mapSectionData,
+                                    IMapSectionContext mapSectionContext,
+                                    IMapData mapData,
                                     DrawableTileBehaviour.Pool drawableTilePool) {
             _logger = logger;
             _grid = grid;
             _gridPositionCalculator = gridPositionCalculator;
             _drawableSprite = drawableSpriteFactory.Create(0);
-            _mapSectionData = mapSectionData;
+            _mapSectionData = mapData.Sections[mapSectionContext.CurrentSectionIndex];
             _drawableTilePool = drawableTilePool;
         }
 

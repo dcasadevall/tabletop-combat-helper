@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Map.MapSections;
 using Zenject;
 
 namespace Map.Rendering {
@@ -11,10 +12,11 @@ namespace Map.Rendering {
         private readonly RandomizedRepeatedTileLoader _randomizedRepeatedTileLoader;
         private readonly SequentialUniqueTileLoader _sequentialUniqueTileLoader;
 
-        public TileLoaderFactory(IMapSectionData mapSectionData,
+        public TileLoaderFactory(IMapData mapData,
+                                 IMapSectionContext mapSectionContext,
                                  RandomizedRepeatedTileLoader randomizedRepeatedTileLoader,
                                  SequentialUniqueTileLoader sequentialUniqueTileLoader) {
-            _mapSectionData = mapSectionData;
+            _mapSectionData = mapData.Sections[mapSectionContext.CurrentSectionIndex];
             _randomizedRepeatedTileLoader = randomizedRepeatedTileLoader;
             _sequentialUniqueTileLoader = sequentialUniqueTileLoader;
         }

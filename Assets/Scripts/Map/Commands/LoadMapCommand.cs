@@ -49,18 +49,11 @@ namespace Map.Commands {
             
             IMapData mapData = _mapDatas[(int)_data.mapIndex];
 
-            IObservable<float> allMapSectionsLoaded = Observable.Empty<float>();
-            foreach (var mapDataSection in mapData.Sections) {
-                AsyncOperation asyncOperation = _sceneLoader.LoadSceneAsync(kCombatSceneName , LoadSceneMode.Additive, container => {
-                    container.Bind<IMapData>().FromInstance(mapData);
-                    container.Bind<IMapSectionData>().FromInstance(mapDataSection);
-                    container.Bind<IGridData>().FromInstance(mapDataSection.GridData);
-                });
-
-                allMapSectionsLoaded = asyncOperation.ToObservable().Merge(allMapSectionsLoaded);
-            }
-
-            return allMapSectionsLoaded.Select(x => Unit.Default);
+            return _sceneLoader.LoadSceneAsync(kCombatSceneName,
+                                               LoadSceneMode.Additive,
+                                               container => {
+                                                   container.Bind<IMapData>().FromInstance(mapData);
+                                               }).ToUniTask().ToObservable();
         }
 
         public void Undo() {
