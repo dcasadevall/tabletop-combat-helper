@@ -3,8 +3,8 @@ using Replays.Playback.UI;
 using UnityEngine;
 using Zenject;
 
-namespace MapOverlay {
-    public class MapOverlayViewController : MonoBehaviour, IMapOverlayViewController {
+namespace EncounterOverlay {
+    public class EncounterOverlayViewController : MonoBehaviour, IEncounterOverlayViewController {
         // For now, just use a "hidden" flag for both states
         [SerializeField]
         private string _replayPlaybackOpenBoolName = "Hidden";
