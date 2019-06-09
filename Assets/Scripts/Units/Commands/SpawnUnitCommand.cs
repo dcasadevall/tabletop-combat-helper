@@ -88,7 +88,7 @@ namespace Units.Commands {
                 ICommand petSpawnCommand =
                     _commandFactory.Create(typeof(SpawnUnitCommand),
                                            typeof(SpawnUnitData),
-                                           _data.unitCommandData.pets[i]);
+                                           new SpawnUnitData(_data.unitCommandData.pets[i], _data.tileCoords));
                 petSpawnCommand.Undo();
             }
             
