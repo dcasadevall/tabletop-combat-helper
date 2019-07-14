@@ -13,9 +13,15 @@ MonoBehaviour:
   m_Name: UnitSpawnSettings
   m_EditorClassIdentifier: UnityEngine.CoreModule:UnityEngine:ScriptableObject
   _nonPlayerUnits:
-  - {fileID: 11400000, guid: 875ac691587d2451e93f7411a86d7c4c, type: 2}
-  - {fileID: 11400000, guid: e901663d2bf45483396fceeb5ceabb96, type: 2}
-  - {fileID: 11400000, guid: 33fefb49f5e1e4ebf9429f580d6a3669, type: 2}
+  - {fileID: 11400000, guid: ebcce4334ad0346b49b1bcc71db0aea4, type: 2}
+  - {fileID: 11400000, guid: 80a0e284e53cf4ceb89edf8686679298, type: 2}
+  - {fileID: 11400000, guid: 3422cf1aa9eff455ea0f5bb8eb918154, type: 2}
+  - {fileID: 11400000, guid: 9f46033dfbae244b8a7e922fddf9ac94, type: 2}
+  - {fileID: 11400000, guid: 80aebb8fa548d4e0da884e4f6d7305f9, type: 2}
+  - {fileID: 11400000, guid: 3bef6ef9f008c471991195f736761989, type: 2}
+  - {fileID: 11400000, guid: 56d7b49353bc34917aaa103eae91f472, type: 2}
+  - {fileID: 11400000, guid: b1cec7cb2e799426bac3905f9f8737f2, type: 2}
+  - {fileID: 11400000, guid: d7de998415fab4cb2a2d09dcc388e959, type: 2}
   - {fileID: 11400000, guid: ed0e30f9be4104fb1803ba7986cd86da, type: 2}
   _playerUnits:
   - {fileID: 11400000, guid: 4bb35f0ffaf0148d6b56cccc942fe576, type: 2}
