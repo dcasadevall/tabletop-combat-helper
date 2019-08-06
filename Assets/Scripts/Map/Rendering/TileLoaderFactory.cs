@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Map.MapSections;
 using Zenject;
 
 namespace Map.Rendering {
@@ -7,20 +8,20 @@ namespace Map.Rendering {
     /// context.
     /// </summary>
     public class TileLoaderFactory : IFactory<ITileLoader> {
-        private readonly IMapData _mapData;
+        private readonly IMapSectionData _mapSectionData;
         private readonly RandomizedRepeatedTileLoader _randomizedRepeatedTileLoader;
         private readonly SequentialUniqueTileLoader _sequentialUniqueTileLoader;
 
-        public TileLoaderFactory(IMapData mapData,
+        public TileLoaderFactory(IMapSectionData mapSectionData,
                                  RandomizedRepeatedTileLoader randomizedRepeatedTileLoader,
                                  SequentialUniqueTileLoader sequentialUniqueTileLoader) {
-            _mapData = mapData;
+            _mapSectionData = mapSectionData;
             _randomizedRepeatedTileLoader = randomizedRepeatedTileLoader;
             _sequentialUniqueTileLoader = sequentialUniqueTileLoader;
         }
         
         public ITileLoader Create() {
-            switch (_mapData.MapTileType) {
+            switch (_mapSectionData.MapTileType) {
                 case MapTileType.RandomizeRepeatedTiles:
                     return _randomizedRepeatedTileLoader;
                 case MapTileType.SequentialUniqueTiles:

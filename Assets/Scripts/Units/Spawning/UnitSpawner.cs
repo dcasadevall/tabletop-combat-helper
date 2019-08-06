@@ -2,6 +2,7 @@ using CommandSystem;
 using EncounterSelection;
 using Grid;
 using Grid.Positioning;
+using Map.MapSections;
 using Math;
 using Units.Commands;
 using Units.Serialized;
@@ -46,6 +47,9 @@ namespace Units.Spawning {
             _unitSpawnSettings = unitSpawnSettings;
         }
 
+        // TODO: This is really janky. We should find a better way to track unit spawn as initial commands.
+        // How about not spawn units with the spawner on subsequent floors?
+        private static bool _firstSpawn = false;
         public void Initialize() {
             _unitPickerViewController.SpawnUnitClicked += HandleSpawnUnitClicked;
 
@@ -65,6 +69,8 @@ namespace Units.Spawning {
             for (int i = 0; i < tilePositions.Length; i++) {
                 SpawnUnit(playerUnits[i], tilePositions[i]);
             }
+
+            _firstSpawn = true;
         }
 
         public void Tick() {
@@ -88,7 +94,7 @@ namespace Units.Spawning {
 
         private void SpawnUnit(IUnitData unitData, IntVector2 tileCoords) {
             UnitCommandData unitCommandData = _unitCommandDataFactory.Create(unitData);
-            SpawnUnitData spawnUnitData = new SpawnUnitData(unitCommandData, tileCoords);
+            SpawnUnitData spawnUnitData = new SpawnUnitData(unitCommandData, tileCoords, _firstSpawn);
             _commandQueue.Enqueue<SpawnUnitCommand, SpawnUnitData>(spawnUnitData, CommandSource.Game);
         }
     }

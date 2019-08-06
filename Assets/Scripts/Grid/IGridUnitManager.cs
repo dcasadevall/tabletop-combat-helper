@@ -2,6 +2,7 @@
 using Math;
 using Units;
 using Units.Serialized;
+using Units.Spawning;
 
 namespace Grid {
     /// <summary>
@@ -17,10 +18,14 @@ namespace Grid {
 
         /// <summary>
         /// Returns all the units of the given <see cref="UnitType"/> on the board.
+        ///
+        /// Note that this takes in a IUnitRegistry instead of injecting it, in order to
+        /// keep the Unit and Grid contexts decoupled.
         /// </summary>
         /// <param name="unitType"></param>
+        /// <param name="unitRegistry"></param>
         /// <returns></returns>
-        IUnit[] GetAllUnits(UnitType unitType);
+        IUnit[] GetAllUnits(UnitType unitType, IUnitRegistry unitRegistry);
         
         /// <summary>
         /// Gets all the units in the tile at the given tile coordinates.

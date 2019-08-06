@@ -3,6 +3,7 @@ using Grid;
 using Grid.Positioning;
 using Logging;
 using Map;
+using Map.MapSections;
 using Math;
 using UnityEngine;
 using Zenject;
@@ -16,20 +17,20 @@ namespace Drawing.DrawableTiles {
         private readonly IGrid _grid;
         private readonly IGridPositionCalculator _gridPositionCalculator;
         private readonly Sprite _drawableSprite;
-        private readonly IMapData _mapData;
+        private readonly IMapSectionData _mapSectionData;
         private readonly DrawableTileBehaviour.Pool _drawableTilePool;
 
         public DrawableTileRegistry(ILogger logger,
                                     IGrid grid,
                                     IGridPositionCalculator gridPositionCalculator,
                                     IFactory<int, Sprite> drawableSpriteFactory,
-                                    IMapData mapData,
+                                    IMapSectionData mapSectionData,
                                     DrawableTileBehaviour.Pool drawableTilePool) {
             _logger = logger;
             _grid = grid;
             _gridPositionCalculator = gridPositionCalculator;
             _drawableSprite = drawableSpriteFactory.Create(0);
-            _mapData = mapData;
+            _mapSectionData = mapSectionData;
             _drawableTilePool = drawableTilePool;
         }
 
@@ -71,22 +72,22 @@ namespace Drawing.DrawableTiles {
         }
 
         IntVector2 GetDrawableTilePositionForTile(IntVector2 tileCoords) {
-            int xSize = Mathf.CeilToInt(_drawableSprite.bounds.size.x / _mapData.PixelsPerUnit);
-            int ySize = Mathf.CeilToInt(_drawableSprite.bounds.size.y / _mapData.PixelsPerUnit);
+            int xSize = Mathf.CeilToInt(_drawableSprite.bounds.size.x / _mapSectionData.PixelsPerUnit);
+            int ySize = Mathf.CeilToInt(_drawableSprite.bounds.size.y / _mapSectionData.PixelsPerUnit);
 
             return IntVector2.Of(tileCoords.x / xSize, tileCoords.y / ySize);
         }
 
         IntVector2 GetBottomLeftGridTileCoords(IntVector2 tileCoords) {
-            int xSize = Mathf.CeilToInt(_drawableSprite.bounds.size.x / _mapData.PixelsPerUnit);
-            int ySize = Mathf.CeilToInt(_drawableSprite.bounds.size.y / _mapData.PixelsPerUnit);
+            int xSize = Mathf.CeilToInt(_drawableSprite.bounds.size.x / _mapSectionData.PixelsPerUnit);
+            int ySize = Mathf.CeilToInt(_drawableSprite.bounds.size.y / _mapSectionData.PixelsPerUnit);
             
             return IntVector2.Of((tileCoords.x / xSize) * xSize, (tileCoords.y / ySize) * ySize);
         }
 
         Vector2 GetCenterWorldPositionWithOrigin(Vector2 drawableTileOrigin) {
-            int xSize = Mathf.CeilToInt(_drawableSprite.bounds.size.x / _mapData.PixelsPerUnit);
-            int ySize = Mathf.CeilToInt(_drawableSprite.bounds.size.y / _mapData.PixelsPerUnit);
+            int xSize = Mathf.CeilToInt(_drawableSprite.bounds.size.x / _mapSectionData.PixelsPerUnit);
+            int ySize = Mathf.CeilToInt(_drawableSprite.bounds.size.y / _mapSectionData.PixelsPerUnit);
             
             return new Vector2(drawableTileOrigin.x + xSize / 2.0f, drawableTileOrigin.y + ySize / 2.0f);
         }

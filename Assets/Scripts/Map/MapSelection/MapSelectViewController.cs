@@ -66,7 +66,7 @@ namespace Map.UI {
             _dropdown.ClearOptions();
             List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
             foreach (var mapData in _mapDatas) {
-                options.Add(new Dropdown.OptionData(mapData.Name));
+                options.Add(new Dropdown.OptionData(mapData.MapName));
             }
             _dropdown.AddOptions(options);
             

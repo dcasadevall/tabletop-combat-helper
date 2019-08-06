@@ -24,8 +24,10 @@ namespace Units {
             Container.Bind<UnitRegistry>().AsSingle();
             Container.Bind<IUnitRegistry>().To<UnitRegistry>().FromResolve();
 
-            // Prototype
-            Container.BindMemoryPool<UnitBehaviour, UnitBehaviour.Pool>().WithInitialSize(10)
+            // TODO: This initial size is 1 because of a race condition when switching map sections and spawning units.
+            // If there is space in the current section's pool, when switching to a new section, that section will
+            // spawn units in the previous section pool.
+            Container.BindMemoryPool<UnitBehaviour, UnitBehaviour.Pool>().WithInitialSize(1)
                      .FromComponentInNewPrefab(_unitPrefab).UnderTransformGroup("UnitPool");
 
             // Prototype: Bind ITicker and IInitializable to the UnitsSpawner

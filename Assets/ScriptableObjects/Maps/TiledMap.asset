@@ -9,18 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa20cef74c994a22996dbb698db9ab4a, type: 3}
+  m_Script: {fileID: 11500000, guid: 09c4d0b508b6406689dde23bc397e751, type: 3}
   m_Name: TiledMap
   m_EditorClassIdentifier: UnityEngine.CoreModule:UnityEngine:ScriptableObject
-  gridData:
-    numTilesX: 100
-    numTilesY: 100
-    centeredAtWorldZero: 1
-    originWorldPosition: {x: 0, y: 0}
-  name: Tiled Map
-  sprites:
-  - {fileID: 21300000, guid: 90765a1dd19f84a14a66ddb072c161ec, type: 3}
-  - {fileID: 21300000, guid: 37595a27aa57145478cd90b496774d09, type: 3}
-  - {fileID: 21300000, guid: c2a91478b71f748c68e3490fa8213011, type: 3}
-  - {fileID: 21300000, guid: 5b2e2ce96b34e4b58810e352981c7f78, type: 3}
-  generationType: 0
+  mapName: TiledMap
+  sections:
+  - gridData:
+      numTilesX: 100
+      numTilesY: 100
+      centeredAtWorldZero: 1
+      originWorldPosition: {x: 0, y: 0}
+    sectionName: Floor 1
+    sprites:
+    - {fileID: 21300000, guid: 90765a1dd19f84a14a66ddb072c161ec, type: 3}
+    - {fileID: 21300000, guid: 37595a27aa57145478cd90b496774d09, type: 3}
+    - {fileID: 21300000, guid: c2a91478b71f748c68e3490fa8213011, type: 3}
+    - {fileID: 21300000, guid: 5b2e2ce96b34e4b58810e352981c7f78, type: 3}
+    generationType: 0

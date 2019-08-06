@@ -1,40 +1,20 @@
-using Grid.Serialized;
-using Map.Rendering;
+using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Map.Serialized {
     public class MapData : ScriptableObject, IMapData {
-        public GridData gridData;
-        public IGridData GridData {
+        public string mapName;
+        public string MapName {
             get {
-                return gridData;
+                return mapName;
             }
         }
-
-        public string name;
-        public string Name {
+        
+        public MapSectionData[] sections;
+        public IMapSectionData[] Sections {
             get {
-                return name;
-            }
-        }
-
-        public Sprite[] sprites;
-        public Sprite[] Sprites {
-            get {
-                return sprites;
-            }
-        }
-
-        public MapTileType generationType;
-        public MapTileType MapTileType {
-            get {
-                return generationType;
-            }
-        }
-
-        public int PixelsPerUnit {
-            get {
-                return 1;
+                return sections.Cast<IMapSectionData>().ToArray();
             }
         }
     }
