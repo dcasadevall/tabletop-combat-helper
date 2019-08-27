@@ -8,13 +8,13 @@ using Zenject;
 namespace Map.MapSelection {
     public class MapSelectionInstaller : MonoInstaller {
         public GameObject mapSelectViewControllerPrefab;
-        public MapData[] mapDatas;
+        public MapSelectionData mapSelectionData;
         
         public override void InstallBindings() {
             Container.Bind<IMapSelectViewController>().To<MapSelectViewController>()
                      .FromComponentInNewPrefab(mapSelectViewControllerPrefab).AsSingle();
             
-            foreach (var mapData in mapDatas) {
+            foreach (var mapData in mapSelectionData.mapDatas) {
                 Container.Bind<IMapData>().To<MapData>().FromInstance(mapData);
             }
             
