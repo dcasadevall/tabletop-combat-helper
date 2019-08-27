@@ -26,6 +26,7 @@ namespace Map.Commands {
         private readonly IReplayLoaderViewController _replayLoaderViewController;
         private readonly IMapSelectViewController _mapSelectViewController;
         private readonly ZenjectSceneLoader _sceneLoader;
+        private readonly Subject<Unit> _sceneLoadedSubject = new Subject<Unit>();
 
         public bool IsInitialGameStateCommand {
             get {
@@ -52,11 +53,12 @@ namespace Map.Commands {
 
             IMapData mapData = _mapDatas[(int) _data.mapIndex];
 
-            return _sceneLoader.LoadSceneAsync(kEncounterScene,
-                                               LoadSceneMode.Additive,
-                                               container => {
-                                                   HandleMapSceneLoaded(container, mapData);
-                                               }).ToUniTask().ToObservable();
+            _sceneLoader.LoadSceneAsync(kEncounterScene,
+                                        LoadSceneMode.Additive,
+                                        container => {
+                                            HandleMapSceneLoaded(container, mapData);
+                                        });
+            return _sceneLoadedSubject;
         }
 
         private void HandleMapSceneLoaded(DiContainer container, IMapData mapData) {
@@ -71,7 +73,9 @@ namespace Map.Commands {
                 ICommand loadMapSectionCommand = _commandFactory.Create(typeof(LoadMapSectionCommand),
                                                                         typeof(LoadMapSectionCommandData),
                                                                         loadMapSectionCommandData);
-                loadMapSectionCommand.Run();
+                loadMapSectionCommand.Run().Subscribe(next => {
+                    _sceneLoadedSubject.OnNext(Unit.Default);
+                });
             });
         }
 
