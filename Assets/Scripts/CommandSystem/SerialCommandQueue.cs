@@ -45,10 +45,6 @@ namespace CommandSystem {
                 return;
             }
 
-            if (_isPaused) {
-                return;
-            }
-
             ProcessNextCommand();
         }
 
