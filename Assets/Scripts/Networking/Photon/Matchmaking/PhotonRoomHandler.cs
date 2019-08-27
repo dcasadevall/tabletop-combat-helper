@@ -20,7 +20,13 @@ namespace Networking.Photon.Matchmaking {
                 return _playerJoinedRoomSubject.AsObservable();
             }
         }
-
+        
+        private Subject<Unit> _roomLeftSubject = new Subject<Unit>();
+        public IObservable<Unit> RoomLeft {
+            get {
+                return _roomLeftSubject.AsObservable();
+            }
+        }
 
         public PhotonRoomHandler(IRoomSettings roomSettings, ILogger logger) {
             _roomSettings = roomSettings;
@@ -30,6 +36,7 @@ namespace Networking.Photon.Matchmaking {
         public void Dispose() {
             PhotonNetwork.RemoveCallbackTarget(this);
             _playerJoinedRoomSubject?.Dispose();
+            _roomLeftSubject?.Dispose();
         }
 
         public bool IsRoomHost {
@@ -99,8 +106,13 @@ namespace Networking.Photon.Matchmaking {
         }
 
         public void OnLeftRoom() {
-            _logger.LogError(LoggedFeature.Network, "Left room while joining.");
+            _logger.LogError(LoggedFeature.Network, "Disconnected from room.");
             _joinRoomState.success = false;
+
+            if (_joinRoomState.isFinished) {
+                _logger.Log(LoggedFeature.Network, "Notifying that we left room.");
+                _roomLeftSubject.OnNext(Unit.Default);
+            }
         }
         #endregion
 

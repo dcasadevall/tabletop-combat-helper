@@ -19,6 +19,7 @@ namespace CommandSystem {
         private readonly List<ICommandQueueListener> _listeners = new List<ICommandQueueListener>();
         private readonly Queue<PendingCommand> _pendingCommands = new Queue<PendingCommand>();
         private bool _processingCommand;
+        private uint _nextIndex;
 
         public SerialCommandQueue(ICommandFactory commandFactory, IClock clock, ILogger logger) {
             _commandFactory = commandFactory;
@@ -30,7 +31,8 @@ namespace CommandSystem {
             _listeners.Add(listener);
         }
 
-        public void Enqueue(Type commandType, Type dataType, ISerializable data, CommandSource source) {
+        public void Enqueue(Type commandType, Type dataType, ISerializable data,
+                            CommandSource source) {
             _pendingCommands.Enqueue(new PendingCommand(commandType, dataType, data, source));
         }
 
@@ -63,7 +65,10 @@ namespace CommandSystem {
 
             // Notify listeners
             CommandSnapshot commandSnapshot =
-                new CommandSnapshot(command, pendingCommand.data, _clock.Now, pendingCommand.source);
+                new CommandSnapshot(command,
+                                    pendingCommand.data,
+                                    _clock.Now,
+                                    pendingCommand.source);
             foreach (var commandQueueListener in _listeners) {
                 commandQueueListener.HandleCommandQueued(commandSnapshot);
             }
@@ -84,7 +89,8 @@ namespace CommandSystem {
             public readonly ISerializable data;
             public readonly CommandSource source;
 
-            public PendingCommand(Type commandType, Type dataType, ISerializable data, CommandSource source) {
+            public PendingCommand(Type commandType, Type dataType, ISerializable data,
+                                  CommandSource source) {
                 this.commandType = commandType;
                 this.dataType = dataType;
                 this.data = data;

@@ -22,6 +22,12 @@ namespace Networking.UNet {
             }
         }
 
+        public IObservable<Unit> Disconnected {
+            get {
+                throw new NotImplementedException();
+            }
+        }
+
         private INetworkSettings _networkSettings;
         public UNetLocalHostNetworkManager(INetworkSettings networkSettings) {
             _networkSettings = networkSettings;
@@ -31,7 +37,7 @@ namespace Networking.UNet {
             _clientConnectedSubject?.Dispose();
         }
 
-        public IObservable<NetworkConnectionResult> Connect() {
+        public IObservable<NetworkConnectionResult> Connect(bool allowOfflineMode) {
             if (IsConnected) {
                 return Observable.Throw<NetworkConnectionResult>(new Exception("Already connected"));
             }

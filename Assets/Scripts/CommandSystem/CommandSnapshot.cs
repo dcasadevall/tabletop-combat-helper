@@ -8,7 +8,8 @@ namespace CommandSystem {
         public TimeSpan ExecutionTime { get; }
         public CommandSource Source { get; }
 
-        public CommandSnapshot(ICommand command, ISerializable data, TimeSpan executionTime, CommandSource source) {
+        public CommandSnapshot(ICommand command, ISerializable data, TimeSpan executionTime,
+                               CommandSource source) {
             Command = command;
             Data = data;
             ExecutionTime = executionTime;

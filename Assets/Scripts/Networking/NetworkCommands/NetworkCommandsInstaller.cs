@@ -11,6 +11,7 @@ namespace Networking.NetworkCommands {
             // These two classes need a non lazy initialization since they are listening to events.
             Container.BindInterfacesTo<NetworkCommandReceiver>().AsSingle().NonLazy();
             Container.BindInterfacesTo<NetworkCommandBroadcaster>().AsSingle().NonLazy();
+            Container.Bind<SequenceIndex>().FromInstance(SequenceIndex.Of(0)).AsSingle();
         }
     }
 }

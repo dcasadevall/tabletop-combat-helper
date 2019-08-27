@@ -4,15 +4,23 @@ using Networking.Messaging;
 using Photon.Pun;
 using Photon.Realtime;
 using UniRx;
+using UnityEngine;
 using Zenject;
 
 namespace Networking.Photon.Messaging {
     public class PhotonMessageHandler : INetworkMessageHandler, IInitializable, IDisposable {
         private Subject<NetworkMessage> _networkMessageSubject = new Subject<NetworkMessage>();
+
         public IObservable<NetworkMessage> NetworkMessageStream {
             get {
                 return _networkMessageSubject.AsObservable();
             }
+        }
+
+        private readonly INetworkManager _networkManager;
+
+        public PhotonMessageHandler(INetworkManager networkManager) {
+            _networkManager = networkManager;
         }
 
         public void Initialize() {
@@ -29,13 +37,18 @@ namespace Networking.Photon.Messaging {
             if (eventData.Code != MessageTags.kNetworkCommand) {
                 return;
             }
-            
+
             byte[] data = (byte[]) eventData.Parameters[ParameterCode.Data];
             NetworkMessage networkMessage = new NetworkMessage(new Guid(), data, eventData.Code);
             _networkMessageSubject.OnNext(networkMessage);
         }
 
         public IObservable<Unit> BroadcastMessage(NetworkMessage networkMessage) {
+            if (!_networkManager.IsConnected) {
+                Observable.Throw<Unit>(new
+                                           Exception($"Not connected to network. Did not broadcast message: {networkMessage}"));
+            }
+
             bool success = PhotonNetwork.RaiseEvent(MessageTags.kNetworkCommand,
                                                     networkMessage.data,
                                                     RaiseEventOptions.Default,

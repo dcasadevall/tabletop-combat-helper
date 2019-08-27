@@ -8,15 +8,12 @@ using Zenject;
 namespace Networking.NetworkCommands {
     public class NetworkCommandReceiver : IInitializable, IDisposable {
         private IDisposable _disposable;
-        private readonly INetworkManager _networkManager;
         private readonly INetworkMessageHandler _networkMessageHandler;
         private readonly INetworkMessageSerializer _messageSerializer;
         private readonly ICommandQueue _commandQueue;
 
-        public NetworkCommandReceiver(INetworkManager networkManager,
-                                      INetworkMessageHandler networkMessageHandler,
+        public NetworkCommandReceiver(INetworkMessageHandler networkMessageHandler,
                                       INetworkMessageSerializer messageSerializer, ICommandQueue commandQueue) {
-            _networkManager = networkManager;
             _networkMessageHandler = networkMessageHandler;
             _messageSerializer = messageSerializer;
             _commandQueue = commandQueue;
