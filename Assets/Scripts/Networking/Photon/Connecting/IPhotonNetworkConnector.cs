@@ -6,6 +6,6 @@ namespace Networking.Photon.Connecting {
     /// This is separated due to the awkward callback system Photon has, which forces us to implement a bunch of methods.
     /// </summary>
     internal interface IPhotonNetworkConnector {
-        UniTask Connect();
+        UniTask Connect(bool allowOfflineMode);
     }
 }

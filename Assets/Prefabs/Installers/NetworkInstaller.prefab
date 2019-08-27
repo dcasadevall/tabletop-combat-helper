@@ -43,6 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f7f8fa19f38445887431430f7d794ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  networkReconnectViewController: {fileID: 5607649076635065802, guid: 5e73c8a131e85468c8dca64dd113e069,
+    type: 3}
   settings:
     _port: 7777
     _address: localhost

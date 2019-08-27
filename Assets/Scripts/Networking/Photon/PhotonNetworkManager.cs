@@ -4,7 +4,6 @@ using Networking.Photon.Connecting;
 using Networking.Photon.Matchmaking;
 using UniRx;
 using UniRx.Async;
-using UnityEngine;
 
 namespace Networking.Photon {
     internal class PhotonNetworkManager : INetworkManager {
@@ -26,20 +25,28 @@ namespace Networking.Photon {
             }
         }
 
+        public IObservable<Unit> Disconnected {
+            get {
+                return _roomHandler.RoomLeft;
+            }
+        }
+
         public PhotonNetworkManager(IPhotonRoomHandler roomHandler, IPhotonNetworkConnector networkConnector) {
             _roomHandler = roomHandler;
             _networkConnector = networkConnector;
+            _roomHandler.RoomLeft.Subscribe(Observer.Create((Unit unit) => IsConnected = false));
         }
 
-        public IObservable<NetworkConnectionResult> Connect() {
-            return ConnectTask().ToObservable();
+        public IObservable<NetworkConnectionResult> Connect(bool allowOfflineMode) {
+            return ConnectTask(allowOfflineMode).ToObservable();
         }
 
-        private async UniTask<NetworkConnectionResult> ConnectTask() {
-            await _networkConnector.Connect();
+        private async UniTask<NetworkConnectionResult> ConnectTask(bool allowOfflineMode) {
+            await _networkConnector.Connect(allowOfflineMode);
 
             await _roomHandler.JoinOrCreateRoom();
             IsConnected = true;
+            
             return new NetworkConnectionResult(IsServer);
         }
     }

@@ -36,12 +36,18 @@ namespace Networking.UNet {
                 return _clientConnectedSubject.AsObservable();
             }
         }
+        
+        public IObservable<Unit> Disconnected {
+            get {
+                throw new NotImplementedException();
+            }
+        }
 
         public UNetMatchmakingNetworkManager(ILogger logger) {
             _logger = logger;
         }
 
-        public IObservable<NetworkConnectionResult> Connect() {
+        public IObservable<NetworkConnectionResult> Connect(bool allowOfflineMode) {
             _connectTask = ConnectAsyncTask();
             return _connectTask.Value.ToObservable();
         }

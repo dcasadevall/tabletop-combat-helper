@@ -46,12 +46,12 @@ MonoBehaviour:
   _scriptableObjectInstallers: []
   _monoInstallers: []
   _installerPrefabs:
+  - {fileID: 5724359077642545227, guid: 410ad339ce0184a0cae3f570e81e0dea, type: 3}
   - {fileID: 2363425180802720114, guid: 794b96351767f4e0f9afeed6f621fe03, type: 3}
   - {fileID: 2331196511622841175, guid: 30fe81bd9358a4598a854d54f645695d, type: 3}
   - {fileID: 1323858554442251348, guid: cfa45805f91e7409f89e20795a7408f6, type: 3}
   - {fileID: 891781553352159418, guid: 98c5c06c8a08f4f6db9c56787c393e32, type: 3}
   - {fileID: 3989486722691860997, guid: 41f0f0cfc0d9445dabb8301686f6a758, type: 3}
-  - {fileID: 5724359077642545227, guid: 410ad339ce0184a0cae3f570e81e0dea, type: 3}
   - {fileID: 3721025420619831321, guid: 510f8df809c604ea99297f8eca82619b, type: 3}
   - {fileID: 2737959522699699110, guid: 6d153878d834a4fac8934fcf27fb33ed, type: 3}
   - {fileID: 7414949513800589215, guid: 68667e17fb2434d68a5fcfd46e5ad46d, type: 3}

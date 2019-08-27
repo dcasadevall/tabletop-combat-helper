@@ -1,4 +1,5 @@
 using Logging;
+using Networking.UI;
 using UniRx;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -19,16 +20,26 @@ namespace Networking {
 
         private ILogger _logger;
         private INetworkManager _networkManager;
+        private readonly INetworkReconnectViewController _reconnectViewController;
         private ZenjectSceneLoader _sceneLoader;
         
-        public NetworkConnector(INetworkManager networkManager, ZenjectSceneLoader zenjectSceneLoader, ILogger logger) {
+        public NetworkConnector(INetworkManager networkManager,
+                                INetworkReconnectViewController reconnectViewController, 
+                                ZenjectSceneLoader zenjectSceneLoader, 
+                                ILogger logger) {
             _networkManager = networkManager;
+            _reconnectViewController = reconnectViewController;
             _sceneLoader = zenjectSceneLoader;
             _logger = logger;
         }
         
         public void Initialize() {
-            _networkManager.Connect().Subscribe(Observer.Create<NetworkConnectionResult>(result => {
+            // Infinitely reconnect.
+            _networkManager.Disconnected.Subscribe(Observer.Create<Unit>(unit => {
+                TryReconnect();
+            }));
+            
+            _networkManager.Connect(allowOfflineMode: true).Subscribe(Observer.Create<NetworkConnectionResult>(result => {
                 if (result.isServer) {
                     _sceneLoader.LoadScene(kEnocunterSelectionSCene, LoadSceneMode.Additive);
                 } else {
@@ -38,6 +49,16 @@ namespace Networking {
             error => {
                 _logger .LogError(LoggedFeature .Network, "Connection error: {0}. Will continue offline.", error);
                 _sceneLoader.LoadScene(kEnocunterSelectionSCene, LoadSceneMode.Additive);
+            }));
+        }
+
+        private void TryReconnect() {
+            _reconnectViewController.Show();
+            _networkManager.Connect(allowOfflineMode: false).Subscribe(Observer.Create<NetworkConnectionResult>(result => {
+                _reconnectViewController.Hide();
+            },
+            error => {
+                TryReconnect();
             }));
         }
     }
