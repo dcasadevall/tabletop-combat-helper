@@ -9,11 +9,17 @@ using Zenject;
 namespace Units {
     public class UnitsInstaller : MonoInstaller {
         [SerializeField]
-        public UnitSpawnSettings _unitSpawnSettings;
-        [SerializeField]
         public GameObject _unitPickerViewController;
         [SerializeField]
         public GameObject _unitPrefab;
+
+        // These settings are loaded in the asset loading stage.
+        private UnitSpawnSettings _unitSpawnSettings;
+        
+        [Inject]
+        public void Construct(UnitSpawnSettings unitSpawnSettings) {
+            _unitSpawnSettings = unitSpawnSettings;
+        }
         
         public override void InstallBindings() {
             Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(_unitPickerViewController).AsSingle();

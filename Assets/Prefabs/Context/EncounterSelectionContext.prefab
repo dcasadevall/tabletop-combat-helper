@@ -54,7 +54,8 @@ MonoBehaviour:
   _parentNewObjectsUnderSceneContext: 0
   _contractNames:
   - EncounterSelection
-  _parentContractNames: []
+  _parentContractNames:
+  - AssetLoading
 --- !u!1001 &7310919856180789479
 PrefabInstance:
   m_ObjectHideFlags: 0

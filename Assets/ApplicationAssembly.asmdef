@@ -5,7 +5,9 @@
         "UniRx.Async",
         "Zenject",
         "PhotonUnityNetworking",
-        "PhotonRealtime"
+        "PhotonRealtime",
+        "Unity.Addressables",
+        "Unity.ResourceManager"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
