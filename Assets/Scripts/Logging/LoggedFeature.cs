@@ -12,6 +12,7 @@ namespace Logging {
         public static LoggedFeature Editor => new LoggedFeature("Editor");
         public static LoggedFeature Pooling => new LoggedFeature("Pooling");
         public static LoggedFeature Coroutines => new LoggedFeature("Coroutines");
+        public static LoggedFeature Assets => new LoggedFeature("Assets");
         public static LoggedFeature Units => new LoggedFeature("Units");
         public static LoggedFeature Map => new LoggedFeature("Map");
         public static LoggedFeature Network => new LoggedFeature("Network");

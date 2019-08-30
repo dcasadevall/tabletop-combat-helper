@@ -11,10 +11,11 @@ namespace Map.MapSelection {
         public GameObject mapSelectViewControllerPrefab;
         
         // Map Selection Data is loaded in a preload scene
-        // And injected here.
-        private readonly MapSelectionData _mapSelectionData;
+        // and injected here.
+        private MapSelectionData _mapSelectionData;
 
-        public MapSelectionInstaller(MapSelectionData mapSelectionData) {
+        [Inject]
+        public void Construct(MapSelectionData mapSelectionData) {
             _mapSelectionData = mapSelectionData;
         }
         

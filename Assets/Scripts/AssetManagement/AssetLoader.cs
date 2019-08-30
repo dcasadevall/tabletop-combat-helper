@@ -15,10 +15,9 @@ namespace AssetManagement {
         private readonly SceneAsset _nextScene;
         private readonly AssetLoadingFunction[] _assetLoadingFunctions;
         private readonly ZenjectSceneLoader _sceneLoader;
-        private readonly List<AssetBinding> _loadedAssets = new List<AssetBinding>();
 
         public AssetLoader(DiContainer container,
-                           SceneAsset nextScene, 
+                           SceneAsset nextScene,
                            AssetLoadingFunction[] assetLoadingFunctions,
                            ZenjectSceneLoader sceneLoader) {
             _container = container;
@@ -26,24 +25,17 @@ namespace AssetManagement {
             _assetLoadingFunctions = assetLoadingFunctions;
             _sceneLoader = sceneLoader;
         }
-        
+
         public void Initialize() {
-            var observables = new List<IObservable<AssetBinding>>(); 
+            var observables = new List<IObservable<AssetBinding>>();
             foreach (var assetLoadingFunction in _assetLoadingFunctions) {
                 observables.Add(assetLoadingFunction.Invoke());
             }
 
-            observables.Merge().Subscribe(binding => _loadedAssets.Add(binding), HandleAssetsLoaded);
-        }
-
-        private void HandleAssetsLoaded() {
-            _sceneLoader.LoadScene(_nextScene.name,
-                                   LoadSceneMode.Additive,
-                                   container => {
-                                       _loadedAssets.ForEach(binding => _container
-                                                                        .Bind(binding.type)
-                                                                        .FromInstance(binding.asset));
-                                   });
+            observables.Merge().Subscribe(binding => _container
+                                                     .Bind(binding.type)
+                                                     .FromInstance(binding.asset),
+                                          () => _sceneLoader.LoadScene(_nextScene.name, LoadSceneMode.Additive));
         }
     }
 }

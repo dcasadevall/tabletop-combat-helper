@@ -13,7 +13,8 @@ namespace Units {
         [SerializeField]
         public GameObject _unitPrefab;
 
-        // These settings are loaded in the asset loading stage.
+        // Unit Spawn Settings is loaded in a preload scene
+        // and injected here.
         private UnitSpawnSettings _unitSpawnSettings;
         
         [Inject]
