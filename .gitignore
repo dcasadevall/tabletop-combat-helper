@@ -38,3 +38,6 @@ sysinfo.txt
 Assets/ThirdParty/Plugins/Editor/JetBrains/JetBrains.Rider.Unity.Editor.Plugin.Repacked.dll
 Assets/ThirdParty/Plugins/Zenject/OptionalExtras/Signals/Zenject-Signals.csproj.meta
 Assets/ThirdParty/Plugins/Zenject/OptionalExtras/ReflectionBaking/Zenject-ReflectionBaking.csproj.meta
+
+# Assetbundles
+HostedData/
