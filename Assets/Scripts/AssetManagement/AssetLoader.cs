@@ -12,12 +12,12 @@ namespace AssetManagement {
     /// </summary>
     internal class AssetLoader : IInitializable {
         private readonly DiContainer _container;
-        private readonly SceneAsset _nextScene;
+        private readonly string _nextScene;
         private readonly AssetLoadingFunction[] _assetLoadingFunctions;
         private readonly ZenjectSceneLoader _sceneLoader;
 
         public AssetLoader(DiContainer container,
-                           SceneAsset nextScene,
+                           [Inject(Id = "NextScene")] string nextScene,
                            AssetLoadingFunction[] assetLoadingFunctions,
                            ZenjectSceneLoader sceneLoader) {
             _container = container;
@@ -35,7 +35,7 @@ namespace AssetManagement {
             observables.Merge().Subscribe(binding => _container
                                                      .Bind(binding.type)
                                                      .FromInstance(binding.asset),
-                                          () => _sceneLoader.LoadScene(_nextScene.name, LoadSceneMode.Additive));
+                                          () => _sceneLoader.LoadScene(_nextScene, LoadSceneMode.Additive));
         }
     }
 }

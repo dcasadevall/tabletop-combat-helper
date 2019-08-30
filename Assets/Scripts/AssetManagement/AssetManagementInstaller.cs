@@ -15,7 +15,7 @@ namespace AssetManagement {
         private PreloadedAsset[] _preloadedAssets;
 
         [SerializeField]
-        private SceneAsset _nextScene;
+        private String _nextScene;
 
         /// <summary>
         /// This context will be required as a parent to each of the loaded assets scene context.
@@ -54,7 +54,7 @@ namespace AssetManagement {
             }
 
             Container.Bind<IInitializable>().To<AssetLoader>().AsSingle();
-            Container.Bind<SceneAsset>().FromInstance(_nextScene).AsSingle();
+            Container.BindInstance(_nextScene).WithId("NextScene").AsSingle();
         }
     }
 }

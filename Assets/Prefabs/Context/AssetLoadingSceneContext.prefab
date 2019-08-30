@@ -74,5 +74,5 @@ MonoBehaviour:
       m_AssetGUID: 67e3c827edc074b89b7afcb61bd32600
     sceneContext: {fileID: 3937098722317639418, guid: ea0dfb4dab15d47e7b5129009e2fa7ea,
       type: 3}
-  _nextScene: {fileID: 102900000, guid: 5c1ebf1a0173546d6958c913c8a16897, type: 3}
+  _nextScene: LobbyScene
   _enforcedParentContext: {fileID: 4413540544412834807}
