@@ -9,7 +9,7 @@ using ILogger = Logging.ILogger;
 
 namespace AssetManagement {
     public class AssetManagementInstaller : MonoInstaller {
-        private readonly ILogger _logger;
+        private ILogger _logger;
 
         [SerializeField]
         private PreloadedAsset[] _preloadedAssets;
@@ -24,7 +24,8 @@ namespace AssetManagement {
         [SerializeField]
         private SceneContext _enforcedParentContext;
 
-        public AssetManagementInstaller(ILogger logger) {
+        [Inject]
+        public void Construct(ILogger logger) {
             _logger = logger;
         }
 
@@ -37,7 +38,7 @@ namespace AssetManagement {
             foreach (var preloadedAsset in _preloadedAssets) {
                 if (!allowedParentContracts.Overlaps(preloadedAsset.sceneContext.ParentContractNames)) {
                     _logger.LogError(LoggedFeature.Assets,
-                                     "Preloaded asset scene context: {1} should have a parent contract in: {2}",
+                                     "Preloaded asset scene context: {0} should have a parent contract in: {1}",
                                      preloadedAsset.sceneContext.name,
                                      _enforcedParentContext.name);
                     continue;
