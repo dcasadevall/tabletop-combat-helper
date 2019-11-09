@@ -36,14 +36,10 @@ namespace AssetManagement {
             }
 
             foreach (var preloadedAsset in _preloadedAssets) {
-                if (!allowedParentContracts.Overlaps(preloadedAsset.sceneContext.ParentContractNames)) {
-                    _logger.LogError(LoggedFeature.Assets,
-                                     "Preloaded asset scene context: {0} should have a parent contract in: {1}",
-                                     preloadedAsset.sceneContext.name,
-                                     _enforcedParentContext.name);
+                if (!ValidateParentContext(preloadedAsset, allowedParentContracts)) {
                     continue;
                 }
-
+                
                 AssetLoadingFunction assetLoadingFunction = () => {
                     var handle = preloadedAsset.assetReference.LoadAssetAsync<object>();
                     return Observable.EveryUpdate().Where(_ => handle.IsDone).FirstOrDefault()
@@ -56,6 +52,20 @@ namespace AssetManagement {
 
             Container.Bind<IInitializable>().To<AssetLoader>().AsSingle();
             Container.BindInstance(_nextScene).WithId("NextScene").AsSingle();
+        }
+
+        private bool ValidateParentContext(PreloadedAsset preloadedAsset, HashSet<string> allowedParentContracts) {
+            foreach (var preloadedAssetSceneContext in preloadedAsset.sceneContexts) {
+                if (!allowedParentContracts.Overlaps(preloadedAssetSceneContext.ParentContractNames)) {
+                    _logger.LogError(LoggedFeature.Assets,
+                                     "Preloaded asset scene context: {0} should have a parent contract in: {1}",
+                                     preloadedAssetSceneContext.name,
+                                     _enforcedParentContext.name);
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

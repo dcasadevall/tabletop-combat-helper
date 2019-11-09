@@ -68,11 +68,12 @@ MonoBehaviour:
   _preloadedAssets:
   - assetReference:
       m_AssetGUID: 55638e91719f64442a3654ede41f33a3
-    sceneContext: {fileID: 2901459981742678035, guid: de15a99275912475ba9f4611db11280f,
-      type: 3}
+    sceneContexts:
+    - {fileID: 2901459981742678035, guid: de15a99275912475ba9f4611db11280f, type: 3}
   - assetReference:
       m_AssetGUID: 67e3c827edc074b89b7afcb61bd32600
-    sceneContext: {fileID: 3937098722317639418, guid: ea0dfb4dab15d47e7b5129009e2fa7ea,
-      type: 3}
+    sceneContexts:
+    - {fileID: 3937098722317639418, guid: ea0dfb4dab15d47e7b5129009e2fa7ea, type: 3}
+    - {fileID: 3636031296562417263, guid: 5690e3a85664c4b2c977202963488993, type: 3}
   _nextScene: LobbyScene
   _enforcedParentContext: {fileID: 4413540544412834807}

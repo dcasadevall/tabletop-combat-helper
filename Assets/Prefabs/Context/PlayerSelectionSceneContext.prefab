@@ -53,7 +53,8 @@ MonoBehaviour:
   _parentNewObjectsUnderSceneContext: 0
   _contractNames:
   - PlayerSelection
-  _parentContractNames: []
+  _parentContractNames:
+  - AssetLoading
 --- !u!114 &5612455811659483501
 MonoBehaviour:
   m_ObjectHideFlags: 0

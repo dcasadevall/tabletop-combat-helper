@@ -10,9 +10,9 @@ namespace AssetManagement {
         /// </summary>
         public AssetReference assetReference;
         /// <summary>
-        /// The context this will be available in. This context MUST have the asset loading scene context
+        /// The contexts this will be available in. These contexts MUST have the asset loading scene context
         /// as parent (error will be thrown otherwise) 
         /// </summary>
-        public SceneContext sceneContext;
+        public SceneContext[] sceneContexts;
     }
 }
