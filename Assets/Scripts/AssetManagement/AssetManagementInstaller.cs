@@ -4,6 +4,7 @@ using Logging;
 using UniRx;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
 using ILogger = Logging.ILogger;
 
@@ -42,9 +43,17 @@ namespace AssetManagement {
                 
                 AssetLoadingFunction assetLoadingFunction = () => {
                     var handle = preloadedAsset.assetReference.LoadAssetAsync<object>();
-                    return Observable.EveryUpdate().Where(_ => handle.IsDone).FirstOrDefault()
+                    return Observable.EveryUpdate()
+                                     .Where(_ => handle.IsDone)
+                                     .FirstOrDefault()
                                      .Timeout(TimeSpan.FromSeconds(10))
-                                     .Select(_ => new AssetBinding(preloadedAsset));
+                                     .Select(_ => {
+                                         if (handle.Status != AsyncOperationStatus.Succeeded) {
+                                             throw new Exception("Failed to load asset: " + preloadedAsset.assetReference);
+                                         }
+                                         
+                                         return new AssetBinding(preloadedAsset);
+                                     });
                 };
 
                 Container.Bind<AssetLoadingFunction>().FromInstance(assetLoadingFunction);
