@@ -14,8 +14,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RuleToResults:
   - RuleName: Check Duplicate Bundle Dependencies
-    Results: []
+    Results:
+    - m_ResultName: No issues found
+      m_Severity: 0
   - RuleName: Check Resources to Addressable Duplicate Dependencies
-    Results: []
+    Results:
+    - m_ResultName: Check Resources to Addressable Duplicate Dependencies - No issues
+        found.
+      m_Severity: 0
   - RuleName: Check Scene to Addressable Duplicate Dependencies
-    Results: []
+    Results:
+    - m_ResultName: Assets/Scenes/AssetLoadingScene.unity:duplicateassetisolation_assets_all.bundle:Assets/Sprites/Characters/Miniatures/Aurora.png
+      m_Severity: 2
+    - m_ResultName: Assets/Scenes/AssetLoadingScene.unity:duplicateassetisolation_assets_all.bundle:Assets/Sprites/Characters/Miniatures/Elsbeth.png
+      m_Severity: 2
+    - m_ResultName: Assets/Scenes/AssetLoadingScene.unity:duplicateassetisolation_assets_all.bundle:Assets/Sprites/Characters/Miniatures/Titus.png
+      m_Severity: 2
+    - m_ResultName: Assets/Scenes/EncounterSelectionScene.unity:duplicateassetisolation_assets_all.bundle:Assets/Sprites/Characters/Miniatures/Aurora.png
+      m_Severity: 2
+    - m_ResultName: Assets/Scenes/EncounterSelectionScene.unity:duplicateassetisolation_assets_all.bundle:Assets/Sprites/Characters/Miniatures/Elsbeth.png
+      m_Severity: 2
+    - m_ResultName: Assets/Scenes/PlayerSelectionScene.unity:duplicateassetisolation_assets_all.bundle:Assets/Sprites/Characters/Miniatures/Aurora.png
+      m_Severity: 2
+    - m_ResultName: Assets/Scenes/PlayerSelectionScene.unity:duplicateassetisolation_assets_all.bundle:Assets/Sprites/Characters/Miniatures/Elsbeth.png
+      m_Severity: 2
+    - m_ResultName: Assets/Scenes/MapSectionScene.unity:duplicateassetisolation_assets_all.bundle:Assets/Sprites/Characters/Miniatures/Aurora.png
+      m_Severity: 2
+    - m_ResultName: Assets/Scenes/MapSectionScene.unity:duplicateassetisolation_assets_all.bundle:Assets/Sprites/Characters/Miniatures/Elsbeth.png
+      m_Severity: 2
+    - m_ResultName: Assets/Scenes/MapSectionScene.unity:duplicateassetisolation_assets_all.bundle:Assets/Sprites/Characters/Miniatures/Titus.png
+      m_Severity: 2

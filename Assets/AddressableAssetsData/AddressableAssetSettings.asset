@@ -22,6 +22,7 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: ab9ad8812012d4c8987e5d0e260bfc19, type: 2}
   - {fileID: 11400000, guid: e86f2a433e56942ad847c6159a3b395d, type: 2}
+  - {fileID: 11400000, guid: 58f8b39717a1241e294954ce297c1746, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -61,6 +62,22 @@ MonoBehaviour:
         m_Value: http://[PrivateIPAddress]:[HostingServicePort]
       - m_Id: 32bb45118fd0b454c82a0e73958db967
         m_Value: 1
+    - m_InheritedParent: 
+      m_Id: 0034230bc1cb846159e6b4e516e4d7d4
+      m_ProfileName: dcasadevall.com
+      m_Values:
+      - m_Id: 322c28d13acf44a3380f2fff44cf6c2c
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: 198b52c48838c42108183e1d0da3329b
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+      - m_Id: db28a2a91ed774181b95db762b807081
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+      - m_Id: 575c0aed354ec46b397bef51b8b3d7d5
+        m_Value: ServerData/[BuildTarget]
+      - m_Id: f5e6d1d0eac544241b01dd2ee62c33cf
+        m_Value: http://dcasadevall.com/apps/tabletop-combat-helper-content/[BuildTarget]
+      - m_Id: 32bb45118fd0b454c82a0e73958db967
+        m_Value: 1
     m_ProfileEntryNames:
     - m_Id: 32bb45118fd0b454c82a0e73958db967
       m_Name: ContentVersion
@@ -98,7 +115,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fcf834a158f334034ad8da0c279ababa, type: 2}
   - {fileID: 11400000, guid: 458c0c3f82d584d4db6974ebdc6a2774, type: 2}
   - {fileID: 11400000, guid: 2d17a2366cf32414c9fca0a7ee69b391, type: 2}
-  m_ActiveProfileId: 87d6bec7ca5ea4776abeec5c386b20d4
+  m_ActiveProfileId: 0034230bc1cb846159e6b4e516e4d7d4
   m_HostingServicesManager:
     m_HostingServiceInfos:
     - classRef: UnityEditor.AddressableAssets.HostingServices.HttpHostingService,
@@ -111,7 +128,7 @@ MonoBehaviour:
           m_Key: HostingServicePort
         - m_AssemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           m_ClassName: System.String
-          m_Data: HostedData/StandaloneOSX
+          m_Data: Library/com.unity.addressables/StreamingAssetsCopy/aa/OSX/StandaloneOSX
           m_Key: ContentRoot
         - m_AssemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           m_ClassName: System.Boolean
@@ -126,6 +143,6 @@ MonoBehaviour:
           m_Data: 3
           m_Key: InstanceId
     m_Settings: {fileID: 11400000}
-    m_NextInstanceId: 4
+    m_NextInstanceId: 5
     m_RegisteredServiceTypeRefs:
     - UnityEditor.AddressableAssets.HostingServices.HttpHostingService, Unity.Addressables.Editor
