@@ -16,17 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: a21bf4285832f475c81402f1b09775af
-  m_SerializeEntries:
-  - m_GUID: 55638e91719f64442a3654ede41f33a3
-    m_Address: UnitSpawnSettings
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-  - m_GUID: 67e3c827edc074b89b7afcb61bd32600
-    m_Address: MapSelectionData
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 61b7488e98b744d79b2a5ec23d910c12, type: 2}
   m_SchemaSet:

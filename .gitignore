@@ -40,4 +40,4 @@ Assets/ThirdParty/Plugins/Zenject/OptionalExtras/Signals/Zenject-Signals.csproj.
 Assets/ThirdParty/Plugins/Zenject/OptionalExtras/ReflectionBaking/Zenject-ReflectionBaking.csproj.meta
 
 # Assetbundles
-HostedData/
+ServerData/
