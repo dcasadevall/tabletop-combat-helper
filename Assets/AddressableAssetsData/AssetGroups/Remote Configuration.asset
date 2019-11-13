@@ -17,18 +17,1232 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 04d1aebb85df345a79b8815aba7b04a2
   m_SerializeEntries:
+  - m_GUID: 01db6d12742de41ff867ccabd3cdb8c6
+    m_Address: Goldmane Manor 2nd Floor 7-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 0284642305560455b8a484067ee3e55a
+    m_Address: Goldmane Manor 1st Floor 1-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 05eda0b2c2cff4bccad658b0ccf279a2
+    m_Address: Goldmane Manor 2nd Floor 3-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 06df61a1cdac24df58a8e2f1a2606abb
+    m_Address: Goldmane Manor 2nd Floor 5-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 07f6ab8a59c0847dabbb7dbb2f604146
+    m_Address: Goldmane Manor 2nd Floor 5-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 089a2b7b781894b2f9e96c6c83d398e0
+    m_Address: Goldmane Manor 1st Floor 1-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 09912b77eac86421998f6b6ebec3cb5d
+    m_Address: Goldmane Manor 2nd Floor 2-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 09ced230df7ee4e65ae4fd998f361cbe
+    m_Address: Goldmane Manor 2nd Floor 2-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 0b4b6eb88039b406e8de56825165ce07
+    m_Address: Goldmane Manor 2nd Floor 8-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 0d16504d0b9304455b4307680d4a96a4
+    m_Address: Goldmane Manor 2nd Floor 6-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 0d9b2ea6835ad4d49b03598ba5a29092
+    m_Address: Goldmane Manor 1st Floor 1-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 0da4d825d6d504e4fac17614b97fe715
+    m_Address: Goldmane Manor 1st Floor 7-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 0f44aa85c89a643ccbebbb5288cd8496
+    m_Address: Goldmane Manor 2nd Floor 3-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 0fbd10852b74344dc9efbbddf3a13c75
+    m_Address: Dwarf_icon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
+  - m_GUID: 0fcf0e1d7edb842529d2dbb386d75a43
+    m_Address: Goldmane Manor 1st Floor 8-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 10af88f6a935146f697c31e47ba14c31
+    m_Address: Goldmane Manor 2nd Floor 1-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 10d0852aedd5f478f86bf3a0f93538ac
+    m_Address: Goldmane Manor 1st Floor 4-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 12d89cd3a0324490a9c675dcc4f88f31
+    m_Address: Goldmane Manor 2nd Floor 4-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 1332d800d10394e44b311068bbcb056e
+    m_Address: Goldmane Manor 2nd Floor 7-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 1335b2a938c2b4fe580a3de74fa69d90
+    m_Address: Goldmane Manor 1st Floor 1-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 14ae4591dd58648dd9fa119264f9c1e8
+    m_Address: Goldmane Manor 2nd Floor 2-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 1526b6bddd8624397bb7e39907e3b159
+    m_Address: Goldmane Manor 2nd Floor 1-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 1549326973e544c7ebdde43bd343a8c9
+    m_Address: Goldmane Manor 1st Floor 3-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 18a9ae58d4e9d46de852e308adf39581
+    m_Address: Goldmane Manor 1st Floor 2-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 1a8b955ea6a834a419f3f1a64361805e
+    m_Address: Goldmane Manor 1st Floor 7-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 1ac7f0c743a3e4821a1412a1d81f7599
+    m_Address: Goldmane Manor 1st Floor 5-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 1e81bf3c4129a46debe71074c622af4b
+    m_Address: Goldmane Manor 2nd Floor 4-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 23a4c349d41374083ba6d8c064f481da
+    m_Address: Guard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Units
+  - m_GUID: 25d282df811434e299abb5d23b77a86f
+    m_Address: Goldmane Manor 2nd Floor 1-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 2945f72349e0145eb8214f3edc1c8bfe
+    m_Address: Goldmane Captain
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Units
+  - m_GUID: 2d01d9da2d31a4e38b8fc824122eb930
+    m_Address: Goldmane Manor 1st Floor 6-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 2da84205e57cb47d591ec7c5ee1b125a
+    m_Address: Goldmane Manor 1st Floor 6-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 2e2d65e17603746c0a1d78bd4f9bcae0
+    m_Address: Goldmane Manor 2nd Floor 8-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 2e90b74afb05f418685013e18ce14617
+    m_Address: Goldmane Manor 1st Floor 5-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 2fd3427e071724183928f11d77bfbafd
+    m_Address: Goldmane Manor 1st Floor 2-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 2fd7896e0180c45108096b1594541a7e
+    m_Address: Goldmane Manor 2nd Floor 7-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 3031fa0352b724bd1b4e1f44c89f5e59
+    m_Address: Goldmane Manor 2nd Floor 3-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 313919814f25d4b47a57a52d2e7724d2
+    m_Address: Noblewoman
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Units
+  - m_GUID: 32ddb0430f56b4d32814415cffcbf292
+    m_Address: Goldmane Manor 2nd Floor 2-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 3336161ff23ce4639bd258749423fcb0
+    m_Address: Goldmane Manor 1st Floor 5-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 33f9dd280992e4b7e8ef7e56ade6f5ad
+    m_Address: Elsbeth
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
+  - m_GUID: 349214e87581d4a5e953b6b111fdc4ed
+    m_Address: Goldmane Manor 1st Floor 1-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 360b4beb10e2e47368a84c436de7259b
+    m_Address: NPC-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Generic Units
+  - m_GUID: 375ead4d1bffd4d05bc456d573769654
+    m_Address: Goldmane Manor 1st Floor 5-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 37b056b0b18914de5acc437a4611d0d3
+    m_Address: Aurora
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
+  - m_GUID: 3836169f2c5c24cb3bd533bdf1b8e1c7
+    m_Address: Titus
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
+  - m_GUID: 385499016fba144d5a83173736af959c
+    m_Address: Goldmane Manor 1st Floor 6-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 39efe8437faaa4b1a803189c70c6d1fe
+    m_Address: Goldmane Manor 1st Floor 1-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 3bb084e3544a84c36bcfee37dd7e56d4
+    m_Address: Goldmane-Student
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Units
+  - m_GUID: 3c8ed7647669c47fc9cf3a65c53a60ea
+    m_Address: Goldmane Manor 1st Floor 4-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 3cbe6854633d34d2bb92a8611d515468
+    m_Address: Kora_icon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
+  - m_GUID: 3d694cfba68a047d786b303337de7bd0
+    m_Address: NPC-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Generic Units
+  - m_GUID: 3e9e5fa7360664ba89db9201c4475084
+    m_Address: Goldmane Manor 2nd Floor 3-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 3f2ea201dbc5c40ba854f12f5f4ce1d7
+    m_Address: Goldmane Manor 2nd Floor 8-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 3f54da25789fd4e4d8e5b834e2fae994
+    m_Address: Goldmane Manor 2nd Floor 5-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 411becf591cb7439ba25879b660fa4d2
+    m_Address: Goldmane Manor 2nd Floor 3-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 41a5f81ae6f734d4cb560584e0f662f6
+    m_Address: Goldmane Manor 2nd Floor 2-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 42849113a43ac41e390c72a651490930
+    m_Address: NPC-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Generic Units
+  - m_GUID: 4328b131af70d42f19447e41006de912
+    m_Address: Goldmane Manor 1st Floor 5-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 442bfce803c2b4b3cb9e75dabc1e8470
+    m_Address: Farathar
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - First Campaign Units
+  - m_GUID: 44fed4b6e27a74f72ac2d9e1c8ceb027
+    m_Address: Goldmane Manor 1st Floor 2-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 457aa19ef4b5d480190e9d70d75bae84
+    m_Address: Goldmane Manor 1st Floor 2-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 45a460da3fdfe4189a5e0a46bb8ae88f
+    m_Address: Goldmane Manor 1st Floor 8-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 46209cfdd0f134391a66af72be537167
+    m_Address: Goldmane Manor 2nd Floor 8-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 463be655163d34fb2b0bc8d785d878a4
+    m_Address: Goldmane Manor 2nd Floor 7-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 4833fc1d915cd41b6a2292587c8d870a
+    m_Address: Goldmane Manor 1st Floor 3-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 48c383ec3a0f24c56818da9fecc38233
+    m_Address: Goldmane Manor 1st Floor 8-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 495cc65384fc14f8eba4aa266dafa990
+    m_Address: Goldmane Manor 1st Floor 3-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 4978ec3ad33d448518efd3264ba02187
+    m_Address: Goldmane Manor 1st Floor 7-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 4a1fa50609f274b728c949e9d15ddf99
+    m_Address: Goldmane Manor 2nd Floor 6-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 4d18e45f7ac394b389a8a590e5aafd6f
+    m_Address: Goldmane Manor 2nd Floor 5-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 4d847bbfd9f194570baa2c9dfda3a683
+    m_Address: Goldmane Manor 1st Floor 4-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 4dc13b31b992e496b9de7071c3eb7107
+    m_Address: Goldmane Manor 1st Floor 8-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 4e862ad58af6a445a8918e7826d20238
+    m_Address: Goldmane Manor 2nd Floor 4-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 50c7c52885a8a4009bc9520bf1c0fdb7
+    m_Address: Goldmane Manor 1st Floor 2-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 50f453d21d6124802809901b62400c60
+    m_Address: Goldmane Manor 2nd Floor 3-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 51b171e5f7bd64d61988d9eafc8938fe
+    m_Address: Goldmane Manor 1st Floor 7-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 51f23d90383834fc4a4cf611d4fdceca
+    m_Address: Liona
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
+  - m_GUID: 535e9cfa65254427ebf196e2e860e111
+    m_Address: Goldmane Manor 2nd Floor 5-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 54d61bdac25f84daf919a3fc280497a5
+    m_Address: Goldmane Manor 1st Floor 6-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 550a3f435d21943adab9df30b4ea60f9
+    m_Address: Elsbeth_icon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
   - m_GUID: 55638e91719f64442a3654ede41f33a3
     m_Address: UnitSpawnSettings
     m_ReadOnly: 0
     m_SerializedLabels:
-    - default
     - Configuration
+  - m_GUID: 5570f5321a8b44708a3380cf2a639757
+    m_Address: Goldmane Manor 1st Floor 6-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 559f68da265364fda95498ace5fcfc85
+    m_Address: Goldmane Manor 2nd Floor 2-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 57658f3cc0ac647e68cf66d9cc49bc38
+    m_Address: Goldmane Manor 1st Floor 7-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 58500693a659444108c8c18042e1af7f
+    m_Address: Goldmane Manor 2nd Floor 7-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 5ae78937a6362496a85e1e031e4616fe
+    m_Address: Goldmane Manor 2nd Floor 6-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 5b4d80574802447788b2cd12bbe6abe6
+    m_Address: Goldmane Manor 2nd Floor 6-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 5c022d85aa96d404b98fb452017ce0b1
+    m_Address: Goldmane Manor 1st Floor 6-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 5c34c269ee5e24109886dbc87d2c1371
+    m_Address: Goldmane Manor 2nd Floor 4-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 5d0d0765173574520816bb012eff5b4b
+    m_Address: Goldmane Manor 2nd Floor 5-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 5d985f3cc18d34b019f25384af83d8ae
+    m_Address: Goldmane Manor 2nd Floor 8-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 5fbbb3bde9e9f49dd909e00895a36b66
+    m_Address: Goldmane Manor 2nd Floor 1-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 60a613878ae524bfc85e708c2c87ed7c
+    m_Address: Goldmane Manor 1st Floor 3-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 6170037f093054b9eac3887944b47162
+    m_Address: Goldmane Manor 2nd Floor 8-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 619998711ff2f45aca8429a9af935017
+    m_Address: Rammstorf_icon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
+  - m_GUID: 61d60db720b79444088c3a2069c7e1c2
+    m_Address: Goldmane Manor 2nd Floor 6-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 630906bf36f0e42d6bd99ded49156f76
+    m_Address: Goldmane Manor 1st Floor 2-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 6365155c81cab4b7ea60446a6eec8879
+    m_Address: Goldmane Manor 1st Floor 2-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 63a57fa7f9c224f3e913b39ad63ab610
+    m_Address: Goldmane Manor 1st Floor 6-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 64262448b7dfc4ef2a05b83316bd9015
+    m_Address: Servant
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Units
+  - m_GUID: 646a025af22c141158bc544735d5f001
+    m_Address: Goldmane Manor 2nd Floor 5-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 668d462e1aefc4a3aa2473661175877d
+    m_Address: Goldmane Manor 2nd Floor 6-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
   - m_GUID: 67e3c827edc074b89b7afcb61bd32600
     m_Address: MapSelectionData
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
     - Configuration
+  - m_GUID: 6ba83e0c89da541eebc88bd2f5db6f4d
+    m_Address: Goldmane Manor 2nd Floor 2-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 6bc13e1d918304976896295c01a030fe
+    m_Address: Goldmane Manor 2nd Floor 6-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 6beb0648c1cb14ea5b595a63ce8a6355
+    m_Address: Goldmane Manor 2nd Floor 1-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 6e64fde004ab141588a2de379057755f
+    m_Address: Goldmane Manor 1st Floor 8-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 6f4beea3b23a24e95a107849e6b11aad
+    m_Address: Goldmane Manor 2nd Floor 1-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 6f55db501012f42c98b8ed3877779f36
+    m_Address: Goldmane Manor 1st Floor 2-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 701d44a8d24ee482aacb563606afcf32
+    m_Address: Bog Strider
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - First Campaign Units
+  - m_GUID: 70f60c96020b0453882bf5e6e6de5787
+    m_Address: Goldmane Manor 2nd Floor 5-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 71183782ec67f4f729baeb7065f1fb2d
+    m_Address: NPC-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Generic Units
+  - m_GUID: 74fed8609242a4dbb94c2dc5e780d0ca
+    m_Address: Goldmane Manor 2nd Floor 3-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 761c4a8bb63f5448ab11103aaa02b26d
+    m_Address: Goldmane Manor 2nd Floor 3-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 78910090cf668453ea314ddf13f86ca4
+    m_Address: Goldmane Manor 1st Floor 8-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 792ed43bdfaae425a8e469419831c3da
+    m_Address: Goldmane Manor 1st Floor 4-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 797c902e6062f45c8a0930a7673ddb50
+    m_Address: Goldmane Manor 1st Floor 1-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 79810e2b5efad498293451e6da7a597d
+    m_Address: Goldmane Manor 2nd Floor 1-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 7a5efbf63f18249738e490d0e6fbbdc7
+    m_Address: Goldmane Manor 2nd Floor 2-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 7ae87e9c17e024f378d954e58b0ead87
+    m_Address: Liona_icon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
+  - m_GUID: 7bbff933ef20d41889edee445c885877
+    m_Address: Rammstorf
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
+  - m_GUID: 7cf1e088fa2fe43ca8a9e718c997adfe
+    m_Address: Goldmane Manor 2nd Floor 4-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 7d35e29fd88bd430abd661bf3f97153b
+    m_Address: Goldmane Manor 2nd Floor 3-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 7eff2a06fd24540de835c3d1fa28646b
+    m_Address: Brethedan
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - First Campaign Units
+  - m_GUID: 802a64b6f982242b79f9c579fac69490
+    m_Address: Goldmane Manor 2nd Floor 8-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 8159315bcfe4c4bf7bf443859ead3e9b
+    m_Address: NPC-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Generic Units
+  - m_GUID: 81f11d60b059441bebec07ea4986b776
+    m_Address: Goldmane Manor 2nd Floor 4-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 824a9433e5a2e4f56977b1fa8b22fdfb
+    m_Address: Goldmane Manor 2nd Floor 6-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 83a4928fa674b41ce814e9c51ff4a5bf
+    m_Address: Goldmane Manor 1st Floor 7-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 848fd3c0b2f9446ecb4087e798bd08f2
+    m_Address: Goldmane Manor 1st Floor 7-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 85bb22584074e4c19ad6494a0d928ee0
+    m_Address: Goldmane Manor 1st Floor 6-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 88cb15f6dc48946e9a1c9eaf3454b4ab
+    m_Address: Goldmane Manor 1st Floor 4-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 890a6d92419fd447a85fbecc7970fc73
+    m_Address: Goldmane Manor 1st Floor 3-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 8a0c4db21a036483190a3973f5b282e0
+    m_Address: Goldmane Manor 2nd Floor 5-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 8b1da3fc2cf044061a920c424a0b0179
+    m_Address: Goldmane Manor 1st Floor 4-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 8c0518ba7a0a448e0b58cad2ee97c4b0
+    m_Address: Goldmane Manor 1st Floor 7-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 8cc26afb691c54684a71db61283a5d11
+    m_Address: Goldmane Manor 1st Floor 8-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 8d0240b4c58fb4144841256e77591ccb
+    m_Address: Goldmane Manor 2nd Floor 8-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 8e7b9679e14df46b889ccc7c11dc77cb
+    m_Address: Goldmane Manor 2nd Floor 4-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 8faf6afb9c44a4368b8bb4270a53513f
+    m_Address: Goldmane Manor 1st Floor 4-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 907435c5043154915a82c2b744fc206e
+    m_Address: Seraphim-Goldmane
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Units
+  - m_GUID: 915e9a3942c6f463486023c3663c8e3a
+    m_Address: Goldmane Manor 2nd Floor 7-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 93f39f8f685be4706bc44daf2336a915
+    m_Address: NPC-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Generic Units
+  - m_GUID: 9488b0d6254984fba9ae716112a366c9
+    m_Address: Titus_icon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
+  - m_GUID: 964423fc9f78747858a5250f47bd2f25
+    m_Address: Goldmane Manor 2nd Floor 1-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 964f38c062483422f8daf07ce46dca69
+    m_Address: Goldmane Manor 1st Floor 4-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 96bb04e2ab50048f7b415512536f4765
+    m_Address: Goldmane Manor 1st Floor 8-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 9750ef61e3a5f476ba4a9419ab0c002e
+    m_Address: Goldmane Manor 1st Floor 6-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 985855c0c1de649f79512f03e23a5600
+    m_Address: Las
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - First Campaign Units
+  - m_GUID: 9970f279d46264556b044f7edd118a0a
+    m_Address: Goldmane Manor 1st Floor 8-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 99f72f7ddad4c405894f8cc854f0239a
+    m_Address: Goldmane Manor 2nd Floor 8-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 9a799fab77b1c4c3897568d36c693b52
+    m_Address: Goldmane Manor 2nd Floor 6-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 9abb577dc98654692af920d9e38863d5
+    m_Address: Goldmane Manor 1st Floor 3-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 9adeba8123b6547c09e566a1cb5cd916
+    m_Address: Goldmane Manor 2nd Floor 5-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 9bc3a98a71d0d4a8ba0b75ecbaf3885f
+    m_Address: Goldmane Manor 2nd Floor 6-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: 9d268ec281b75440cba6ff2e4fc3821e
+    m_Address: Goldmane Manor 1st Floor 3-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: a0830afd07c75444d97d8e2f0f311360
+    m_Address: Goldmane Manor 2nd Floor 8-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: a0d62cc7a450f4175aeb271cf5d46e0d
+    m_Address: Goldmane Manor 2nd Floor 5-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: a1e27cf512d4d4ee3b4d5bb77415238a
+    m_Address: Goldmane Manor 1st Floor 4-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: a384bf14b78d24190a2ab097ca8e247a
+    m_Address: Goldmane Manor 1st Floor 3-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: a45362a5c378c432e9599eebcaab44c9
+    m_Address: Goldmane Manor 2nd Floor 2-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: a60ac4dfc08274605a02c3b81e9be113
+    m_Address: Goldmane Manor 1st Floor 8-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: a724ca4a7e65143f3bbb23b2d694114b
+    m_Address: Goldmane Manor 1st Floor 8-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: a85256366dd3c40b39c9420260bbdfa2
+    m_Address: NPC-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Generic Units
+  - m_GUID: a87ba24649cf24624950aa6707b5851f
+    m_Address: Goldmane Manor 2nd Floor 3-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: aa204bb1c66b04cd4b633df52643d11b
+    m_Address: Goldmane Manor 1st Floor 1-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: aa7e15a1483204fc58b4ef21ca3396b9
+    m_Address: NPC-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Generic Units
+  - m_GUID: ab96c5784e94348d9a09ce5b1677016f
+    m_Address: Goldmane Manor 1st Floor 8-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: ae04b6da0bbed4f91a825153ce86cd8f
+    m_Address: Goldmane Manor 1st Floor 3-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: aeaf30c5693fb46a0a2550376e00d48f
+    m_Address: Bedwyr_icon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
+  - m_GUID: af08555d78d174ec28f6324353287a52
+    m_Address: Goldmane Manor 1st Floor 5-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: afa7139ac50924e7888eb0ef8fad940a
+    m_Address: Goldmane Manor 2nd Floor 6-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: b179ed15d4abd457aa5f2ca79091a44c
+    m_Address: Goldmane Manor 2nd Floor 4-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: b18a9421a599647c2ae2304eb1980904
+    m_Address: Goldmane Manor 2nd Floor 5-9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: b1b2ee27ae7b74a9bbcc82119dce1d5e
+    m_Address: Goldmane Manor 1st Floor 1-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: b28e555ffb2f441bd971845bca8d4607
+    m_Address: Goldmane Manor 2nd Floor 2-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: b2b584ad86eb04156856e6cd97977d5b
+    m_Address: Goldmane Manor 1st Floor 7-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: b6d09a3bad6514ac2842e85d02d51ac1
+    m_Address: Goldmane Manor 2nd Floor 4-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: b75b93fe0f683486a8cd2671b8de28c8
+    m_Address: Goldmane Manor 1st Floor 4-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: b7c924a6e3118420cb50a122b2ff35be
+    m_Address: Goldmane Manor 1st Floor 1-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: b960fe0f88ab54e5780cfbcd7c1bcb97
+    m_Address: Goldmane Manor 1st Floor 6-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: becd9a1ac82834cb5ab384d9c0202dc8
+    m_Address: Goldmane Manor 1st Floor 2-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: bfb796ba83aab4872bfb44809452580d
+    m_Address: Goldmane Manor 2nd Floor 7-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: bfe5a29ea6c2b4b66897acfd17d72359
+    m_Address: Goldmane Manor 1st Floor 5-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: c022c7abe3de04c1a94c0f7fd06e7e7c
+    m_Address: Goldmane Manor 2nd Floor 7-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: c0dd92efd6cbc4f8daf37d9b689bc61f
+    m_Address: Goldmane Manor 2nd Floor 1-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: c1db00967b5b94e53a0dea1cda6895dc
+    m_Address: Goldmane Manor 1st Floor 5-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: c32c6036658124f72994aafa64876e3a
+    m_Address: Goldmane Manor 2nd Floor 2-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: c3f982810b74a4bfe84903b20e11069e
+    m_Address: Goldmane Manor 1st Floor 2-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: c5484dfcb076f47ab9b23b6e69c0fd73
+    m_Address: Goldmane Manor 2nd Floor 6-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: c79e73804884a4a1fb5e2ef1b750758f
+    m_Address: Goldmane Manor 1st Floor 5-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: c7fead565ec924d00b5a9c050ac01413
+    m_Address: Goldmane Manor 2nd Floor 8-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: cc3c265b4651e435ca904a498e2f05ec
+    m_Address: Goldmane Manor 2nd Floor 3-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: cc712b76b181f4d588db005c7bf9735c
+    m_Address: Goldmane Manor 2nd Floor 7-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: cd13e5c95ac5346f79d9c177add32d66
+    m_Address: Goldmane Manor 2nd Floor 7-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: cd3c7876d62ea41ca8d2acbd355c6420
+    m_Address: Goldmane Manor 1st Floor 1-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: ce97334e6710d47d88a5c4a2f0764fbe
+    m_Address: Goldmane Manor 1st Floor 4-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: cfdc5b485701b48b5a81e7c40eef5140
+    m_Address: Goldmane Manor 1st Floor 1-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: d19816cfe1bf245bea919d34dee5e126
+    m_Address: Goldmane Manor 2nd Floor 4-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: d2ac98fbde5ef4305bf8059e3701a79e
+    m_Address: Goldmane Manor 1st Floor 5-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: d3d9a33e6ceb74a4882ef36ab29707d9
+    m_Address: Kora
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
+  - m_GUID: d4866929130a74c7c96fcfd79f79795e
+    m_Address: Goldmane Manor 1st Floor 3-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: d5469eaba55f848d5888192c64485a1b
+    m_Address: Goldmane Manor 1st Floor 7-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: d5d43ea2974ed4f27ae9b4400b569291
+    m_Address: Goldmane Manor 1st Floor 3-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: d70f5153e96cd4d60b6f090fd9b87db3
+    m_Address: Goldmane Manor 1st Floor 2-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: dbbf2c64f555b41159d208276d390394
+    m_Address: Goldmane Manor 2nd Floor 8-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: dc568f7edd1ca40dcbe8c71f0e383179
+    m_Address: Goldmane Manor 1st Floor 3-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: dc8dc3bd243d641eba36e4d6f54d4c76
+    m_Address: Goldmane Manor 1st Floor 6-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: dcefc3d2483d7460f8219b11be5cd09f
+    m_Address: Goldmane Manor 1st Floor 8-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: de8e7635034a54bcc98612eaa037a821
+    m_Address: Goldmane Manor 2nd Floor 5-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: e0223fcaca79e43929230530a472e8c7
+    m_Address: Goldmane Manor 2nd Floor 1-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: e0333d75426d4470d81a51c6dfab5f1c
+    m_Address: Goldmane Manor 2nd Floor 7-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: e0c2887dc153d4cf4adeda7f9e6108dc
+    m_Address: Goldmane Manor 1st Floor 6-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: e0d42505667644aadadb7e058be1d3ea
+    m_Address: Goldmane Manor 1st Floor 1-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: e3618583cfa704a86ac5d91e6cb7b372
+    m_Address: Goldmane Manor 1st Floor 3-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: e3ead04f36e814c37bb153d410fb5a4a
+    m_Address: Goldmane Manor 1st Floor 5-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: e4008b092d7294ed2a9f2781dfed73f4
+    m_Address: Goldmane Manor 2nd Floor 6-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: e4d2c9e03d7064a108bb75e623057822
+    m_Address: Goldmane Manor 1st Floor 5-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: e54a5018e33144a37af8c23159838629
+    m_Address: Goldmane Manor 2nd Floor 2-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: e571853a77071483491bf644a8c63f87
+    m_Address: Goldmane Manor 2nd Floor 2-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: e7e75fd4d3d6d41ab96eb27320631afe
+    m_Address: Goldmane Manor 1st Floor 5-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: e854f48f5d88849dca1e15fd108082a2
+    m_Address: Goldmane Manor 1st Floor 4-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: e97360c7099fd49a29a8412e539da84b
+    m_Address: Goldmane Manor 1st Floor 7-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: ebc1391f8062f40f5b437d92446d7473
+    m_Address: Goldmane Manor 2nd Floor 4-2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: ec69775a08ec34fdd9201b8dd681a77a
+    m_Address: Goldmane Manor 2nd Floor 3-1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: ecd7cef2ebb6b4a1486ae6f415425b72
+    m_Address: Goldmane Manor 1st Floor 7-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: ece28f756f35746d799d1ebeb76070b2
+    m_Address: Goldmane Manor 1st Floor 7-4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: ed0509c99b2744c18a3626ee9bd1baf3
+    m_Address: Goldmane Manor 1st Floor 4-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: eda545a43c7b040d5a57ae268b7202fe
+    m_Address: NPC-6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Generic Units
+  - m_GUID: ee7b8e389dd3943c38cf0da53878d39b
+    m_Address: Goldmane Manor 2nd Floor 1-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: f0c25680eaea74e1f9de19cf55fe1c82
+    m_Address: Goldmane Manor 2nd Floor 1-11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: f1d3b40943a1f4f49a2b4dc94777d2b5
+    m_Address: Goldmane Manor 2nd Floor 8-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: f242f9729ee884dfd9219d52673fb090
+    m_Address: Goldmane Manor 2nd Floor 4-13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: f269c8b04319f42e8a0d7d6863b299c0
+    m_Address: Goldmane Manor 2nd Floor 1-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: f3023ab00e93a4d3493a551714421137
+    m_Address: Goldmane Manor 2nd Floor 3-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: f580dac31f30e4a32b7812ad25e6240e
+    m_Address: Aurora_icon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player Units
+  - m_GUID: f5c0c663c468a46b799c51e7c952a99d
+    m_Address: Goldmane Manor 1st Floor 2-10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: f6e336bc37dd9456e8ebda0e3e2a2058
+    m_Address: Goldmane Manor 1st Floor 2-3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: f7de93671ad7a4e298f7a4bae4c63ca5
+    m_Address: Goldmane Manor 2nd Floor 7-8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: f82029a082e51468cb2ca87ed4382bce
+    m_Address: Goldmane Manor 1st Floor 6-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: f95f1b7ecdb1b40f49ae04daacb69f66
+    m_Address: Goldmane Manor 2nd Floor 4-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: f9c4ab8a6666f4ba082838eff57dd21a
+    m_Address: Goldmane Manor 2nd Floor 7-12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
+  - m_GUID: fe1b1fc453fb4440790a75b610678301
+    m_Address: Brethedan Icon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - First Campaign Units
+  - m_GUID: ffcbd89ad35814d13a98c537b1683580
+    m_Address: Nobleman
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Units
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 61b7488e98b744d79b2a5ec23d910c12, type: 2}
   m_SchemaSet:
