@@ -232,6 +232,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Generic Units
+  - m_GUID: 37595a27aa57145478cd90b496774d09
+    m_Address: Floor Tiles 02 Neyjour
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Test Maps
+    - Generic Maps
   - m_GUID: 375ead4d1bffd4d05bc456d573769654
     m_Address: Goldmane Manor 1st Floor 5-9
     m_ReadOnly: 0
@@ -453,11 +459,22 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Goldmane Manor
+  - m_GUID: 5b2e2ce96b34e4b58810e352981c7f78
+    m_Address: Floor Tiles 04 Neyjour
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Test Maps
+    - Generic Maps
   - m_GUID: 5b4d80574802447788b2cd12bbe6abe6
     m_Address: Goldmane Manor 2nd Floor 6-5
     m_ReadOnly: 0
     m_SerializedLabels:
     - Goldmane Manor
+  - m_GUID: 5b7d3d577e4ca4c3b92e039a351f754c
+    m_Address: Farathar's-Hall
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - First Campaign Maps
   - m_GUID: 5c022d85aa96d404b98fb452017ce0b1
     m_Address: Goldmane Manor 1st Floor 6-12
     m_ReadOnly: 0
@@ -730,6 +747,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Goldmane Units
+  - m_GUID: 90765a1dd19f84a14a66ddb072c161ec
+    m_Address: Floor Tiles 01 Neyjour
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Test Maps
+    - Generic Maps
   - m_GUID: 915e9a3942c6f463486023c3663c8e3a
     m_Address: Goldmane Manor 2nd Floor 7-13
     m_ReadOnly: 0
@@ -825,6 +848,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Goldmane Manor
+  - m_GUID: a41c959d0122d485da5b254c516a6396
+    m_Address: 4x4-Grass-Floor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Test Maps
+    - Generic Maps
   - m_GUID: a45362a5c378c432e9599eebcaab44c9
     m_Address: Goldmane Manor 2nd Floor 2-12
     m_ReadOnly: 0
@@ -900,6 +929,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Goldmane Manor
+  - m_GUID: b238efff2955642c38ab8ba8d578c46e
+    m_Address: Big Map
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - First Campaign Maps
   - m_GUID: b28e555ffb2f441bd971845bca8d4607
     m_Address: Goldmane Manor 2nd Floor 2-5
     m_ReadOnly: 0
@@ -910,6 +944,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Goldmane Manor
+  - m_GUID: b4d14224704cb445483bffc6ea840336
+    m_Address: Flooded Grotto
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - First Campaign Maps
   - m_GUID: b6d09a3bad6514ac2842e85d02d51ac1
     m_Address: Goldmane Manor 2nd Floor 4-6
     m_ReadOnly: 0
@@ -960,6 +999,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Goldmane Manor
+  - m_GUID: c2a91478b71f748c68e3490fa8213011
+    m_Address: Floor Tiles 03 Neyjour
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Test Maps
+    - Generic Maps
   - m_GUID: c32c6036658124f72994aafa64876e3a
     m_Address: Goldmane Manor 2nd Floor 2-13
     m_ReadOnly: 0
