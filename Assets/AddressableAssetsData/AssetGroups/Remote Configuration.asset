@@ -427,6 +427,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Configuration
+    - Settings
   - m_GUID: 5570f5321a8b44708a3380cf2a639757
     m_Address: Goldmane Manor 1st Floor 6-3
     m_ReadOnly: 0
@@ -538,6 +539,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - default
     - Configuration
+    - Settings
   - m_GUID: 6ba83e0c89da541eebc88bd2f5db6f4d
     m_Address: Goldmane Manor 2nd Floor 2-10
     m_ReadOnly: 0
