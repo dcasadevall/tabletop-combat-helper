@@ -41,5 +41,6 @@ Assets/ThirdParty/Plugins/Zenject/OptionalExtras/ReflectionBaking/Zenject-Reflec
 
 # Assetbundles
 ServerData/
+Assets/StreamingAssets/
 Assets/StreamingAssets.meta
 Assets/Content.meta
