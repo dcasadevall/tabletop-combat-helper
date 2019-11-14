@@ -45,4 +45,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapSelectViewControllerPrefab: {fileID: 2571834939211621924, guid: 7a49f61fe897448c6807002b45d79c28,
     type: 3}
-  mapSelectionData: {fileID: 11400000, guid: 67e3c827edc074b89b7afcb61bd32600, type: 2}
+  _mapSelectionData: {fileID: 11400000, guid: 67e3c827edc074b89b7afcb61bd32600, type: 2}

@@ -23,13 +23,11 @@ namespace Map.MapSelection {
             Container.Bind<IMapSelectViewController>().To<MapSelectViewController>()
                      .FromComponentInNewPrefab(mapSelectViewControllerPrefab).AsSingle();
             
-            foreach (var mapData in _mapSelectionData.mapDatas) {
-                Container.Bind<IMapData>().To<MapData>().FromInstance(mapData);
+            foreach (var mapReference in _mapSelectionData.mapReferences) {
+                Container.Bind<IMapReference>().To<MapReference>().FromInstance(mapReference);
             }
             
-            // MapCommands directly invoke MapSectionsCommands, so they need to be loaded together.
             Container.Install<MapCommandsInstaller>();
-            Container.Install<MapSectionsCommandsInstaller>();
         }
     }
 }

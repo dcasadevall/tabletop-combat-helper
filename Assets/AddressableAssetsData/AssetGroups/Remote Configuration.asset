@@ -187,6 +187,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Goldmane Manor
+  - m_GUID: 2f11d4816a0c642adba3c77703bc7b66
+    m_Address: Goldmane Manor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Goldmane Manor
   - m_GUID: 2fd3427e071724183928f11d77bfbafd
     m_Address: Goldmane Manor 1st Floor 2-1
     m_ReadOnly: 0
@@ -283,6 +288,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Generic Units
+  - m_GUID: 3ddfbdd824ded41f8b19d4713f2c8cc8
+    m_Address: Big Map
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - First Campaign Maps
   - m_GUID: 3e9e5fa7360664ba89db9201c4475084
     m_Address: Goldmane Manor 2nd Floor 3-5
     m_ReadOnly: 0
@@ -348,6 +358,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Goldmane Manor
+  - m_GUID: 46fec75a272f4490b837f47af4d08089
+    m_Address: Grotto
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - First Campaign Maps
   - m_GUID: 4833fc1d915cd41b6a2292587c8d870a
     m_Address: Goldmane Manor 1st Floor 3-9
     m_ReadOnly: 0
@@ -798,6 +813,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Goldmane Manor
+  - m_GUID: 99bd98f4046f84229ac1ecfae2feb2f2
+    m_Address: Farathar's Hall
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - First Campaign Maps
   - m_GUID: 99f72f7ddad4c405894f8cc854f0239a
     m_Address: Goldmane Manor 2nd Floor 8-4
     m_ReadOnly: 0
@@ -838,6 +858,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Goldmane Manor
+  - m_GUID: a0f23619dc62844b68dd3827d90f6e3d
+    m_Address: TiledMap
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Generic Maps
   - m_GUID: a1e27cf512d4d4ee3b4d5bb77415238a
     m_Address: Goldmane Manor 1st Floor 4-7
     m_ReadOnly: 0
@@ -1095,6 +1120,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Goldmane Manor
+  - m_GUID: dad0e82a6ed854fe18f5caafe8ee37dd
+    m_Address: Grass
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Generic Maps
   - m_GUID: dbbf2c64f555b41159d208276d390394
     m_Address: Goldmane Manor 2nd Floor 8-10
     m_ReadOnly: 0

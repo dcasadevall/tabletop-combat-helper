@@ -20,7 +20,7 @@ namespace Map.Commands {
         private const string kEncounterScene = "EncounterScene";
 
         private readonly LoadMapCommandData _data;
-        private readonly List<IMapData> _mapDatas;
+        private readonly List<IMapReference> _mapPreviews;
         private readonly ICommandFactory _commandFactory;
         private readonly ILogger _logger;
         private readonly IReplayLoaderViewController _replayLoaderViewController;
@@ -35,29 +35,32 @@ namespace Map.Commands {
         }
 
         public LoadMapCommand(LoadMapCommandData data,
-                              List<IMapData> mapDatas, ICommandFactory commandFactory, ILogger logger,
+                              List<IMapReference> mapPreviews, ICommandFactory commandFactory, ILogger logger,
                               ZenjectSceneLoader sceneLoader) {
             _data = data;
-            _mapDatas = mapDatas;
+            _mapPreviews = mapPreviews;
             _commandFactory = commandFactory;
             _logger = logger;
             _sceneLoader = sceneLoader;
         }
 
         public IObservable<Unit> Run() {
-            if (_data.mapIndex > _mapDatas.Count) {
+            if (_data.mapIndex > _mapPreviews.Count) {
                 string errorMsg = string.Format("Invalid map index: {0}", _data.mapIndex);
                 _logger.LogError(LoggedFeature.Map, errorMsg);
                 return Observable.Throw<Unit>(new Exception(errorMsg));
             }
 
-            IMapData mapData = _mapDatas[(int) _data.mapIndex];
+            IMapReference mapReference = _mapPreviews[(int) _data.mapIndex];
+            IObservable<IMapData> mapDataObservable = mapReference.LoadMap();
+            mapDataObservable.Subscribe(mapData => {
+                _sceneLoader.LoadSceneAsync(kEncounterScene,
+                                            LoadSceneMode.Additive,
+                                            container => {
+                                                HandleMapSceneLoaded(container, mapData);
+                                            });      
+            });
 
-            _sceneLoader.LoadSceneAsync(kEncounterScene,
-                                        LoadSceneMode.Additive,
-                                        container => {
-                                            HandleMapSceneLoaded(container, mapData);
-                                        });
             return _sceneLoadedSubject;
         }
 
