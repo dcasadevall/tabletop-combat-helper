@@ -7,6 +7,7 @@ using Logging;
 using Map.MapSections.Commands;
 using Map.UI;
 using Replays.Persistence.UI;
+using UI;
 using UniRx;
 using UniRx.Async;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace Map.Commands {
         private readonly IReplayLoaderViewController _replayLoaderViewController;
         private readonly IMapSelectViewController _mapSelectViewController;
         private readonly ZenjectSceneLoader _sceneLoader;
+        private readonly IModalViewController _modalViewController;
         private readonly Subject<Unit> _sceneLoadedSubject = new Subject<Unit>();
 
         public bool IsInitialGameStateCommand {
@@ -36,12 +38,14 @@ namespace Map.Commands {
 
         public LoadMapCommand(LoadMapCommandData data,
                               List<IMapReference> mapPreviews, ICommandFactory commandFactory, ILogger logger,
-                              ZenjectSceneLoader sceneLoader) {
+                              ZenjectSceneLoader sceneLoader,
+                              IModalViewController modalViewController) {
             _data = data;
             _mapPreviews = mapPreviews;
             _commandFactory = commandFactory;
             _logger = logger;
             _sceneLoader = sceneLoader;
+            _modalViewController = modalViewController;
         }
 
         public IObservable<Unit> Run() {
@@ -51,6 +55,7 @@ namespace Map.Commands {
                 return Observable.Throw<Unit>(new Exception(errorMsg));
             }
 
+            _modalViewController.Show("Loading Assets...");
             IMapReference mapReference = _mapPreviews[(int) _data.mapIndex];
             IObservable<IMapData> mapDataObservable = mapReference.LoadMap();
             mapDataObservable.Subscribe(mapData => {
@@ -77,6 +82,7 @@ namespace Map.Commands {
                                                                         typeof(LoadMapSectionCommandData),
                                                                         loadMapSectionCommandData);
                 loadMapSectionCommand.Run().Subscribe(next => {
+                    _modalViewController.Hide();
                     _sceneLoadedSubject.OnNext(Unit.Default);
                 });
             });
