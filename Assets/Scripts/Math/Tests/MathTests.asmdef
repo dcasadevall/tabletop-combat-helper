@@ -1,9 +1,9 @@
 {
     "name": "MathTests",
     "references": [
-        "Zenject-TestFramework",
         "ApplicationAssembly",
-        "Zenject"
+        "Zenject",
+        "Zenject-TestFramework"
     ],
     "optionalUnityReferences": [
         "TestAssemblies"

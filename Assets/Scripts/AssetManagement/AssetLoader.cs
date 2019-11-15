@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UI;
 using UniRx;
 using UnityEditor;
 using UnityEngine.SceneManagement;
@@ -15,15 +16,18 @@ namespace AssetManagement {
         private readonly string _nextScene;
         private readonly AssetLoadingFunction[] _assetLoadingFunctions;
         private readonly ZenjectSceneLoader _sceneLoader;
+        private readonly IModalViewController _modalViewController;
 
         public AssetLoader(DiContainer container,
                            [Inject(Id = "NextScene")] string nextScene,
                            AssetLoadingFunction[] assetLoadingFunctions,
-                           ZenjectSceneLoader sceneLoader) {
+                           ZenjectSceneLoader sceneLoader,
+                           IModalViewController modalViewController) {
             _container = container;
             _nextScene = nextScene;
             _assetLoadingFunctions = assetLoadingFunctions;
             _sceneLoader = sceneLoader;
+            _modalViewController = modalViewController;
         }
 
         public void Initialize() {
@@ -32,10 +36,14 @@ namespace AssetManagement {
                 observables.Add(assetLoadingFunction.Invoke());
             }
 
+            _modalViewController.Show("Loading Assets...");
             observables.Merge().Subscribe(binding => _container
                                                      .Bind(binding.type)
                                                      .FromInstance(binding.asset),
-                                          () => _sceneLoader.LoadScene(_nextScene, LoadSceneMode.Additive));
+                                          () => {
+                                              _modalViewController.Hide();
+                                              _sceneLoader.LoadScene(_nextScene, LoadSceneMode.Additive);
+                                          });
         }
     }
 }

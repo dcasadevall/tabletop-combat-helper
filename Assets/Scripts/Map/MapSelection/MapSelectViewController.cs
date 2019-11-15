@@ -19,12 +19,12 @@ namespace Map.UI {
         
         private int _selectedIndex = 0;
         
-        private List<IMapData> _mapDatas;
+        private List<IMapReference> _mapReferences;
         private ILogger _logger;
 
         [Inject]
-        public void Construct(List<IMapData> mapDatas, ILogger logger) {
-            _mapDatas = mapDatas;
+        public void Construct(List<IMapReference> mapReferences, ILogger logger) {
+            _mapReferences = mapReferences;
             _logger = logger;
         }
 
@@ -44,7 +44,7 @@ namespace Map.UI {
         }
 
         private void HandleOnLoadMapClicked() {
-            if (_selectedIndex < 0 || _selectedIndex >= _mapDatas.Count) {
+            if (_selectedIndex < 0 || _selectedIndex >= _mapReferences.Count) {
                 _logger.LogError(LoggedFeature.Map, "Invalid selected index: {0}", _selectedIndex);
                 return;
             }
@@ -65,7 +65,7 @@ namespace Map.UI {
 
             _dropdown.ClearOptions();
             List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
-            foreach (var mapData in _mapDatas) {
+            foreach (var mapData in _mapReferences) {
                 options.Add(new Dropdown.OptionData(mapData.MapName));
             }
             _dropdown.AddOptions(options);

@@ -1,5 +1,6 @@
 using Map.MapSections.Commands;
 using Map.MapSections.UI;
+using Map.Serialized;
 using UnityEngine;
 using Zenject;
 
@@ -12,8 +13,7 @@ namespace Map.MapSections {
             Container.Bind<MapSectionSelectionViewController>().FromComponentInNewPrefab(_mapSelectionViewController)
                      .AsSingle().NonLazy();
             
-            // MapSectionsCommands loaded in MapSelectionInstaller, since loading the map depends on loading a section.
-            // TODO: change structure of scenes instead.
+            Container.Install<MapSectionsCommandsInstaller>();
         }
     }
 }

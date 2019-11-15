@@ -7,6 +7,7 @@ using Logging;
 using Map.MapSections.Commands;
 using Map.UI;
 using Replays.Persistence.UI;
+using UI;
 using UniRx;
 using UniRx.Async;
 using UnityEngine;
@@ -20,12 +21,13 @@ namespace Map.Commands {
         private const string kEncounterScene = "EncounterScene";
 
         private readonly LoadMapCommandData _data;
-        private readonly List<IMapData> _mapDatas;
+        private readonly List<IMapReference> _mapPreviews;
         private readonly ICommandFactory _commandFactory;
         private readonly ILogger _logger;
         private readonly IReplayLoaderViewController _replayLoaderViewController;
         private readonly IMapSelectViewController _mapSelectViewController;
         private readonly ZenjectSceneLoader _sceneLoader;
+        private readonly IModalViewController _modalViewController;
         private readonly Subject<Unit> _sceneLoadedSubject = new Subject<Unit>();
 
         public bool IsInitialGameStateCommand {
@@ -35,29 +37,35 @@ namespace Map.Commands {
         }
 
         public LoadMapCommand(LoadMapCommandData data,
-                              List<IMapData> mapDatas, ICommandFactory commandFactory, ILogger logger,
-                              ZenjectSceneLoader sceneLoader) {
+                              List<IMapReference> mapPreviews, ICommandFactory commandFactory, ILogger logger,
+                              ZenjectSceneLoader sceneLoader,
+                              IModalViewController modalViewController) {
             _data = data;
-            _mapDatas = mapDatas;
+            _mapPreviews = mapPreviews;
             _commandFactory = commandFactory;
             _logger = logger;
             _sceneLoader = sceneLoader;
+            _modalViewController = modalViewController;
         }
 
         public IObservable<Unit> Run() {
-            if (_data.mapIndex > _mapDatas.Count) {
+            if (_data.mapIndex > _mapPreviews.Count) {
                 string errorMsg = string.Format("Invalid map index: {0}", _data.mapIndex);
                 _logger.LogError(LoggedFeature.Map, errorMsg);
                 return Observable.Throw<Unit>(new Exception(errorMsg));
             }
 
-            IMapData mapData = _mapDatas[(int) _data.mapIndex];
+            _modalViewController.Show("Loading Assets...");
+            IMapReference mapReference = _mapPreviews[(int) _data.mapIndex];
+            IObservable<IMapData> mapDataObservable = mapReference.LoadMap();
+            mapDataObservable.Subscribe(mapData => {
+                _sceneLoader.LoadSceneAsync(kEncounterScene,
+                                            LoadSceneMode.Additive,
+                                            container => {
+                                                HandleMapSceneLoaded(container, mapData);
+                                            });      
+            });
 
-            _sceneLoader.LoadSceneAsync(kEncounterScene,
-                                        LoadSceneMode.Additive,
-                                        container => {
-                                            HandleMapSceneLoaded(container, mapData);
-                                        });
             return _sceneLoadedSubject;
         }
 
@@ -74,6 +82,7 @@ namespace Map.Commands {
                                                                         typeof(LoadMapSectionCommandData),
                                                                         loadMapSectionCommandData);
                 loadMapSectionCommand.Run().Subscribe(next => {
+                    _modalViewController.Hide();
                     _sceneLoadedSubject.OnNext(Unit.Default);
                 });
             });
