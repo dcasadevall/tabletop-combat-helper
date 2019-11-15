@@ -3,11 +3,15 @@ using InputSystem;
 using JetBrains.Annotations;
 using Logging;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 using ILogger = Logging.ILogger;
 
-namespace Networking.UI {
-    public class NetworkReconnectViewController : MonoBehaviour, INetworkReconnectViewController {
+namespace UI {
+    public class ModalViewController : MonoBehaviour, IModalViewController {
+        [SerializeField]
+        private Text _text;
+        
         private IInputLock _inputLock;
         private ILogger _logger;
         private bool _isShown;
@@ -25,14 +29,15 @@ namespace Networking.UI {
             Hide();
         }
 
-        public void Show() {
+        public void Show(String text) {
+            _text.text = text;
             _isShown = true;
             gameObject.SetActive(true);
         }
 
         private void Update() {
             if (_lock == null && _isShown) {
-                _logger.Log(LoggedFeature.Network, "Network Reconnect VC acquiring input lock.");
+                _logger.Log(LoggedFeature.Network, "ModalViewController acquiring input lock.");
                 _lock = _inputLock.Lock();
             }
         }

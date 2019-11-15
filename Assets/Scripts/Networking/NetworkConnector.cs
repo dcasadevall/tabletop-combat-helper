@@ -1,5 +1,5 @@
 using Logging;
-using Networking.UI;
+using UI;
 using UniRx;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -20,15 +20,15 @@ namespace Networking {
 
         private ILogger _logger;
         private INetworkManager _networkManager;
-        private readonly INetworkReconnectViewController _reconnectViewController;
+        private readonly IModalViewController _modalViewController;
         private ZenjectSceneLoader _sceneLoader;
         
         public NetworkConnector(INetworkManager networkManager,
-                                INetworkReconnectViewController reconnectViewController, 
+                                IModalViewController modalViewController, 
                                 ZenjectSceneLoader zenjectSceneLoader, 
                                 ILogger logger) {
             _networkManager = networkManager;
-            _reconnectViewController = reconnectViewController;
+            _modalViewController = modalViewController;
             _sceneLoader = zenjectSceneLoader;
             _logger = logger;
         }
@@ -53,9 +53,9 @@ namespace Networking {
         }
 
         private void TryReconnect() {
-            _reconnectViewController.Show();
+            _modalViewController.Show("Reconnecting...");
             _networkManager.Connect(allowOfflineMode: false).Subscribe(Observer.Create<NetworkConnectionResult>(result => {
-                _reconnectViewController.Hide();
+                _modalViewController.Hide();
             },
             error => {
                 TryReconnect();
