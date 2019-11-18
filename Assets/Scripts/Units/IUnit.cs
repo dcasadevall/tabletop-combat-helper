@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using Grid;
+using Math;
 using Units.Serialized;
 using UnityEngine;
 
@@ -25,5 +26,13 @@ namespace Units {
         /// Pet Units are directly associated to this unit, and should be initially spawned together.
         /// </summary>
         IUnit[] PetUnits { get; }
+        
+        /// <summary>
+        /// The read-only information of the unit's transform.
+        /// Actors accessing this unit should not be able to mutate its transform.
+        /// Instead, a <see cref="ITransformableUnit"/> is available to those systems that should be
+        /// able to mutate the unit's transform.
+        /// </summary>
+        TransformData TransformData { get; }
     }
 }

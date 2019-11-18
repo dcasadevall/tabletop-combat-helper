@@ -1,4 +1,6 @@
 ﻿using CommandSystem;
+using Grid.Commands;
+using Units.Actions;
 using Units.Commands;
 using Units.Serialized;
 using Units.Spawning;
@@ -30,6 +32,7 @@ namespace Units {
             // TODO: Avoid having to expose UnitRegistry.
             Container.Bind<UnitRegistry>().AsSingle();
             Container.Bind<IUnitRegistry>().To<UnitRegistry>().FromResolve();
+            Container.Bind<IMutableUnitRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<UnitPool>();
 
             // TODO: This initial size is 1 because of a race condition when switching map sections and spawning units.
             // If there is space in the current section's pool, when switching to a new section, that section will
@@ -43,6 +46,8 @@ namespace Units {
             // Commands installer
             Container.Install<UnitCommandsInstaller>();
 
+            // Unit Actions
+            Container.Install<UnitActionsInstaller>();
         }
     }
 }

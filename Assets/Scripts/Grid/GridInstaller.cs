@@ -1,5 +1,6 @@
 using Grid.Commands;
 using Grid.Positioning;
+using Units.Spawning;
 using UnityEngine;
 using Zenject;
 
@@ -13,6 +14,9 @@ namespace Grid {
             Container.Bind<IRandomGridPositionProvider>().To<SpiralSequenceRandomPositionProvider>().AsSingle();
             Container.Bind<IGridPositionCalculator>().To<GridPositionCalculator>().AsSingle();
             Container.Bind<IGridInputManager>().To<GridInputManager>().AsSingle();
+            
+            // GridUnitManager should be the only thing mutating the unit transform.
+            Container.Bind<IUnitTransformRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<GridUnitManager>();
             
 #if DEBUG
             // ITicker and IInitializer

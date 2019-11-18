@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Logging;
 
 namespace Units.Spawning {
-    public class UnitRegistry : IUnitRegistry, IMutableUnitRegistry {
+    public class UnitRegistry : IMutableUnitRegistry, IUnitTransformRegistry {
         private readonly ILogger _logger;
         private Dictionary<UnitId, IUnit> _unitMap = new Dictionary<UnitId, IUnit>();
 
@@ -21,6 +21,10 @@ namespace Units.Spawning {
             }
 
             return _unitMap[unitId];
+        }
+        
+        public ITransformableUnit GetTransformableUnit(UnitId unitId) {
+            return (ITransformableUnit) GetUnit(unitId);
         }
 
         public void RegisterUnit(IUnit unit) {

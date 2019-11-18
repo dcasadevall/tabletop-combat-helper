@@ -18,7 +18,7 @@ namespace Units.Commands {
         private readonly IUnitSpawnSettings _unitSpawnSettings;
         private readonly IMutableUnitRegistry _unitRegistry;
         private readonly IGridUnitManager _gridUnitManager;
-        private readonly UnitBehaviour.Pool _unitBehaviourPool;
+        private readonly IUnitPool _unitPool;
         private readonly ILogger _logger;
 
         public bool IsInitialGameStateCommand {
@@ -32,14 +32,14 @@ namespace Units.Commands {
                                 IUnitSpawnSettings unitSpawnSettings,
                                 IMutableUnitRegistry unitRegistry,
                                 IGridUnitManager gridUnitManager,
-                                UnitBehaviour.Pool unitBehaviourPool,
+                                IUnitPool unitPool,
                                 ILogger logger) {
             _data = data;
             _commandFactory = commandFactory;
             _unitSpawnSettings = unitSpawnSettings;
             _unitRegistry = unitRegistry;
             _gridUnitManager = gridUnitManager;
-            _unitBehaviourPool = unitBehaviourPool;
+            _unitPool = unitPool;
             _logger = logger;
         }
 
@@ -69,9 +69,7 @@ namespace Units.Commands {
             }
 
             // Now, spawn the unit itself.
-            IUnit unit = new Unit(_data.unitCommandData.unitId, unitData, pets);
-            _unitRegistry.RegisterUnit(unit);
-            _unitBehaviourPool.Spawn(unit);
+            IUnit unit = _unitPool.Spawn(_data.unitCommandData.unitId, unitData, pets);
             _gridUnitManager.PlaceUnitAtTile(unit, _data.tileCoords);
 
             return Observable.ReturnUnit();
@@ -99,8 +97,7 @@ namespace Units.Commands {
 
             // Now the unit itself.
             IUnit unit = _unitRegistry.GetUnit(_data.unitCommandData.unitId);
-            _unitRegistry.UnregisterUnit(unit.UnitId);
-            _unitBehaviourPool.Despawn(unit.UnitId);
+            _unitPool.Despawn(unit.UnitId);
             _gridUnitManager.RemoveUnit(unit);
         }
     }
