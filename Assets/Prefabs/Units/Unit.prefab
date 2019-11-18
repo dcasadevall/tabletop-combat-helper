@@ -170,7 +170,6 @@ GameObject:
   - component: {fileID: 131}
   - component: {fileID: 266}
   - component: {fileID: 339}
-  - component: {fileID: 329}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -252,16 +251,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteRenderer: {fileID: 133}
   _avatarIconRenderer: {fileID: 132}
-  _dragAndDropBehaviour: {fileID: 329}
---- !u!114 &329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 90}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfdff94f5cc534a28a22d10134f49372, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

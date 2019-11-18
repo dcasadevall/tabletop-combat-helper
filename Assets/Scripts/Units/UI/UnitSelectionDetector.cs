@@ -1,16 +1,14 @@
 using System;
 using Grid;
+using InputSystem;
 using JetBrains.Annotations;
 using Math;
-using UniRx.Async;
-using Units;
 using Units.Actions;
 using Units.Spawning;
 using UnityEngine;
-using UnityEngine.Experimental.UIElements;
 using Zenject;
 
-namespace InputSystem {
+namespace Units.UI {
     public class UnitSelectionDetector : ITickable {
         private readonly IInputLock _inputLock;
         private readonly IUnitActionPlanner _unitActionPlanner;

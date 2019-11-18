@@ -25,7 +25,10 @@ namespace Units {
         }
         
         public override void InstallBindings() {
+            // UI
             Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(_unitPickerViewController).AsSingle();
+            Container.Bind<ITickable>().To<UnitSelectionDetector>().AsSingle();
+            
             Container.Bind<IUnitSpawnSettings>().To<UnitSpawnSettings>().FromInstance(_unitSpawnSettings).AsSingle();
             Container.Bind<IUnitDataIndexResolver>().To<UnitDataIndexResolver>().AsSingle();
 
@@ -33,12 +36,10 @@ namespace Units {
             Container.Bind<UnitRegistry>().AsSingle();
             Container.Bind<IUnitRegistry>().To<UnitRegistry>().FromResolve();
             Container.Bind<IMutableUnitRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<UnitPool>();
-
-            // TODO: This initial size is 1 because of a race condition when switching map sections and spawning units.
-            // If there is space in the current section's pool, when switching to a new section, that section will
-            // spawn units in the previous section pool.
-            Container.BindMemoryPool<UnitBehaviour, UnitBehaviour.Pool>().WithInitialSize(1)
-                     .FromComponentInNewPrefab(_unitPrefab).UnderTransformGroup("UnitPool");
+            
+            // TODO: UnitPool to implement IMemoryPool
+            Container.Bind<IUnitPool>().To<UnitPool>().AsSingle();
+            Container.Bind<GameObject>().FromInstance(_unitPrefab).WhenInjectedInto<UnitPool>();
 
             // Prototype: Bind ITicker and IInitializable to the UnitsSpawner
             Container.BindInterfacesTo<UnitSpawner>().AsSingle();

@@ -1,37 +1,39 @@
-using System;
 using System.Collections.Generic;
-using Grid;
 using Logging;
-using Math;
 using Units.Serialized;
 using UnityEngine;
 using Zenject;
 using ILogger = Logging.ILogger;
-using Object = UnityEngine.Object;
 
 namespace Units.Spawning {
+    /// <summary>
+    /// Spawns units, and registers them to the <see cref="IUnitRegistry"/>.
+    /// </summary>
     public class UnitPool : IUnitPool {
-        private readonly Dictionary<UnitId, UnitBehaviour> _unitBehaviours = new Dictionary<UnitId, UnitBehaviour>();
+        private readonly Dictionary<UnitId, UnitInitializer> _unitBehaviours = new Dictionary<UnitId, UnitInitializer>();
         private readonly DiContainer _container;
+        private readonly GameObject _unitPrefab;
         private readonly IMutableUnitRegistry _unitRegistry;
         private readonly ILogger _logger;
 
         public UnitPool(DiContainer container, 
+                        GameObject unitPrefab,
                         IMutableUnitRegistry unitRegistry,
                         ILogger logger) {
             _container = container;
+            _unitPrefab = unitPrefab;
             _unitRegistry = unitRegistry;
             _logger = logger;
         }
 
         public IUnit Spawn(UnitId unitId, IUnitData unitData, IUnit[] pets) {
             // Create Behaviour
-            UnitBehaviour unitBehaviour = _container.Instantiate<UnitBehaviour>();
-            _unitBehaviours[unitId] = unitBehaviour;
+            UnitInitializer unitInitializer = _container.InstantiatePrefabForComponent<UnitInitializer>(_unitPrefab);
+            _unitBehaviours[unitId] = unitInitializer;
 
             // Create Unit and register it
             IUnit unit = new Unit(unitId, unitData, pets, _unitBehaviours[unitId].transform);
-            unitBehaviour.SetUnit(unit);
+            unitInitializer.SetUnit(unit);
             _unitRegistry.RegisterUnit(unit);
 
             return unit;
