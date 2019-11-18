@@ -10,30 +10,27 @@ namespace Units.Spawning {
     /// Spawns units, and registers them to the <see cref="IUnitRegistry"/>.
     /// </summary>
     public class UnitPool : IUnitPool {
-        private readonly Dictionary<UnitId, UnitInitializer> _unitBehaviours = new Dictionary<UnitId, UnitInitializer>();
-        private readonly DiContainer _container;
-        private readonly GameObject _unitPrefab;
+        private readonly Dictionary<UnitId, UnitRenderer> _unitBehaviours = new Dictionary<UnitId, UnitRenderer>();
+        private readonly UnitRenderer.Pool _unitRendererPool;
         private readonly IMutableUnitRegistry _unitRegistry;
         private readonly ILogger _logger;
 
-        public UnitPool(DiContainer container, 
-                        GameObject unitPrefab,
+        internal UnitPool(UnitRenderer.Pool unitRendererPool,
                         IMutableUnitRegistry unitRegistry,
                         ILogger logger) {
-            _container = container;
-            _unitPrefab = unitPrefab;
+            _unitRendererPool = unitRendererPool;
             _unitRegistry = unitRegistry;
             _logger = logger;
         }
 
         public IUnit Spawn(UnitId unitId, IUnitData unitData, IUnit[] pets) {
-            // Create Behaviour
-            UnitInitializer unitInitializer = _container.InstantiatePrefabForComponent<UnitInitializer>(_unitPrefab);
-            _unitBehaviours[unitId] = unitInitializer;
+            // Create Initializer
+            UnitRenderer unitRenderer = _unitRendererPool.Spawn();
+            _unitBehaviours[unitId] = unitRenderer;
 
             // Create Unit and register it
             IUnit unit = new Unit(unitId, unitData, pets, _unitBehaviours[unitId].transform);
-            unitInitializer.SetUnit(unit);
+            unitRenderer.SetUnit(unit);
             _unitRegistry.RegisterUnit(unit);
 
             return unit;
@@ -46,7 +43,7 @@ namespace Units.Spawning {
             }
 
             _unitRegistry.UnregisterUnit(unitId);
-            Object.Destroy(_unitBehaviours[unitId]);
+            _unitRendererPool.Despawn(_unitBehaviours[unitId]);
         }
     }
 }

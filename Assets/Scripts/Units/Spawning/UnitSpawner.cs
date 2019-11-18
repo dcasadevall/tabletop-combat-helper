@@ -13,9 +13,9 @@ using Zenject;
 namespace Units.Spawning {
     /// <summary>
     /// Handles Spawning units in the world space.
-    /// It uses the <see cref="UnitInitializer.Pool"/> in order to spawn such units.
+    /// It uses the <see cref="UnitRenderer.Pool"/> in order to spawn such units.
     ///
-    /// <see cref="UnitInitializer"/>s are initialized with the newly created <see cref="IUnit"/>.
+    /// <see cref="UnitRenderer"/>s are initialized with the newly created <see cref="IUnit"/>.
     /// </summary>
     public class UnitSpawner : IInitializable, ITickable {
         private readonly bool _shouldSpawnInitialUnits;

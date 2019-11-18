@@ -1,11 +1,12 @@
 using UnityEngine;
+using Zenject;
 
 namespace Units.Spawning {
     /// <summary>
     /// <see cref="MonoBehaviour"/> responsible for binding serialized fields found in the unit prefab to their
     /// respective unit data.
     /// </summary>
-    public class UnitInitializer : MonoBehaviour {
+    public class UnitRenderer : MonoBehaviour {
 #pragma warning disable 649
         [SerializeField]
         private SpriteRenderer _spriteRenderer;
@@ -16,6 +17,9 @@ namespace Units.Spawning {
         internal void SetUnit(IUnit unit) {
             _spriteRenderer.sprite = unit.UnitData.Sprite;
             _avatarIconRenderer.sprite = unit.UnitData.AvatarSprite; 
+        }
+
+        internal class Pool : MemoryPool<UnitRenderer> {
         }
     }
 }

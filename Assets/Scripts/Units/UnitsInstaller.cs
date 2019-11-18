@@ -37,9 +37,10 @@ namespace Units {
             Container.Bind<IUnitRegistry>().To<UnitRegistry>().FromResolve();
             Container.Bind<IMutableUnitRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<UnitPool>();
             
-            // TODO: UnitPool to implement IMemoryPool
+            // Unit Pool
+            Container.BindMemoryPool<UnitRenderer, UnitRenderer.Pool>().WithInitialSize(1)
+                     .FromComponentInNewPrefab(_unitPrefab).WhenInjectedInto<UnitPool>();
             Container.Bind<IUnitPool>().To<UnitPool>().AsSingle();
-            Container.Bind<GameObject>().FromInstance(_unitPrefab).WhenInjectedInto<UnitPool>();
 
             // Prototype: Bind ITicker and IInitializable to the UnitsSpawner
             Container.BindInterfacesTo<UnitSpawner>().AsSingle();
