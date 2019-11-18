@@ -36,7 +36,7 @@ namespace Units.Actions {
         }
 
         private void HandleActionPlanned(IUnit unit, UnitAction action) {
-            _logger.Log(LoggedFeature.Units, $"Action: ${action} planned on unit: ${unit}");
+            _logger.Log(LoggedFeature.Units, $"Action: {action} planned on unit: {unit.UnitData.Name}");
             _actionListeners.Where(x => x.ActionType == action).ToList().ForEach(x => x.HandleActionPlanned(unit));
         }
 
@@ -45,7 +45,8 @@ namespace Units.Actions {
         }
         
         private void HandleActionConfirmed(IUnit unit, UnitAction action, IntVector2 tileCoords) {
-            _logger.Log(LoggedFeature.Units, $"Action: ${action} confirmed on unit: ${unit}. Coords: ${tileCoords}");
+            _logger.Log(LoggedFeature.Units,
+                        $"Action: {action} confirmed on unit: {unit.UnitData.Name}. Coords: {tileCoords}");
             _actionListeners.Where(x => x.ActionType == action).ToList()
                             .ForEach(x => x.HandleActionConfirmed(unit, tileCoords));
             

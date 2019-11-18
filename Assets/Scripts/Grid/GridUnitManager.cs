@@ -61,13 +61,14 @@ namespace Grid {
         }
 
         public bool PlaceUnitAtTile(IUnit unit, IntVector2 tileCoords) {
-            // Update unit map
+            // Remove previous unit position if present
             if (_unitMap.ContainsKey(unit.UnitId)) {
-                _tiles[tileCoords.x % _grid.NumTilesX, tileCoords.y / _grid.NumTilesY].Remove(unit);
-                _unitMap.Remove(unit.UnitId);
+                RemoveUnit(unit);
             }
 
+            // Add unit to new position.
             int tileIndex = (int)(System.Math.Max(0, tileCoords.y) * _grid.NumTilesX + tileCoords.x);
+            _tiles[tileIndex % _grid.NumTilesX, tileIndex / _grid.NumTilesY].Add(unit);
             _unitMap.Add(unit.UnitId, tileIndex);
             
             // Move unit in 3D space.
