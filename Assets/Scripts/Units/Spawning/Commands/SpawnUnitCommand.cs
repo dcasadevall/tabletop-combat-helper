@@ -1,13 +1,13 @@
 using System;
-using System.Collections.Generic;
 using CommandSystem;
 using Grid;
 using Logging;
 using UniRx;
 using Units.Serialized;
-using Units.Spawning;
+using UnityEngine;
+using ILogger = Logging.ILogger;
 
-namespace Units.Commands {
+namespace Units.Spawning.Commands {
     /// <summary>
     /// Command used to spawn a unit and position it in the grid.
     /// We may want to consider decoupling those two actions, but this works for now.
@@ -69,6 +69,8 @@ namespace Units.Commands {
             }
 
             // Now, spawn the unit itself.
+            Debug.Log("Command hash: " + GetHashCode());
+            Debug.Log("Pool hash: " + _unitPool.GetHashCode());
             IUnit unit = _unitPool.Spawn(_data.unitCommandData.unitId, unitData, pets);
             _gridUnitManager.PlaceUnitAtTile(unit, _data.tileCoords);
 

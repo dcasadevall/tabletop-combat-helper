@@ -25,8 +25,11 @@ namespace Units.Spawning {
         
         public override void InstallBindings() {
             // Unit Pool
+            // NOTE: There is a bug in Zenject pools when we switch scenes and spawn elements in a pool while doing so.
+            // Zenject will use the pool of the currently active scene, instead of the one in context.
+            // To avoid that, for now, we tread this pool as one with a size of 1.
             Container.BindMemoryPool<UnitRenderer, UnitRenderer.Pool>().WithInitialSize(1)
-                     .FromComponentInNewPrefab(_unitPrefab).WhenInjectedInto<UnitPool>();
+                     .FromComponentInNewPrefab(_unitPrefab).UnderTransformGroup("Units");
             Container.Bind<IUnitPool>().To<UnitPool>().AsSingle();
             Container.Bind<IMutableUnitRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<UnitPool>();
             

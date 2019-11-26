@@ -16,8 +16,8 @@ namespace Units.Spawning {
         private readonly ILogger _logger;
 
         internal UnitPool(UnitRenderer.Pool unitRendererPool,
-                        IMutableUnitRegistry unitRegistry,
-                        ILogger logger) {
+                          IMutableUnitRegistry unitRegistry,
+                          ILogger logger) {
             _unitRendererPool = unitRendererPool;
             _unitRegistry = unitRegistry;
             _logger = logger;

@@ -7,19 +7,29 @@ using ILogger = Logging.ILogger;
 
 namespace CommandSystem {
     public class CommandFactory : ICommandFactory {
+        private static readonly HashSet<DiContainer> _containers = new HashSet<DiContainer>();
+        
+        private readonly DiContainer _container;
         private readonly ILogger _logger;
-        private readonly HashSet<DiContainer> _containers = new HashSet<DiContainer>();
 
         public CommandFactory(DiContainer container, ILogger logger) {
+            _container = container;
             _logger = logger;
-            _containers.Add(container);
         }
 
-        public void RegisterSceneContainer(DiContainer container) {
+        public static void RegisterSceneContainer(DiContainer container) {
             _containers.Add(container);
         }
 
         public ICommand Create(Type commandType, Type dataType, ISerializable data) {
+            // If our container has the binding in context, we prioritize that one
+            if (_container.HasBinding(commandType)) {
+                return (ICommand)_container.InstantiateExplicit(commandType, new List<TypeValuePair> {
+                    new TypeValuePair(dataType, data)
+                });   
+            }
+            
+            // Otherwise, we iterate through the containers statically injected, which may not be in context.
             foreach (var container in _containers) {
                 if (!container.HasBinding(commandType)) {
                     continue;

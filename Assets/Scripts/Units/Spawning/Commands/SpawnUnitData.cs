@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 using Math;
 
-namespace Units.Commands {
+namespace Units.Spawning.Commands {
     [Serializable]
     public class SpawnUnitData : ISerializable {
         public readonly UnitCommandData unitCommandData;

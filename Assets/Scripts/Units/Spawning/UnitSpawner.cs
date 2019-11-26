@@ -4,8 +4,9 @@ using Grid;
 using Grid.Positioning;
 using Map.MapSections;
 using Math;
-using Units.Commands;
+using UniRx;
 using Units.Serialized;
+using Units.Spawning.Commands;
 using Units.UI;
 using UnityEngine;
 using Zenject;
@@ -91,6 +92,7 @@ namespace Units.Spawning {
         }
 
         private void SpawnUnit(IUnitData unitData, IntVector2 tileCoords) {
+            Debug.Log("Spawner Hash: " + GetHashCode());
             UnitCommandData unitCommandData = _unitCommandDataFactory.Create(unitData);
             SpawnUnitData spawnUnitData = new SpawnUnitData(unitCommandData, tileCoords, _firstSpawn);
             _commandQueue.Enqueue<SpawnUnitCommand, SpawnUnitData>(spawnUnitData, CommandSource.Game);

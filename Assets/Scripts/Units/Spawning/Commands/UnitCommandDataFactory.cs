@@ -2,7 +2,7 @@ using Logging;
 using Units.Serialized;
 using Zenject;
 
-namespace Units.Commands {
+namespace Units.Spawning.Commands {
     public class UnitCommandDataFactory : IFactory<IUnitData, UnitCommandData> {
         private readonly IUnitDataIndexResolver _unitDataIndexResolver;
         private readonly ILogger _logger;

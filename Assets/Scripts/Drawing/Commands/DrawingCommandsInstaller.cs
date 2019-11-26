@@ -4,8 +4,6 @@ using Zenject;
 
 namespace Drawing.Commands {
     public class DrawingCommandsInstaller : AbstractCommandsInstaller {
-        public DrawingCommandsInstaller(CommandFactory commandFactory) : base(commandFactory) { }
-        
         protected override void InstallCommandBindings() {
             // These two commands preserve state to be able to Undo().
             // i.e: They keep the state of the pixel before painting it.

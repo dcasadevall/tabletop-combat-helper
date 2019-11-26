@@ -7,15 +7,9 @@ namespace CommandSystem.Installers {
     /// such commands.
     /// </summary>
     public abstract class AbstractCommandsInstaller : Installer {
-        private readonly CommandFactory _commandFactory;
-
-        public AbstractCommandsInstaller(CommandFactory commandFactory) {
-            _commandFactory = commandFactory;
-        }
-        
         // This should NOT be called in the base method
         public override void InstallBindings() {
-            _commandFactory.RegisterSceneContainer(Container);
+            CommandFactory.RegisterSceneContainer(Container);
             
             InstallCommandBindings();
         }

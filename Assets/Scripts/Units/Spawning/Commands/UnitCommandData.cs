@@ -1,9 +1,8 @@
 using System;
 using System.Runtime.Serialization;
-using Math;
 using Units.Serialized;
 
-namespace Units.Commands {
+namespace Units.Spawning.Commands {
     /// <summary>
     /// Serializable data that is used for commands performed on a unit.
     /// </summary>
