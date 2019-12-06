@@ -5,6 +5,7 @@ using Grid.Positioning;
 using Map.MapSections;
 using Math;
 using UniRx;
+using UniRx.Async;
 using Units.Serialized;
 using Units.Spawning.Commands;
 using Units.UI;
@@ -57,6 +58,11 @@ namespace Units.Spawning {
                 return;
             } 
             
+            SpawnInitialUnits();
+        }
+        
+        private async void SpawnInitialUnits() {
+            await UniTask.DelayFrame(25);
             // Spawn initial player units
             IUnitData[] playerUnits = _unitSpawnSettings.GetUnits(UnitType.Player);
             IntVector2 startPosition = _gridPositionCalculator.GetTileClosestToCenter();
@@ -69,7 +75,7 @@ namespace Units.Spawning {
                 SpawnUnit(playerUnits[i], tilePositions[i]);
             }
 
-            _firstSpawn = true;
+            _firstSpawn = true; 
         }
 
         public void Tick() {

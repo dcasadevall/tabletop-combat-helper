@@ -11,21 +11,21 @@ namespace Units.Spawning {
     /// </summary>
     public class UnitPool : IUnitPool {
         private readonly Dictionary<UnitId, UnitRenderer> _unitBehaviours = new Dictionary<UnitId, UnitRenderer>();
-        private readonly UnitRenderer.Pool _unitRendererPool;
+        private readonly UnitRenderer.Factory _unitRendererFactory;
         private readonly IMutableUnitRegistry _unitRegistry;
         private readonly ILogger _logger;
 
-        internal UnitPool(UnitRenderer.Pool unitRendererPool,
+        internal UnitPool(UnitRenderer.Factory unitRendererFactory,
                           IMutableUnitRegistry unitRegistry,
                           ILogger logger) {
-            _unitRendererPool = unitRendererPool;
+            _unitRendererFactory = unitRendererFactory;
             _unitRegistry = unitRegistry;
             _logger = logger;
         }
 
         public IUnit Spawn(UnitId unitId, IUnitData unitData, IUnit[] pets) {
             // Create Initializer
-            UnitRenderer unitRenderer = _unitRendererPool.Spawn();
+            UnitRenderer unitRenderer = _unitRendererFactory.Create();
             _unitBehaviours[unitId] = unitRenderer;
 
             // Create Unit and register it
@@ -43,7 +43,7 @@ namespace Units.Spawning {
             }
 
             _unitRegistry.UnregisterUnit(unitId);
-            _unitRendererPool.Despawn(_unitBehaviours[unitId]);
+            _unitRendererFactory.Destroy(_unitBehaviours[unitId]);
         }
     }
 }
