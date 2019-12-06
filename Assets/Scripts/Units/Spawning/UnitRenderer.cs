@@ -6,7 +6,7 @@ namespace Units.Spawning {
     /// <see cref="MonoBehaviour"/> responsible for binding serialized fields found in the unit prefab to their
     /// respective unit data.
     /// </summary>
-    public class UnitRenderer : MonoBehaviour {
+    public class UnitRenderer : MonoBehaviour, IPoolable<IMemoryPool> {
 #pragma warning disable 649
         [SerializeField]
         private SpriteRenderer _spriteRenderer;
@@ -14,14 +14,24 @@ namespace Units.Spawning {
         private SpriteRenderer _avatarIconRenderer;
 #pragma warning restore 649
 
+        // Something is really messed up and the pool inactive items are enabled by default...
+        // so we need to do this.
+        public void OnDespawned() {
+            gameObject.SetActive(false);
+        }
+
+        public void OnSpawned(IMemoryPool memoryPool) {
+            gameObject.SetActive(true);
+        }
+
         internal void SetUnit(IUnit unit) {
             _spriteRenderer.sprite = unit.UnitData.Sprite;
             _avatarIconRenderer.sprite = unit.UnitData.AvatarSprite; 
         }
 
-        internal class Factory : PlaceholderFactory<UnitRenderer> {
-            public void Destroy(UnitRenderer unitBehaviour) {
-                Object.Destroy(unitBehaviour);
+        internal class Pool : MemoryPool<UnitRenderer> {
+            protected override void Reinitialize(UnitRenderer item) {
+                Debug.Log($"Pool {GetHashCode()} reinitialize");
             }
         }
     }
