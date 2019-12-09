@@ -52,7 +52,7 @@ MonoBehaviour:
   - {fileID: 2616146810924423047, guid: 47bd38f4f7d1c4513a6b8e0b1b053cc1, type: 3}
   - {fileID: 5620275601756309865, guid: 99188830058a0481d812cbd3f3f3cd0f, type: 3}
   _autoRun: 1
-  _parentNewObjectsUnderSceneContext: 0
+  _parentNewObjectsUnderSceneContext: 1
   _contractNames:
   - Map
   _parentContractNames:

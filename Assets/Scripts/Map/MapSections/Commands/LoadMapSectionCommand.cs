@@ -68,7 +68,6 @@ namespace Map.MapSections.Commands {
             }
 
             IMapSectionData mapSectionData = _mapData.Sections[nextSection];
-
             return _sceneLoader.LoadSceneAsync(kMapSectionScene,
                                                LoadSceneMode.Additive,
                                                container => {

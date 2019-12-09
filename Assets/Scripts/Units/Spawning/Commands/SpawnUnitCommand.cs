@@ -41,6 +41,7 @@ namespace Units.Spawning.Commands {
             _gridUnitManager = gridUnitManager;
             _unitPool = unitPool;
             _logger = logger;
+            Debug.Log("Spawn Unit command instance.");
         }
 
         public IObservable<UniRx.Unit> Run() {
