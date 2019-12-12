@@ -36,6 +36,7 @@ namespace Units.Spawning {
             return unit;
         }
 
+        // IDisposable?
         public void Despawn(UnitId unitId) {
             if (!_unitBehaviours.ContainsKey(unitId)) {
                 _logger.LogError(LoggedFeature.Units, "Despawn called on unitId not found: {0}", unitId);

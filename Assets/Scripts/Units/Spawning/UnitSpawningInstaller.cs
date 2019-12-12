@@ -31,9 +31,12 @@ namespace Units.Spawning {
             Container.BindMemoryPool<UnitRenderer, UnitRenderer.Pool>()
                      .WithInitialSize(10)
                      .FromComponentInNewPrefab(_unitPrefab)
-                     .UnderTransformGroup("Units");
+                     .UnderTransformGroup("Units")
+                     .WhenInjectedInto<UnitPool>();
+            
             Debug.Log("Binding");
             Container.Bind<IUnitPool>().To<UnitPool>().AsSingle();
+            // Maybe use identifiers? random number?
             Container.Bind<IMutableUnitRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<UnitPool>();
             
             // Bind ITicker and IInitializable to the UnitsSpawner

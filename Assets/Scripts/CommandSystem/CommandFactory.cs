@@ -7,8 +7,8 @@ using ILogger = Logging.ILogger;
 
 namespace CommandSystem {
     public class CommandFactory : ICommandFactory {
-        private static readonly HashSet<DiContainer> _containers = new HashSet<DiContainer>();
-        
+//        private static readonly HashSet<DiContainer> _containers = new HashSet<DiContainer>();
+//        
         private readonly DiContainer _container;
         private readonly ILogger _logger;
 
@@ -17,38 +17,30 @@ namespace CommandSystem {
             _logger = logger;
         }
 
-        public static void RegisterSceneContainer(DiContainer container) {
-            _containers.Add(container);
-        }
-
+//        internal ConcreteIdBinderGeneric<TCommand> Bind<TCommand>() where TCommand : ICommand {
+//            return _container.Bind<TCommand>();
+//        }
+//        
+//        internal bool Unbind(Type commandType) {
+//            if (!typeof(ICommand).IsAssignableFrom(commandType)) {
+//                return false;
+//            }
+//            
+//            return _container.Unbind(commandType);
+//        }
+        
         public ICommand Create(Type commandType, Type dataType, ISerializable data) {
-            // If our container has the binding in context, we prioritize that one
-            if (_container.HasBinding(commandType)) {
-                return (ICommand)_container.InstantiateExplicit(commandType, new List<TypeValuePair> {
-                    new TypeValuePair(dataType, data)
-                });   
-            }
-            
-            // Otherwise, we iterate through the containers statically injected, which may not be in context.
-            foreach (var container in _containers) {
-                if (!container.HasBinding(commandType)) {
-                    continue;
-                }
+            ICommand command = (ICommand)_container.InstantiateExplicit(commandType, new List<TypeValuePair> {
+                new TypeValuePair(dataType, data)
+            });
                 
-                // TODO: Avoid using instantiate explicit here
-                ICommand command = (ICommand)container.InstantiateExplicit(commandType, new List<TypeValuePair> {
-                    new TypeValuePair(dataType, data)
-                });
-                
-                if (command != null) {
-                    return command;
-                }
+            if (command == null) {
+                _logger.LogError(LoggedFeature.CommandSystem,
+                                 "Command not found in registered contexts: {0}",
+                                 typeof(ICommand));
             }
 
-            _logger.LogError(LoggedFeature.CommandSystem,
-                             "Command not found in registered contexts: {0}",
-                             typeof(ICommand));
-            return null;
+            return command;
         }
     }
 }

@@ -43,7 +43,6 @@ namespace Networking.Photon {
 
         private async UniTask<NetworkConnectionResult> ConnectTask(bool allowOfflineMode) {
             await _networkConnector.Connect(allowOfflineMode);
-
             await _roomHandler.JoinOrCreateRoom();
             IsConnected = true;
             

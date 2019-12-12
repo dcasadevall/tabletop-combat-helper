@@ -37,6 +37,8 @@ namespace AssetManagement {
             }
 
             _modalViewController.Show("Loading Assets...");
+            // NOTE: Not good practice! 
+            // Maybe use oncomplete to bind on container?
             observables.Merge().Subscribe(binding => _container
                                                      .Bind(binding.type)
                                                      .FromInstance(binding.asset),

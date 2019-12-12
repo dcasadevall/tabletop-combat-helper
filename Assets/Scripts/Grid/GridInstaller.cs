@@ -1,3 +1,5 @@
+using System;
+using CommandSystem.Installers;
 using Grid.Commands;
 using Grid.Positioning;
 using Units.Spawning;
@@ -7,6 +9,7 @@ using Zenject;
 namespace Grid {
     internal class GridInstaller : MonoInstaller {
         public GameObject gridCellPrefab;
+        private IDisposable _commandsDisposable;
         
         public override void InstallBindings() {
             Container.Bind<IGrid>().To<Grid>().AsSingle();
@@ -26,7 +29,19 @@ namespace Grid {
                      .UnderTransformGroup("Cells");
 #endif
             
-            Container.Install<GridCommandsInstaller>();
-        } 
+            _commandsDisposable = CommandsInstaller.Install<GridCommandsInstaller>(Container);
+        }
+        
+        private void OnEnable() {
+            if (_commandsDisposable != null) {
+                return;
+            }
+            
+            _commandsDisposable = CommandsInstaller.Install<GridCommandsInstaller>(Container);
+        }
+
+        private void OnDisable() {
+            _commandsDisposable?.Dispose();
+        }
     }
 }
