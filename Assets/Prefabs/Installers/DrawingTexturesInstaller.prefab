@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6237436456729835170
+--- !u!1 &3918136983771351394
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,45 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6237436456729835228}
-  - component: {fileID: 6237436456729835171}
+  - component: {fileID: 1574596416722735882}
+  - component: {fileID: 408788726347927264}
   m_Layer: 0
-  m_Name: DrawingInstaller
+  m_Name: DrawableTilesInstaller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6237436456729835228
+--- !u!4 &1574596416722735882
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6237436456729835170}
+  m_GameObject: {fileID: 3918136983771351394}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.856934, y: -5.632295, z: 13.780365}
+  m_LocalPosition: {x: 1.9134806, y: 1.3482096, z: -2.181847}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6237436456729835171
+--- !u!114 &408788726347927264
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6237436456729835170}
+  m_GameObject: {fileID: 3918136983771351394}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d48d9ad61b714ab8a82a387d57ae2150, type: 3}
+  m_Script: {fileID: 11500000, guid: 27817033ea414d7e9261ec176fe93396, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _drawingViewController: {fileID: 7691832317851621601, guid: 5c44b09b7e06844c7b912405be8caaab,
-    type: 3}
   _drawableTilePrefab: {fileID: 3028894099037597124, guid: e913f4842d45f48e4b6bb39463ad54d7,
     type: 3}
-  _settings:
-    path: Sprites/Drawing
-    format: '{0}/DrawableTile_{1}'

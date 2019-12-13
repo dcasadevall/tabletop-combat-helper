@@ -48,10 +48,30 @@ MonoBehaviour:
   _installerPrefabs:
   - {fileID: 7754144119156181451, guid: ea41255bd272b4e7a91ba7750a9c217a, type: 3}
   - {fileID: 2001596227, guid: c6a9db96f3e8247e6b7bc24f2e060fc8, type: 3}
-  - {fileID: 6237436456729835171, guid: 5437112e9f5bb4331a148d2d857e52a2, type: 3}
+  - {fileID: 4144602517964906790, guid: 5437112e9f5bb4331a148d2d857e52a2, type: 3}
   - {fileID: 2616146810924423047, guid: 47bd38f4f7d1c4513a6b8e0b1b053cc1, type: 3}
   - {fileID: 5620275601756309865, guid: 99188830058a0481d812cbd3f3f3cd0f, type: 3}
   _autoRun: 1
+  OnPreInstall:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPostInstall:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPreResolve:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPostResolve:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   _parentNewObjectsUnderSceneContext: 0
   _contractNames:
   - Map

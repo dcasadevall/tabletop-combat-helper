@@ -122,7 +122,7 @@ PrefabInstance:
     - target: {fileID: 6177683463821511290, guid: de15a99275912475ba9f4611db11280f,
         type: 3}
       propertyPath: m_Name
-      value: MapSceneContext
+      value: MapSectionSceneContext
       objectReference: {fileID: 0}
     - target: {fileID: 4446635996379177132, guid: de15a99275912475ba9f4611db11280f,
         type: 3}

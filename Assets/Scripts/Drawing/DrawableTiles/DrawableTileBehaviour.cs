@@ -10,27 +10,20 @@ namespace Drawing.DrawableTiles {
     /// </summary>
     public class DrawableTileBehaviour : MonoBehaviour, IDrawableTile {
         public class Pool : MonoMemoryPool<Vector2, DrawableTileBehaviour> {
-            private readonly IFactory<int, Sprite> _drawableSpriteFactory;
-            private int _numTiles = 0;
+            private readonly IFactory<Sprite> _drawableSpriteFactory;
             
-            public Pool(IFactory<int, Sprite> drawableSpriteFactory) {
+            public Pool(IFactory<Sprite> drawableSpriteFactory) {
                 _drawableSpriteFactory = drawableSpriteFactory;
             }
             
             protected override void Reinitialize(Vector2 position, DrawableTileBehaviour tile) {
-                Sprite sprite = _drawableSpriteFactory.Create(_numTiles);
-                _numTiles++;
+                Sprite sprite = _drawableSpriteFactory.Create();
                 if (sprite == null) {
                     return;
                 }
                 
                 tile.Reinitialize(position, sprite);
                 tile.Clear();
-            }
-
-            protected override void OnDespawned(DrawableTileBehaviour tile) {
-                _numTiles--;
-                base.OnDespawned(tile);
             }
         }
 

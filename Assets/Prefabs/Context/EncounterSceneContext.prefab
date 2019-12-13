@@ -52,7 +52,28 @@ MonoBehaviour:
   - {fileID: 7713475859710784944, guid: 17d580ea188c74b48935ad0a7014c36e, type: 3}
   - {fileID: 8706844254505784451, guid: c7c93ee6496f24ba29a6663c14e63c12, type: 3}
   - {fileID: 6752459310856674750, guid: 7d8d1db0de53f4c8680336257d0c7e78, type: 3}
+  - {fileID: 408788726347927264, guid: 53258aadba73e4aa1b900ac8c42e2c47, type: 3}
   _autoRun: 1
+  OnPreInstall:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPostInstall:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPreResolve:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPostResolve:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   _parentNewObjectsUnderSceneContext: 0
   _contractNames:
   - Encounter

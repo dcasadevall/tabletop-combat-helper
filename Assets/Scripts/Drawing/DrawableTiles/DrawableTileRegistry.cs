@@ -23,13 +23,13 @@ namespace Drawing.DrawableTiles {
         public DrawableTileRegistry(ILogger logger,
                                     IGrid grid,
                                     IGridPositionCalculator gridPositionCalculator,
-                                    IFactory<int, Sprite> drawableSpriteFactory,
+                                    IFactory<Sprite> drawableSpriteFactory,
                                     IMapSectionData mapSectionData,
                                     DrawableTileBehaviour.Pool drawableTilePool) {
             _logger = logger;
             _grid = grid;
             _gridPositionCalculator = gridPositionCalculator;
-            _drawableSprite = drawableSpriteFactory.Create(0);
+            _drawableSprite = drawableSpriteFactory.Create();
             _mapSectionData = mapSectionData;
             _drawableTilePool = drawableTilePool;
         }
