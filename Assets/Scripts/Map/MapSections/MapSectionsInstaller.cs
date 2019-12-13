@@ -1,6 +1,6 @@
+using CommandSystem.Installers;
 using Map.MapSections.Commands;
 using Map.MapSections.UI;
-using Map.Serialized;
 using UnityEngine;
 using Zenject;
 
@@ -13,7 +13,7 @@ namespace Map.MapSections {
             Container.Bind<MapSectionSelectionViewController>().FromComponentInNewPrefab(_mapSelectionViewController)
                      .AsSingle().NonLazy();
             
-            Container.Install<MapSectionsCommandsInstaller>();
+            AbstractCommandsInstaller.Install<MapSectionsCommandsInstaller>(Container, () => gameObject.activeInHierarchy);
         }
     }
 }

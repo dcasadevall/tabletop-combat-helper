@@ -3,11 +3,11 @@ using CommandSystem.Installers;
 using Zenject;
 
 namespace Map.Commands {
-    public class MapCommandsInstaller : CommandsInstaller {
-        public MapCommandsInstaller(CommandFactory commandFactory) : base(commandFactory) { }
-        
+    public class MapCommandsInstaller : AbstractCommandsInstaller {
+        public MapCommandsInstaller(ICommandBinder commandBinder) : base(commandBinder) { }
+
         public override void InstallBindings() {
-            BindCommand<LoadMapCommand>().AsSingle();
+            BindCommand<LoadMapCommand>(binder => binder.AsSingle());
         }
     }
 }

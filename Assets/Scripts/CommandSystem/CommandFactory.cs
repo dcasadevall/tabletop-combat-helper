@@ -7,8 +7,6 @@ using ILogger = Logging.ILogger;
 
 namespace CommandSystem {
     public class CommandFactory : ICommandFactory {
-//        private static readonly HashSet<DiContainer> _containers = new HashSet<DiContainer>();
-//        
         private readonly DiContainer _container;
         private readonly ILogger _logger;
 
@@ -16,18 +14,6 @@ namespace CommandSystem {
             _container = container;
             _logger = logger;
         }
-
-//        internal ConcreteIdBinderGeneric<TCommand> Bind<TCommand>() where TCommand : ICommand {
-//            return _container.Bind<TCommand>();
-//        }
-//        
-//        internal bool Unbind(Type commandType) {
-//            if (!typeof(ICommand).IsAssignableFrom(commandType)) {
-//                return false;
-//            }
-//            
-//            return _container.Unbind(commandType);
-//        }
         
         public ICommand Create(Type commandType, Type dataType, ISerializable data) {
             ICommand command = (ICommand)_container.InstantiateExplicit(commandType, new List<TypeValuePair> {

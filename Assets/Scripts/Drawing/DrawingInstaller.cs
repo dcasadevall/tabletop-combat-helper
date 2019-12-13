@@ -1,11 +1,13 @@
 using System;
 using CommandSystem;
+using CommandSystem.Installers;
 using Drawing.Commands;
 using Drawing.DrawableTiles;
 using Drawing.Input;
 using Drawing.TexturePainter;
 using Drawing.UI;
 using Grid;
+using Grid.Commands;
 using Grid.Serialized;
 using UnityEngine;
 using Zenject;
@@ -34,7 +36,7 @@ namespace Drawing {
             Container.Bind<IFactory<int, Sprite>>().To<DrawableSpriteFactory>().AsSingle();
             
             // Commands
-            Container.Install<DrawingCommandsInstaller>();
+            AbstractCommandsInstaller.Install<DrawingCommandsInstaller>(Container, () => gameObject.activeInHierarchy);
         }
 
         private void BindTexturePainter(DiContainer container) {

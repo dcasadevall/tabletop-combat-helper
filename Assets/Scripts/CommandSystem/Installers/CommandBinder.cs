@@ -4,7 +4,7 @@ using Logging;
 using Zenject;
 
 namespace CommandSystem.Installers {
-    public sealed class CommandBinder : ITickable, IDisposable {
+    public sealed class CommandBinder : ICommandBinder, ITickable, IDisposable {
         private readonly ILogger _logger;
         private readonly HashSet<CommandBinding> _activeBindings = new HashSet<CommandBinding>();
         private readonly HashSet<CommandBinding> _inactiveBindings = new HashSet<CommandBinding>();
@@ -14,7 +14,7 @@ namespace CommandSystem.Installers {
         }
 
         /// <summary>
-        /// Installs the CommandsInstaller of type <see cref="TInstaller"/>, with the given container.
+        /// Installs the AbstractCommandsInstaller of type <see cref="TInstaller"/>, with the given container.
         /// The given <see cref="isActiveFunc"/> will be polled so we can <see cref="UninstallBindings"/> when
         /// this installer is no longer active.
         /// </summary>
@@ -55,7 +55,7 @@ namespace CommandSystem.Installers {
         }
 
         private class CommandBinding {
-            private readonly CommandsInstaller _commandsInstaller;
+            private readonly AbstractCommandsInstaller _commandsInstaller;
             private readonly DiContainer _container;
             private readonly Type _bindingType;
             private readonly Action<ConcreteIdBinderGeneric<ICommand>> _afterBindCallback;
@@ -70,12 +70,12 @@ namespace CommandSystem.Installers {
                 _container = container;
                 _bindingType = bindingType;
                 _afterBindCallback = afterBindCallback;
-                this.isActiveFunc = isActiveFunc;
                 _logger = logger;
+                this.isActiveFunc = isActiveFunc;
             }
 
             public void Bind() {
-                _afterBindCallback.Invoke(_container.Bind<ICommand>());
+                _afterBindCallback.Invoke(_container.BindNoFlush<ICommand>());
             }
 
             public void Unbind() {

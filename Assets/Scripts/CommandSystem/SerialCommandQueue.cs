@@ -55,7 +55,7 @@ namespace CommandSystem {
                 _commandFactory.Create(pendingCommand.commandType, pendingCommand.dataType, pendingCommand.data);
             if (command == null) {
                 _logger.LogError(LoggedFeature.CommandSystem,
-                                 "Command is not bound. Have you created a CommandsInstaller for your system?");
+                                 "Command is not bound. Have you created a AbstractCommandsInstaller for your system?");
                 return;
             }
 

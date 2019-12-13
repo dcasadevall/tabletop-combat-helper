@@ -29,19 +29,7 @@ namespace Grid {
                      .UnderTransformGroup("Cells");
 #endif
             
-            _commandsDisposable = CommandsInstaller.Install<GridCommandsInstaller>(Container);
-        }
-        
-        private void OnEnable() {
-            if (_commandsDisposable != null) {
-                return;
-            }
-            
-            _commandsDisposable = CommandsInstaller.Install<GridCommandsInstaller>(Container);
-        }
-
-        private void OnDisable() {
-            _commandsDisposable?.Dispose();
+            AbstractCommandsInstaller.Install<GridCommandsInstaller>(Container, () => gameObject.activeInHierarchy);
         }
     }
 }

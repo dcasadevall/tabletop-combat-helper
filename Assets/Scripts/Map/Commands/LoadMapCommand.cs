@@ -49,7 +49,7 @@ namespace Map.Commands {
         }
 
         public IObservable<Unit> Run() {
-            if (_data.mapIndex > _mapPreviews.Count) {
+            if (_data.mapIndex >= _mapPreviews.Count) {
                 string errorMsg = string.Format("Invalid map index: {0}", _data.mapIndex);
                 _logger.LogError(LoggedFeature.Map, errorMsg);
                 return Observable.Throw<Unit>(new Exception(errorMsg));

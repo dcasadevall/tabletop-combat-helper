@@ -1,4 +1,5 @@
-﻿using Map.Commands;
+﻿using CommandSystem.Installers;
+using Map.Commands;
 using Map.MapSections.Commands;
 using Map.Serialized;
 using Map.UI;
@@ -27,7 +28,8 @@ namespace Map.MapSelection {
                 Container.Bind<IMapReference>().To<MapReference>().FromInstance(mapReference);
             }
             
-            Container.Install<MapCommandsInstaller>();
+            // Commands installer
+            AbstractCommandsInstaller.Install<MapCommandsInstaller>(Container, () => gameObject.activeInHierarchy);
         }
     }
 }

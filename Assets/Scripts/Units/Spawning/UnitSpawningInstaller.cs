@@ -1,3 +1,4 @@
+using CommandSystem.Installers;
 using Units.Serialized;
 using Units.Spawning.Commands;
 using UnityEngine;
@@ -46,7 +47,7 @@ namespace Units.Spawning {
             Container.Bind<IUnitSpawnSettings>().To<UnitSpawnSettings>().FromInstance(_unitSpawnSettings).AsSingle();
                         
             // Commands installer
-            Container.Install<SpawnUnitCommandsInstaller>();
+            AbstractCommandsInstaller.Install<SpawnUnitCommandsInstaller>(Container, () => gameObject.activeInHierarchy);
         }
     }
 }
