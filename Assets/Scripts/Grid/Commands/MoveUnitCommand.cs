@@ -16,8 +16,6 @@ namespace Grid.Commands {
         private readonly IUnitRegistry _unitRegistry;
         private readonly ILogger _logger;
 
-        // This state is of transient scope, so we can preserve state for Undo()
-        private IntVector2? _previousCoords;
 
         public bool IsInitialGameStateCommand {
             get {
@@ -34,29 +32,30 @@ namespace Grid.Commands {
         }
 
         public IObservable<UniRx.Unit> Run() {
-            IUnit unit = _unitRegistry.GetUnit(_data.unitId);
+            return DoMoveUnit(_data.unitId, _data.moveDistance);
+        }
+
+        public void Undo() {
+            DoMoveUnit(_data.unitId, -_data.moveDistance);
+        }
+
+        private IObservable<UniRx.Unit> DoMoveUnit(UnitId unitId, IntVector2 moveDistance) {
+            IUnit unit = _unitRegistry.GetUnit(unitId);
             if (unit == null) {
-                string errorMsg = string.Format("Unit not found in registry: {0}", _data.unitId);
+                var errorMsg = $"Unit not found in registry: {unitId}";
                 _logger.LogError(LoggedFeature.Units, errorMsg);
                 return Observable.Throw<UniRx.Unit>(new Exception(errorMsg));
             }
 
-            _previousCoords = _gridUnitManager.GetUnitCoords(unit);
-            _gridUnitManager.PlaceUnitAtTile(unit, _data.tileCoords);
-
-            return Observable.ReturnUnit();
-        }
-
-        public void Undo() {
-            if (_previousCoords == null) {
-                _logger.LogError(LoggedFeature.Units,
-                                 "Previous coords not found for MoveUnitCommand.Undo(): {0}",
-                                 _data.unitId);
-                return;
+            IntVector2? previousCoords = _gridUnitManager.GetUnitCoords(unit);
+            if (previousCoords == null) {
+                var errorMsg = $"Unit position not found: {unitId}";
+                _logger.LogError(LoggedFeature.Units, errorMsg);
+                return Observable.Throw<UniRx.Unit>(new Exception(errorMsg));
             }
-
-            IUnit unit = _unitRegistry.GetUnit(_data.unitId);
-            _gridUnitManager.PlaceUnitAtTile(unit, _previousCoords.Value);
+            
+            _gridUnitManager.PlaceUnitAtTile(unit, moveDistance + previousCoords.Value);
+            return Observable.ReturnUnit(); 
         }
     }
 }

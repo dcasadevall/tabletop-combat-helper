@@ -1,10 +1,13 @@
 using System.Collections.Generic;
+using Grid.Positioning;
 using Logging;
 using Math;
 using Units;
 using Units.Serialized;
 using Units.Spawning;
+using UnityEngine;
 using Zenject;
+using ILogger = Logging.ILogger;
 
 namespace Grid {
     /// <summary>
@@ -16,10 +19,17 @@ namespace Grid {
         private Dictionary<UnitId, int> _unitMap = new Dictionary<UnitId, int>();
         private List<IUnit>[,] _tiles;
         private readonly IGrid _grid;
+        private readonly IGridPositionCalculator _gridPositionCalculator;
+        private readonly IUnitTransformRegistry _unitTransformRegistry;
         private readonly ILogger _logger;
 
-        public GridUnitManager(IGrid grid, ILogger logger) {
+        public GridUnitManager(IGrid grid, 
+                               IGridPositionCalculator gridPositionCalculator,
+                               IUnitTransformRegistry unitTransformRegistry, 
+                               ILogger logger) {
             _grid = grid;
+            _gridPositionCalculator = gridPositionCalculator;
+            _unitTransformRegistry = unitTransformRegistry;
             _logger = logger;
         }
         
@@ -51,14 +61,22 @@ namespace Grid {
         }
 
         public bool PlaceUnitAtTile(IUnit unit, IntVector2 tileCoords) {
+            // Remove previous unit position if present
             if (_unitMap.ContainsKey(unit.UnitId)) {
-                _tiles[tileCoords.x % _grid.NumTilesX, tileCoords.y / _grid.NumTilesY].Remove(unit);
-                _unitMap.Remove(unit.UnitId);
+                RemoveUnit(unit);
             }
 
+            // Add unit to new position.
             int tileIndex = (int)(System.Math.Max(0, tileCoords.y) * _grid.NumTilesX + tileCoords.x);
+            _tiles[tileIndex % _grid.NumTilesX, tileIndex / _grid.NumTilesY].Add(unit);
             _unitMap.Add(unit.UnitId, tileIndex);
+            
+            // Move unit in 3D space.
+            Transform unitTransform = _unitTransformRegistry.GetTransformableUnit(unit.UnitId).Transform;
+            Vector2 worldPosition = _gridPositionCalculator.GetTileCenterWorldPosition(tileCoords);
+            unitTransform.position = new Vector3(worldPosition.x, worldPosition.y, unitTransform.position.z);
 
+            // Notify listeners
             UnitPlacedAtTile.Invoke(unit, tileCoords);
             return true;
         }

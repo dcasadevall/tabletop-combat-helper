@@ -17,6 +17,7 @@ namespace Map.MapSections.Commands {
 
         private readonly LoadMapSectionCommandData _data;
         private readonly IMapData _mapData;
+        private readonly IPausableCommandQueue _pausableCommandQueue;
         private readonly MapSectionContext _mapSectionContext;
         private readonly ZenjectSceneLoader _sceneLoader;
 
@@ -30,10 +31,12 @@ namespace Map.MapSections.Commands {
 
         public LoadMapSectionCommand(LoadMapSectionCommandData data,
                                      IMapData mapData,
+                                     IPausableCommandQueue pausableCommandQueue,
                                      MapSectionContext mapSectionContext,
                                      ZenjectSceneLoader sceneLoader) {
             _data = data;
             _mapData = mapData;
+            _pausableCommandQueue = pausableCommandQueue;
             _mapSectionContext = mapSectionContext;
             _sceneLoader = sceneLoader;
         }
@@ -55,6 +58,10 @@ namespace Map.MapSections.Commands {
         private static Dictionary<uint, SceneState> _loadedScenes = new Dictionary<uint, SceneState>();
 
         private IObservable<Unit> LoadMapSection(uint nextSection) {
+            // While we change scenes, pause any commands from being processed.
+            // This avoids race conditions with commands being instantiated in the wrong context.
+            _pausableCommandQueue.Pause();
+            
             _previousSection = _mapSectionContext.CurrentSectionIndex;
             _mapSectionContext.CurrentSectionIndex = nextSection;
             
@@ -63,20 +70,21 @@ namespace Map.MapSections.Commands {
             }
 
             if (_loadedScenes.ContainsKey(nextSection)) {
+                _pausableCommandQueue.Resume();
                 _loadedScenes[nextSection].Reactivate();
                 return Observable.ReturnUnit();
             }
 
             IMapSectionData mapSectionData = _mapData.Sections[nextSection];
-
             return _sceneLoader.LoadSceneAsync(kMapSectionScene,
                                                LoadSceneMode.Additive,
                                                container => {
                                                    _loadedScenes[nextSection] =
                                                        new SceneState(SceneManager.GetSceneAt(SceneManager.sceneCount - 1));
-                                                   
+
                                                    container.Bind<IGridData>().FromInstance(mapSectionData.GridData);
                                                    container.Bind<IMapSectionData>().FromInstance(mapSectionData);
+                                                   _pausableCommandQueue.Resume();
                                                }).ToUniTask().ToObservable();
         }
     }

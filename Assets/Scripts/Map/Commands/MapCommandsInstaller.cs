@@ -1,12 +1,10 @@
 using CommandSystem;
 using CommandSystem.Installers;
+using Zenject;
 
 namespace Map.Commands {
-    public class MapCommandsInstaller : AbstractCommandsInstaller {
-        public MapCommandsInstaller(CommandFactory commandFactory) : base(commandFactory) { }
-        
-        protected override void InstallCommandBindings() {
-            // We must expose the concrete command for the typed creation to work.
+    public class MapCommandsInstaller : Installer {
+        public override void InstallBindings() {
             Container.Bind<LoadMapCommand>().AsSingle();
         }
     }

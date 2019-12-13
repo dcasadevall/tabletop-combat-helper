@@ -4,18 +4,17 @@ using Grid;
 using Grid.Positioning;
 using Map.MapSections;
 using Math;
-using Units.Commands;
+using UniRx;
 using Units.Serialized;
+using Units.Spawning.Commands;
 using Units.UI;
 using UnityEngine;
 using Zenject;
 
 namespace Units.Spawning {
     /// <summary>
-    /// Handles Spawning units in the world space.
-    /// It uses the <see cref="UnitBehaviour.Pool"/> in order to spawn such units.
-    ///
-    /// <see cref="UnitBehaviour"/>s are initialized with the newly created <see cref="IUnit"/>.
+    /// Handles Spawning units in the world space when the scene context is first loaded.
+    /// It uses the <see cref="IUnitPool"/> in order to spawn such units.
     /// </summary>
     public class UnitSpawner : IInitializable, ITickable {
         private readonly bool _shouldSpawnInitialUnits;

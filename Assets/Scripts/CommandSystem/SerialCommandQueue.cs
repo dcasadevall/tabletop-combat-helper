@@ -12,12 +12,13 @@ namespace CommandSystem {
     /// Implementation of <see cref="ICommandQueue"/> that serially executes the given commands,
     /// adding them to a processing queue as they are received.
     /// </summary>
-    public class SerialCommandQueue : ICommandQueue, ITickable {
+    public class SerialCommandQueue : ICommandQueue, IPausableCommandQueue, ITickable {
         private readonly ICommandFactory _commandFactory;
         private readonly IClock _clock;
         private readonly ILogger _logger;
         private readonly List<ICommandQueueListener> _listeners = new List<ICommandQueueListener>();
         private readonly Queue<PendingCommand> _pendingCommands = new Queue<PendingCommand>();
+        private bool _isPaused;
         private bool _processingCommand;
         private uint _nextIndex;
 
@@ -37,6 +38,10 @@ namespace CommandSystem {
         }
 
         public void Tick() {
+            if (_isPaused) {
+                return;
+            }
+            
             if (_processingCommand) {
                 return;
             }
@@ -55,7 +60,7 @@ namespace CommandSystem {
                 _commandFactory.Create(pendingCommand.commandType, pendingCommand.dataType, pendingCommand.data);
             if (command == null) {
                 _logger.LogError(LoggedFeature.CommandSystem,
-                                 "Command is not bound. Have you created an AbstractCommandsInstaller for your system?");
+                                 "Command is not bound. Have you created a AbstractCommandsInstaller for your system?");
                 return;
             }
 
@@ -81,6 +86,16 @@ namespace CommandSystem {
         private void HandleCommandError(Exception exception) {
             _logger.LogError(LoggedFeature.CommandSystem, "Error executing command: {0}", exception);
             _processingCommand = false;
+        }
+
+        public void Pause() {
+            _logger.Log(LoggedFeature.CommandSystem, "Pausing Command Execution");
+            _isPaused = true;
+        }
+        
+        public void Resume() {
+            _logger.Log(LoggedFeature.CommandSystem, "Resuming Command Execution");
+            _isPaused = false;
         }
 
         private class PendingCommand {
