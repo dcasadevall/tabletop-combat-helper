@@ -6,7 +6,7 @@ namespace Units.Spawning {
     /// <see cref="MonoBehaviour"/> responsible for binding serialized fields found in the unit prefab to their
     /// respective unit data.
     /// </summary>
-    public class UnitRenderer : MonoBehaviour, IPoolable<IMemoryPool> {
+    public class UnitRenderer : MonoBehaviour, IPoolable {
 #pragma warning disable 649
         [SerializeField]
         private SpriteRenderer _spriteRenderer;
@@ -20,7 +20,7 @@ namespace Units.Spawning {
             gameObject.SetActive(false);
         }
 
-        public void OnSpawned(IMemoryPool memoryPool) {
+        public void OnSpawned() {
             gameObject.SetActive(true);
         }
 
@@ -29,7 +29,7 @@ namespace Units.Spawning {
             _avatarIconRenderer.sprite = unit.UnitData.AvatarSprite; 
         }
 
-        internal class Pool : MemoryPool<UnitRenderer> {
+        internal class Pool : MonoMemoryPool<UnitRenderer> {
         }
     }
 }
