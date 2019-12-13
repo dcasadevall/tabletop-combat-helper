@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using CommandSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 namespace Map.MapSections.Commands {
     /// <summary>
@@ -16,6 +18,11 @@ namespace Map.MapSections.Commands {
 
         public void Deactivate() {
             foreach (var rootGameObject in _scene.GetRootGameObjects()) {
+                SceneContext sceneContext = rootGameObject.GetComponent<SceneContext>();
+                if (sceneContext != null) {
+                    CommandFactory.UnregisterSceneContainer(sceneContext.Container);
+                }
+                
                 if (rootGameObject.activeSelf) {
                     rootGameObject.SetActive(false);
                     _activeGameObjects.Add(rootGameObject);
@@ -25,6 +32,11 @@ namespace Map.MapSections.Commands {
         
         public void Reactivate() {
             foreach (var rootGameObject in _scene.GetRootGameObjects()) {
+                SceneContext sceneContext = rootGameObject.GetComponent<SceneContext>();
+                if (sceneContext != null) {
+                    CommandFactory.RegisterSceneContainer(sceneContext.Container);
+                }
+                
                 if (_activeGameObjects.Contains(rootGameObject)) {
                     rootGameObject.SetActive(true);
                 }

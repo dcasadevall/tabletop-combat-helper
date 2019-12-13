@@ -13,7 +13,7 @@ namespace Map.MapSections {
             Container.Bind<MapSectionSelectionViewController>().FromComponentInNewPrefab(_mapSelectionViewController)
                      .AsSingle().NonLazy();
             
-            AbstractCommandsInstaller.Install<MapSectionsCommandsInstaller>(Container, () => gameObject.activeInHierarchy);
+            CommandsInstaller.Install<MapSectionsCommandsInstaller>(Container);
         }
     }
 }

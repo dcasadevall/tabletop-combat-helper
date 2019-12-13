@@ -29,7 +29,7 @@ namespace Grid {
                      .UnderTransformGroup("Cells");
 #endif
             
-            AbstractCommandsInstaller.Install<GridCommandsInstaller>(Container, () => gameObject.activeInHierarchy);
+            CommandsInstaller.Install<GridCommandsInstaller>(Container);
         }
     }
 }

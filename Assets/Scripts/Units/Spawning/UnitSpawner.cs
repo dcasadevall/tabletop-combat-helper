@@ -92,7 +92,6 @@ namespace Units.Spawning {
         }
 
         private void SpawnUnit(IUnitData unitData, IntVector2 tileCoords) {
-            Debug.Log("Spawner Hash: " + GetHashCode());
             UnitCommandData unitCommandData = _unitCommandDataFactory.Create(unitData);
             SpawnUnitData spawnUnitData = new SpawnUnitData(unitCommandData, tileCoords, _firstSpawn);
             _commandQueue.Enqueue<SpawnUnitCommand, SpawnUnitData>(spawnUnitData, CommandSource.Game);

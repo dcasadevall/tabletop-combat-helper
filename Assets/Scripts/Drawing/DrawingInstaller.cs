@@ -36,7 +36,7 @@ namespace Drawing {
             Container.Bind<IFactory<int, Sprite>>().To<DrawableSpriteFactory>().AsSingle();
             
             // Commands
-            AbstractCommandsInstaller.Install<DrawingCommandsInstaller>(Container, () => gameObject.activeInHierarchy);
+            CommandsInstaller.Install<DrawingCommandsInstaller>(Container);
         }
 
         private void BindTexturePainter(DiContainer container) {

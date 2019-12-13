@@ -29,7 +29,7 @@ namespace Map.MapSelection {
             }
             
             // Commands installer
-            AbstractCommandsInstaller.Install<MapCommandsInstaller>(Container, () => gameObject.activeInHierarchy);
+            CommandsInstaller.Install<MapCommandsInstaller>(Container);
         }
     }
 }

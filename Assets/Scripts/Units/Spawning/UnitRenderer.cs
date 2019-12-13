@@ -30,9 +30,6 @@ namespace Units.Spawning {
         }
 
         internal class Pool : MemoryPool<UnitRenderer> {
-            protected override void Reinitialize(UnitRenderer item) {
-                Debug.Log($"UnitRenderer Pool {GetHashCode()} reinitialize");
-            }
         }
     }
 }

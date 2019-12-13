@@ -41,7 +41,6 @@ namespace Units.Spawning.Commands {
             _gridUnitManager = gridUnitManager;
             _unitPool = unitPool;
             _logger = logger;
-            Debug.Log("Spawn Unit command instance.");
         }
 
         public IObservable<UniRx.Unit> Run() {
@@ -70,8 +69,6 @@ namespace Units.Spawning.Commands {
             }
 
             // Now, spawn the unit itself.
-            Debug.Log("Command hash: " + GetHashCode());
-            Debug.Log("Pool hash: " + _unitPool.GetHashCode());
             IUnit unit = _unitPool.Spawn(_data.unitCommandData.unitId, unitData, pets);
             _gridUnitManager.PlaceUnitAtTile(unit, _data.tileCoords);
 
