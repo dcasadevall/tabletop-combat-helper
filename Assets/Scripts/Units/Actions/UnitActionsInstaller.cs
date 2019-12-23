@@ -7,7 +7,6 @@ namespace Units.Actions {
             Container.Bind<IUnitActionPlanner>().To<UnitActionBroadcaster>().AsSingle();
             
             // Action Listeners
-            Container.Bind<IUnitActionListener>().To<UnitGridPositionPreviewer>().AsSingle();
             Container.Bind<IUnitActionListener>().To<UnitValidMovementHighlighter>().AsSingle();
         }
     }

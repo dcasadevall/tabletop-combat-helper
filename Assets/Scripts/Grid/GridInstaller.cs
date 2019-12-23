@@ -1,6 +1,7 @@
 using System;
 using CommandSystem.Installers;
 using Grid.Commands;
+using Grid.Highlighting;
 using Grid.Positioning;
 using Units.Spawning;
 using UnityEngine;
@@ -20,13 +21,14 @@ namespace Grid {
             
             // GridUnitManager should be the only thing mutating the unit transform.
             Container.Bind<IUnitTransformRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<GridUnitManager>();
-            
+
+            // Grid Visualization
+            Container.Bind<IGridCellHighlightPool>().To<GridCellHighlightPool>().AsSingle();
+            Container.BindMemoryPool<GridCellHighlight, GridCellHighlight.Pool>().WithInitialSize(10)
+                     .FromComponentInNewPrefab(gridCellPrefab).UnderTransformGroup("CellHighlights")
+                     .WhenInjectedInto<GridCellHighlightPool>();
 #if DEBUG
-            // ITicker and IInitializer
             Container.BindInterfacesTo<GridVisualizer>().AsSingle();
-            Container.BindFactory<SpriteRenderer, GridVisualizer.GridCellFactory>()
-                     .FromComponentInNewPrefab(gridCellPrefab)
-                     .UnderTransformGroup("Cells");
 #endif
             
             CommandsInstaller.Install<GridCommandsInstaller>(Container);
