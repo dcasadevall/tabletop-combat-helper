@@ -70,6 +70,7 @@ namespace Units.UI {
             _logger.Log(LoggedFeature.Units, "Planning Action: Move");
             await _unitActionPlanner.PlanAction(unit, UnitAction.Move);
             _logger.Log(LoggedFeature.Units, "Done Planning Action: Move");
+            _radialMenu.Hide();
             
             // Wait a few frames to release the input lock so there are no mouse button conflicts.
             await UniTask.DelayFrame(10);

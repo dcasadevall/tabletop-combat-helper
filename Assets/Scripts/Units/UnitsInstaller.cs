@@ -25,7 +25,8 @@ namespace Units {
             // UI: Radial Menu. For now, no need to use ID since there is only 1 radial menu.
             Container.Bind<IRadialMenu>().To<RadialMenuViewController>()
                      .FromComponentInNewPrefab(_unitMenuPrefab)
-                     .AsSingle();
+                     .AsSingle()
+                     .Lazy();
             
             Container.Bind<IUnitDataIndexResolver>().To<UnitDataIndexResolver>().AsSingle();
 
