@@ -39,5 +39,12 @@ namespace Units.Serialized {
                 return avatarSprite;
             }
         }
+
+        public UnitStats unitStats;
+        public UnitStats UnitStats {
+            get {
+                return unitStats;
+            }
+        }
     }
 }
