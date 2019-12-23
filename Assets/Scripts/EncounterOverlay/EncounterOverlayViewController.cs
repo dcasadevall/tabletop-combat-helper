@@ -1,4 +1,5 @@
 using Drawing.UI;
+using InputSystem;
 using Replays.Playback.UI;
 using UnityEngine;
 using Zenject;
@@ -8,22 +9,50 @@ namespace EncounterOverlay {
         // For now, just use a "hidden" flag for both states
         [SerializeField]
         private string _replayPlaybackOpenBoolName = "Hidden";
+
         [SerializeField]
         private string _drawingOpenBoolName = "Hidden";
-        
+
         [SerializeField]
         private Animator _animator;
 
+        private IInputLock _inputLock;
         private IReplayPlaybackViewController _replayPlaybackViewController;
         private IDrawingViewController _drawingViewController;
 
         [Inject]
-        public void Construct(IReplayPlaybackViewController replayPlaybackViewController,
+        public void Construct(IInputLock inputLock,
+                              IReplayPlaybackViewController replayPlaybackViewController,
                               IDrawingViewController drawingViewController) {
+            _inputLock = inputLock;
             _replayPlaybackViewController = replayPlaybackViewController;
             _drawingViewController = drawingViewController;
         }
-        
+
+        private void Awake() {
+            if (_inputLock.IsLocked) {
+                HandleInputLockAcquired();
+            } else {
+                HandleInputLockReleased();
+            }
+            
+            _inputLock.InputLockAcquired += HandleInputLockAcquired;
+            _inputLock.InputLockReleased += HandleInputLockReleased;
+        }
+
+        private void OnDestroy() {
+            _inputLock.InputLockAcquired -= HandleInputLockAcquired;
+            _inputLock.InputLockReleased -= HandleInputLockReleased;
+        }
+
+        private void HandleInputLockReleased() {
+            gameObject.SetActive(true);
+        }
+
+        private void HandleInputLockAcquired() {
+            gameObject.SetActive(false);
+        }
+
         public void HandleReplayPlaybackButtonPressed() {
             _animator.SetBool(_replayPlaybackOpenBoolName, true);
             _replayPlaybackViewController.CancelReplayButtonPressed += HandleCancelReplayButtonPressed;

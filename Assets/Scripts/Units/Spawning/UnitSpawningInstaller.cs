@@ -26,9 +26,9 @@ namespace Units.Spawning {
         
         public override void InstallBindings() {
             // Unit Pool
-            // NOTE: There is a bug in Zenject pools when we switch scenes and spawn elements in a pool while doing so.
-            // Zenject will use the pool of the currently active scene, instead of the one in context.
-            // To avoid that, for now, we tread this pool as one with a size of 1.
+            // NOTE: We do not use UnderTransformGroup because there is an issue with parenting under a
+            // transform with a given name when switching scenes.
+            // We should use UnderTransform instead, but that requires a specific Transform reference.
             Container.BindMemoryPool<UnitRenderer, UnitRenderer.Pool>()
                      .WithInitialSize(10)
                      .FromComponentInNewPrefab(_unitPrefab)

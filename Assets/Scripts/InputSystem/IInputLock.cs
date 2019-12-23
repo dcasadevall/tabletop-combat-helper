@@ -9,6 +9,15 @@ namespace InputSystem {
     /// </summary>
     public interface IInputLock {
         /// <summary>
+        /// Triggered when any actor acquires the input lock.
+        /// </summary>
+        event Action InputLockAcquired;
+        /// <summary>
+        /// Triggered when the actor currently holding the input lock releases it.
+        /// </summary>
+        event Action InputLockReleased;
+        
+        /// <summary>
         /// True if the lock has been acquired by any actor.
         /// </summary>
         bool IsLocked { get; }
