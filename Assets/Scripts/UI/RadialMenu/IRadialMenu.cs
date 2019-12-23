@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using UniRx.Async;
+using UnityEngine;
 
 namespace UI.RadialMenu {
     public interface IRadialMenu {
-        void Show();
-        void Hide();
+        UniTask Show(Vector3 screenPosition);
+        UniTask Hide();
     }
 }

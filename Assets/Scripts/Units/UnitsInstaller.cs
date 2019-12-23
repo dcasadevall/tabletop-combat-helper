@@ -15,19 +15,20 @@ namespace Units {
         public GameObject _unitPickerViewController;
 
         [SerializeField]
-        private RadialMenuViewController _unitMenuPrefab;
+        private UnitMenuViewController _unitMenuPrefab;
         
         public override void InstallBindings() {
             // UI
             Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(_unitPickerViewController).AsSingle();
             Container.Bind<ITickable>().To<UnitSelectionDetector>().AsSingle();
             
-            // UI: Radial Menu. For now, no need to use ID since there is only 1 radial menu.
-            Container.Bind<IRadialMenu>().To<RadialMenuViewController>()
+            // UI: Unit Menu
+            Container.Bind<UnitMenuViewController>()
                      .FromComponentInNewPrefab(_unitMenuPrefab)
                      .AsSingle()
+                     .WhenInjectedInto<UnitSelectionDetector>()
                      .Lazy();
-            
+
             Container.Bind<IUnitDataIndexResolver>().To<UnitDataIndexResolver>().AsSingle();
 
             // TODO: Avoid having to expose UnitRegistry.

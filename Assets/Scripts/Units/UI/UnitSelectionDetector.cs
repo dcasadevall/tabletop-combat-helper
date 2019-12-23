@@ -13,7 +13,7 @@ using ILogger = Logging.ILogger;
 
 namespace Units.UI {
     public class UnitSelectionDetector : ITickable {
-        private readonly IRadialMenu _radialMenu;
+        private readonly UnitMenuViewController _unitMenuViewController;
         private readonly IInputLock _inputLock;
         private readonly IUnitActionPlanner _unitActionPlanner;
         private readonly IGridInputManager _gridInputManager;
@@ -21,13 +21,13 @@ namespace Units.UI {
         private readonly IGridUnitManager _gridUnitManager;
         private readonly ILogger _logger;
 
-        public UnitSelectionDetector(IRadialMenu radialMenu,
+        public UnitSelectionDetector(UnitMenuViewController unitMenuViewController,
                                      IInputLock inputLock,
                                      IUnitActionPlanner unitActionPlanner,
                                      IGridInputManager gridInputManager,
                                      IGridUnitManager gridUnitManager,
                                      ILogger logger) {
-            _radialMenu = radialMenu;
+            _unitMenuViewController = unitMenuViewController;
             _inputLock = inputLock;
             _unitActionPlanner = unitActionPlanner;
             _gridInputManager = gridInputManager;
@@ -61,16 +61,12 @@ namespace Units.UI {
             if (lockId == null) {
                 return;
             }
-
-            _radialMenu.Show();
-            MoveUnit(units[0], lockId.Value);
+            
+            ShowUnitMenuViewController(units[0], lockId.Value);
         }
 
-        private async void MoveUnit(IUnit unit, Guid lockId) {
-            _logger.Log(LoggedFeature.Units, "Planning Action: Move");
-            await _unitActionPlanner.PlanAction(unit, UnitAction.Move);
-            _logger.Log(LoggedFeature.Units, "Done Planning Action: Move");
-            _radialMenu.Hide();
+        private async void ShowUnitMenuViewController(IUnit unit, Guid lockId) {
+            await _unitMenuViewController.Show(unit); 
             
             // Wait a few frames to release the input lock so there are no mouse button conflicts.
             await UniTask.DelayFrame(10);
