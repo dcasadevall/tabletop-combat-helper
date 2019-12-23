@@ -1,5 +1,6 @@
 ﻿using CommandSystem;
 using Grid.Commands;
+using UI.RadialMenu;
 using Units.Actions;
 using Units.Serialized;
 using Units.Spawning;
@@ -13,10 +14,18 @@ namespace Units {
         [SerializeField]
         public GameObject _unitPickerViewController;
 
+        [SerializeField]
+        private RadialMenuViewController _unitMenuPrefab;
+        
         public override void InstallBindings() {
             // UI
             Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(_unitPickerViewController).AsSingle();
             Container.Bind<ITickable>().To<UnitSelectionDetector>().AsSingle();
+            
+            // UI: Radial Menu. For now, no need to use ID since there is only 1 radial menu.
+            Container.Bind<IRadialMenu>().To<RadialMenuViewController>()
+                     .FromComponentInNewPrefab(_unitMenuPrefab)
+                     .AsSingle();
             
             Container.Bind<IUnitDataIndexResolver>().To<UnitDataIndexResolver>().AsSingle();
 

@@ -252,6 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 1550464143}
+  _canvas: {fileID: 557118708965462769}
 --- !u!1 &557118709158185923
 GameObject:
   m_ObjectHideFlags: 0

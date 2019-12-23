@@ -3,6 +3,7 @@ using Grid;
 using InputSystem;
 using Logging;
 using Math;
+using UI.RadialMenu;
 using UniRx.Async;
 using Units.Actions;
 using Units.Spawning;
@@ -12,6 +13,7 @@ using ILogger = Logging.ILogger;
 
 namespace Units.UI {
     public class UnitSelectionDetector : ITickable {
+        private readonly IRadialMenu _radialMenu;
         private readonly IInputLock _inputLock;
         private readonly IUnitActionPlanner _unitActionPlanner;
         private readonly IGridInputManager _gridInputManager;
@@ -19,11 +21,13 @@ namespace Units.UI {
         private readonly IGridUnitManager _gridUnitManager;
         private readonly ILogger _logger;
 
-        public UnitSelectionDetector(IInputLock inputLock,
+        public UnitSelectionDetector(IRadialMenu radialMenu,
+                                     IInputLock inputLock,
                                      IUnitActionPlanner unitActionPlanner,
                                      IGridInputManager gridInputManager,
                                      IGridUnitManager gridUnitManager,
                                      ILogger logger) {
+            _radialMenu = radialMenu;
             _inputLock = inputLock;
             _unitActionPlanner = unitActionPlanner;
             _gridInputManager = gridInputManager;
@@ -58,6 +62,7 @@ namespace Units.UI {
                 return;
             }
 
+            _radialMenu.Show();
             MoveUnit(units[0], lockId.Value);
         }
 
