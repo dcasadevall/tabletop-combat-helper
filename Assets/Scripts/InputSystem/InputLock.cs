@@ -2,6 +2,9 @@ using System;
 
 namespace InputSystem {
     public class InputLock : IInputLock {
+        public event Action InputLockAcquired;
+        public event Action InputLockReleased;
+
         public bool IsLocked {
             get {
                 return _owner != null;
@@ -16,6 +19,8 @@ namespace InputSystem {
             }
             
             _owner = Guid.NewGuid();
+            InputLockAcquired?.Invoke();
+            
             return _owner;
         }
 
@@ -29,6 +34,8 @@ namespace InputSystem {
             }
 
             _owner = null;
+            InputLockReleased?.Invoke();
+            
             return true;
         }
     }

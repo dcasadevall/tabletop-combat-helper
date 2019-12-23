@@ -20,6 +20,7 @@ namespace Units.UI {
         private Button _cancelButton;
 
         private Camera _camera;
+        private Guid? _lockId;
         private IUnit _unit;
         private IInputLock _inputLock;
         private IUnitActionPlanner _unitActionPlanner;
@@ -54,6 +55,14 @@ namespace Units.UI {
                 return UniTask.FromException(new Exception(msg));
             }
             
+            // Acquire input lock. If we fail to do so, return.
+            _lockId = _inputLock.Lock();
+            if (_lockId == null) {
+                var msg = "Failed to acquire input lock.";
+                _logger.LogError(LoggedFeature.Units, msg);
+                return UniTask.FromException(new Exception(msg));
+            }
+            
             // Set selected unit and events
             _unit = unit;
             _moveUnitButton.onClick.AddListener(HandleMoveUnitButtonPressed);
@@ -65,19 +74,23 @@ namespace Units.UI {
         }
 
         public UniTask Hide() {
+            if (_lockId != null) {
+                _inputLock.Unlock(_lockId.Value);
+            }
+            
             _moveUnitButton.onClick.RemoveListener(HandleMoveUnitButtonPressed);
             _cancelButton.onClick.RemoveListener(HandleCancelButtonPressed);
             return _radialMenu.Hide();
         }
-
+        
         private void HandleMoveUnitButtonPressed() {
+            Hide();
             var lockId = _inputLock.Lock();
             if (lockId == null) {
                 _logger.LogError(LoggedFeature.Units, "Could not acquire input lock");
                 return;
             }
 
-            Hide();
             MoveUnit(_unit, lockId.Value);
         }
 
