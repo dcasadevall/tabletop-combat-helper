@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Linq;
 using Math;
 using NSubstitute;
 using NUnit.Framework;
@@ -94,6 +96,75 @@ namespace Grid.Positioning.Tests {
             
             IntVector2 tileClosestToCenter = _positionCalculator.GetTileClosestToCenter();
             Assert.AreEqual(IntVector2.Of(expectedTileX, expectedTileY), tileClosestToCenter);  
+        }
+
+        private class ValidTestCases : IEnumerable {
+            public IEnumerator GetEnumerator() {
+                yield return new object[] {
+                    1,
+                    new[,] {
+                        {0, 1, 0},
+                        {1, 0, 1},
+                        {0, 1, 0}
+                    }
+                };
+                yield return new object[] {
+                    2,
+                    new[,] {
+                        {0, 0, 1, 0, 0},
+                        {0, 1, 1, 1, 0},
+                        {1, 1, 0, 1, 1},
+                        {0, 1, 1, 1, 0},
+                        {0, 0, 1, 0, 0}
+                    }
+                };
+                yield return new object[] {
+                    3,
+                    new[,] {
+                        {0, 0, 0, 1, 0, 0, 0},
+                        {0, 0, 1, 1, 1, 0, 0},
+                        {0, 1, 1, 1, 1, 1, 0},
+                        {1, 1, 1, 0, 1, 1, 1},
+                        {0, 1, 1, 1, 1, 1, 0},
+                        {0, 0, 1, 1, 1, 0, 0},
+                        {0, 0, 0, 1, 0, 0, 0},
+                    }
+                };
+            }
+        }
+
+        [TestCaseSource(typeof(ValidTestCases))]
+        public void TestGivenDistance_GetTilesAtDistance_ReturnsElementsWithinDistance(
+            int distance, int[,] resultMatrix) {
+            _grid.NumTilesX.Returns(100U);
+            _grid.NumTilesY.Returns(100U);
+
+            IntVector2 centerCoords = _positionCalculator.GetTileClosestToCenter();
+            var result = _positionCalculator.GetTilesAtDistance(centerCoords, distance);
+
+            for (int y = 0; y < resultMatrix.GetLength(0); y++) {
+                for (int x = 0; x < resultMatrix.GetLength(1); x++) {
+                    int inResult = resultMatrix[x, y];
+                    IntVector2 relativeCoords = IntVector2.Of(x - distance, y - distance);
+                    if (inResult == 1) {
+                        Assert.IsTrue(result.Contains(centerCoords + relativeCoords));
+                    } else {
+                        Assert.IsFalse(result.Contains(centerCoords + relativeCoords));
+                    }
+                }
+            }
+        }
+        
+        [TestCase(0)]
+        [TestCase(-1)]
+        [TestCase(-10)]
+        public void TestGivenInvalidDistance_GetTilesAtDistance_ReturnsEmptyArray(int distance) {
+            _grid.NumTilesX.Returns(100U);
+            _grid.NumTilesY.Returns(100U);
+
+            IntVector2 centerCoords = _positionCalculator.GetTileClosestToCenter();
+            var result = _positionCalculator.GetTilesAtDistance(centerCoords, distance);
+            Assert.IsEmpty(result);
         }
     }
 }

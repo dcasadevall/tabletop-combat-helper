@@ -1,19 +1,20 @@
-
+using System.Collections.Generic;
 using Math;
 using UnityEngine;
 
 namespace Grid.Positioning {
     public class GridPositionCalculator : IGridPositionCalculator {
         private readonly IGrid _grid;
+
         public GridPositionCalculator(IGrid grid) {
             _grid = grid;
         }
-        
+
         /// <inheritdoc />
         public Vector2 GetTileCenterWorldPosition(IntVector2 tileCoords) {
             float xPosition = _grid.WorldSpaceBounds().x + _grid.TileSize / 2.0f + _grid.TileSize * tileCoords.x;
             float yPosition = _grid.WorldSpaceBounds().y + _grid.TileSize / 2.0f + _grid.TileSize * tileCoords.y;
-            
+
             return new Vector2(xPosition, yPosition);
         }
 
@@ -28,7 +29,7 @@ namespace Grid.Positioning {
         public IntVector2 GetTileClosestToCenter() {
             uint xTile = (_grid.NumTilesX - 1) / 2;
             uint yTile = (_grid.NumTilesY - 1) / 2;
-            return IntVector2.Of((int)xTile, (int)yTile);
+            return IntVector2.Of((int) xTile, (int) yTile);
         }
 
         /// <inheritdoc />
@@ -38,8 +39,37 @@ namespace Grid.Positioning {
             if (x == -1 || y == -1) {
                 return null;
             }
-            
+
             return IntVector2.Of(x, y);
+        }
+
+        public IntVector2[] GetTilesAtDistance(IntVector2 coords, int distance) {
+            if (distance <= 0) {
+                return new IntVector2[0];
+            }
+            
+            int tileIndex = 0;
+            var tiles = new List<IntVector2>();
+            for (int x = -distance; x <= distance; x++) {
+                for (int y = -distance; y <= distance; y++) {
+                    if (x == 0 && y == 0) {
+                        continue;
+                    }
+                    
+                    var tileCoords = coords + IntVector2.Of(x, y);
+                    if (!IsInsideGrid(tileCoords)) {
+                        continue;
+                    }
+
+                    if (System.Math.Abs(x) + System.Math.Abs(y) > distance) {
+                        continue;
+                    }
+                    
+                    tiles.Add(tileCoords);
+                }
+            }
+
+            return tiles.ToArray();
         }
 
         /**
@@ -61,7 +91,7 @@ namespace Grid.Positioning {
             }
 
             if (end == start + 1) {
-                return (int)start;
+                return (int) start;
             }
 
             uint m = (start + end) / 2;
@@ -82,6 +112,13 @@ namespace Grid.Positioning {
             } else {
                 return GetTileOriginWorldPosition(IntVector2.One * coordinate).y;
             }
+        }
+
+        private bool IsInsideGrid(IntVector2 point) {
+            return point.x >= 0
+                && point.x < _grid.NumTilesX
+                && point.y >= 0
+                && point.y < _grid.NumTilesY;
         }
     }
 }

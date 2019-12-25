@@ -12,6 +12,9 @@ namespace EncounterOverlay {
 
         [SerializeField]
         private string _drawingOpenBoolName = "Hidden";
+        
+        [SerializeField]
+        private string _inputLockBoolName = "InputLock";
 
         [SerializeField]
         private Animator _animator;
@@ -46,11 +49,11 @@ namespace EncounterOverlay {
         }
 
         private void HandleInputLockReleased() {
-            gameObject.SetActive(true);
+            _animator.SetBool(_inputLockBoolName, false);
         }
 
         private void HandleInputLockAcquired() {
-            gameObject.SetActive(false);
+            _animator.SetBool(_inputLockBoolName, true);
         }
 
         public void HandleReplayPlaybackButtonPressed() {
