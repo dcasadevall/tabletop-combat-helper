@@ -45,7 +45,7 @@ namespace Units.Actions.Listeners.Move {
 
         public void Tick(IUnit unit) { }
 
-        public void HandleActionConfirmed(IUnit unit, IntVector2 tileCoords) {
+        public void HandleActionConfirmed(IUnit unit) {
             _gridCellHighlightPool.DespawnAll();
         }
 

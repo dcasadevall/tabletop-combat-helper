@@ -1,6 +1,11 @@
 using System;
+using System.Threading;
+using UI.RadialMenu;
 using UniRx.Async;
+using Units.Actions;
 using UnityEngine;
+using UnityEngine.UI;
+using Zenject;
 
 namespace Units.UI {
     /// <summary>
@@ -8,15 +13,36 @@ namespace Units.UI {
     /// <see cref="UnitMenuViewController"/>
     /// </summary>
     public class MoveUnitMenuViewController : MonoBehaviour {
-        public event Action UnitMovementConfirmed;
-        public event Action UnitMovementCanceled;
+        [SerializeField]
+        private Button _confirmButton;
 
-        internal UniTask<bool> Show() {
-            return UniTask.FromResult(true);
-        }
+        [SerializeField]
+        private Button _cancelButton;
+
+        private IRadialMenu _radialMenu;
         
+        [Inject]
+        public void Construct() {
+            // TODO: Can we inject this instead?
+            _radialMenu = GetComponent<IRadialMenu>();
+        }
+
+        internal async UniTask<UnitActionPlanResult> Show(Vector3 screenPosition, CancellationToken token) {
+            _radialMenu.Show(screenPosition);
+            gameObject.SetActive(true);
+
+            UnitActionPlanResult result;
+            using (var confirmHandler = _confirmButton.GetAsyncClickEventHandler(token)) 
+            using (var cancelHandler = _cancelButton.GetAsyncClickEventHandler(token)) {
+                var clickIndex = await UniTask.WhenAny(confirmHandler.OnClickAsync(), cancelHandler.OnClickAsync());
+                result = clickIndex == 0 ? UnitActionPlanResult.Confirmed : UnitActionPlanResult.Canceled;
+            }
+
+            return result;
+        }
+
         internal UniTask Hide() {
-            return UniTask.CompletedTask;
+            return _radialMenu.Hide();
         }
     }
 }

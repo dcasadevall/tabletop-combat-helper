@@ -9,7 +9,7 @@ namespace Units.Actions {
         UnitAction ActionType { get; }
         void HandleActionPlanned(IUnit unit);
         void Tick(IUnit unit);
-        void HandleActionConfirmed(IUnit unit, IntVector2 tileCoords);
+        void HandleActionConfirmed(IUnit unit);
         void HandleActionCanceled(IUnit unit);
     }
 }

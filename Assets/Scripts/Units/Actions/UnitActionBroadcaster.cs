@@ -30,8 +30,8 @@ namespace Units.Actions {
                                   UnitAction action,
                                   IObservable<UnitActionPlanResult> actionPlanObservable) {
             _planCompleteObserver = actionPlanObservable.Subscribe(result => {
-                if (result.resultType == UnitActionPlanResult.PlanResultType.Confirmed) {
-                    HandleActionConfirmed(unit, action, result.tileCoords);
+                if (result == UnitActionPlanResult.Confirmed) {
+                    HandleActionConfirmed(unit, action);
                 } else {
                     HandleActionCanceled(unit, action);
                 }
@@ -51,11 +51,11 @@ namespace Units.Actions {
             _actionListeners.Where(x => x.ActionType == unitAction).ToList().ForEach(x => x.Tick(unit));
         }
 
-        private void HandleActionConfirmed(IUnit unit, UnitAction action, IntVector2 tileCoords) {
+        private void HandleActionConfirmed(IUnit unit, UnitAction action) {
             _logger.Log(LoggedFeature.Units,
-                        $"Action: {action} confirmed on unit: {unit.UnitData.Name}. Coords: {tileCoords}");
+                        $"Action: {action} confirmed on unit: {unit.UnitData.Name}.");
             _actionListeners.Where(x => x.ActionType == action).ToList()
-                            .ForEach(x => x.HandleActionConfirmed(unit, tileCoords));
+                            .ForEach(x => x.HandleActionConfirmed(unit));
 
             _planCompleteObserver.Dispose();
             _planCompleteObserver = null;
@@ -64,7 +64,7 @@ namespace Units.Actions {
         }
 
         private void HandleActionCanceled(IUnit unit, UnitAction action) {
-            _logger.Log(LoggedFeature.Units, $"Action: ${action} canceled on unit: ${unit}");
+            _logger.Log(LoggedFeature.Units, $"Action: {action} canceled on unit: {unit}");
             _actionListeners.Where(x => x.ActionType == action).ToList().ForEach(x => x.HandleActionCanceled(unit));
 
             _planCompleteObserver.Dispose();
