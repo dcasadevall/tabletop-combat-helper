@@ -42,5 +42,14 @@ namespace Grid.Positioning {
         /// <param name="worldPosition"></param>
         /// <returns></returns>
         IntVector2? GetTileContainingWorldPosition(Vector2 worldPosition);
+
+        /// <summary>
+        /// Gets the tiles at a given distance from the given tile.
+        /// Diagonal movement is considered distance 2 (1 for horizontal, 1 for vertical)
+        /// </summary>
+        /// <param name="coords"></param>
+        /// <param name="distance"></param>
+        /// <returns></returns>
+        IntVector2[] GetTilesAtDistance(IntVector2 coords, int distance);
     }
 }

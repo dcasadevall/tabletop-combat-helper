@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Threading;
 using Grid;
 using Grid.Positioning;
 using InputSystem;
 using Logging;
 using UI.RadialMenu;
+using UniRx;
 using UniRx.Async;
 using Units.Actions;
 using UnityEngine;
@@ -12,6 +14,9 @@ using Zenject;
 using ILogger = Logging.ILogger;
 
 namespace Units.UI {
+    /// <summary>
+    /// ViewController used for the root HUD shown when a unit is selected.
+    /// </summary>
     public class UnitMenuViewController : MonoBehaviour {
         [SerializeField]
         private Button _moveUnitButton;
@@ -28,6 +33,7 @@ namespace Units.UI {
         private IGridPositionCalculator _gridPositionCalculator;
         private IRadialMenu _radialMenu;
         private ILogger _logger;
+        private Vector3 _menuScreenPositon;
 
         [Inject]
         public void Construct(Camera worldCamera,
@@ -54,7 +60,7 @@ namespace Units.UI {
                 _logger.LogError(LoggedFeature.Units, msg);
                 return UniTask.FromException(new Exception(msg));
             }
-            
+
             // Acquire input lock. If we fail to do so, return.
             _lockId = _inputLock.Lock();
             if (_lockId == null) {
@@ -62,7 +68,7 @@ namespace Units.UI {
                 _logger.LogError(LoggedFeature.Units, msg);
                 return UniTask.FromException(new Exception(msg));
             }
-            
+
             // Set selected unit and events
             _unit = unit;
             _moveUnitButton.onClick.AddListener(HandleMoveUnitButtonPressed);
@@ -70,20 +76,23 @@ namespace Units.UI {
 
             // Show radial menu
             var worldPosition = _gridPositionCalculator.GetTileCenterWorldPosition(unitCoords.Value);
-            return _radialMenu.Show(_camera.WorldToScreenPoint(worldPosition));
+            _menuScreenPositon = _camera.WorldToScreenPoint(worldPosition);
+            return _radialMenu.Show(_menuScreenPositon);
         }
 
         public UniTask Hide() {
             if (_lockId != null) {
                 _inputLock.Unlock(_lockId.Value);
             }
-            
+
             _moveUnitButton.onClick.RemoveListener(HandleMoveUnitButtonPressed);
             _cancelButton.onClick.RemoveListener(HandleCancelButtonPressed);
             return _radialMenu.Hide();
         }
-        
-        private void HandleMoveUnitButtonPressed() {
+
+        // Maybe we should have a different handler to do this logic?
+        private async void HandleMoveUnitButtonPressed() {
+            // Hide the top menu. This releases input lock, so reacquire it.
             Hide();
             var lockId = _inputLock.Lock();
             if (lockId == null) {
@@ -91,21 +100,40 @@ namespace Units.UI {
                 return;
             }
 
-            MoveUnit(_unit, lockId.Value);
-        }
+            // Action Planning / Confirmation
+            _logger.Log(LoggedFeature.Units, "Planning Action: SelectMoveDestination");
+            var destinationResult = await _unitActionPlanner.PlanAction(_unit, UnitAction.SelectMoveDestination);
+            _logger.Log(LoggedFeature.Units, "Done Planning Action: SelectMoveDestination");
+            if (destinationResult.resultType == UnitActionPlanResult.PlanResultType.Canceled) {
+                await UniTask.DelayFrame(5);
+                _inputLock.Unlock(lockId.Value);
+                return;
+            }
+            
+            _logger.Log(LoggedFeature.Units, "Planning Action: ChooseMovePath");
+            var choosePathResult = await _unitActionPlanner.PlanAction(_unit, UnitAction.ChooseMovePath);
+            _logger.Log(LoggedFeature.Units, "Done Planning Action: ChooseMovePath");
+            if (choosePathResult.resultType == UnitActionPlanResult.PlanResultType.Canceled) {
+                await UniTask.DelayFrame(5);
+                _inputLock.Unlock(lockId.Value);
+                return;
+            }
+            
+            _logger.Log(LoggedFeature.Units, "Planning Action: AnimateMovement");
+            await _unitActionPlanner.PlanAction(_unit, UnitAction.AnimateMovement);
+            _logger.Log(LoggedFeature.Units, "Done Planning Action: AnimateMovement");
 
+            if (destinationResult.tileCoords != null) {
+                _gridUnitManager.PlaceUnitAtTile(_unit, destinationResult.tileCoords.Value);
+            }
+            
+            // Release input lock delay to avoid input conflicts
+            await UniTask.DelayFrame(5);
+            _inputLock.Unlock(lockId.Value);
+        }
+        
         private void HandleCancelButtonPressed() {
             Hide();
-        }
-
-        private async void MoveUnit(IUnit unit, Guid lockId) {
-            _logger.Log(LoggedFeature.Units, "Planning Action: Move");
-            await _unitActionPlanner.PlanAction(unit, UnitAction.Move);
-            _logger.Log(LoggedFeature.Units, "Done Planning Action: Move");
-
-            // Wait a few frames to release the input lock so there are no mouse button conflicts.
-            await UniTask.DelayFrame(10);
-            _inputLock.Unlock(lockId);
         }
     }
 }

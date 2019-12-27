@@ -17,6 +17,9 @@ namespace Units {
         [SerializeField]
         private UnitMenuViewController _unitMenuPrefab;
         
+        [SerializeField]
+        private MoveUnitMenuViewController _moveUnitMenuPrefab;
+        
         public override void InstallBindings() {
             // UI
             Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(_unitPickerViewController).AsSingle();
@@ -27,6 +30,12 @@ namespace Units {
                      .FromComponentInNewPrefab(_unitMenuPrefab)
                      .AsSingle()
                      .WhenInjectedInto<UnitSelectionDetector>()
+                     .Lazy();
+            
+            Container.Bind<MoveUnitMenuViewController>()
+                     .FromComponentInNewPrefab(_moveUnitMenuPrefab)
+                     .AsSingle()
+                     .WhenInjectedInto<UnitMenuViewController>()
                      .Lazy();
 
             Container.Bind<IUnitDataIndexResolver>().To<UnitDataIndexResolver>().AsSingle();

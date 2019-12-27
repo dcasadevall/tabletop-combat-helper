@@ -1,4 +1,5 @@
 using Debugging;
+using Grid.Highlighting;
 using Grid.Positioning;
 using Math;
 using UnityEngine;
@@ -13,24 +14,27 @@ namespace Grid {
     /// If <see cref="IDebugSettings.ShowDebugGrid"/> is false, the <see cref="SpriteRenderer"/>s are not shown.
     /// </summary>
     internal class GridVisualizer : IInitializable, ITickable {
-        private IGrid _grid;
-        private IDebugSettings _debugSettings;
-        private IGridPositionCalculator _positionCalculator;
-        private SpriteRenderer[,] _cells;
-        private GridCellFactory _factory;
+        private readonly IGrid _grid;
+        private readonly IDebugSettings _debugSettings;
+        private readonly IGridPositionCalculator _positionCalculator;
+        private readonly IGridCellHighlightPool _cellHighlightPool;
 
-        public GridVisualizer(IGrid grid, IGridPositionCalculator gridPositionCalculator, GridCellFactory factory,
+        private IGridCellHighlight[,] _cells;
+
+        public GridVisualizer(IGrid grid,
+                              IGridPositionCalculator gridPositionCalculator,
+                              IGridCellHighlightPool cellHighlightPool,
                               IDebugSettings debugSettings) {
             _grid = grid;
             _positionCalculator = gridPositionCalculator;
+            _cellHighlightPool = cellHighlightPool;
             _debugSettings = debugSettings;
-            _factory = factory;
         }
 
         public void Initialize() {
-            _cells = new SpriteRenderer[_grid.NumTilesX, _grid.NumTilesY];
+            _cells = new IGridCellHighlight[_grid.NumTilesX, _grid.NumTilesY];
         }
-        
+
         public void Tick() {
             for (int x = 0; x < _grid.NumTilesX; x++) {
                 for (int y = 0; y < _grid.NumTilesY; y++) {
@@ -44,17 +48,22 @@ namespace Grid {
             if (_cells[x, y] == null && !_debugSettings.ShowDebugGrid) {
                 return;
             }
-            
-            if (_cells[x, y] == null) {
-                _cells[x, y] = _factory.Create();
-                _cells[x, y].transform.position =
-                    _positionCalculator.GetTileCenterWorldPosition(IntVector2.Of(x, y));
+
+            if (_debugSettings.ShowDebugGrid) {
+                if (_cells[x, y] == null) {
+                    var position = _positionCalculator.GetTileCenterWorldPosition(IntVector2.Of(x, y));
+                    _cells[x, y] = _cellHighlightPool.Spawn(position, new Color(0, 0, 0, 0));
+                }
+
+                _cells[x, y].SetColor(new Color(0, 0, 0, 0));
             }
 
-            _cells[x, y].enabled = _debugSettings.ShowDebugGrid;
+            if (!_debugSettings.ShowDebugGrid && _cells[x, y] != null) {
+                _cellHighlightPool.Despawn(_cells[x, y]);
+                _cells[x, y] = null;
+            }
         }
 
-        public class GridCellFactory : PlaceholderFactory<SpriteRenderer> {
-        }
+        public class GridCellFactory : PlaceholderFactory<Transform> { }
     }
 }

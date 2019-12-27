@@ -45,6 +45,9 @@ TagManager:
   - name: Background
     uniqueID: 3828787579
     locked: 0
+  - name: Grid Highlight
+    uniqueID: 2284299501
+    locked: 0
   - name: Units
     uniqueID: 2632996201
     locked: 0

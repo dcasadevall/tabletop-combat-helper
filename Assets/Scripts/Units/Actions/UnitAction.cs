@@ -1,5 +1,7 @@
 namespace Units.Actions {
     public enum UnitAction {
-        Move
+        SelectMoveDestination,
+        ChooseMovePath,
+        AnimateMovement
     }
 }

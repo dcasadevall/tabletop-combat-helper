@@ -47,3 +47,5 @@ MonoBehaviour:
     type: 3}
   _unitMenuPrefab: {fileID: 1959486018043154191, guid: 7f5d6ce3dc5974473b54213ee0a4bf8e,
     type: 3}
+  _moveUnitMenuPrefab: {fileID: 2216332640465794078, guid: a4266766f106841cfa42515565092e99,
+    type: 3}

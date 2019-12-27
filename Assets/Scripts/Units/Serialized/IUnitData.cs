@@ -31,5 +31,12 @@ namespace Units.Serialized {
         /// Should be shown in minimap and when zoomed out.
         /// </summary>
         Sprite AvatarSprite { get; }
+        
+        /// <summary>
+        /// Stats for this unit.
+        /// Things such as HP, Base Speed, etc with which
+        /// the unit starts.
+        /// </summary>
+        UnitStats UnitStats { get; }
     }
 }
