@@ -25,7 +25,6 @@ namespace Units.UI {
         private Button _cancelButton;
 
         private Camera _camera;
-        private MoveUnitMenuViewController _moveUnitMenuViewController;
         private Guid? _lockId;
         private IUnit _unit;
         private IInputLock _inputLock;
@@ -38,14 +37,12 @@ namespace Units.UI {
 
         [Inject]
         public void Construct(Camera worldCamera,
-                              MoveUnitMenuViewController moveUnitMenuViewController,
                               IUnitActionPlanner unitActionPlanner,
                               IGridPositionCalculator gridPositionCalculator,
                               IGridUnitManager gridUnitManager,
                               IInputLock inputLock,
                               ILogger logger) {
             _camera = worldCamera;
-            _moveUnitMenuViewController = moveUnitMenuViewController;
             _unitActionPlanner = unitActionPlanner;
             _gridPositionCalculator = gridPositionCalculator;
             _gridUnitManager = gridUnitManager;
@@ -93,6 +90,7 @@ namespace Units.UI {
             return _radialMenu.Hide();
         }
 
+        // Maybe we should have a different handler to do this logic?
         private async void HandleMoveUnitButtonPressed() {
             // Hide the top menu. This releases input lock, so reacquire it.
             Hide();
@@ -102,18 +100,35 @@ namespace Units.UI {
                 return;
             }
 
-            // Show MoveUnitViewController Submenu.
-            var moveUnitMenuTask = _moveUnitMenuViewController.Show(_menuScreenPositon, CancellationToken.None);
-            
             // Action Planning / Confirmation
-            _logger.Log(LoggedFeature.Units, "Planning Action: Move");
-            await _unitActionPlanner.PlanAction(_unit, UnitAction.Move, moveUnitMenuTask.ToObservable());
-            _logger.Log(LoggedFeature.Units, "Done Planning Action: Move");
+            _logger.Log(LoggedFeature.Units, "Planning Action: SelectMoveDestination");
+            var destinationResult = await _unitActionPlanner.PlanAction(_unit, UnitAction.SelectMoveDestination);
+            _logger.Log(LoggedFeature.Units, "Done Planning Action: SelectMoveDestination");
+            if (destinationResult.resultType == UnitActionPlanResult.PlanResultType.Canceled) {
+                await UniTask.DelayFrame(5);
+                _inputLock.Unlock(lockId.Value);
+                return;
+            }
+            
+            _logger.Log(LoggedFeature.Units, "Planning Action: ChooseMovePath");
+            var choosePathResult = await _unitActionPlanner.PlanAction(_unit, UnitAction.ChooseMovePath);
+            _logger.Log(LoggedFeature.Units, "Done Planning Action: ChooseMovePath");
+            if (choosePathResult.resultType == UnitActionPlanResult.PlanResultType.Canceled) {
+                await UniTask.DelayFrame(5);
+                _inputLock.Unlock(lockId.Value);
+                return;
+            }
+            
+            _logger.Log(LoggedFeature.Units, "Planning Action: AnimateMovement");
+            await _unitActionPlanner.PlanAction(_unit, UnitAction.AnimateMovement);
+            _logger.Log(LoggedFeature.Units, "Done Planning Action: AnimateMovement");
 
-            // Hide Submenu
-            await _moveUnitMenuViewController.Hide();
-           
-            // Release input lock
+            if (destinationResult.tileCoords != null) {
+                _gridUnitManager.PlaceUnitAtTile(_unit, destinationResult.tileCoords.Value);
+            }
+            
+            // Release input lock delay to avoid input conflicts
+            await UniTask.DelayFrame(5);
             _inputLock.Unlock(lockId.Value);
         }
         

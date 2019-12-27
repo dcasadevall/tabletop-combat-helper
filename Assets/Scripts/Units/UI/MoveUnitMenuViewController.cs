@@ -1,8 +1,6 @@
-using System;
 using System.Threading;
 using UI.RadialMenu;
 using UniRx.Async;
-using Units.Actions;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -27,18 +25,18 @@ namespace Units.UI {
             _radialMenu = GetComponent<IRadialMenu>();
         }
 
-        internal async UniTask<UnitActionPlanResult> Show(Vector3 screenPosition, CancellationToken token) {
+        internal async UniTask<bool> Show(Vector3 screenPosition, CancellationToken token) {
             _radialMenu.Show(screenPosition);
             gameObject.SetActive(true);
 
-            UnitActionPlanResult result;
+            bool didConfirm;
             using (var confirmHandler = _confirmButton.GetAsyncClickEventHandler(token)) 
             using (var cancelHandler = _cancelButton.GetAsyncClickEventHandler(token)) {
                 var clickIndex = await UniTask.WhenAny(confirmHandler.OnClickAsync(), cancelHandler.OnClickAsync());
-                result = clickIndex == 0 ? UnitActionPlanResult.Confirmed : UnitActionPlanResult.Canceled;
+                didConfirm = clickIndex == 0;
             }
 
-            return result;
+            return didConfirm;
         }
 
         internal UniTask Hide() {
