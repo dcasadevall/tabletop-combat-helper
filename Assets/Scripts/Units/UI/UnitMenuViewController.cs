@@ -4,6 +4,7 @@ using Grid.Positioning;
 using InputSystem;
 using Logging;
 using UI.RadialMenu;
+using UniRx;
 using UniRx.Async;
 using Units.Actions;
 using UnityEngine;
@@ -12,6 +13,9 @@ using Zenject;
 using ILogger = Logging.ILogger;
 
 namespace Units.UI {
+    /// <summary>
+    /// ViewController used for the root HUD shown when a unit is selected.
+    /// </summary>
     public class UnitMenuViewController : MonoBehaviour {
         [SerializeField]
         private Button _moveUnitButton;
@@ -20,6 +24,7 @@ namespace Units.UI {
         private Button _cancelButton;
 
         private Camera _camera;
+        private MoveUnitMenuViewController _moveUnitMenuViewController;
         private Guid? _lockId;
         private IUnit _unit;
         private IInputLock _inputLock;
@@ -31,12 +36,14 @@ namespace Units.UI {
 
         [Inject]
         public void Construct(Camera worldCamera,
+                              MoveUnitMenuViewController moveUnitMenuViewController,
                               IUnitActionPlanner unitActionPlanner,
                               IGridPositionCalculator gridPositionCalculator,
                               IGridUnitManager gridUnitManager,
                               IInputLock inputLock,
                               ILogger logger) {
             _camera = worldCamera;
+            _moveUnitMenuViewController = moveUnitMenuViewController;
             _unitActionPlanner = unitActionPlanner;
             _gridPositionCalculator = gridPositionCalculator;
             _gridUnitManager = gridUnitManager;
@@ -99,6 +106,9 @@ namespace Units.UI {
         }
 
         private async void MoveUnit(IUnit unit, Guid lockId) {
+            UniTask<bool> moveUnitMenuTask = _moveUnitMenuViewController.Show();
+            moveUnitMenuTask.ToObservable().Select(confirmed => confirmed ? UnitActionPlanResult.MakeConfirmed())
+            
             _logger.Log(LoggedFeature.Units, "Planning Action: Move");
             await _unitActionPlanner.PlanAction(unit, UnitAction.Move);
             _logger.Log(LoggedFeature.Units, "Done Planning Action: Move");

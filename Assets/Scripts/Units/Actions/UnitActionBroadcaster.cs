@@ -17,20 +17,27 @@ namespace Units.Actions {
     /// </summary>
     public class UnitActionBroadcaster : IUnitActionPlanner {
         private readonly List<IUnitActionListener> _actionListeners;
-        private readonly IGridInputManager _gridInputManager;
         private readonly ILogger _logger;
         private IDisposable _disposable;
+        private IDisposable _planCompleteObserver;
 
-        UnitActionBroadcaster(List<IUnitActionListener> actionListeners, IGridInputManager gridInputManager,
-                              ILogger logger) {
+        UnitActionBroadcaster(List<IUnitActionListener> actionListeners, ILogger logger) {
             _actionListeners = actionListeners;
-            _gridInputManager = gridInputManager;
             _logger = logger;
         }
 
-        public UniTask PlanAction(IUnit unit, UnitAction action) {
-            HandleActionPlanned(unit, action);
+        public UniTask PlanAction(IUnit unit,
+                                  UnitAction action,
+                                  IObservable<UnitActionPlanResult> actionPlanObservable) {
+            _planCompleteObserver = actionPlanObservable.Subscribe(result => {
+                if (result.resultType == UnitActionPlanResult.PlanResultType.Confirmed) {
+                    HandleActionConfirmed(unit, action, result.tileCoords);
+                } else {
+                    HandleActionCanceled(unit, action);
+                }
+            });
             
+            HandleActionPlanned(unit, action);
             _disposable = Observable.EveryUpdate().Subscribe(_ => Tick(unit, action));
             return UniTask.WaitUntil(() => _disposable == null);
         }
@@ -43,13 +50,15 @@ namespace Units.Actions {
         private void HandleActionTick(IUnit unit, UnitAction unitAction) {
             _actionListeners.Where(x => x.ActionType == unitAction).ToList().ForEach(x => x.Tick(unit));
         }
-        
+
         private void HandleActionConfirmed(IUnit unit, UnitAction action, IntVector2 tileCoords) {
             _logger.Log(LoggedFeature.Units,
                         $"Action: {action} confirmed on unit: {unit.UnitData.Name}. Coords: {tileCoords}");
             _actionListeners.Where(x => x.ActionType == action).ToList()
                             .ForEach(x => x.HandleActionConfirmed(unit, tileCoords));
-            
+
+            _planCompleteObserver.Dispose();
+            _planCompleteObserver = null;
             _disposable.Dispose();
             _disposable = null;
         }
@@ -57,25 +66,15 @@ namespace Units.Actions {
         private void HandleActionCanceled(IUnit unit, UnitAction action) {
             _logger.Log(LoggedFeature.Units, $"Action: ${action} canceled on unit: ${unit}");
             _actionListeners.Where(x => x.ActionType == action).ToList().ForEach(x => x.HandleActionCanceled(unit));
-            
+
+            _planCompleteObserver.Dispose();
+            _planCompleteObserver = null;
             _disposable.Dispose();
             _disposable = null;
         }
 
         private void Tick(IUnit unit, UnitAction unitAction) {
             HandleActionTick(unit, unitAction);
-            
-            if (Input.GetMouseButtonDown(1)) {
-                HandleActionCanceled(unit, unitAction);
-                return;
-            }
-
-            if (Input.GetMouseButtonDown(0)) {
-                IntVector2? currentTile = _gridInputManager.GetTileAtMousePosition();
-                if (currentTile != null) {
-                    HandleActionConfirmed(unit, unitAction, currentTile.Value);
-                }
-            }
         }
     }
 }
