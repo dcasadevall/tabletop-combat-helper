@@ -1,10 +1,7 @@
-﻿using CommandSystem;
-using Grid.Commands;
-using UI.RadialMenu;
+﻿using System;
 using Units.Actions;
 using Units.Serialized;
 using Units.Spawning;
-using Units.Spawning.Commands;
 using Units.UI;
 using UnityEngine;
 using Zenject;
@@ -23,7 +20,7 @@ namespace Units {
         public override void InstallBindings() {
             // UI
             Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(_unitPickerViewController).AsSingle();
-            Container.Bind<ITickable>().To<UnitSelectionDetector>().AsSingle();
+            Container.Bind(typeof(IInitializable), typeof(IDisposable)).To<UnitSelectionDetector>().AsSingle();
             
             // UI: Unit Menu
             Container.Bind<UnitMenuViewController>()

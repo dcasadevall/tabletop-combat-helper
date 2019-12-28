@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Grid;
 using InputSystem;
 using Math;
@@ -10,12 +11,13 @@ using Zenject;
 using ILogger = Logging.ILogger;
 
 namespace Units.UI {
-    public class UnitSelectionDetector : IInitializable {
+    public class UnitSelectionDetector : IInitializable, IDisposable {
         private readonly UnitMenuViewController _unitMenuViewController;
         private readonly IInputLock _inputLock;
         private readonly IGridInputManager _gridInputManager;
         private readonly IUnitRegistry _unitRegistry;
         private readonly IGridUnitManager _gridUnitManager;
+        private readonly List<IDisposable> _disposables;
 
         public UnitSelectionDetector(UnitMenuViewController unitMenuViewController,
                                      IInputLock inputLock,
@@ -25,21 +27,26 @@ namespace Units.UI {
             _inputLock = inputLock;
             _gridInputManager = gridInputManager;
             _gridUnitManager = gridUnitManager;
+            _disposables = new List<IDisposable>();
         }
 
         public void Initialize() {
             var mouseDownStream = Observable.EveryUpdate()
                                             .Where(_ => Input.GetMouseButtonDown(0))
+                                            .Where(_ => !_inputLock.IsLocked)
                                             .Where(_ => _gridInputManager.TileAtMousePosition != null)
                                             .Select(_ => new Tuple<string, IntVector2>("down",
+                                                                                       // ReSharper disable once PossibleInvalidOperationException
                                                                                        _gridInputManager
                                                                                            .TileAtMousePosition
                                                                                            .Value));
 
             var mouseUpStream = Observable.EveryUpdate()
                                           .Where(_ => Input.GetMouseButtonUp(0))
+                                          .Where(_ => !_inputLock.IsLocked)
                                           .Where(_ => _gridInputManager.TileAtMousePosition != null)
                                           .Select(_ => new Tuple<string, IntVector2>("up",
+                                                                                     // ReSharper disable once PossibleInvalidOperationException
                                                                                      _gridInputManager
                                                                                          .TileAtMousePosition.Value));
             var clickStream = mouseDownStream.Merge(mouseUpStream)
@@ -55,42 +62,25 @@ namespace Units.UI {
 
             var longClickStream = clickStream.Where(x => x.Current.Interval > TimeSpan.FromMilliseconds(500));
             var shortClickStream = clickStream.Where(x => x.Current.Interval <= TimeSpan.FromMilliseconds(500));
-            
-            mouseDownStream.Merge(mouseUpStream.Take(TimeSpan.FromMilliseconds(250)));
-            mouseDownStream.Merge(Observable.Timer(TimeSpan.FromMilliseconds(1000)).TakeUntil(mouseUpStream)
-                                            .Select(_ => _gridInputManager.TileAtMousePosition.Value));
-
-//            var clicks = downs.flatMapLatest(function(){
-//                return ups.takeUntil(Rx.Observable.timer(250));
-//            });
-//
-//            var longDownsStart = downs.flatMapLatest(function(){
-//                return Rx.Observable.timer(1000).takeUntil(ups);
-//            }); 
+            shortClickStream.Subscribe(next => OnMouseDown(next.Current.Value.Item2)).AddTo(_disposables);
+            longClickStream.Subscribe(next => OnMouseHold(next.Current.Value.Item2)).AddTo(_disposables);
         }
 
-        public void Tick() {
-            if (_inputLock.IsLocked) {
-                return;
-            }
-
-            if (Input.GetMouseButtonDown(0)) {
-                OnMouseDown();
-            }
+        public void Dispose() {
+            _disposables.ForEach(x => x.Dispose());
+            _disposables.Clear();
         }
 
-        private void OnMouseDown() {
-            IntVector2? tileCoords = _gridInputManager.TileAtMousePosition;
-            if (tileCoords == null) {
-                return;
-            }
-
-            IUnit[] units = _gridUnitManager.GetUnitsAtTile(tileCoords.Value);
+        private void OnMouseDown(IntVector2 tileCoords) {
+            IUnit[] units = _gridUnitManager.GetUnitsAtTile(tileCoords);
             if (units.Length == 0) {
                 return;
             }
 
             _unitMenuViewController.Show(units[0]);
+        }
+
+        private void OnMouseHold(IntVector2 tileCoords) {
         }
     }
 }
