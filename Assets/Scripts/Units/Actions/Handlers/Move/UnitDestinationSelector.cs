@@ -28,7 +28,7 @@ namespace Units.Actions.Handlers.Move {
             get {
                 return Observable
                        .EveryUpdate().Where(_ => Input.GetMouseButton(0))
-                       .Select(_ => _gridInputManager.GetTileAtMousePosition())
+                       .Select(_ => _gridInputManager.TileAtMousePosition)
                        .Where(tile => tile != null && _validTiles.Contains(tile.Value));
             }
         }
@@ -41,7 +41,7 @@ namespace Units.Actions.Handlers.Move {
                                        .Select(_ => UniRx.Unit.Default);
                 var leftClickOutsideStream = Observable
                                              .EveryUpdate().Where(_ => Input.GetMouseButton(0))
-                                             .Select(_ => _gridInputManager.GetTileAtMousePosition())
+                                             .Select(_ => _gridInputManager.TileAtMousePosition)
                                              .Where(tile => tile != null && !_validTiles.Contains(tile.Value))
                                              .Select(_ => UniRx.Unit.Default);
 

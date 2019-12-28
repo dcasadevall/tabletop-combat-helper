@@ -17,7 +17,7 @@ namespace Grid {
             Container.Bind(typeof(IGridUnitManager), typeof(IInitializable)).To<GridUnitManager>().AsSingle();
             Container.Bind<IRandomGridPositionProvider>().To<SpiralSequenceRandomPositionProvider>().AsSingle();
             Container.Bind<IGridPositionCalculator>().To<GridPositionCalculator>().AsSingle();
-            Container.Bind<IGridInputManager>().To<GridInputManager>().AsSingle();
+            Container.BindInterfacesTo<GridInputManager>().AsSingle();
             
             // GridUnitManager should be the only thing mutating the unit transform.
             Container.Bind<IUnitTransformRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<GridUnitManager>();

@@ -74,7 +74,7 @@ namespace Units.Spawning {
 
         public void Tick() {
             if (Input.GetKeyUp(KeyCode.U)) {
-                _selectedTile = _gridInputManager.GetTileAtMousePosition();
+                _selectedTile = _gridInputManager.TileAtMousePosition;
                 _unitPickerViewController.Show();
             }
         }

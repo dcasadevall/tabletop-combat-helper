@@ -69,7 +69,7 @@ namespace Drawing.Input {
             }
 
             // Are we inside the grid?
-            IntVector2? tileAtMouse = _gridInputManager.GetTileAtMousePosition();
+            IntVector2? tileAtMouse = _gridInputManager.TileAtMousePosition;
             if (tileAtMouse == null) {
                 return;
             }
