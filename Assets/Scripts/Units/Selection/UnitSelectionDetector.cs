@@ -71,17 +71,24 @@ namespace Units.UI {
             var shortClickStream = clickStream.Where(x => x.Current.Interval <= TimeSpan.FromMilliseconds(500));
             var mouseHeldStream = Observable.EveryUpdate()
                                             .Where(_ => Input.GetMouseButton(0))
-                                            .TakeUntil(mouseUpStream)
+                                            .Where(_ => !_inputLock.IsLocked)
+                                            .Where(_ => _gridInputManager.TileAtMousePosition.HasValue)
                                             // ReSharper disable once PossibleInvalidOperationException
-                                            // We know we have a tile, because mouseUpStream requires a tile to be hovered.
                                             .Select(_ => _gridInputManager
                                                          .TileAtMousePosition.Value)
-                                            // We skip the first 500ms emitted. Since
-                                            // this observable ends on mouse up, we know we have been holding for this amount of time.
-                                            .Skip(TimeSpan.FromMilliseconds(500));
+                                            .Pairwise()
+                                            // Mouse hold stops once we move tile or mouse up before timer
+                                            // .TakeWhile(x => x.Current == x.Previous)
+                                            // Stop once we have a mouse up.
+                                            .TakeUntil(mouseUpStream)
+                                            // We would use ThrottleLast, but it's not available in UniRx,
+                                            // so we have to use Throttlefirst + Skip(1)
+                                            // This gives us the first mouse down event after 500 ms of mouse down.
+                                            .ThrottleFirst(TimeSpan.FromMilliseconds(500))
+                                            .Skip(1);
             
             shortClickStream.Subscribe(next => OnMouseDown(next.Current.Value.Item2)).AddTo(_disposables);
-            mouseHeldStream.Subscribe(OnMouseHold).AddTo(_disposables);
+            mouseHeldStream.Subscribe(next => OnMouseHold(next.Current)).AddTo(_disposables);
         }
 
         public void Dispose() {
@@ -101,12 +108,10 @@ namespace Units.UI {
         }
 
         private void OnMouseHold(IntVector2 tileCoords) {
+            _logger.Log(LoggedFeature.Units, "{0}, {1}", tileCoords.x, tileCoords.y);
+            
             IUnit[] units = _gridUnitManager.GetUnitsAtTile(tileCoords);
             if (units.Length == 0) {
-                return;
-            }
-
-            if (_inputLock.IsLocked) {
                 return;
             }
 
