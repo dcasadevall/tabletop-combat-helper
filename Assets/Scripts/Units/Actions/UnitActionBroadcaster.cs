@@ -52,10 +52,6 @@ namespace Units.Actions {
             _actionHandlers.Where(x => x.ActionType == action).ToList().ForEach(x => x.HandleActionPlanned(unit));
         }
 
-        private void HandleActionTick(IUnit unit, UnitAction unitAction) {
-            _actionHandlers.Where(x => x.ActionType == unitAction).ToList().ForEach(x => x.Tick(unit));
-        }
-
         private void HandleActionConfirmed(IUnit unit, UnitAction action) {
             _logger.Log(LoggedFeature.Units,
                         $"Action: {action} confirmed on unit: {unit.UnitData.Name}.");
@@ -72,10 +68,6 @@ namespace Units.Actions {
 
             _disposables.ForEach(x => x.Dispose());
             _disposables.Clear();
-        }
-
-        private void Tick(IUnit unit, UnitAction unitAction) {
-            HandleActionTick(unit, unitAction);
         }
     }
 }

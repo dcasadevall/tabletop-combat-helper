@@ -6,6 +6,8 @@ using Logging;
 using Math;
 using UniRx;
 using Units.Actions;
+using Units.Movement;
+using Units.Selection;
 using Units.Spawning;
 using UnityEngine;
 using Zenject;
@@ -14,7 +16,7 @@ using ILogger = Logging.ILogger;
 namespace Units.UI {
     public class UnitSelectionDetector : IInitializable, IDisposable {
         private readonly UnitMenuViewController _unitMenuViewController;
-        private readonly IUnitActionPlanner _unitActionPlanner;
+        private readonly IUnitMovementController _unitMovementController;
         private readonly IInputLock _inputLock;
         private readonly IGridInputManager _gridInputManager;
         private readonly IUnitRegistry _unitRegistry;
@@ -23,13 +25,13 @@ namespace Units.UI {
         private readonly List<IDisposable> _disposables;
 
         public UnitSelectionDetector(UnitMenuViewController unitMenuViewController,
-                                     IUnitActionPlanner unitActionPlanner,
+                                     IUnitMovementController unitMovementController,
                                      IInputLock inputLock,
                                      IGridInputManager gridInputManager,
                                      IGridUnitManager gridUnitManager,
                                      ILogger logger) {
             _unitMenuViewController = unitMenuViewController;
-            _unitActionPlanner = unitActionPlanner;
+            _unitMovementController = unitMovementController;
             _inputLock = inputLock;
             _gridInputManager = gridInputManager;
             _gridUnitManager = gridUnitManager;
@@ -98,7 +100,7 @@ namespace Units.UI {
             _unitMenuViewController.Show(units[0]);
         }
 
-        private async void OnMouseHold(IntVector2 tileCoords) {
+        private void OnMouseHold(IntVector2 tileCoords) {
             IUnit[] units = _gridUnitManager.GetUnitsAtTile(tileCoords);
             if (units.Length == 0) {
                 return;
@@ -108,14 +110,8 @@ namespace Units.UI {
                 return;
             }
 
-            var lockId = _inputLock.Lock();
-            if (lockId == null) {
-                _logger.LogError(LoggedFeature.Units, "Failed to acquire input lock");
-                return;
-            }
-            
-            await _unitActionPlanner.PlanAction(units[0], UnitAction.DragAndDrop);
-            _inputLock.Unlock(lockId.Value);
+            // Input lock handled by unit movement controller
+            _unitMovementController.DragAndDropUnit(units[0]);
         }
     }
 }

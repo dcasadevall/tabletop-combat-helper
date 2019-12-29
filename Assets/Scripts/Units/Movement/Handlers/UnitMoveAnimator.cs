@@ -1,9 +1,9 @@
 using System;
 using Grid;
-using Math;
 using UniRx;
+using Units.Actions;
 
-namespace Units.Actions.Handlers.Move {
+namespace Units.Movement.Handlers {
     /// <summary>
     /// Action handler which shows the animation of a unit moving through a specific path.
     /// Action is confirmed once the unit reaches its destination.

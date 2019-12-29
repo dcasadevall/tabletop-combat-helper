@@ -6,10 +6,11 @@ using Grid.Positioning;
 using Logging;
 using Math;
 using UniRx;
+using Units.Actions;
 using UnityEngine;
 using ILogger = Logging.ILogger;
 
-namespace Units.Actions.Handlers.Move {
+namespace Units.Movement.Handlers {
     /// <summary>
     /// This action handler shows all possible destinations for a unit to move to.
     /// Action is confirmed when the user taps or clicks on a valid destination.
