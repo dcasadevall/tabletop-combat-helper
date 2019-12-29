@@ -30,9 +30,6 @@ namespace Units.Actions.Handlers.Move {
         public void HandleActionPlanned(IUnit unit) {
         }
 
-        public void Tick(IUnit unit) {
-        }
-
         public void HandleActionConfirmed(IUnit unit) {
         }
 

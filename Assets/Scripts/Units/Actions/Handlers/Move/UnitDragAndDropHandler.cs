@@ -12,10 +12,12 @@ namespace Units.Actions.Handlers.Move {
     /// </summary>
     public class UnitDragAndDropHandler : IUnitActionHandler {
         private readonly IGridInputManager _gridInputManager;
+        private readonly IGridUnitManager _gridUnitManager;
+        private IDisposable _disposable;
 
         public UnitAction ActionType {
             get {
-                return UnitAction.FreeMove;
+                return UnitAction.DragAndDrop;
             }
         }
 
@@ -33,24 +35,24 @@ namespace Units.Actions.Handlers.Move {
             }
         }
 
-        public UnitDragAndDropHandler(IGridInputManager gridInputManager) {
+        public UnitDragAndDropHandler(IGridInputManager gridInputManager, IGridUnitManager gridUnitManager) {
             _gridInputManager = gridInputManager;
+            _gridUnitManager = gridUnitManager;
         }
 
         public void HandleActionPlanned(IUnit unit) {
-            throw new NotImplementedException();
-        }
-
-        public void Tick(IUnit unit) {
-            throw new NotImplementedException();
+            _disposable =
+                _gridInputManager.MouseEnteredTile.Subscribe(next => _gridUnitManager.PlaceUnitAtTile(unit, next));
         }
 
         public void HandleActionConfirmed(IUnit unit) {
-            throw new NotImplementedException();
+            _disposable?.Dispose();
+            _disposable = null;
         }
 
         public void HandleActionCanceled(IUnit unit) {
-            throw new NotImplementedException();
+            _disposable?.Dispose();
+            _disposable = null;
         }
     }
 }

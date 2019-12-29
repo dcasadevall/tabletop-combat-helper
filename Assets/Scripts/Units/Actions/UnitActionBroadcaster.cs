@@ -42,9 +42,6 @@ namespace Units.Actions {
                 result = UnitActionPlanResult.MakeCanceled();
             }).AddTo(_disposables);
             
-            // Tick
-            Observable.EveryUpdate().Subscribe(_ => Tick(unit, action)).AddTo(_disposables);
-            
             // Wait until result is received
             await UniTask.WaitUntil(() => result != null);
             return result;

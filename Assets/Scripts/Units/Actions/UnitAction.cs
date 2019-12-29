@@ -3,6 +3,6 @@ namespace Units.Actions {
         SelectMoveDestination,
         ChooseMovePath,
         AnimateMovement,
-        FreeMove
+        DragAndDrop,
     }
 }

@@ -84,8 +84,6 @@ namespace Units.Actions.Handlers.Move {
             }
         }
 
-        public void Tick(IUnit unit) { }
-
         public void HandleActionConfirmed(IUnit unit) {
             _gridCellHighlightPool.DespawnAll();
         }
