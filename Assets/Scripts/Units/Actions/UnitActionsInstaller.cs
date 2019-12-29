@@ -8,6 +8,9 @@ namespace Units.Actions {
             
             // Action Listeners
             Container.Bind<IUnitActionHandler>().To<UnitDestinationSelector>().AsSingle();
+            Container.Bind<IUnitActionHandler>().To<UnitDragAndDropHandler>().AsSingle();
+            Container.Bind<IUnitActionHandler>().To<UnitPathPlanner>().AsSingle();
+            Container.Bind<IUnitActionHandler>().To<UnitMoveAnimator>().AsSingle();
         }
     }
 }

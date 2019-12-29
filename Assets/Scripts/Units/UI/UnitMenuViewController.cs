@@ -122,10 +122,6 @@ namespace Units.UI {
             _logger.Log(LoggedFeature.Units, "Planning Action: AnimateMovement");
             await _unitActionPlanner.PlanAction(_unit, UnitAction.AnimateMovement);
             _logger.Log(LoggedFeature.Units, "Done Planning Action: AnimateMovement");
-
-            if (destinationResult.tileCoords != null) {
-                _gridUnitManager.PlaceUnitAtTile(_unit, destinationResult.tileCoords.Value);
-            }
             
             // Release input lock delay to avoid input conflicts
             await UniTask.DelayFrame(5);

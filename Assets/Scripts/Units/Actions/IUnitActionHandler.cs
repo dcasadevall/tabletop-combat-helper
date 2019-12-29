@@ -15,7 +15,7 @@ namespace Units.Actions {
         /// <summary>
         /// An action will be confirmed if ANY of the <see cref="IUnitActionHandler.ConfirmActionObservable"/>s is fired.
         /// </summary>
-        IObservable<IntVector2?> ConfirmActionObservable { get; }
+        IObservable<UniRx.Unit> ConfirmActionObservable { get; }
         /// <summary>
         /// An action will be canceled if ANY of the <see cref="IUnitActionHandler.CancelActionObservable"/>s is fired.
         /// </summary>

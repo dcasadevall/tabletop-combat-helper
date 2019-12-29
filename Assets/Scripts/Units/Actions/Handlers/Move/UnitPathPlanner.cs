@@ -3,6 +3,11 @@ using Math;
 using UniRx;
 
 namespace Units.Actions.Handlers.Move {
+    /// <summary>
+    /// Action handler that shows UI previsualizing the path a unit will take upon confirming this action.
+    /// Action is confirmed when the user clicks the "confirm" button.
+    /// Action is canceled when the user clicks the "cancel" button.
+    /// </summary>
     public class UnitPathPlanner : IUnitActionHandler {
         public UnitAction ActionType {
             get {
@@ -10,9 +15,9 @@ namespace Units.Actions.Handlers.Move {
             }
         }
 
-        public IObservable<IntVector2?> ConfirmActionObservable {
+        public IObservable<UniRx.Unit> ConfirmActionObservable {
             get {
-                return Observable.Never<IntVector2?>();
+                return Observable.Return<UniRx.Unit>(UniRx.Unit.Default);
             }
         }
 

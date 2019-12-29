@@ -10,19 +10,17 @@ namespace Units.Actions {
         }
 
         public PlanResultType resultType;
-        public IntVector2? tileCoords;
 
-        public static UnitActionPlanResult MakeConfirmed(IntVector2? tileCoords) {
-            return new UnitActionPlanResult(PlanResultType.Confirmed, tileCoords);
+        public static UnitActionPlanResult MakeConfirmed() {
+            return new UnitActionPlanResult(PlanResultType.Confirmed);
         }
 
         public static UnitActionPlanResult MakeCanceled() {
             return new UnitActionPlanResult(PlanResultType.Canceled);
         }
         
-        private UnitActionPlanResult(PlanResultType resultType, IntVector2? tileCoords = null) {
+        private UnitActionPlanResult(PlanResultType resultType) {
             this.resultType = resultType;
-            this.tileCoords = tileCoords;
         }
     }
 }

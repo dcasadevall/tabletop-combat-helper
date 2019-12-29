@@ -23,21 +23,29 @@ namespace Units.Actions {
         }
 
         public async UniTask<UnitActionPlanResult> PlanAction(IUnit unit, UnitAction action) {
+            // Action Plan Event
+            HandleActionPlanned(unit, action);
+            
+            // Subscribe to confirm / cancel. They will fire before Tick if possible.
             UnitActionPlanResult result = null;
-            var confirmObservables = _actionHandlers.Select(x => x.ConfirmActionObservable);
+            var confirmObservables =
+                _actionHandlers.Where(x => x.ActionType == action).Select(x => x.ConfirmActionObservable);
             confirmObservables.Merge().Subscribe(coords => {
                 HandleActionConfirmed(unit, action);
-                result = UnitActionPlanResult.MakeConfirmed(coords);
+                result = UnitActionPlanResult.MakeConfirmed();
             }).AddTo(_disposables);
 
-            var cancelObservables = _actionHandlers.Select(x => x.CancelActionObservable);
+            var cancelObservables =
+                _actionHandlers.Where(x => x.ActionType == action).Select(x => x.CancelActionObservable);
             cancelObservables.Merge().Subscribe(coords => {
                 HandleActionCanceled(unit, action);
                 result = UnitActionPlanResult.MakeCanceled();
             }).AddTo(_disposables);
             
-            HandleActionPlanned(unit, action);
+            // Tick
             Observable.EveryUpdate().Subscribe(_ => Tick(unit, action)).AddTo(_disposables);
+            
+            // Wait until result is received
             await UniTask.WaitUntil(() => result != null);
             return result;
         }

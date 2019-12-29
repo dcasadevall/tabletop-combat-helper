@@ -2,26 +2,28 @@ using System;
 using Grid;
 using Math;
 using UniRx;
+using UnityEngine;
 
 namespace Units.Actions.Handlers.Move {
     /// <summary>
-    /// Action handler which shows the animation of a unit moving through a specific path.
-    /// Action is confirmed once the unit reaches its destination.
+    /// Action handler used to drag a unit around the grid, without movement restrictions.
+    /// Action is confirmed when drag stops.
     /// Action is never canceled.
     /// </summary>
-    public class UnitMoveAnimator : IUnitActionHandler {
-        private readonly IGridUnitManager _gridUnitManager;
+    public class UnitDragAndDropHandler : IUnitActionHandler {
         private readonly IGridInputManager _gridInputManager;
 
         public UnitAction ActionType {
             get {
-                return UnitAction.AnimateMovement;
+                return UnitAction.FreeMove;
             }
         }
-        
+
         public IObservable<UniRx.Unit> ConfirmActionObservable {
             get {
-                return Observable.Return(UniRx.Unit.Default);
+                return Observable.EveryUpdate()
+                                 .Where(_ => Input.GetMouseButtonUp(0))
+                                 .Select(_ => UniRx.Unit.Default);
             }
         }
 
@@ -31,24 +33,24 @@ namespace Units.Actions.Handlers.Move {
             }
         }
 
-        public UnitMoveAnimator(IGridUnitManager gridUnitManager, IGridInputManager gridInputManager) {
-            _gridUnitManager = gridUnitManager;
+        public UnitDragAndDropHandler(IGridInputManager gridInputManager) {
             _gridInputManager = gridInputManager;
         }
 
         public void HandleActionPlanned(IUnit unit) {
-            if (_gridInputManager.TileAtMousePosition.HasValue) {
-                _gridUnitManager.PlaceUnitAtTile(unit, _gridInputManager.TileAtMousePosition.Value);
-            }
+            throw new NotImplementedException();
         }
 
         public void Tick(IUnit unit) {
+            throw new NotImplementedException();
         }
 
         public void HandleActionConfirmed(IUnit unit) {
+            throw new NotImplementedException();
         }
 
         public void HandleActionCanceled(IUnit unit) {
+            throw new NotImplementedException();
         }
     }
 }
