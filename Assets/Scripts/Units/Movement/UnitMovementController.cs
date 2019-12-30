@@ -48,7 +48,6 @@ namespace Units.Movement {
             _logger.Log(LoggedFeature.Units, "Done Planning Action: AnimateMovement");
             
             // Release input lock delay to avoid input conflicts
-            await UniTask.DelayFrame(5);
             _inputLock.Unlock(lockId.Value);
             return UniRx.Unit.Default;
         }
@@ -63,8 +62,6 @@ namespace Units.Movement {
             
             await _unitActionPlanner.PlanAction(unit, UnitAction.DragAndDrop);
             
-            // Release input lock delay to avoid input conflicts
-            await UniTask.DelayFrame(5);
             _inputLock.Unlock(lockId.Value);
             return UniRx.Unit.Default;
         }

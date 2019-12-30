@@ -21,7 +21,6 @@ namespace Units.UI {
         private readonly IInputLock _inputLock;
         private readonly IGridInputManager _gridInputManager;
         private readonly IUnitRegistry _unitRegistry;
-        private readonly IGridUnitManager _gridUnitManager;
         private readonly ILogger _logger;
         private readonly List<IDisposable> _disposables;
 
@@ -29,13 +28,11 @@ namespace Units.UI {
                                      IUnitMovementController unitMovementController,
                                      IInputLock inputLock,
                                      IGridInputManager gridInputManager,
-                                     IGridUnitManager gridUnitManager,
                                      ILogger logger) {
             _unitMenuViewController = unitMenuViewController;
             _unitMovementController = unitMovementController;
             _inputLock = inputLock;
             _gridInputManager = gridInputManager;
-            _gridUnitManager = gridUnitManager;
             _logger = logger;
             _disposables = new List<IDisposable>();
         }
@@ -44,20 +41,17 @@ namespace Units.UI {
             var mouseDownStream = Observable.EveryUpdate()
                                             .Where(_ => Input.GetMouseButtonDown(0))
                                             .Where(_ => !_inputLock.IsLocked)
-                                            .Where(_ => _gridInputManager.TileAtMousePosition != null)
-                                            .Select(_ => new Tuple<string, IntVector2>("down",
-                                                                                       // ReSharper disable once PossibleInvalidOperationException
-                                                                                       _gridInputManager
-                                                                                           .TileAtMousePosition
-                                                                                           .Value));
+                                            .Where(_ => _gridInputManager.UnitsAtMousePosition.Length > 0)
+                                            .Select(_ => new Tuple<string, IUnit[]>("down",
+                                                                                    _gridInputManager
+                                                                                        .UnitsAtMousePosition));
             var mouseUpStream = Observable.EveryUpdate()
                                           .Where(_ => Input.GetMouseButtonUp(0))
                                           .Where(_ => !_inputLock.IsLocked)
-                                          .Where(_ => _gridInputManager.TileAtMousePosition != null)
-                                          .Select(_ => new Tuple<string, IntVector2>("up",
-                                                                                     // ReSharper disable once PossibleInvalidOperationException
-                                                                                     _gridInputManager
-                                                                                         .TileAtMousePosition.Value));
+                                          .Where(_ => _gridInputManager.UnitsAtMousePosition.Length > 0)
+                                          .Select(_ => new Tuple<string, IUnit[]>("up",
+                                                                                  _gridInputManager
+                                                                                      .UnitsAtMousePosition));
             var clickStream = mouseDownStream.Merge(mouseUpStream)
                                              // Add Interval info from current to previous event
                                              .TimeInterval()
@@ -65,9 +59,7 @@ namespace Units.UI {
                                              .Pairwise()
                                              // Grab only "mouse ups", preceded by mouse downs.
                                              .Where(x => x.Current.Value.Item1.Equals("up") &&
-                                                         x.Previous.Value.Item1.Equals("down"))
-                                             // And only those clicks which have been held and released within the same unit.
-                                             .Where(x => x.Current.Value.Item2 == x.Previous.Value.Item2);
+                                                         x.Previous.Value.Item1.Equals("down"));
 
             // Short Click
             var shortClickStream = clickStream.Where(x => x.Current.Interval <= TimeSpan.FromMilliseconds(500));
@@ -77,19 +69,16 @@ namespace Units.UI {
             var mouseDragStream = Observable.EveryUpdate()
                                             .Where(_ => !_inputLock.IsLocked)
                                             .Where(_ => Input.GetMouseButton(0))
-                                            .Where(_ => _gridInputManager.TileAtMousePosition.HasValue)
+                                            .Where(_ => _gridInputManager.UnitsAtMousePosition.Length > 0)
                                             .Select(_ => Input.mousePosition)
-                                            .ThrottleFirst(TimeSpan.FromMilliseconds(100))
+                                            .TakeUntil(mouseUpStream)
+                                            .ThrottleFirst(TimeSpan.FromMilliseconds(50))
                                             .TimeInterval()
                                             .Pairwise()
                                             // This avoids long lapses between drags
-                                            .Where(x => x.Current.Interval <= TimeSpan.FromMilliseconds(200))
-                                            // Make sure we have moved at least 50 pixels
-                                            .Where(x => Vector3.Distance(x.Current.Value, x.Previous.Value) > 50.0f)
-                                            // ReSharper disable once PossibleInvalidOperationException
-                                            .Select(_ => _gridInputManager
-                                                         .TileAtMousePosition.Value);
-            mouseDragStream.Subscribe(OnMouseHold).AddTo(_disposables);
+                                            .Where(x => x.Current.Interval <= TimeSpan.FromMilliseconds(100))
+                                            .Select(_ => _gridInputManager.UnitsAtMousePosition);
+            mouseDragStream.Subscribe(OnMouseDrag).AddTo(_disposables);
         }
 
         public void Dispose() {
@@ -97,29 +86,13 @@ namespace Units.UI {
             _disposables.Clear();
         }
 
-        private void OnMouseDown(IntVector2 tileCoords) {
-            IUnit[] units = _gridUnitManager.GetUnitsAtTile(tileCoords);
-            if (units.Length == 0) {
-                return;
-            }
-
+        private void OnMouseDown(IUnit[] units) {
             // Input lock is handled by the VC since it owns other sub VCs, etc..
             // Ideally, we would lock here and await for the root menu to be closed.
             _unitMenuViewController.Show(units[0]);
         }
 
-        private void OnMouseHold(IntVector2 tileCoords) {
-            _logger.Log(LoggedFeature.Units, "{0}, {1}", tileCoords.x, tileCoords.y);
-            
-            IUnit[] units = _gridUnitManager.GetUnitsAtTile(tileCoords);
-            if (units.Length == 0) {
-                return;
-            }
-
-            if (_inputLock.IsLocked) {
-                return;
-            }
-
+        private void OnMouseDrag(IUnit[] units) {
             // Input lock handled by unit movement controller
             _unitMovementController.DragAndDropUnit(units[0]);
         }

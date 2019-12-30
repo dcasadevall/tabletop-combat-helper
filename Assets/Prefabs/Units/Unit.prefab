@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 128}
   - component: {fileID: 133}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UnitSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   m_Component:
   - component: {fileID: 120}
   - component: {fileID: 132}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AvatarSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 131}
   - component: {fileID: 266}
   - component: {fileID: 339}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Unit
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -2,12 +2,14 @@ using System;
 using Grid.Positioning;
 using Math;
 using UniRx;
+using Units;
 using UnityEngine;
 using Zenject;
 
 namespace Grid {
     public class GridInputManager : IGridInputManager, IInitializable {
         private readonly Camera _camera;
+        private readonly IGridUnitManager _gridUnitManager;
         private readonly IGridPositionCalculator _gridPositionCalculator;
 
         /// <summary>
@@ -27,8 +29,21 @@ namespace Grid {
             }
         }
 
-        public GridInputManager(Camera camera, IGridPositionCalculator gridPositionCalculator) {
+        public IUnit[] UnitsAtMousePosition {
+            get {
+                if (!TileAtMousePosition.HasValue) {
+                    return new IUnit[0];
+                }
+
+                return _gridUnitManager.GetUnitsAtTile(TileAtMousePosition.Value);
+            }
+        }
+
+        public GridInputManager(Camera camera, 
+                                IGridUnitManager gridUnitManager,
+                                IGridPositionCalculator gridPositionCalculator) {
             _camera = camera;
+            _gridUnitManager = gridUnitManager;
             _gridPositionCalculator = gridPositionCalculator;
         }
 
