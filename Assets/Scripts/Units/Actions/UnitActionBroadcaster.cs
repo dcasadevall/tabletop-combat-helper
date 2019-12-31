@@ -23,21 +23,26 @@ namespace Units.Actions {
         }
 
         public async UniTask<UnitActionPlanResult> PlanAction(IUnit unit, UnitAction action) {
+            // Action Plan Event
+            HandleActionPlanned(unit, action);
+            
+            // Subscribe to confirm / cancel. They will fire before Tick if possible.
             UnitActionPlanResult result = null;
-            var confirmObservables = _actionHandlers.Select(x => x.ConfirmActionObservable);
+            var confirmObservables =
+                _actionHandlers.Where(x => x.ActionType == action).Select(x => x.ConfirmActionObservable);
             confirmObservables.Merge().Subscribe(coords => {
                 HandleActionConfirmed(unit, action);
-                result = UnitActionPlanResult.MakeConfirmed(coords);
+                result = UnitActionPlanResult.MakeConfirmed();
             }).AddTo(_disposables);
 
-            var cancelObservables = _actionHandlers.Select(x => x.CancelActionObservable);
+            var cancelObservables =
+                _actionHandlers.Where(x => x.ActionType == action).Select(x => x.CancelActionObservable);
             cancelObservables.Merge().Subscribe(coords => {
                 HandleActionCanceled(unit, action);
                 result = UnitActionPlanResult.MakeCanceled();
             }).AddTo(_disposables);
             
-            HandleActionPlanned(unit, action);
-            Observable.EveryUpdate().Subscribe(_ => Tick(unit, action)).AddTo(_disposables);
+            // Wait until result is received
             await UniTask.WaitUntil(() => result != null);
             return result;
         }
@@ -45,10 +50,6 @@ namespace Units.Actions {
         private void HandleActionPlanned(IUnit unit, UnitAction action) {
             _logger.Log(LoggedFeature.Units, $"Action: {action} planned on unit: {unit.UnitData.Name}");
             _actionHandlers.Where(x => x.ActionType == action).ToList().ForEach(x => x.HandleActionPlanned(unit));
-        }
-
-        private void HandleActionTick(IUnit unit, UnitAction unitAction) {
-            _actionHandlers.Where(x => x.ActionType == unitAction).ToList().ForEach(x => x.Tick(unit));
         }
 
         private void HandleActionConfirmed(IUnit unit, UnitAction action) {
@@ -67,10 +68,6 @@ namespace Units.Actions {
 
             _disposables.ForEach(x => x.Dispose());
             _disposables.Clear();
-        }
-
-        private void Tick(IUnit unit, UnitAction unitAction) {
-            HandleActionTick(unit, unitAction);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace CameraSystem {
             _inputLock = inputLock;
         }
 
-        private Vector3 lastPosition;
+        private Vector3? lastPosition;
         private void Update() {
             // Panning with WASD
             float speed = 5.0f;
@@ -107,8 +107,8 @@ namespace CameraSystem {
             }
 
             // Check for lock. Do nothing if not acquired.
-            if (!_inputLock.IsLocked) {
-                _lockId = _inputLock.Lock();
+            if (_inputLock.IsLocked) {
+                return;
             }
             if (_lockId == null) {
                 return;
@@ -117,13 +117,28 @@ namespace CameraSystem {
             // Panning with mouse
             float mouseSensitivity = 0.02f;
             if (Input.GetMouseButtonDown(0)) {
+                // We can't inject IGridUnitManager or IGridInputManager since camera controller lives 
+                // in the project context, so we have to raycast :/.
+                if (Physics2D.Raycast(_camera.ScreenToWorldPoint(Input.mousePosition),
+                                      Vector2.zero,
+                                      1000.0f,
+                                      LayerMask.GetMask("Units")).collider != null) {
+                    _inputLock.Unlock(_lockId.Value);
+                    _lockId = null;
+                    return;
+                }
+                
                 lastPosition = Input.mousePosition;
             }
  
-            if (Input.GetMouseButton(0)) {
-                Vector3 delta = Input.mousePosition - lastPosition;
+            if (Input.GetMouseButton(0) && lastPosition != null) {
+                Vector3 delta = Input.mousePosition - lastPosition.Value;
                 transform.Translate(-delta.x * mouseSensitivity, -delta.y * mouseSensitivity, 0);
                 lastPosition = Input.mousePosition;
+            }
+
+            if (Input.GetMouseButtonUp(0)) {
+                lastPosition = null;
             }
             
             _inputLock.Unlock(_lockId.Value);

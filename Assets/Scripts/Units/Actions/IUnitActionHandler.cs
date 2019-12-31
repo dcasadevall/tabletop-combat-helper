@@ -15,7 +15,7 @@ namespace Units.Actions {
         /// <summary>
         /// An action will be confirmed if ANY of the <see cref="IUnitActionHandler.ConfirmActionObservable"/>s is fired.
         /// </summary>
-        IObservable<IntVector2?> ConfirmActionObservable { get; }
+        IObservable<UniRx.Unit> ConfirmActionObservable { get; }
         /// <summary>
         /// An action will be canceled if ANY of the <see cref="IUnitActionHandler.CancelActionObservable"/>s is fired.
         /// </summary>
@@ -25,11 +25,6 @@ namespace Units.Actions {
         /// </summary>
         /// <param name="unit"></param>
         void HandleActionPlanned(IUnit unit);
-        /// <summary>
-        /// Called every frame, after the action has been planned, and before it has been confirmed or canceled.
-        /// </summary>
-        /// <param name="unit"></param>
-        void Tick(IUnit unit);
         /// <summary>
         /// Called when the action has been confirmed (due to one of the <see cref="IUnitActionHandler.ConfirmActionObservable"/>
         /// being fired).

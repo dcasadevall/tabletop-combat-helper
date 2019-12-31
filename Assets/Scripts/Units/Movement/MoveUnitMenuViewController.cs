@@ -1,14 +1,17 @@
 using System.Threading;
 using UI.RadialMenu;
 using UniRx.Async;
+using Units.Selection;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Units.UI {
+namespace Units.Movement {
     /// <summary>
     /// ViewController used for the Unit Submenu which is shown when unit movement is selected from within
-    /// <see cref="UnitMenuViewController"/>
+    /// <see cref="UnitMenuViewController"/>.
+    /// 
+    /// THIS IS CURRENTLY UNUSED.
     /// </summary>
     public class MoveUnitMenuViewController : MonoBehaviour {
         [SerializeField]

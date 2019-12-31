@@ -7,36 +7,42 @@ namespace InputSystem {
 
         public bool IsLocked {
             get {
-                return _owner != null;
+                lock (this) {
+                    return _owner != null;
+                }
             }
         }
-        
+
         private Guid? _owner;
-        
+
         public Guid? Lock() {
-            if (IsLocked) {
-                return null;
+            lock (this) {
+                if (IsLocked) {
+                    return null;
+                }
+
+                _owner = Guid.NewGuid();
+                InputLockAcquired?.Invoke();
+
+                return _owner;
             }
-            
-            _owner = Guid.NewGuid();
-            InputLockAcquired?.Invoke();
-            
-            return _owner;
         }
 
         public bool Unlock(Guid owner) {
-            if (_owner == null) {
-                return false;
-            }
-            
-            if (!_owner.Equals(owner)) {
-                return false;
-            }
+            lock (this) {
+                if (_owner == null) {
+                    return false;
+                }
 
-            _owner = null;
-            InputLockReleased?.Invoke();
-            
-            return true;
+                if (!_owner.Equals(owner)) {
+                    return false;
+                }
+
+                _owner = null;
+                InputLockReleased?.Invoke();
+
+                return true;
+            }
         }
     }
 }

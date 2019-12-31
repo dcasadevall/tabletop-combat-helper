@@ -11,7 +11,6 @@ namespace CameraSystem {
             Container.Bind(typeof(Camera), typeof(EventSystem)).FromComponentInNewPrefab(_cameraPrefab)
                      .AsSingle()
                      .NonLazy();
-            
         }
     }
 }

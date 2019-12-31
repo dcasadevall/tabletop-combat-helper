@@ -6,10 +6,16 @@ using Grid.Positioning;
 using Logging;
 using Math;
 using UniRx;
+using Units.Actions;
 using UnityEngine;
 using ILogger = Logging.ILogger;
 
-namespace Units.Actions.Handlers.Move {
+namespace Units.Movement.Handlers {
+    /// <summary>
+    /// This action handler shows all possible destinations for a unit to move to.
+    /// Action is confirmed when the user taps or clicks on a valid destination.
+    /// Action is canceled when the user right clicks anywhere, or clicks / taps outside of a valid destination.
+    /// </summary>
     public class UnitDestinationSelector : IUnitActionHandler {
         private readonly IGridUnitManager _gridUnitManager;
         private readonly IGridInputManager _gridInputManager;
@@ -24,12 +30,13 @@ namespace Units.Actions.Handlers.Move {
             }
         }
 
-        public IObservable<IntVector2?> ConfirmActionObservable {
+        public IObservable<UniRx.Unit> ConfirmActionObservable {
             get {
                 return Observable
                        .EveryUpdate().Where(_ => Input.GetMouseButton(0))
-                       .Select(_ => _gridInputManager.GetTileAtMousePosition())
-                       .Where(tile => tile != null && _validTiles.Contains(tile.Value));
+                       .Select(_ => _gridInputManager.TileAtMousePosition)
+                       .Where(tile => tile != null && _validTiles.Contains(tile.Value))
+                       .Select(_ => UniRx.Unit.Default);
             }
         }
 
@@ -41,7 +48,7 @@ namespace Units.Actions.Handlers.Move {
                                        .Select(_ => UniRx.Unit.Default);
                 var leftClickOutsideStream = Observable
                                              .EveryUpdate().Where(_ => Input.GetMouseButton(0))
-                                             .Select(_ => _gridInputManager.GetTileAtMousePosition())
+                                             .Select(_ => _gridInputManager.TileAtMousePosition)
                                              .Where(tile => tile != null && !_validTiles.Contains(tile.Value))
                                              .Select(_ => UniRx.Unit.Default);
 
@@ -77,8 +84,6 @@ namespace Units.Actions.Handlers.Move {
                 _validTiles.Add(tileCoords);
             }
         }
-
-        public void Tick(IUnit unit) { }
 
         public void HandleActionConfirmed(IUnit unit) {
             _gridCellHighlightPool.DespawnAll();
