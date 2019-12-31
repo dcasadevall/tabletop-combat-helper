@@ -21,19 +21,16 @@ namespace Units.UI {
         private readonly IInputLock _inputLock;
         private readonly IGridInputManager _gridInputManager;
         private readonly IUnitRegistry _unitRegistry;
-        private readonly ILogger _logger;
         private readonly List<IDisposable> _disposables;
 
         public UnitSelectionDetector(UnitMenuViewController unitMenuViewController,
                                      IUnitMovementController unitMovementController,
                                      IInputLock inputLock,
-                                     IGridInputManager gridInputManager,
-                                     ILogger logger) {
+                                     IGridInputManager gridInputManager) {
             _unitMenuViewController = unitMenuViewController;
             _unitMovementController = unitMovementController;
             _inputLock = inputLock;
             _gridInputManager = gridInputManager;
-            _logger = logger;
             _disposables = new List<IDisposable>();
         }
 
@@ -62,22 +59,21 @@ namespace Units.UI {
                                                          x.Previous.Value.Item1.Equals("down"));
 
             // Short Click
-            var shortClickStream = clickStream.Where(x => x.Current.Interval <= TimeSpan.FromMilliseconds(500));
+            var shortClickStream = clickStream.Where(x => x.Current.Interval <= TimeSpan.FromMilliseconds(300));
             shortClickStream.Subscribe(next => OnMouseDown(next.Current.Value.Item2)).AddTo(_disposables);
 
             // Drag
-            var mouseDragStream = Observable.EveryUpdate()
-                                            .Where(_ => !_inputLock.IsLocked)
-                                            .Where(_ => Input.GetMouseButton(0))
-                                            .Where(_ => _gridInputManager.UnitsAtMousePosition.Length > 0)
-                                            .Select(_ => Input.mousePosition)
+            // TODO: Detect initial emission with the proper unit, then propagate than.
+            // Right now, if we drag away from the tile, we don't know what unit we were dragging.
+            // Also, if we start dragging outside of the unit, then we can drag that unit as long as we hold the mouse
+            var mouseDragStream = Observable.Timer(TimeSpan.FromMilliseconds(300))
+                                            .TakeWhile(_ => Input.GetMouseButton(0))
+                                            .TakeWhile(_ => !_inputLock.IsLocked)
+                                            .TakeWhile(_ => _gridInputManager.UnitsAtMousePosition.Length > 0)
                                             .TakeUntil(mouseUpStream)
-                                            .ThrottleFirst(TimeSpan.FromMilliseconds(50))
-                                            .TimeInterval()
-                                            .Pairwise()
-                                            // This avoids long lapses between drags
-                                            .Where(x => x.Current.Interval <= TimeSpan.FromMilliseconds(100))
-                                            .Select(_ => _gridInputManager.UnitsAtMousePosition);
+                                            .Select(_ => _gridInputManager.UnitsAtMousePosition)
+                                            .Repeat();
+
             mouseDragStream.Subscribe(OnMouseDrag).AddTo(_disposables);
         }
 

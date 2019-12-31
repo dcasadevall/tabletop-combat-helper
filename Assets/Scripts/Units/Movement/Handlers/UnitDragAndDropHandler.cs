@@ -24,7 +24,7 @@ namespace Units.Movement.Handlers {
         public IObservable<UniRx.Unit> ConfirmActionObservable {
             get {
                 return Observable.EveryUpdate()
-                                 .Where(_ => Input.GetMouseButtonUp(0))
+                                 .Where(_ => !Input.GetMouseButton(0))
                                  .Select(_ => UniRx.Unit.Default);
             }
         }
