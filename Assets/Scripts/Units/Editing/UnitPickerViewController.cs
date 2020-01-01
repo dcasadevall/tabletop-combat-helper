@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Grid.Positioning;
+﻿using System.Collections.Generic;
 using Logging;
-using Math;
 using Units.Serialized;
 using Units.Spawning;
 using UnityEngine;
@@ -10,7 +7,7 @@ using UnityEngine.UI;
 using Zenject;
 using ILogger = Logging.ILogger;
 
-namespace Units.UI {
+namespace Units.Editing {
     public class UnitPickerViewController : MonoBehaviour, IUnitPickerViewController {
         public event SpawnUnitClickedDelegate SpawnUnitClicked = delegate {};
 

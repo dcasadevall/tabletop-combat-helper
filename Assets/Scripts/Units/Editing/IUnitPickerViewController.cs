@@ -1,7 +1,6 @@
-using Math;
 using Units.Serialized;
 
-namespace Units.UI {
+namespace Units.Editing {
     public delegate void SpawnUnitClickedDelegate(IUnitData unitData, int numUnits);
     
     public interface IUnitPickerViewController {

@@ -2,14 +2,15 @@ using System;
 using InputSystem;
 using Map;
 using Replays.Persistence;
+using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
 namespace Replays.Playback.UI {
-    public class ReplayPlaybackViewController : MonoBehaviour, IReplayPlaybackViewController {
-        public event Action CancelReplayButtonPressed = delegate { };
+    public class ReplayPlaybackViewController : MonoBehaviour, IDismissNotifyingViewController {
+        public event Action ViewControllerDismissed;
 
         [SerializeField]
         private Slider _scrubSlider;
@@ -65,6 +66,7 @@ namespace Replays.Playback.UI {
 
         public void Hide() {
             gameObject.SetActive(false);
+            ViewControllerDismissed?.Invoke();
         }
 
         public void HandlePlayButtonPressed() {
@@ -83,7 +85,7 @@ namespace Replays.Playback.UI {
 
         public void HandleCancelReplayButtonPressed() {
             _playbackManager.Stop();
-            CancelReplayButtonPressed.Invoke();
+            Hide();
         }
 
         public void HandleSliderDragBegin(BaseEventData baseEventData) {

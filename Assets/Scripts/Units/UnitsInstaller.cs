@@ -1,17 +1,19 @@
-﻿using System;
-using Units.Actions;
+﻿using Units.Actions;
+using Units.Editing;
 using Units.Movement;
 using Units.Selection;
 using Units.Serialized;
 using Units.Spawning;
-using Units.UI;
 using UnityEngine;
 using Zenject;
 
 namespace Units {
     public class UnitsInstaller : MonoInstaller {
         [SerializeField]
-        public GameObject _unitPickerViewController;
+        private GameObject _unitPickerViewController;
+        
+        [SerializeField]
+        private GameObject _editUnitsVcPrefab;
 
         [SerializeField]
         private UnitMenuViewController _unitMenuPrefab;
@@ -27,7 +29,20 @@ namespace Units {
                      .AsSingle()
                      .WhenInjectedInto<UnitSelectionInstaller>()
                      .Lazy();
+            
+            // UI: Unit Editing / Picking. Inject into installer as we do with other unit menus.
+            Container.Bind<UnitEditingViewController>()
+                     .FromComponentInNewPrefab(_editUnitsVcPrefab)
+                     .AsSingle()
+                     .WhenInjectedInto<UnitEditingInstaller>()
+                     .Lazy();
+            Container.Bind<UnitPickerViewController>()
+                     .FromComponentInNewPrefab(_unitPickerViewController)
+                     .AsSingle()
+                     .WhenInjectedInto<UnitEditingInstaller>()
+                     .Lazy();
 
+            // Unit Data
             Container.Bind<IUnitDataIndexResolver>().To<UnitDataIndexResolver>().AsSingle();
 
             // TODO: Avoid having to expose UnitRegistry.
@@ -37,6 +52,7 @@ namespace Units {
             Container.Install<UnitActionsInstaller>();
             Container.Install<UnitMovementInstaller>();
             Container.Install<UnitSelectionInstaller>();
+            Container.Install<UnitEditingInstaller>();
         }
     }
 }
