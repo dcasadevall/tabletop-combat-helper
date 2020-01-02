@@ -9,26 +9,18 @@ namespace Units.Editing {
     public class UnitEditingInstaller : Installer {
         public const string EDIT_UNITS_OVERLAY_ID = "EditUnits";
         
-        private readonly UnitPickerViewController _unitPickerViewController;
         private readonly UnitEditingViewController _unitEditingViewController;
 
-        public UnitEditingInstaller(UnitPickerViewController unitPickerViewController,
-                                  UnitEditingViewController unitEditingViewController) {
-            _unitPickerViewController = unitPickerViewController;
+        public UnitEditingInstaller(UnitEditingViewController unitEditingViewController) {
             _unitEditingViewController = unitEditingViewController;
         }
 
         public override void InstallBindings() {
-            Container.Bind<IUnitPickerViewController>()
-                     .To<UnitPickerViewController>()
-                     .FromInstance(_unitPickerViewController)
-                     .AsSingle();
-            
             Container.Bind<IDismissNotifyingViewController>()
+                     .WithId(EDIT_UNITS_OVERLAY_ID)
                      .To<UnitEditingViewController>()
                      .FromInstance(_unitEditingViewController)
-                     .AsSingle()
-                     .WithConcreteId(EDIT_UNITS_OVERLAY_ID);
+                     .AsSingle();
         }
     }
 }

@@ -12,10 +12,10 @@ namespace Replays.Playback {
 
         public override void InstallBindings() {
             Container.Bind<IDismissNotifyingViewController>()
+                     .WithId(REPLAY_OVERLAY_ID)
                      .To<ReplayPlaybackViewController>()
                      .FromComponentInNewPrefab(_replayPlaybackVcPrefab)
-                     .AsSingle()
-                     .WithConcreteId(REPLAY_OVERLAY_ID);
+                     .AsSingle();
 
             Container.BindInterfacesTo<ReplayPlaybackManager>().AsSingle();
         }

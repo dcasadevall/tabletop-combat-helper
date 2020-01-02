@@ -1,3 +1,4 @@
+using UI;
 using UnityEngine;
 using Zenject;
 
@@ -13,11 +14,16 @@ namespace Drawing.UI {
         private GameObject _drawingViewController;
 
         public override void InstallBindings() {
-            Container.BindInterfacesTo<DrawingViewController>()
+            // TODO: Avoid exposing this implementation globally
+            // We need to do this here so we can use "FromResolve" in order to inject different interfaces
+            // to the same implementation (one with id) later on.
+            Container.Bind<DrawingViewController>()
                      .FromComponentInNewPrefab(_drawingViewController)
                      .AsSingle()
-                     .WithConcreteId(DRAWING_OVERLAY_ID)
                      .NonLazy();
+
+            Container.Bind<IDrawingViewController>().To<DrawingViewController>().FromResolve();
+            Container.Bind<IDismissNotifyingViewController>().WithId(DRAWING_OVERLAY_ID).To<DrawingViewController>().FromResolve();
         }
     }
 }

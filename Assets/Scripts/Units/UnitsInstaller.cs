@@ -10,18 +10,12 @@ using Zenject;
 namespace Units {
     public class UnitsInstaller : MonoInstaller {
         [SerializeField]
-        private GameObject _unitPickerViewController;
-        
-        [SerializeField]
-        private GameObject _editUnitsVcPrefab;
+        private GameObject _unitEditingPrefab;
 
         [SerializeField]
         private UnitMenuViewController _unitMenuPrefab;
         
         public override void InstallBindings() {
-            // UI: Picking units
-            Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(_unitPickerViewController).AsSingle();
-            
             // UI: Selection prefab. Inject into the installer so we avoid having too many MonoInstallers,
             // while being able to isolate dependencies.
             Container.Bind<UnitMenuViewController>()
@@ -32,12 +26,7 @@ namespace Units {
             
             // UI: Unit Editing / Picking. Inject into installer as we do with other unit menus.
             Container.Bind<UnitEditingViewController>()
-                     .FromComponentInNewPrefab(_editUnitsVcPrefab)
-                     .AsSingle()
-                     .WhenInjectedInto<UnitEditingInstaller>()
-                     .Lazy();
-            Container.Bind<UnitPickerViewController>()
-                     .FromComponentInNewPrefab(_unitPickerViewController)
+                     .FromComponentInNewPrefab(_unitEditingPrefab)
                      .AsSingle()
                      .WhenInjectedInto<UnitEditingInstaller>()
                      .Lazy();
@@ -52,7 +41,6 @@ namespace Units {
             Container.Install<UnitActionsInstaller>();
             Container.Install<UnitMovementInstaller>();
             Container.Install<UnitSelectionInstaller>();
-            Container.Install<UnitEditingInstaller>();
         }
     }
 }

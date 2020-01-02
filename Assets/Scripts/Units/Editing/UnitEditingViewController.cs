@@ -1,10 +1,19 @@
 using System;
 using UI;
+using Units.Serialized;
 using UnityEngine;
+using Zenject;
 
 namespace Units.Editing {
     public class UnitEditingViewController : MonoBehaviour, IDismissNotifyingViewController {
         public event Action ViewControllerDismissed;
+
+        private IUnitPickerViewController _unitPickerViewController;
+
+        [Inject]
+        public void Construct(IUnitPickerViewController unitPickerViewController) {
+            _unitPickerViewController = unitPickerViewController;
+        }
 
         public void Show() {
             gameObject.SetActive(true);
@@ -16,19 +25,16 @@ namespace Units.Editing {
         }
 
         public void HandleAddUnitsPressed() {
-            
+            _unitPickerViewController.SpawnUnitClicked += HandleSpawnUnitClicked;
+            _unitPickerViewController.Show();
         }
-        
-        public void HandleSelectUnitsPressed() {
-            
+
+        private void HandleSpawnUnitClicked(IUnitData unitData, int numUnits) {
+            Hide();
         }
-        
-        public void HandleStopSelectingUnitsPressed() {
-            
-        }
-        
+
         public void HandleCancelPressed() {
-            
+            Hide();
         }
     }
 }
