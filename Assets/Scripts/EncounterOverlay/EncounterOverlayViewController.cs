@@ -3,6 +3,7 @@ using InputSystem;
 using Replays.Playback;
 using Replays.Playback.UI;
 using UI;
+using Units;
 using Units.Editing;
 using UnityEngine;
 using Zenject;
@@ -34,7 +35,7 @@ namespace EncounterOverlay {
         public void Construct(IInputLock inputLock,
                               [Inject(Id = ReplayPlaybackInstaller.REPLAY_OVERLAY_ID)]
                               IDismissNotifyingViewController replayPlaybackViewController,
-                              [Inject(Id = UnitEditingInstaller.EDIT_UNITS_OVERLAY_ID)]
+                              [Inject(Id = UnitsInstaller.EDIT_UNITS_OVERLAY_ID)]
                               IDismissNotifyingViewController editUnitsViewController,
                               [Inject(Id = DrawingViewControllerInstaller.DRAWING_OVERLAY_ID)]
                               IDismissNotifyingViewController drawingViewController) {

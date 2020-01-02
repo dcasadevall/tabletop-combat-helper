@@ -16,9 +16,6 @@ namespace Units.Spawning {
         [SerializeField]
         public GameObject _unitPrefab; 
         
-        [SerializeField]
-        private UnitPickerViewController _unitPickerVcPrefab;
-        
         // Unit Spawn Settings is loaded in a preload scene
         // and injected here.
         private UnitSpawnSettings _unitSpawnSettings;
@@ -29,15 +26,6 @@ namespace Units.Spawning {
         }
         
         public override void InstallBindings() {
-            // Unit Picker UI.
-            // This is not injected via the root units installer because This installer is already a mono installer
-            // with a different context.
-            Container.Bind<IUnitPickerViewController>()
-                     .FromComponentInNewPrefab(_unitPickerVcPrefab)
-                     .AsSingle()
-                     .WhenInjectedInto<UnitSpawningInstaller>()
-                     .Lazy();
-            
             // Unit Pool
             // NOTE: We do not use UnderTransformGroup because there is an issue with parenting under a
             // transform with a given name when switching scenes.

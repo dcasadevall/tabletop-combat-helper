@@ -38,13 +38,6 @@ namespace Units {
                      .AsSingle()
                      .WhenInjectedInto<UnitSelectionInstaller>()
                      .Lazy();
-            
-            // UI: Unit Editing / Picking. Inject into installer as we do with other unit menus.
-            Container.Bind<UnitEditingViewController>()
-                     .FromComponentInNewPrefab(_unitEditingPrefab)
-                     .AsSingle()
-                     .WhenInjectedInto<UnitEditingInstaller>()
-                     .Lazy();
 
             // Unit Data
             Container.Bind<IUnitDataIndexResolver>().To<UnitDataIndexResolver>().AsSingle();
