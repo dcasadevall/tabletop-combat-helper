@@ -1,24 +1,28 @@
-﻿using System;
+﻿using UI;
 using Units.Actions;
+using Units.Editing;
 using Units.Movement;
 using Units.Selection;
 using Units.Serialized;
 using Units.Spawning;
-using Units.UI;
 using UnityEngine;
 using Zenject;
 
 namespace Units {
     public class UnitsInstaller : MonoInstaller {
         [SerializeField]
-        public GameObject _unitPickerViewController;
+        private GameObject _unitEditingPrefab;
 
         [SerializeField]
         private UnitMenuViewController _unitMenuPrefab;
         
         public override void InstallBindings() {
-            // UI: Picking units
-            Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(_unitPickerViewController).AsSingle();
+            // UI: Editing units. This is injected here because so far it has no dependencies, and needs to be
+            // shown on start. We can move it to its own installer later.
+            Container.BindInterfacesTo<UnitToolbarViewController>()
+                     .FromComponentInNewPrefab(_unitEditingPrefab)
+                     .AsSingle()
+                     .NonLazy();
             
             // UI: Selection prefab. Inject into the installer so we avoid having too many MonoInstallers,
             // while being able to isolate dependencies.
@@ -28,6 +32,7 @@ namespace Units {
                      .WhenInjectedInto<UnitSelectionInstaller>()
                      .Lazy();
 
+            // Unit Data
             Container.Bind<IUnitDataIndexResolver>().To<UnitDataIndexResolver>().AsSingle();
 
             // TODO: Avoid having to expose UnitRegistry.

@@ -1,20 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Grid;
 using InputSystem;
-using Logging;
-using Math;
 using UniRx;
-using Units.Actions;
 using Units.Movement;
-using Units.Selection;
 using Units.Spawning;
 using UnityEngine;
 using Zenject;
-using ILogger = Logging.ILogger;
 
-namespace Units.UI {
+namespace Units.Selection {
     public class UnitSelectionDetector : IInitializable, IDisposable {
         private readonly UnitMenuViewController _unitMenuViewController;
         private readonly IUnitMovementController _unitMovementController;

@@ -5,6 +5,7 @@ using Drawing.Input;
 using Drawing.TexturePainter;
 using InputSystem;
 using Logging;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -15,14 +16,13 @@ namespace Drawing.UI {
     /// ViewController to manage the painting view. This should be injected, but for now, just have it manage
     /// itself through unity's lifecycle.
     /// </summary>
-    public class DrawingViewController : MonoBehaviour, IDrawingViewController {
+    public class DrawingViewController : MonoBehaviour, IDrawingViewController, IDismissNotifyingViewController {
         private static Color kDefaultColor = Color.red;
 
         public event Action DrawingEnabled = delegate { };
         public event Action DrawingDisabled = delegate { };
-        public event Action CancelButtonPressed = delegate { };
+        public event Action ViewControllerDismissed;
 
-        public bool IsDrawing { get; private set; }
         public TexturePaintParams PaintParams { get; private set; }
 
         // TODO: These should be shown / hidden via animator
@@ -63,24 +63,23 @@ namespace Drawing.UI {
                 return;
             }
 
-            IsDrawing = true;
             _stopPaintingButton.SetActive(true);
             _drawingTools.SetActive(true);
 
-            DrawingEnabled.Invoke();
+            DrawingEnabled?.Invoke();
         }
 
-        public void Hide() {
+        private void Hide() {
             if (_lockId != null) {
                 _inputLock.Unlock(_lockId.Value);
                 _lockId = null;
             }
 
-            IsDrawing = false;
             _stopPaintingButton.SetActive(false);
             _drawingTools.SetActive(false);
 
-            DrawingDisabled.Invoke();
+            DrawingDisabled?.Invoke();
+            ViewControllerDismissed?.Invoke();
         }
 
         public void SetBrush() {
@@ -100,7 +99,7 @@ namespace Drawing.UI {
         }
 
         public void HandleCancelButtonPressed() {
-            CancelButtonPressed.Invoke();
+            Hide();
         }
 
         public void Clear() {

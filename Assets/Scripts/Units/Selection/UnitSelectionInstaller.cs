@@ -1,5 +1,4 @@
 using System;
-using Units.UI;
 using Zenject;
 
 namespace Units.Selection {

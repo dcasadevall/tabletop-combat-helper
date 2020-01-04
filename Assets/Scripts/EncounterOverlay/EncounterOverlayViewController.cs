@@ -1,12 +1,16 @@
 using Drawing.UI;
 using InputSystem;
+using Replays.Playback;
 using Replays.Playback.UI;
+using UI;
+using Units;
+using Units.Editing;
 using UnityEngine;
 using Zenject;
 
 namespace EncounterOverlay {
     public class EncounterOverlayViewController : MonoBehaviour, IEncounterOverlayViewController {
-        // For now, just use a "hidden" flag for both states
+        // For now, just use a "hidden" flag for all states
         [SerializeField]
         private string _replayPlaybackOpenBoolName = "Hidden";
 
@@ -20,13 +24,15 @@ namespace EncounterOverlay {
         private Animator _animator;
 
         private IInputLock _inputLock;
-        private IReplayPlaybackViewController _replayPlaybackViewController;
-        private IDrawingViewController _drawingViewController;
+        private IDismissNotifyingViewController _replayPlaybackViewController;
+        private IDismissNotifyingViewController _drawingViewController;
 
         [Inject]
         public void Construct(IInputLock inputLock,
-                              IReplayPlaybackViewController replayPlaybackViewController,
-                              IDrawingViewController drawingViewController) {
+                              [Inject(Id = ReplayPlaybackInstaller.REPLAY_OVERLAY_ID)]
+                              IDismissNotifyingViewController replayPlaybackViewController,
+                              [Inject(Id = DrawingViewControllerInstaller.DRAWING_OVERLAY_ID)]
+                              IDismissNotifyingViewController drawingViewController) {
             _inputLock = inputLock;
             _replayPlaybackViewController = replayPlaybackViewController;
             _drawingViewController = drawingViewController;
@@ -58,26 +64,24 @@ namespace EncounterOverlay {
 
         public void HandleReplayPlaybackButtonPressed() {
             _animator.SetBool(_replayPlaybackOpenBoolName, true);
-            _replayPlaybackViewController.CancelReplayButtonPressed += HandleCancelReplayButtonPressed;
+            _replayPlaybackViewController.ViewControllerDismissed += HandleReplayPlaybackViewControllerDismissed;
             _replayPlaybackViewController.Show();
         }
 
-        private void HandleCancelReplayButtonPressed() {
+        private void HandleReplayPlaybackViewControllerDismissed() {
             _animator.SetBool(_replayPlaybackOpenBoolName, false);
-            _replayPlaybackViewController.CancelReplayButtonPressed -= HandleCancelReplayButtonPressed;
-            _replayPlaybackViewController.Hide();
+            _replayPlaybackViewController.ViewControllerDismissed -= HandleReplayPlaybackViewControllerDismissed;
         }
 
         public void HandleDrawingButtonPressed() {
             _animator.SetBool(_drawingOpenBoolName, true);
-            _drawingViewController.CancelButtonPressed += HandleCancelDrawingButtonPressed;
+            _drawingViewController.ViewControllerDismissed += HandleDrawingViewControllerDismissed;
             _drawingViewController.Show();
         }
 
-        private void HandleCancelDrawingButtonPressed() {
+        private void HandleDrawingViewControllerDismissed() {
             _animator.SetBool(_drawingOpenBoolName, false);
-            _drawingViewController.CancelButtonPressed -= HandleCancelDrawingButtonPressed;
-            _drawingViewController.Hide();
+            _drawingViewController.ViewControllerDismissed -= HandleDrawingViewControllerDismissed;
         }
     }
 }

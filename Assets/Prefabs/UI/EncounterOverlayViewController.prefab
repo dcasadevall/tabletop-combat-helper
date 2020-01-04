@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8458091253767641110}
   - component: {fileID: 3461252169547486759}
   m_Layer: 5
-  m_Name: MapOverlayViewController
+  m_Name: EncounterOverlayViewController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,6 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _replayPlaybackOpenBoolName: Hidden
   _drawingOpenBoolName: Hidden
+  _inputLockBoolName: InputLock
   _animator: {fileID: 8458091253767641110}
 --- !u!1 &1829163809714567392
 GameObject:

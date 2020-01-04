@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using Grid.Positioning;
 using Logging;
-using Math;
 using Units.Serialized;
-using Units.Spawning;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using ILogger = Logging.ILogger;
 
-namespace Units.UI {
-    public class UnitPickerViewController : MonoBehaviour, IUnitPickerViewController {
-        public event SpawnUnitClickedDelegate SpawnUnitClicked = delegate {};
+namespace Units.Spawning.UI {
+    public class UnitPickerViewController : MonoBehaviour, IUnitPickerViewController, IInitializable, IDisposable {
+        public event System.Action ViewControllerDismissed;
+        public event SpawnUnitClickedDelegate SpawnUnitClicked;
 
 #pragma warning disable 649
         [SerializeField]
@@ -41,7 +39,7 @@ namespace Units.UI {
             _logger = logger;
         }
 
-        private void Start() {
+        public void Initialize() {
             if (_dropdown == null) {
                 _logger.LogError(LoggedFeature.Units, "Dropdown not assigned.");
                 return;
@@ -54,9 +52,14 @@ namespace Units.UI {
             
             _spawnButton.onClick.AddListener(HandleOnSpawnButtonClicked);
             _dropdown.onValueChanged.AddListener(HandleOnValueChanged);
-
-            // Because this class is injected, make sure it is initialized as "hidden".
+            
+            // Prefab is instantiated on scene load, so make sure we start hidden.
             Hide();
+        }
+
+        public void Dispose() {
+            _spawnButton.onClick.RemoveListener(HandleOnSpawnButtonClicked);
+            _dropdown.onValueChanged.RemoveListener(HandleOnValueChanged);
         }
 
         private void HandleOnSpawnButtonClicked() {
@@ -66,7 +69,9 @@ namespace Units.UI {
                 return;
             }
             
-            SpawnUnitClicked.Invoke(unitData, _unitAmountDropdown.value + 1);
+            Hide();
+            ViewControllerDismissed?.Invoke();
+            SpawnUnitClicked?.Invoke(unitData, _unitAmountDropdown.value + 1);
         }
 
         public void Show() {
@@ -97,13 +102,13 @@ namespace Units.UI {
             _unitAmountDropdown.AddOptions(options);
 
             // Set UI anchored to wherever the mouse is.
-            _uiAnchor.position = Input.mousePosition;
+            // _uiAnchor.position = Input.mousePosition;
             
             // Show the UI
             gameObject.SetActive(true);
         }
 
-        public void Hide() {
+        private void Hide() {
             gameObject.SetActive(false);
         }
 
