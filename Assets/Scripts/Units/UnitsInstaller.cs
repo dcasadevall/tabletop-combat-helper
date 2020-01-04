@@ -10,11 +10,6 @@ using Zenject;
 
 namespace Units {
     public class UnitsInstaller : MonoInstaller {
-        public const string EDIT_UNITS_OVERLAY_ID = "EditUnits";
-        
-        [SerializeField]
-        private GameObject _unitPickerViewController;
-
         [SerializeField]
         private GameObject _unitEditingPrefab;
 
@@ -22,14 +17,12 @@ namespace Units {
         private UnitMenuViewController _unitMenuPrefab;
         
         public override void InstallBindings() {
-            // UI: Editing / Picking units. These are injected here because they are needed by EncounterOverlay.
-            // We could move this to another installer as long as it is injected in the encounter context.
-            Container.Bind<IUnitPickerViewController>().FromComponentInNewPrefab(_unitPickerViewController).AsSingle();
-            Container.Bind<IDismissNotifyingViewController>()
-                     .WithId(EDIT_UNITS_OVERLAY_ID)
-                     .To<UnitEditingViewController>()
-                     .FromNewComponentOnNewPrefab(_unitEditingPrefab)
-                     .AsSingle();
+            // UI: Editing units. This is injected here because so far it has no dependencies, and needs to be
+            // shown on start. We can move it to its own installer later.
+            Container.BindInterfacesTo<UnitToolbarViewController>()
+                     .FromComponentInNewPrefab(_unitEditingPrefab)
+                     .AsSingle()
+                     .NonLazy();
             
             // UI: Selection prefab. Inject into the installer so we avoid having too many MonoInstallers,
             // while being able to isolate dependencies.

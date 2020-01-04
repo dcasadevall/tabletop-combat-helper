@@ -18,9 +18,6 @@ namespace EncounterOverlay {
         private string _drawingOpenBoolName = "Hidden";
         
         [SerializeField]
-        private string _editUnitsOpenBoolName = "Hidden";
-        
-        [SerializeField]
         private string _inputLockBoolName = "InputLock";
 
         [SerializeField]
@@ -29,19 +26,15 @@ namespace EncounterOverlay {
         private IInputLock _inputLock;
         private IDismissNotifyingViewController _replayPlaybackViewController;
         private IDismissNotifyingViewController _drawingViewController;
-        private IDismissNotifyingViewController _editUnitsViewController;
 
         [Inject]
         public void Construct(IInputLock inputLock,
                               [Inject(Id = ReplayPlaybackInstaller.REPLAY_OVERLAY_ID)]
                               IDismissNotifyingViewController replayPlaybackViewController,
-                              [Inject(Id = UnitsInstaller.EDIT_UNITS_OVERLAY_ID)]
-                              IDismissNotifyingViewController editUnitsViewController,
                               [Inject(Id = DrawingViewControllerInstaller.DRAWING_OVERLAY_ID)]
                               IDismissNotifyingViewController drawingViewController) {
             _inputLock = inputLock;
             _replayPlaybackViewController = replayPlaybackViewController;
-            _editUnitsViewController = editUnitsViewController;
             _drawingViewController = drawingViewController;
         }
 
@@ -89,17 +82,6 @@ namespace EncounterOverlay {
         private void HandleDrawingViewControllerDismissed() {
             _animator.SetBool(_drawingOpenBoolName, false);
             _drawingViewController.ViewControllerDismissed -= HandleDrawingViewControllerDismissed;
-}
-
-        public void HandleUnitsButtonPressed() {
-            _animator.SetBool(_editUnitsOpenBoolName, true);
-            _editUnitsViewController.ViewControllerDismissed += HandleEditUnitsViewControllerDismissed;
-            _editUnitsViewController.Show();
-        }
-
-        private void HandleEditUnitsViewControllerDismissed() {
-            _animator.SetBool(_editUnitsOpenBoolName, false);
-            _editUnitsViewController.ViewControllerDismissed -= HandleEditUnitsViewControllerDismissed;
         }
     }
 }

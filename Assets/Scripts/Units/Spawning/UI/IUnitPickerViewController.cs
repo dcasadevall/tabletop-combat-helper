@@ -1,12 +1,10 @@
+using UI;
 using Units.Serialized;
 
-namespace Units.Editing {
+namespace Units.Spawning.UI {
     public delegate void SpawnUnitClickedDelegate(IUnitData unitData, int numUnits);
     
-    public interface IUnitPickerViewController {
+    public interface IUnitPickerViewController : IDismissNotifyingViewController {
         event SpawnUnitClickedDelegate SpawnUnitClicked;
-        
-        void Show();
-        void Hide();
     }
 }
