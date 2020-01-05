@@ -26,15 +26,18 @@ namespace Units.Spawning {
         private readonly IEncounterSelectionContext _encounterSelectionContext;
         private readonly IFactory<IUnitData, UnitCommandData> _unitCommandDataFactory;
         private readonly ICommandQueue _commandQueue;
+        private readonly Camera _camera;
         private IntVector2? _selectedTile;
 
-        public UnitSpawner(IEncounterSelectionContext encounterSelectionContext,
+        public UnitSpawner(Camera camera,
+                           IEncounterSelectionContext encounterSelectionContext,
                            IUnitPickerViewController unitPickerVc, 
                            IGridPositionCalculator gridPositionCalculator,
                            IRandomGridPositionProvider randomGridPositionProvider,
                            IFactory<IUnitData, UnitCommandData> unitCommandDataFactory,
                            ICommandQueue commandQueue,
                            IUnitSpawnSettings unitSpawnSettings) {
+            _camera = camera;
             _encounterSelectionContext = encounterSelectionContext;
             _unitCommandDataFactory = unitCommandDataFactory;
             _commandQueue = commandQueue;
@@ -72,9 +75,11 @@ namespace Units.Spawning {
 
         // TOOD: Spawning and the ui has to be refactored
         private void HandleSpawnUnitClicked(IUnitData unitData, int numUnits) {
-            var centerTile = _gridPositionCalculator.GetTileClosestToCenter();
+            // Center tile from the camera center as default. Zero if none found (should not happen).
+            var cameraCenter = _camera.ViewportToWorldPoint(new Vector2(0.5f, 0.5f));
+            var centerTile = _gridPositionCalculator.GetTileContainingWorldPosition(cameraCenter);
             IntVector2[] tilePositions =
-                _randomGridPositionProvider.GetRandomUniquePositions(_selectedTile ?? centerTile,
+                _randomGridPositionProvider.GetRandomUniquePositions(_selectedTile ?? centerTile ?? IntVector2.Zero,
                                                                      1,
                                                                      numUnits);
            
