@@ -13,10 +13,10 @@ namespace Units.Editing {
     /// </summary>
     public class UnitToolbarViewController : MonoBehaviour, IInitializable, ITickable, IDisposable {
         [SerializeField]
-        private GameObject _expandedUnitEditingToolbar;
+        private GameObject _batchSelectButton;
 
         [SerializeField]
-        private GameObject _collapsedUnitEditingToolbar;
+        private GameObject _normalCursorButton;
 
         private IUnitPickerViewController _unitPickerViewController;
         private IInputLock _inputLock;
@@ -88,7 +88,7 @@ namespace Units.Editing {
             Show();
         }
 
-        public void HandleExpandUnitMenuPressed() {
+        public void HandleBatchSelectPressed() {
             _lockId = _inputLock.Lock();
             if (_lockId == null) {
                 _logger.LogError(LoggedFeature.Units, "Failed to acquire input lock.");
@@ -99,17 +99,17 @@ namespace Units.Editing {
             // TODO: Input.Lock() to return owner so we can verify we own the lock.
             Show();
 
-            _expandedUnitEditingToolbar.SetActive(true);
-            _collapsedUnitEditingToolbar.SetActive(false);
+            _normalCursorButton.SetActive(true);
+            _batchSelectButton.SetActive(false);
         }
 
-        public void HandleCollapseUnitMenuPressed() {
+        public void HandleNormalCursorPressed() {
             if (_lockId != null) {
                 _inputLock.Unlock(_lockId.Value);
             }
 
-            _expandedUnitEditingToolbar.SetActive(false);
-            _collapsedUnitEditingToolbar.SetActive(true);
+            _normalCursorButton.SetActive(false);
+            _batchSelectButton.SetActive(true);
         }
     }
 }
