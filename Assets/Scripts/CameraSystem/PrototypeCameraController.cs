@@ -110,6 +110,8 @@ namespace CameraSystem {
             if (_inputLock.IsLocked) {
                 return;
             }
+
+            _lockId = _inputLock.Lock();
             if (_lockId == null) {
                 return;
             }
