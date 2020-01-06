@@ -1,8 +1,17 @@
 using System;
+using System.Threading;
+using CameraSystem;
+using Grid;
+using Grid.Positioning;
 using InputSystem;
 using Logging;
+using Math;
+using UI.SelectionBox;
+using UniRx;
+using UniRx.Async;
 using Units.Spawning.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Zenject;
 using ILogger = Logging.ILogger;
 
@@ -18,16 +27,32 @@ namespace Units.Editing {
         [SerializeField]
         private GameObject _normalCursorButton;
 
+        private EventSystem _eventSystem;
+        private Camera _camera;
         private IUnitPickerViewController _unitPickerViewController;
+        private ISelectionBox _selectionBox;
+        private IGridPositionCalculator _gridPositionCalculator;
+        private IGridUnitManager _gridUnitManager;
         private IInputLock _inputLock;
         private ILogger _logger;
         private Guid? _lockId;
+        private CancellationTokenSource _batchSelectCancellationTokenSource;
 
         [Inject]
-        public void Construct(IUnitPickerViewController unitPickerViewController, 
+        public void Construct(EventSystem eventSystem,
+                              Camera camera,
+                              IUnitPickerViewController unitPickerViewController, 
+                              IGridPositionCalculator gridPositionCalculator,
+                              IGridUnitManager gridUnitManager,
+                              ISelectionBox selectionBox,
                               IInputLock inputLock,
                               ILogger logger) {
+            _eventSystem = eventSystem;
+            _camera = camera;
             _unitPickerViewController = unitPickerViewController;
+            _gridPositionCalculator = gridPositionCalculator;
+            _gridUnitManager = gridUnitManager;
+            _selectionBox = selectionBox;
             _inputLock = inputLock;
             _logger = logger;
         }
@@ -88,7 +113,7 @@ namespace Units.Editing {
             Show();
         }
 
-        public void HandleBatchSelectPressed() {
+        private async void HandleBatchSelectPressed() {
             _lockId = _inputLock.Lock();
             if (_lockId == null) {
                 _logger.LogError(LoggedFeature.Units, "Failed to acquire input lock.");
@@ -101,6 +126,29 @@ namespace Units.Editing {
 
             _normalCursorButton.SetActive(true);
             _batchSelectButton.SetActive(false);
+            _batchSelectCancellationTokenSource = new CancellationTokenSource();
+
+            while (!_batchSelectCancellationTokenSource.IsCancellationRequested) {
+                // Wait for a click, not on UI.
+                await Observable.EveryUpdate()
+                                .Where(_ => Input.GetMouseButton(0))
+                                .Where(_ => !_eventSystem.IsPointerOverGameObject())
+                                .TakeWhile(_ => !_batchSelectCancellationTokenSource.IsCancellationRequested)
+                                .FirstOrDefault();
+                
+                // Check how many units we selected.
+                Rect selectionRect = await _selectionBox.Show();
+                Rect worldRect = CameraRectUtils.ViewPortRectToWorldRect(_camera, selectionRect);
+                IntVector2[] tilesCoveredByRect = _gridPositionCalculator.GetTilesCoveredByRect(worldRect);
+                IUnit[] units = _gridUnitManager.GetUnitsAtTiles(tilesCoveredByRect);
+
+                 // Handle Unit Selection.
+                _logger.Log(LoggedFeature.Units, "Selected World Space: {0}", worldRect);
+                _logger.Log(LoggedFeature.Units, "Selected {0} Units", units.Length);
+                if (units.Length > 0) {
+                    HandleNormalCursorPressed();
+                }
+            }
         }
 
         public void HandleNormalCursorPressed() {
@@ -110,6 +158,7 @@ namespace Units.Editing {
 
             _normalCursorButton.SetActive(false);
             _batchSelectButton.SetActive(true);
+            _batchSelectCancellationTokenSource?.Cancel();
         }
     }
 }

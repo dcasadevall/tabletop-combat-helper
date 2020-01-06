@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Math;
 using UnityEngine;
@@ -43,12 +44,12 @@ namespace Grid.Positioning {
             return IntVector2.Of(x, y);
         }
 
+        /// <inheritdoc />
         public IntVector2[] GetTilesAtDistance(IntVector2 coords, int distance) {
             if (distance <= 0) {
                 return new IntVector2[0];
             }
             
-            int tileIndex = 0;
             var tiles = new List<IntVector2>();
             for (int x = -distance; x <= distance; x++) {
                 for (int y = -distance; y <= distance; y++) {
@@ -66,6 +67,29 @@ namespace Grid.Positioning {
                     }
                     
                     tiles.Add(tileCoords);
+                }
+            }
+
+            return tiles.ToArray();
+        }
+
+        /// <inheritdoc />
+        public IntVector2[] GetTilesCoveredByRect(Rect worldSpaceRect) {
+            float minX = Mathf.Max(GetTileOriginWorldPosition(0, Axis.X), worldSpaceRect.min.x);
+            float maxX = Mathf.Min(GetTileOriginWorldPosition(_grid.NumTilesX - 1, Axis.X) + _grid.TileSize, worldSpaceRect.max.x);
+            float minY = Mathf.Max(GetTileOriginWorldPosition(0, Axis.Y), worldSpaceRect.min.y);
+            float maxY = Mathf.Min(GetTileOriginWorldPosition(_grid.NumTilesY - 1, Axis.Y) + _grid.TileSize, worldSpaceRect.max.y);
+            
+            IntVector2? bottomLeft = GetTileContainingWorldPosition(new Vector2(minX, minY));
+            IntVector2? topRight = GetTileContainingWorldPosition(new Vector2(maxX, maxY));
+            if (!bottomLeft.HasValue || !topRight.HasValue) {
+                throw new Exception("Bounds are not right for grid rect.");
+            }
+            
+            var tiles = new List<IntVector2>();
+            for (int x = bottomLeft.Value.x; x <= topRight.Value.x; x++) {
+                for (int y = bottomLeft.Value.y; y <= topRight.Value.y; y++) {
+                    tiles.Add(IntVector2.Of(x, y));
                 }
             }
 
