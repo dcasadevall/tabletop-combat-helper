@@ -9,6 +9,7 @@ using Math;
 using UI.SelectionBox;
 using UniRx;
 using UniRx.Async;
+using Units.Selection;
 using Units.Spawning.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -31,16 +32,17 @@ namespace Units.Editing {
         private Camera _camera;
         private IUnitPickerViewController _unitPickerViewController;
         private ISelectionBox _selectionBox;
+        private BatchUnitSelectionDetector _batchUnitSelectionDetector;
         private IGridPositionCalculator _gridPositionCalculator;
         private IGridUnitManager _gridUnitManager;
         private IInputLock _inputLock;
         private ILogger _logger;
         private Guid? _lockId;
-        private CancellationTokenSource _batchSelectCancellationTokenSource;
 
         [Inject]
         public void Construct(EventSystem eventSystem,
                               Camera camera,
+                              BatchUnitSelectionDetector batchUnitSelectionDetector,
                               IUnitPickerViewController unitPickerViewController, 
                               IGridPositionCalculator gridPositionCalculator,
                               IGridUnitManager gridUnitManager,
@@ -49,6 +51,7 @@ namespace Units.Editing {
                               ILogger logger) {
             _eventSystem = eventSystem;
             _camera = camera;
+            _batchUnitSelectionDetector = batchUnitSelectionDetector;
             _unitPickerViewController = unitPickerViewController;
             _gridPositionCalculator = gridPositionCalculator;
             _gridUnitManager = gridUnitManager;
@@ -126,6 +129,7 @@ namespace Units.Editing {
 
             _normalCursorButton.SetActive(true);
             _batchSelectButton.SetActive(false);
+            _batchUnitSelectionDetector.DetectBatchSelections();
             _batchSelectCancellationTokenSource = new CancellationTokenSource();
 
             while (!_batchSelectCancellationTokenSource.IsCancellationRequested) {
@@ -138,12 +142,11 @@ namespace Units.Editing {
                 
                 // Check how many units we selected.
                 Rect selectionRect = await _selectionBox.Show();
-                Rect worldRect = CameraRectUtils.ViewPortRectToWorldRect(_camera, selectionRect);
-                IntVector2[] tilesCoveredByRect = _gridPositionCalculator.GetTilesCoveredByRect(worldRect);
+                IntVector2[] tilesCoveredByRect = _gridPositionCalculator.GetTilesCoveredByRect(selectionRect);
                 IUnit[] units = _gridUnitManager.GetUnitsAtTiles(tilesCoveredByRect);
 
                  // Handle Unit Selection.
-                _logger.Log(LoggedFeature.Units, "Selected World Space: {0}", worldRect);
+                _logger.Log(LoggedFeature.Units, "Selected World Space: {0}", selectionRect);
                 _logger.Log(LoggedFeature.Units, "Selected {0} Units", units.Length);
                 if (units.Length > 0) {
                     HandleNormalCursorPressed();
@@ -158,7 +161,7 @@ namespace Units.Editing {
 
             _normalCursorButton.SetActive(false);
             _batchSelectButton.SetActive(true);
-            _batchSelectCancellationTokenSource?.Cancel();
+            _batchUnitSelectionDetector.StopDetecting();
         }
     }
 }

@@ -41,18 +41,18 @@ namespace UI.SelectionBox {
             }
             
             // Show sprite
-            Vector2 selectionStart = _camera.ScreenToViewportPoint(Input.mousePosition);
+            Vector2 selectionStart = _camera.ScreenToWorldPoint(Input.mousePosition);
 
             // Subscribe to mouse events
             var mouseUpStream = Observable.EveryUpdate()
                                           .Where(_ => Input.GetMouseButtonUp(0))
-                                          .Select(_ => _camera.ScreenToViewportPoint(Input.mousePosition))
+                                          .Select(_ => _camera.ScreenToWorldPoint(Input.mousePosition))
                                           .Select(selectionEnd => GetSelectionRect(selectionStart, selectionEnd))
                                           .First();
 
             var mouseDragStream = Observable.EveryUpdate()
                                             .Where(_ => Input.GetMouseButton(0))
-                                            .Select(_ => _camera.ScreenToViewportPoint(Input.mousePosition))
+                                            .Select(_ => _camera.ScreenToWorldPoint(Input.mousePosition))
                                             .TakeUntil(mouseUpStream)
                                             .Pairwise()
                                             .Where(mousePos =>
@@ -78,8 +78,7 @@ namespace UI.SelectionBox {
 
         private void HandleMouseDrag(Rect selectionRect) {
             _selectionSprite.enabled = true;
-            Rect worldRect = CameraRectUtils.ViewPortRectToWorldRect(_camera, selectionRect);
-            _selectionSprite.size = new Vector2(worldRect.width, worldRect.height);
+            _selectionSprite.size = new Vector2(selectionRect.width, selectionRect.height);
             _selectionSprite.transform.position =
                 new Vector3(selectionRect.center.x, selectionRect.center.y, _selectionSprite.transform.position.z);
         }
