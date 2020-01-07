@@ -23,6 +23,9 @@ namespace Units {
                      .FromComponentInNewPrefab(_unitEditingPrefab)
                      .AsSingle()
                      .NonLazy();
+            Container.Bind<BatchUnitSelectionDetector>()
+                     .AsSingle()
+                     .WhenInjectedInto<UnitToolbarViewController>();
             
             // UI: Selection prefab. Inject into the installer so we avoid having too many MonoInstallers,
             // while being able to isolate dependencies.

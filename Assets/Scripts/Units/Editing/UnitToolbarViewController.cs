@@ -38,12 +38,13 @@ namespace Units.Editing {
         private IInputLock _inputLock;
         private ILogger _logger;
         private Guid? _lockId;
+        private IDisposable _selectionObserver;
 
         [Inject]
         public void Construct(EventSystem eventSystem,
                               Camera camera,
                               BatchUnitSelectionDetector batchUnitSelectionDetector,
-                              IUnitPickerViewController unitPickerViewController, 
+                              IUnitPickerViewController unitPickerViewController,
                               IGridPositionCalculator gridPositionCalculator,
                               IGridUnitManager gridUnitManager,
                               ISelectionBox selectionBox,
@@ -65,7 +66,7 @@ namespace Units.Editing {
             _inputLock.InputLockReleased += HandleInputLockReleased;
             Show();
         }
-        
+
         // TODO: This is a pretty janky way of handling input.
         // Maybe create a separate class to handle this?
         // Or disable these shortcuts altogether...
@@ -73,7 +74,7 @@ namespace Units.Editing {
             if (!gameObject.activeInHierarchy) {
                 return;
             }
-            
+
             if (Input.GetKeyUp(KeyCode.U)) {
                 _unitPickerViewController.Show();
             }
@@ -90,6 +91,9 @@ namespace Units.Editing {
         }
 
         private void Hide() {
+            _selectionObserver?.Dispose();
+            _selectionObserver = null;
+
             gameObject.SetActive(false);
         }
 
@@ -97,7 +101,7 @@ namespace Units.Editing {
             if (_lockId != null) {
                 return;
             }
-            
+
             Hide();
         }
 
@@ -122,6 +126,7 @@ namespace Units.Editing {
                 _logger.LogError(LoggedFeature.Units, "Failed to acquire input lock.");
                 return;
             }
+
             // Locking causes this menu to hide, and the way events are fired, we get an event before the ownerId
             // is assigned.
             // TODO: Input.Lock() to return owner so we can verify we own the lock.
@@ -129,29 +134,13 @@ namespace Units.Editing {
 
             _normalCursorButton.SetActive(true);
             _batchSelectButton.SetActive(false);
-            _batchUnitSelectionDetector.DetectBatchSelections();
-            _batchSelectCancellationTokenSource = new CancellationTokenSource();
-
-            while (!_batchSelectCancellationTokenSource.IsCancellationRequested) {
-                // Wait for a click, not on UI.
-                await Observable.EveryUpdate()
-                                .Where(_ => Input.GetMouseButton(0))
-                                .Where(_ => !_eventSystem.IsPointerOverGameObject())
-                                .TakeWhile(_ => !_batchSelectCancellationTokenSource.IsCancellationRequested)
-                                .FirstOrDefault();
-                
-                // Check how many units we selected.
-                Rect selectionRect = await _selectionBox.Show();
-                IntVector2[] tilesCoveredByRect = _gridPositionCalculator.GetTilesCoveredByRect(selectionRect);
-                IUnit[] units = _gridUnitManager.GetUnitsAtTiles(tilesCoveredByRect);
-
-                 // Handle Unit Selection.
-                _logger.Log(LoggedFeature.Units, "Selected World Space: {0}", selectionRect);
-                _logger.Log(LoggedFeature.Units, "Selected {0} Units", units.Length);
-                if (units.Length > 0) {
-                    HandleNormalCursorPressed();
-                }
-            }
+            _selectionObserver = _batchUnitSelectionDetector
+                                 .GetSelectedUnits().Subscribe(Observer.Create<IUnit[]>(units => {
+                                     _logger.Log(LoggedFeature.Units, "Selected {0} Units", units.Length);
+                                     if (units.Length > 0) {
+                                         HandleNormalCursorPressed();
+                                     }
+                                 }));
         }
 
         public void HandleNormalCursorPressed() {
@@ -161,7 +150,8 @@ namespace Units.Editing {
 
             _normalCursorButton.SetActive(false);
             _batchSelectButton.SetActive(true);
-            _batchUnitSelectionDetector.StopDetecting();
+            _selectionObserver?.Dispose();
+            _selectionObserver = null;
         }
     }
 }
