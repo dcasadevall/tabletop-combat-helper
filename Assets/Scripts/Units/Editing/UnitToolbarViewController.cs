@@ -28,35 +28,23 @@ namespace Units.Editing {
         [SerializeField]
         private GameObject _normalCursorButton;
 
-        private EventSystem _eventSystem;
-        private Camera _camera;
         private IUnitPickerViewController _unitPickerViewController;
-        private ISelectionBox _selectionBox;
         private BatchUnitSelectionDetector _batchUnitSelectionDetector;
-        private IGridPositionCalculator _gridPositionCalculator;
-        private IGridUnitManager _gridUnitManager;
         private IInputLock _inputLock;
         private ILogger _logger;
         private Guid? _lockId;
         private IDisposable _selectionObserver;
 
         [Inject]
-        public void Construct(EventSystem eventSystem,
-                              Camera camera,
-                              BatchUnitSelectionDetector batchUnitSelectionDetector,
+        public void Construct(BatchUnitSelectionDetector batchUnitSelectionDetector,
                               IUnitPickerViewController unitPickerViewController,
                               IGridPositionCalculator gridPositionCalculator,
                               IGridUnitManager gridUnitManager,
                               ISelectionBox selectionBox,
                               IInputLock inputLock,
                               ILogger logger) {
-            _eventSystem = eventSystem;
-            _camera = camera;
             _batchUnitSelectionDetector = batchUnitSelectionDetector;
             _unitPickerViewController = unitPickerViewController;
-            _gridPositionCalculator = gridPositionCalculator;
-            _gridUnitManager = gridUnitManager;
-            _selectionBox = selectionBox;
             _inputLock = inputLock;
             _logger = logger;
         }
@@ -135,7 +123,7 @@ namespace Units.Editing {
             _normalCursorButton.SetActive(true);
             _batchSelectButton.SetActive(false);
             _selectionObserver = _batchUnitSelectionDetector
-                                 .GetSelectedUnits().Subscribe(Observer.Create<IUnit[]>(units => {
+                                 .StartDetecting().Subscribe(Observer.Create<IUnit[]>(units => {
                                      _logger.Log(LoggedFeature.Units, "Selected {0} Units", units.Length);
                                      if (units.Length > 0) {
                                          HandleNormalCursorPressed();
