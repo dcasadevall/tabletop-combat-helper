@@ -79,7 +79,7 @@ namespace Units.Selection {
             return _radialMenu.Show(_menuScreenPositon);
         }
 
-        public UniTask Hide() {
+        private UniTask Hide() {
             if (_lockId != null) {
                 _inputLock.Unlock(_lockId.Value);
             }

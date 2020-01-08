@@ -9,7 +9,7 @@ using UnityEngine;
 using Zenject;
 
 namespace Units.Selection {
-    public class UnitSelectionDetector : IInitializable, IDisposable {
+    internal class UnitSelectionDetector : IInitializable, IDisposable {
         private readonly UnitMenuViewController _unitMenuViewController;
         private readonly IUnitMovementController _unitMovementController;
         private readonly IInputLock _inputLock;

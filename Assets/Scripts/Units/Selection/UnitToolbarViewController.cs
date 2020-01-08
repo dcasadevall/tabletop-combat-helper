@@ -1,22 +1,16 @@
 using System;
-using System.Threading;
-using CameraSystem;
 using Grid;
 using Grid.Positioning;
 using InputSystem;
 using Logging;
-using Math;
 using UI.SelectionBox;
 using UniRx;
-using UniRx.Async;
-using Units.Selection;
 using Units.Spawning.UI;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Zenject;
 using ILogger = Logging.ILogger;
 
-namespace Units.Editing {
+namespace Units.Selection {
     /// <summary>
     /// This MonoBehaviour controls collapsing / expanding the unit toolbar, which can be used to spawn / batch select
     /// units.
@@ -36,13 +30,13 @@ namespace Units.Editing {
         private IDisposable _selectionObserver;
 
         [Inject]
-        public void Construct(BatchUnitSelectionDetector batchUnitSelectionDetector,
-                              IUnitPickerViewController unitPickerViewController,
-                              IGridPositionCalculator gridPositionCalculator,
-                              IGridUnitManager gridUnitManager,
-                              ISelectionBox selectionBox,
-                              IInputLock inputLock,
-                              ILogger logger) {
+        internal void Construct(BatchUnitSelectionDetector batchUnitSelectionDetector,
+                                IUnitPickerViewController unitPickerViewController,
+                                IGridPositionCalculator gridPositionCalculator,
+                                IGridUnitManager gridUnitManager,
+                                ISelectionBox selectionBox,
+                                IInputLock inputLock,
+                                ILogger logger) {
             _batchUnitSelectionDetector = batchUnitSelectionDetector;
             _unitPickerViewController = unitPickerViewController;
             _inputLock = inputLock;

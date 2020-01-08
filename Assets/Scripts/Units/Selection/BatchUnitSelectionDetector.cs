@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 using ILogger = Logging.ILogger;
 
 namespace Units.Selection {
-    public class BatchUnitSelectionDetector {
+    internal class BatchUnitSelectionDetector {
         private readonly EventSystem _eventSystem;
         private readonly ISelectionBox _selectionBox;
         private readonly IGridPositionCalculator _gridPositionCalculator;

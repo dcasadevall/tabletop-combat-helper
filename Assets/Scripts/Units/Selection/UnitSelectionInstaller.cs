@@ -12,11 +12,14 @@ namespace Units.Selection {
         public override void InstallBindings() {
             Container.Bind(typeof(IInitializable), typeof(IDisposable)).To<UnitSelectionDetector>().AsSingle();
             
-            // UI
+            // UI: Normal and batch selection
             Container.Bind<UnitMenuViewController>()
                      .FromInstance(_unitMenuViewController)
                      .WhenInjectedInto<UnitSelectionDetector>()
                      .Lazy();
+            Container.Bind<BatchUnitSelectionDetector>()
+                     .AsSingle()
+                     .WhenInjectedInto<UnitToolbarViewController>();
         }
     }
 }
