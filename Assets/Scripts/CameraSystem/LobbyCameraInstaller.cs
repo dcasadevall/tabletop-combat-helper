@@ -8,6 +8,7 @@ namespace CameraSystem {
         private GameObject _cameraPrefab;
         
         public override void InstallBindings() {
+            Container.Bind<CameraInput>().AsSingle();
             Container.Bind(typeof(Camera), typeof(EventSystem)).FromComponentInNewPrefab(_cameraPrefab)
                      .AsSingle()
                      .NonLazy();

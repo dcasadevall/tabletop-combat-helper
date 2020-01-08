@@ -37,7 +37,7 @@ namespace Units.Selection {
             var observable = Observable.EveryUpdate()
                                        .Where(_ => Input.GetMouseButton(0))
                                        .Where(_ => !_eventSystem.IsPointerOverGameObject())
-                                       .Zip(_selectionBox.Show(new WorldSpaceMouseInputProvider(_camera)),
+                                       .Zip(_selectionBox.Show(),
                                             (frame, rect) => _gridPositionCalculator.GetTilesCoveredByRect(rect))
                                        .Select(selectedTiles => _gridUnitManager.GetUnitsAtTiles(selectedTiles))
                                        .Where(units => units.Length > 0);

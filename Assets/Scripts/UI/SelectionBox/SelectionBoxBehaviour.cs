@@ -19,10 +19,12 @@ namespace UI.SelectionBox {
         private SpriteRenderer _selectionSprite;
 
         private readonly List<IDisposable> _disposables = new List<IDisposable>();
+        private CameraInput _cameraInput;
         private ILogger _logger;
 
         [Inject]
-        public void Construct(ILogger logger) {
+        public void Construct(CameraInput cameraInput, ILogger logger) {
+            _cameraInput = cameraInput;
             _logger = logger;
         }
 
@@ -31,7 +33,7 @@ namespace UI.SelectionBox {
             Hide();
         }
 
-        public IObservable<Rect> Show(ISelectionInputProvider selectionInputProvider) {
+        public IObservable<Rect> Show() {
             if (_selectionSprite.drawMode != SpriteDrawMode.Sliced) {
                 var msg = "SelectionSprite drawMode must be sliced";
                 _logger.LogError(LoggedFeature.UI, msg);
@@ -41,12 +43,12 @@ namespace UI.SelectionBox {
             // Subscribe to mouse events
             var mouseDownStream = Observable.EveryUpdate()
                                             .Where(_ => Input.GetMouseButtonDown(0))
-                                            .Select(_ => selectionInputProvider.CurrentPosition);
+                                            .Select(_ => _cameraInput.MouseWorldPosition);
 
             // Return a drag stream for each time we receive a mouse down.
             // This builds an observable of observables which will only emit as we drag.
             mouseDownStream
-                .Select(_ => GetMouseDragStream(selectionInputProvider.CurrentPosition, selectionInputProvider))
+                .Select(_ => GetMouseDragStream(_cameraInput.MouseWorldPosition))
                 // Switch "Flattens" the observable and only emits the drag events.
                 .Switch()
                 .Subscribe(HandleMouseDrag)
@@ -55,20 +57,17 @@ namespace UI.SelectionBox {
             // Same deal but this time only emit mouse ups. This is the event that we want to return.
             // Note that we need to pass in the "StartPosition" to the mouse up stream method to
             // create a different observable based on the start position, which depends on mouseDownStream.
-            var mouseUpObservable = mouseDownStream
-                                    .Select(startPosition => GetMouseUpStream(startPosition, selectionInputProvider))
-                                    .Switch();
+            var mouseUpObservable = mouseDownStream.Select(GetMouseUpStream).Switch();
             mouseUpObservable.Subscribe(HandleMouseUp).AddTo(_disposables);
-            
+
             return mouseUpObservable;
         }
 
-        private IObservable<Rect> GetMouseDragStream(Vector3 startPosition,
-                                                     ISelectionInputProvider selectionInputProvider) {
+        private IObservable<Rect> GetMouseDragStream(Vector3 startPosition) {
             return Observable.EveryUpdate()
                              .Where(_ => Input.GetMouseButton(0))
-                             .Select(_ => selectionInputProvider.CurrentPosition)
-                             .TakeUntil(GetMouseUpStream(startPosition, selectionInputProvider))
+                             .Select(_ => _cameraInput.MouseWorldPosition)
+                             .TakeUntil(GetMouseUpStream(startPosition))
                              .Pairwise()
                              .Where(mousePos =>
                                         Vector2.Distance(mousePos.Current, mousePos.Previous) >=
@@ -76,12 +75,11 @@ namespace UI.SelectionBox {
                              .Select(selection => GetSelectionRect(startPosition, selection.Current));
         }
 
-        private IObservable<Rect> GetMouseUpStream(Vector3 startPosition,
-                                                   ISelectionInputProvider selectionInputProvider) {
+        private IObservable<Rect> GetMouseUpStream(Vector3 startPosition) {
             return Observable.EveryUpdate()
                              .Where(__ => Input.GetMouseButtonUp(0))
                              .Select(selectionEnd =>
-                                         GetSelectionRect(startPosition, selectionInputProvider.CurrentPosition));
+                                         GetSelectionRect(startPosition, _cameraInput.MouseWorldPosition));
         }
 
         public void Hide() {
@@ -99,7 +97,7 @@ namespace UI.SelectionBox {
             _selectionSprite.transform.position =
                 new Vector3(selectionRect.center.x, selectionRect.center.y, _selectionSprite.transform.position.z);
         }
-        
+
         private void HandleMouseUp(Rect selectionRect) {
             _selectionSprite.enabled = false;
         }

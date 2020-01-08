@@ -9,9 +9,8 @@ namespace UI.SelectionBox {
         /// Returns an observable with the World Space Rect that is contained within the selection box once the
         /// left mouse button up or stop tap event is received.
         /// </summary>
-        /// <param name="selectionInputProvider">The input provider used to determine the selection box area.</param>
         /// <returns>The Rect covered by the SelectionBox, in World Space</returns>
-        IObservable<Rect> Show(ISelectionInputProvider selectionInputProvider);
+        IObservable<Rect> Show();
         /// <summary>
         /// Stops detecting selections via mouse / taps.
         /// </summary>
