@@ -9,19 +9,16 @@ using ILogger = Logging.ILogger;
 
 namespace Units.Selection {
     public class BatchUnitSelectionDetector {
-        private readonly Camera _camera;
         private readonly EventSystem _eventSystem;
         private readonly ISelectionBox _selectionBox;
         private readonly IGridPositionCalculator _gridPositionCalculator;
         private readonly IGridUnitManager _gridUnitManager;
         private readonly ILogger _logger;
 
-        public BatchUnitSelectionDetector(Camera camera,
-                                          EventSystem eventSystem,
+        public BatchUnitSelectionDetector(EventSystem eventSystem,
                                           ISelectionBox selectionBox,
                                           IGridPositionCalculator gridPositionCalculator,
                                           IGridUnitManager gridUnitManager) {
-            _camera = camera;
             _eventSystem = eventSystem;
             _selectionBox = selectionBox;
             _gridPositionCalculator = gridPositionCalculator;
@@ -44,6 +41,11 @@ namespace Units.Selection {
             return new SelectionObservable(observable, _selectionBox);
         }
 
+        /// <summary>
+        /// Class used to encapsulate the lifecycle of our <see cref="ISelectionBox"/> when used inside an observable.
+        /// This allows users of <see cref="BatchUnitSelectionDetector"/> to only care about disposing the
+        /// returned observable.
+        /// </summary>
         private class SelectionObservable : IObservable<IUnit[]> {
             private readonly IObservable<IUnit[]> _observable;
             private readonly ISelectionBox _selectionBox;
@@ -58,6 +60,9 @@ namespace Units.Selection {
             }
         }
 
+        /// <summary>
+        /// Observer returned by the <see cref="SelectionObservable"/> when one subscribes to it.
+        /// </summary>
         private class SelectionObserver : IDisposable {
             private readonly IDisposable _observer;
             private readonly ISelectionBox _selectionBox;

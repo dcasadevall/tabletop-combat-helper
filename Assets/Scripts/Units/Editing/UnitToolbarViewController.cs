@@ -108,7 +108,7 @@ namespace Units.Editing {
             Show();
         }
 
-        private async void HandleBatchSelectPressed() {
+        private void HandleBatchSelectPressed() {
             _lockId = _inputLock.Lock();
             if (_lockId == null) {
                 _logger.LogError(LoggedFeature.Units, "Failed to acquire input lock.");
