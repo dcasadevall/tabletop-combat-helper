@@ -24,6 +24,7 @@ namespace Units.Selection {
 
         private IUnitPickerViewController _unitPickerViewController;
         private BatchUnitSelectionDetector _batchUnitSelectionDetector;
+        private BatchUnitMenuViewController _batchUnitMenuViewController;
         private IInputLock _inputLock;
         private ILogger _logger;
         private Guid? _lockId;
@@ -31,13 +32,12 @@ namespace Units.Selection {
 
         [Inject]
         internal void Construct(BatchUnitSelectionDetector batchUnitSelectionDetector,
+                                BatchUnitMenuViewController batchUnitMenuViewController,
                                 IUnitPickerViewController unitPickerViewController,
-                                IGridPositionCalculator gridPositionCalculator,
-                                IGridUnitManager gridUnitManager,
-                                ISelectionBox selectionBox,
                                 IInputLock inputLock,
                                 ILogger logger) {
             _batchUnitSelectionDetector = batchUnitSelectionDetector;
+            _batchUnitMenuViewController = batchUnitMenuViewController;
             _unitPickerViewController = unitPickerViewController;
             _inputLock = inputLock;
             _logger = logger;
@@ -116,13 +116,18 @@ namespace Units.Selection {
 
             _normalCursorButton.SetActive(true);
             _batchSelectButton.SetActive(false);
-            _selectionObserver = _batchUnitSelectionDetector
-                                 .StartDetecting().Subscribe(Observer.Create<IUnit[]>(units => {
-                                     _logger.Log(LoggedFeature.Units, "Selected {0} Units", units.Length);
-                                     if (units.Length > 0) {
-                                         HandleNormalCursorPressed();
-                                     }
-                                 }));
+            _selectionObserver =
+                _batchUnitSelectionDetector.GetSelectedUnitsObservable().Subscribe(HandleUnitsSelected);
+        }
+
+        private async void HandleUnitsSelected(IUnit[] units) {
+            _logger.Log(LoggedFeature.Units, "Selected {0} Units", units.Length);
+            
+            gameObject.SetActive(false);
+            await _batchUnitMenuViewController.ShowAndWaitForAction(units);
+            gameObject.SetActive(true);
+            
+            HandleNormalCursorPressed();
         }
 
         public void HandleNormalCursorPressed() {

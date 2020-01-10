@@ -27,10 +27,10 @@ namespace Units.Selection {
 
         /// <summary>
         /// Returns an observable which receives a stream of units selected via <see cref="ISelectionBox"/>.
-        /// is called. Will continue to receive selected units until <see cref="StopDetecting"/> is called.
+        /// Will only receive an event if more than 0 units are selected.
         /// </summary>
         /// <returns></returns>
-        public IObservable<IUnit[]> StartDetecting() {
+        public IObservable<IUnit[]> GetSelectedUnitsObservable() {
             var observable = Observable.EveryUpdate()
                                        .Where(_ => Input.GetMouseButton(0))
                                        .Where(_ => !_eventSystem.IsPointerOverGameObject())

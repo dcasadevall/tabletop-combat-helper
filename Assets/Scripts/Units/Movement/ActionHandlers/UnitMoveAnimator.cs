@@ -3,7 +3,7 @@ using Grid;
 using UniRx;
 using Units.Actions;
 
-namespace Units.Movement.Handlers {
+namespace Units.Movement.ActionHandlers {
     /// <summary>
     /// Action handler which shows the animation of a unit moving through a specific path.
     /// Action is confirmed once the unit reaches its destination.

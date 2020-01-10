@@ -4,7 +4,7 @@ using UniRx;
 using Units.Actions;
 using UnityEngine;
 
-namespace Units.Movement.Handlers {
+namespace Units.Movement.ActionHandlers {
     /// <summary>
     /// Action handler used to drag a unit around the grid, without movement restrictions.
     /// Action is confirmed when drag stops.
