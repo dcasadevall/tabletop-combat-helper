@@ -61,6 +61,7 @@ namespace Units.Selection {
 
             // Drag
             // TODO: Detect initial emission with the proper unit, then propagate than.
+            // we can do stream.Select(_ => drag.TakeUntil(mouseUp)).Switch()
             // Right now, if we drag away from the tile, we don't know what unit we were dragging.
             // Also, if we start dragging outside of the unit, then we can drag that unit as long as we hold the mouse
             var mouseDragStream = Observable.Timer(TimeSpan.FromMilliseconds(300))

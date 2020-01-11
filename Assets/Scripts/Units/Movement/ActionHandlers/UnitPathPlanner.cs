@@ -8,7 +8,7 @@ namespace Units.Movement.ActionHandlers {
     /// Action is confirmed when the user clicks the "confirm" button.
     /// Action is canceled when the user clicks the "cancel" button.
     /// </summary>
-    public class UnitPathPlanner : IUnitActionHandler {
+    public class UnitPathPlanner : ISingleUnitActionHandler {
         public UnitAction ActionType {
             get {
                 return UnitAction.ChooseMovePath;

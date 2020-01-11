@@ -9,10 +9,12 @@ namespace Units.Movement {
             Container.Bind<IUnitMovementController>().To<UnitMovementController>().AsSingle();
             
             // Action Handlers
-            Container.Bind<IUnitActionHandler>().To<UnitDestinationSelector>().AsSingle();
-            Container.Bind<IUnitActionHandler>().To<UnitDragAndDropHandler>().AsSingle();
-            Container.Bind<IUnitActionHandler>().To<UnitPathPlanner>().AsSingle();
-            Container.Bind<IUnitActionHandler>().To<UnitMoveAnimator>().AsSingle();
+            Container.Bind<ISingleUnitActionHandler>().To<UnitDestinationSelector>().AsSingle();
+            Container.Bind<ISingleUnitActionHandler>().To<UnitPathPlanner>().AsSingle();
+            Container.Bind<ISingleUnitActionHandler>().To<UnitMoveAnimator>().AsSingle();
+            Container.Bind(typeof(ISingleUnitActionHandler), typeof(IBatchedUnitActionHandler))
+                     .To<UnitDragAndDropHandler>()
+                     .AsSingle();
         }
     }
 }

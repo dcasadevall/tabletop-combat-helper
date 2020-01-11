@@ -20,22 +20,5 @@ namespace Units.Actions {
         /// An action will be canceled if ANY of the <see cref="IUnitActionHandler.CancelActionObservable"/>s is fired.
         /// </summary>
         IObservable<UniRx.Unit> CancelActionObservable { get; }
-        /// <summary>
-        /// Called before the action is executed, and before any <see cref="Tick"/> is processed.
-        /// </summary>
-        /// <param name="unit"></param>
-        void HandleActionPlanned(IUnit unit);
-        /// <summary>
-        /// Called when the action has been confirmed (due to one of the <see cref="IUnitActionHandler.ConfirmActionObservable"/>
-        /// being fired).
-        /// </summary>
-        /// <param name="unit"></param>
-        void HandleActionConfirmed(IUnit unit);
-        /// <summary>
-        /// Called when the action has been canceled (due to one of the <see cref="IUnitActionHandler.CancelActionObservable"/>
-        /// being fired).
-        /// </summary>
-        /// <param name="unit"></param>
-        void HandleActionCanceled(IUnit unit);
     }
 }

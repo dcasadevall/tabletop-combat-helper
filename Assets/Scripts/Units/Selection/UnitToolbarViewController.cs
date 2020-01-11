@@ -123,10 +123,16 @@ namespace Units.Selection {
         private async void HandleUnitsSelected(IUnit[] units) {
             _logger.Log(LoggedFeature.Units, "Selected {0} Units", units.Length);
             
+            // Stop observing for selection
+            _selectionObserver?.Dispose();
+            _selectionObserver = null;
             gameObject.SetActive(false);
+            
+            // Start Batch Unit UI / Input handling
             await _batchUnitMenuViewController.ShowAndWaitForAction(units);
             gameObject.SetActive(true);
             
+            // Return to normal cursor mode.
             HandleNormalCursorPressed();
         }
 

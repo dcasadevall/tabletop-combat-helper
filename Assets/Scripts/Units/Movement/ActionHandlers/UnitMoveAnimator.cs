@@ -9,7 +9,7 @@ namespace Units.Movement.ActionHandlers {
     /// Action is confirmed once the unit reaches its destination.
     /// Action is never canceled.
     /// </summary>
-    public class UnitMoveAnimator : IUnitActionHandler {
+    public class UnitMoveAnimator : ISingleUnitActionHandler {
         private readonly IGridUnitManager _gridUnitManager;
         private readonly IGridInputManager _gridInputManager;
 
