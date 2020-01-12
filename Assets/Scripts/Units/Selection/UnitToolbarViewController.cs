@@ -84,6 +84,9 @@ namespace Units.Selection {
                 return;
             }
 
+            // Note that this works only because we parent our objects under the scene context.
+            // TODO: Instead of injecting unitSelection with MapSectionScene, all UI should be "encounter" UI
+            // Otherwise, Show / Hide will show ui from hidden map sections unless we parent them under the scene ctx.
             Hide();
         }
 

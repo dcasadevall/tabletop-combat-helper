@@ -50,6 +50,7 @@ MonoBehaviour:
   - {fileID: 2001596227, guid: c6a9db96f3e8247e6b7bc24f2e060fc8, type: 3}
   - {fileID: 4144602517964906790, guid: 5437112e9f5bb4331a148d2d857e52a2, type: 3}
   - {fileID: 2616146810924423047, guid: 47bd38f4f7d1c4513a6b8e0b1b053cc1, type: 3}
+  - {fileID: 268898890915226259, guid: 9f6b7ebc3bf99491aa11ee21a3aa01af, type: 3}
   - {fileID: 5620275601756309865, guid: 99188830058a0481d812cbd3f3f3cd0f, type: 3}
   _autoRun: 1
   OnPreInstall:
@@ -72,7 +73,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  _parentNewObjectsUnderSceneContext: 0
+  _parentNewObjectsUnderSceneContext: 1
   _contractNames:
   - Map
   _parentContractNames:
