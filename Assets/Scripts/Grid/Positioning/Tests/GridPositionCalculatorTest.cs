@@ -98,7 +98,7 @@ namespace Grid.Positioning.Tests {
             Assert.AreEqual(IntVector2.Of(expectedTileX, expectedTileY), tileClosestToCenter);  
         }
 
-        private class ValidTestCases : IEnumerable {
+        private class GetTilesAtDistanceValidCases : IEnumerable {
             public IEnumerator GetEnumerator() {
                 yield return new object[] {
                     1,
@@ -133,7 +133,7 @@ namespace Grid.Positioning.Tests {
             }
         }
 
-        [TestCaseSource(typeof(ValidTestCases))]
+        [TestCaseSource(typeof(GetTilesAtDistanceValidCases))]
         public void TestGivenDistance_GetTilesAtDistance_ReturnsElementsWithinDistance(
             int distance, int[,] resultMatrix) {
             _grid.NumTilesX.Returns(100U);
@@ -165,6 +165,118 @@ namespace Grid.Positioning.Tests {
             IntVector2 centerCoords = _positionCalculator.GetTileClosestToCenter();
             var result = _positionCalculator.GetTilesAtDistance(centerCoords, distance);
             Assert.IsEmpty(result);
+        }
+        
+        private class GetTilesCoveredByRectAllTilesContainedCases : IEnumerable {
+            public IEnumerator GetEnumerator() {
+                yield return new object[] {
+                    Rect.MinMaxRect(1.0f, 1.0f, 3.9f, 3.9f),
+                    new[,] {
+                        {0, 0, 0, 0, 0},
+                        {0, 1, 1, 1, 0},
+                        {0, 1, 1, 1, 0},
+                        {0, 1, 1, 1, 0},
+                        {0, 0, 0, 0, 0}
+                    }
+                };
+                yield return new object[] {
+                    Rect.MinMaxRect(0.0f, 0.0f, 0.9f, 0.9f),
+                    new[,] {
+                        {0, 0, 0},
+                        {0, 0, 0},
+                        {1, 0, 0}
+                    }
+                };
+                // 1.0f includes the next tile
+                yield return new object[] {
+                    Rect.MinMaxRect(0.0f, 0.0f, 1.0f, 1.0f),
+                    new[,] {
+                        {0, 0, 0},
+                        {1, 1, 0},
+                        {1, 1, 0}
+                    }
+                };
+                yield return new object[] {
+                    Rect.MinMaxRect(0.0f, 0.0f, 2.0f, 2.0f),
+                    new[,] {
+                        {1, 1, 1},
+                        {1, 1, 1},
+                        {1, 1, 1}
+                    }
+                };
+            }
+        }
+        
+        // Note that these cases only cover one side (bottom left) because the grid is bigger than
+        // the represented cases.
+        private class GetTilesCoveredByRectSomeOutsideCases : IEnumerable {
+            public IEnumerator GetEnumerator() {
+                yield return new object[] {
+                    Rect.MinMaxRect(-1.0f, -1.0f, 5.0f, 5.0f),
+                    new[,] {
+                        {1, 1, 1, 1, 1},
+                        {1, 1, 1, 1, 1},
+                        {1, 1, 1, 1, 1},
+                        {1, 1, 1, 1, 1},
+                        {1, 1, 1, 1, 1}
+                    }
+                };
+                yield return new object[] {
+                    Rect.MinMaxRect(-5.0f, 0.0f, 0.9f, 0.9f),
+                    new[,] {
+                        {0, 0, 0},
+                        {0, 0, 0},
+                        {1, 0, 0}
+                    }
+                };
+                yield return new object[] {
+                    Rect.MinMaxRect(1.1f, -20.0f, 1.5f, 1.5f),
+                    new[,] {
+                        {0, 0, 0},
+                        {0, 1, 0},
+                        {0, 1, 0}
+                    }
+                };
+            }
+        }
+
+        [TestCaseSource(typeof(GetTilesCoveredByRectAllTilesContainedCases))]
+        public void TestGivenRectInsideGrid_GetTilesCoveredByRect_ReturnsAllTilesContained(Rect rect, int[,] resultMatrix) {
+            TestGetTilesCoveredByRect(rect, resultMatrix);
+        }
+        
+        [TestCaseSource(typeof(GetTilesCoveredByRectSomeOutsideCases))]
+        public void TestGivenRectOutsideGrid_GetTilesCoveredByRect_ReturnsIntersection(Rect rect, int[,] resultMatrix) {
+            TestGetTilesCoveredByRect(rect, resultMatrix);
+        }
+
+        private void TestGetTilesCoveredByRect(Rect rect, int[,] resultMatrix) {
+            _grid.NumTilesX.Returns(100U);
+            _grid.NumTilesY.Returns(100U);
+
+            var result = _positionCalculator.GetTilesCoveredByRect(rect);
+            
+            for (int y = resultMatrix.GetLength(0) - 1; y >= 0; y--) {
+                for (int x = 0; x < resultMatrix.GetLength(1); x++) {
+                    int inResult = resultMatrix[y, x];
+                    var tileCoord = IntVector2.Of(x, resultMatrix.GetLength(0) - 1 - y);
+                    if (inResult == 1) {
+                        Assert.IsTrue(result.Contains(tileCoord));
+                    } else {
+                        Assert.IsFalse(result.Contains(tileCoord));
+                    }
+                }
+            }
+        }
+        
+        [Test]
+        public void TestGivenEmptyRect_GetTilesCoveredByRect_ReturnsZeroTile() {
+            _grid.NumTilesX.Returns(100U);
+            _grid.NumTilesY.Returns(100U);
+            
+            var result = _positionCalculator.GetTilesCoveredByRect(Rect.zero);
+            Assert.AreEqual(1, result.Length);
+            Assert.AreEqual(IntVector2.Zero, result[0]);
         }
     }
 }

@@ -1,12 +1,16 @@
 using System;
+using Grid;
+using Grid.Positioning;
 using InputSystem;
 using Logging;
+using UI.SelectionBox;
+using UniRx;
 using Units.Spawning.UI;
 using UnityEngine;
 using Zenject;
 using ILogger = Logging.ILogger;
 
-namespace Units.Editing {
+namespace Units.Selection {
     /// <summary>
     /// This MonoBehaviour controls collapsing / expanding the unit toolbar, which can be used to spawn / batch select
     /// units.
@@ -19,14 +23,21 @@ namespace Units.Editing {
         private GameObject _normalCursorButton;
 
         private IUnitPickerViewController _unitPickerViewController;
+        private BatchUnitSelectionDetector _batchUnitSelectionDetector;
+        private BatchUnitMenuViewController _batchUnitMenuViewController;
         private IInputLock _inputLock;
         private ILogger _logger;
         private Guid? _lockId;
+        private IDisposable _selectionObserver;
 
         [Inject]
-        public void Construct(IUnitPickerViewController unitPickerViewController, 
-                              IInputLock inputLock,
-                              ILogger logger) {
+        internal void Construct(BatchUnitSelectionDetector batchUnitSelectionDetector,
+                                BatchUnitMenuViewController batchUnitMenuViewController,
+                                IUnitPickerViewController unitPickerViewController,
+                                IInputLock inputLock,
+                                ILogger logger) {
+            _batchUnitSelectionDetector = batchUnitSelectionDetector;
+            _batchUnitMenuViewController = batchUnitMenuViewController;
             _unitPickerViewController = unitPickerViewController;
             _inputLock = inputLock;
             _logger = logger;
@@ -37,7 +48,7 @@ namespace Units.Editing {
             _inputLock.InputLockReleased += HandleInputLockReleased;
             Show();
         }
-        
+
         // TODO: This is a pretty janky way of handling input.
         // Maybe create a separate class to handle this?
         // Or disable these shortcuts altogether...
@@ -45,7 +56,7 @@ namespace Units.Editing {
             if (!gameObject.activeInHierarchy) {
                 return;
             }
-            
+
             if (Input.GetKeyUp(KeyCode.U)) {
                 _unitPickerViewController.Show();
             }
@@ -62,6 +73,9 @@ namespace Units.Editing {
         }
 
         private void Hide() {
+            _selectionObserver?.Dispose();
+            _selectionObserver = null;
+
             gameObject.SetActive(false);
         }
 
@@ -69,7 +83,10 @@ namespace Units.Editing {
             if (_lockId != null) {
                 return;
             }
-            
+
+            // Note that this works only because we parent our objects under the scene context.
+            // TODO: Instead of injecting unitSelection with MapSectionScene, all UI should be "encounter" UI
+            // Otherwise, Show / Hide will show ui from hidden map sections unless we parent them under the scene ctx.
             Hide();
         }
 
@@ -88,12 +105,13 @@ namespace Units.Editing {
             Show();
         }
 
-        public void HandleBatchSelectPressed() {
+        private void HandleBatchSelectPressed() {
             _lockId = _inputLock.Lock();
             if (_lockId == null) {
                 _logger.LogError(LoggedFeature.Units, "Failed to acquire input lock.");
                 return;
             }
+
             // Locking causes this menu to hide, and the way events are fired, we get an event before the ownerId
             // is assigned.
             // TODO: Input.Lock() to return owner so we can verify we own the lock.
@@ -101,6 +119,24 @@ namespace Units.Editing {
 
             _normalCursorButton.SetActive(true);
             _batchSelectButton.SetActive(false);
+            _selectionObserver =
+                _batchUnitSelectionDetector.GetSelectedUnitsObservable().Subscribe(HandleUnitsSelected);
+        }
+
+        private async void HandleUnitsSelected(IUnit[] units) {
+            _logger.Log(LoggedFeature.Units, "Selected {0} Units", units.Length);
+            
+            // Stop observing for selection
+            _selectionObserver?.Dispose();
+            _selectionObserver = null;
+            gameObject.SetActive(false);
+            
+            // Start Batch Unit UI / Input handling
+            await _batchUnitMenuViewController.ShowAndWaitForAction(units);
+            gameObject.SetActive(true);
+            
+            // Return to normal cursor mode.
+            HandleNormalCursorPressed();
         }
 
         public void HandleNormalCursorPressed() {
@@ -110,6 +146,8 @@ namespace Units.Editing {
 
             _normalCursorButton.SetActive(false);
             _batchSelectButton.SetActive(true);
+            _selectionObserver?.Dispose();
+            _selectionObserver = null;
         }
     }
 }

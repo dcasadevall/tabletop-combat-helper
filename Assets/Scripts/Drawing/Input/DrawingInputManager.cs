@@ -64,6 +64,8 @@ namespace Drawing.Input {
         }
 
         public void Tick() {
+//            _logger.Log(LoggedFeature.Assets, "{0}", _camera.ScreenToViewportPoint(UnityEngine.Input.mousePosition));
+//            
             if (!_isEnabled) {
                 return;
             }

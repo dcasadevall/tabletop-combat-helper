@@ -51,5 +51,13 @@ namespace Grid.Positioning {
         /// <param name="distance"></param>
         /// <returns></returns>
         IntVector2[] GetTilesAtDistance(IntVector2 coords, int distance);
+
+        /// <summary>
+        /// Returns the tiles contained within the given rectangle, in world space coordinates.
+        /// It returns any tiles partially covered, or fully contained within the given rect.
+        /// </summary>
+        /// <param name="worldSpaceRect"></param>
+        /// <returns></returns>
+        IntVector2[] GetTilesCoveredByRect(Rect worldSpaceRect);
     }
 }

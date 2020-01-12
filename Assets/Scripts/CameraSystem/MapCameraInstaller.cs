@@ -11,6 +11,8 @@ namespace CameraSystem {
             Camera camera = Container.Resolve<Camera>();
             Container.Bind<ICameraController>().To<PrototypeCameraController>().FromNewComponentOn(camera.gameObject)
                      .AsSingle();
+            
+            Container.Bind<CameraInput>().AsSingle();
         }
     }
 }

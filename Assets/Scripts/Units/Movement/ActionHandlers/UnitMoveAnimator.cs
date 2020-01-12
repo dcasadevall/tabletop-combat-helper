@@ -3,13 +3,13 @@ using Grid;
 using UniRx;
 using Units.Actions;
 
-namespace Units.Movement.Handlers {
+namespace Units.Movement.ActionHandlers {
     /// <summary>
     /// Action handler which shows the animation of a unit moving through a specific path.
     /// Action is confirmed once the unit reaches its destination.
     /// Action is never canceled.
     /// </summary>
-    public class UnitMoveAnimator : IUnitActionHandler {
+    public class UnitMoveAnimator : ISingleUnitActionHandler {
         private readonly IGridUnitManager _gridUnitManager;
         private readonly IGridInputManager _gridInputManager;
 

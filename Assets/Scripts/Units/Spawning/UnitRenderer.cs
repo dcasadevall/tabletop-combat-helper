@@ -12,8 +12,11 @@ namespace Units.Spawning {
         private SpriteRenderer _spriteRenderer;
         [SerializeField]
         private SpriteRenderer _avatarIconRenderer;
+        [SerializeField]
+        private Animator _animator;
 #pragma warning restore 649
 
+        #region IPoolable
         // Something is really messed up and the pool inactive items are enabled by default...
         // so we need to do this.
         public void OnDespawned() {
@@ -22,6 +25,11 @@ namespace Units.Spawning {
 
         public void OnSpawned() {
             gameObject.SetActive(true);
+        }
+        #endregion
+
+        public void SetSelected(bool selected) {
+            _animator.SetBool("Selected", selected);
         }
 
         internal void SetUnit(IUnit unit) {

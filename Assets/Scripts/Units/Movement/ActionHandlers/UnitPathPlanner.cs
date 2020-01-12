@@ -2,13 +2,13 @@ using System;
 using UniRx;
 using Units.Actions;
 
-namespace Units.Movement.Handlers {
+namespace Units.Movement.ActionHandlers {
     /// <summary>
     /// Action handler that shows UI previsualizing the path a unit will take upon confirming this action.
     /// Action is confirmed when the user clicks the "confirm" button.
     /// Action is canceled when the user clicks the "cancel" button.
     /// </summary>
-    public class UnitPathPlanner : IUnitActionHandler {
+    public class UnitPathPlanner : ISingleUnitActionHandler {
         public UnitAction ActionType {
             get {
                 return UnitAction.ChooseMovePath;

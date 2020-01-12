@@ -10,13 +10,13 @@ using Units.Actions;
 using UnityEngine;
 using ILogger = Logging.ILogger;
 
-namespace Units.Movement.Handlers {
+namespace Units.Movement.ActionHandlers {
     /// <summary>
     /// This action handler shows all possible destinations for a unit to move to.
     /// Action is confirmed when the user taps or clicks on a valid destination.
     /// Action is canceled when the user right clicks anywhere, or clicks / taps outside of a valid destination.
     /// </summary>
-    public class UnitDestinationSelector : IUnitActionHandler {
+    public class UnitDestinationSelector : ISingleUnitActionHandler {
         private readonly IGridUnitManager _gridUnitManager;
         private readonly IGridInputManager _gridInputManager;
         private readonly IGridPositionCalculator _gridPositionCalculator;

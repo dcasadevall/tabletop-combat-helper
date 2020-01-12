@@ -1,4 +1,5 @@
 using UI.RadialMenu;
+using UI.SelectionBox;
 using UnityEngine;
 using Zenject;
 
@@ -9,10 +10,17 @@ namespace UI {
     public class UIInstaller : MonoInstaller {
         [SerializeField]
         private ModalViewController _modalViewControllerPrefab;
+        
+        [SerializeField]
+        private SelectionBoxBehaviour _selectionBoxBehaviour;
 
         public override void InstallBindings() {
             Container.Bind<IModalViewController>().To<ModalViewController>()
                      .FromComponentsInNewPrefab(_modalViewControllerPrefab).AsSingle()
+                     .Lazy();
+            
+            Container.Bind<ISelectionBox>().To<SelectionBoxBehaviour>()
+                     .FromComponentsInNewPrefab(_selectionBoxBehaviour).AsSingle()
                      .Lazy();
         }
     }

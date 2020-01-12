@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DefaultGroup: 04d1aebb85df345a79b8815aba7b04a2
   m_BuildRemoteCatalog: 0
-  m_UniqueBundleIds: 0
   m_RemoteCatalogBuildPath:
     m_Id: 575c0aed354ec46b397bef51b8b3d7d5
   m_RemoteCatalogLoadPath:
@@ -116,6 +115,7 @@ MonoBehaviour:
     m_AssemblyName: 
     m_ClassName: 
   m_ActivePlayerDataBuilderIndex: 3
+  m_ActivePlayModeDataBuilderIndex: 0
   m_DataBuilders:
   - {fileID: 11400000, guid: 6f94f1054ccc04eb09af1d83d1e9a24d, type: 2}
   - {fileID: 11400000, guid: fcf834a158f334034ad8da0c279ababa, type: 2}
@@ -130,7 +130,7 @@ MonoBehaviour:
         m_SerializedData:
         - m_AssemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           m_ClassName: System.Int32
-          m_Data: 60245
+          m_Data: 59706
           m_Key: HostingServicePort
         - m_AssemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           m_ClassName: System.String

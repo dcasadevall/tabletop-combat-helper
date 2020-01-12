@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+using System.Linq;
 using Math;
 using Units;
 using Units.Serialized;
@@ -61,5 +63,11 @@ namespace Grid {
         /// <param name="unit"></param>
         /// <returns></returns>
         IntVector2? GetUnitCoords(IUnit unit);
+    }
+
+    public static class IGridUnitManagerCollectionExtensions {
+        public static IUnit[] GetUnitsAtTiles(this IGridUnitManager gridUnitManager, IEnumerable<IntVector2> tiles) {
+            return tiles.SelectMany(gridUnitManager.GetUnitsAtTile).ToArray();
+        }
     }
 }

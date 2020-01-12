@@ -45,3 +45,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _modalViewControllerPrefab: {fileID: 6098410116664747637, guid: e30b2beb3f1b94e16a62118644ba388a,
     type: 3}
+  _selectionBoxBehaviour: {fileID: 3041167242460141035, guid: d49376ccf85944b938913df69837ed43,
+    type: 3}

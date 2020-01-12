@@ -87,7 +87,9 @@ namespace Math.Tests {
             try {
                 IntVector2 result = IntVector2.One / IntVector2.Zero;
                 Assert.Fail("Should throw exception");
+#pragma warning disable 168
             } catch (Exception e) {
+#pragma warning restore 168
                 // ignored
             }
         }

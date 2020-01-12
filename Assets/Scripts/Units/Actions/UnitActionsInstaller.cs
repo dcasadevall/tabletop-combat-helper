@@ -1,4 +1,5 @@
 using Units.Movement;
+using Units.Selection;
 using Zenject;
 
 namespace Units.Actions {
@@ -19,6 +20,10 @@ namespace Units.Actions {
                      .To<UnitActionBroadcaster>()
                      .FromResolve()
                      .WhenInjectedInto<UnitMovementController>();
+            container.Bind<IUnitActionPlanner>()
+                     .To<UnitActionBroadcaster>()
+                     .FromResolve()
+                     .WhenInjectedInto<BatchUnitMenuViewController>();
         }
     }
 }
