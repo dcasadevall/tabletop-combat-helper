@@ -1,5 +1,7 @@
 ﻿using System;
+using CommandSystem;
 using Grid;
+using Grid.Commands;
 using Grid.Positioning;
 using InputSystem;
 using Logging;
@@ -18,30 +20,40 @@ namespace Units.Selection {
     /// </summary>
     public class UnitMenuViewController : MonoBehaviour {
         [SerializeField]
+        private Button _removeUnitButton;
+
+        [SerializeField]
+        private Button _rotateUnitButton;
+
+        [SerializeField]
         private Button _moveUnitButton;
 
         [SerializeField]
         private Button _cancelButton;
 
         private Camera _camera;
-        private Guid? _lockId;
-        private IUnit _unit;
+        private ICommandQueue _commandQueue;
         private IInputLock _inputLock;
         private IGridUnitManager _gridUnitManager;
         private IUnitMovementController _unitMovementController;
         private IGridPositionCalculator _gridPositionCalculator;
         private IRadialMenu _radialMenu;
         private ILogger _logger;
+        
+        private Guid? _lockId;
+        private IUnit _unit;
         private Vector3 _menuScreenPositon;
 
         [Inject]
         public void Construct(Camera worldCamera,
+                              ICommandQueue commandQueue,
                               IUnitMovementController unitMovementController,
                               IGridPositionCalculator gridPositionCalculator,
                               IGridUnitManager gridUnitManager,
                               IInputLock inputLock,
                               ILogger logger) {
             _camera = worldCamera;
+            _commandQueue = commandQueue;
             _unitMovementController = unitMovementController;
             _gridPositionCalculator = gridPositionCalculator;
             _gridUnitManager = gridUnitManager;
@@ -71,6 +83,8 @@ namespace Units.Selection {
             // Set selected unit and events
             _unit = unit;
             _moveUnitButton.onClick.AddListener(HandleMoveUnitButtonPressed);
+            _removeUnitButton.onClick.AddListener(HandleRemoveUnitButtonPressed);
+            _rotateUnitButton.onClick.AddListener(HandleRotateUnitPressed);
             _cancelButton.onClick.AddListener(HandleCancelButtonPressed);
 
             // Show radial menu
@@ -85,6 +99,8 @@ namespace Units.Selection {
             }
 
             _moveUnitButton.onClick.RemoveListener(HandleMoveUnitButtonPressed);
+            _removeUnitButton.onClick.RemoveListener(HandleRemoveUnitButtonPressed);
+            _rotateUnitButton.onClick.RemoveListener(HandleRotateUnitPressed);
             _cancelButton.onClick.RemoveListener(HandleCancelButtonPressed);
             return _radialMenu.Hide();
         }
@@ -94,6 +110,15 @@ namespace Units.Selection {
             // Hide the top menu. This releases input lock.
             Hide();
             _unitMovementController.PlanUnitMovement(_unit);
+        }
+
+        private void HandleRotateUnitPressed() {
+            _commandQueue.Enqueue<RotateUnitCommand, RotateUnitData>(new RotateUnitData(_unit.UnitId, 90),
+                                                                     CommandSource.Game);
+        }
+        
+        private void HandleRemoveUnitButtonPressed() {
+            Hide();
         }
         
         private void HandleCancelButtonPressed() {
