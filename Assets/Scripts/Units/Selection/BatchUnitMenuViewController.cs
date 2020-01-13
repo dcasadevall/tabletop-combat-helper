@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
+using CommandSystem;
 using Grid;
+using Grid.Commands;
 using Grid.Positioning;
 using Logging;
 using UI.RadialMenu;
@@ -16,12 +18,16 @@ namespace Units.Selection {
     public class BatchUnitMenuViewController : MonoBehaviour {
         [SerializeField]
         private Button _removeUnitButton;
+        
+        [SerializeField]
+        private Button _rotateUnitButton;
 
         [SerializeField]
         private Button _cancelSelectionButton;
 
         private Camera _camera;
         private UnitSelectionHighlighter _unitSelectionHighlighter;
+        private ICommandQueue _commandQueue;
         private IUnitActionPlanner _unitActionPlanner;
         private IGridUnitManager _gridUnitManager;
         private IGridInputManager _gridInputManager;
@@ -29,19 +35,21 @@ namespace Units.Selection {
         private IGridPositionCalculator _gridPositionCalculator;
         private ILogger _logger;
 
-        // We need this boolean flag because we may still hide the menu while awaiting on drag / drop action.
-        private bool _isActive;
+        // We keep track of the selected units so we can act on them when buttons are pressed.
+        private IUnit[] _selectedUnits;
         private IDisposable _observer;
 
         [Inject]
         public void Construct(Camera camera,
                               UnitSelectionHighlighter unitSelectionHighlighter,
+                              ICommandQueue commandQueue,
                               IUnitActionPlanner unitActionPlanner,
                               IGridUnitManager gridUnitManager,
                               IGridInputManager gridInputManager,
                               IGridPositionCalculator gridPositionCalculator,
                               ILogger logger) {
             _camera = camera;
+            _commandQueue = commandQueue;
             _unitSelectionHighlighter = unitSelectionHighlighter;
             _unitActionPlanner = unitActionPlanner;
             _gridUnitManager = gridUnitManager;
@@ -68,12 +76,13 @@ namespace Units.Selection {
                 throw new Exception(msg);
             }
 
-            _isActive = true;
+            _selectedUnits = units;
             var worldPosition = _gridPositionCalculator.GetTileCenterWorldPosition(unitCoords.Value);
             _radialMenu.Show(_camera.WorldToScreenPoint(worldPosition));
-            
+
             // Add listeners
             _removeUnitButton.onClick.AddListener(HandleRemoveUnitPressed);
+            _rotateUnitButton.onClick.AddListener(HandleRotateUnitPressed);
             _cancelSelectionButton.onClick.AddListener(HandleCancelSelectionPressed);
 
             // Highlights
@@ -92,31 +101,39 @@ namespace Units.Selection {
                 HandleUnitMouseDown(units);
             });
 
-            await UniTask.WaitUntil(() => !_isActive);
+            await UniTask.WaitUntil(() => _selectedUnits == null);
         }
 
         private async void HandleUnitMouseDown(IUnit[] units) {
             Hide();
             await _unitActionPlanner.PlanBatchedAction(units, UnitAction.DragAndDrop);
             _unitSelectionHighlighter.ClearHighlights();
-            _isActive = false;
+            _selectedUnits = null;
+        }
+
+        public void HandleRotateUnitPressed() {
+            foreach (var selectedUnit in _selectedUnits) {
+                _commandQueue.Enqueue<RotateUnitCommand, RotateUnitData>(new RotateUnitData(selectedUnit.UnitId, 90),
+                                                                         CommandSource.Game);
+            }
         }
 
         public void HandleRemoveUnitPressed() {
             Hide();
             _unitSelectionHighlighter.ClearHighlights();
-            _isActive = false;
+            _selectedUnits = null;
         }
 
         public void HandleCancelSelectionPressed() {
             Hide();
             _unitSelectionHighlighter.ClearHighlights();
-            _isActive = false;
+            _selectedUnits = null;
         }
 
         private void Hide() {
             // Listeners
             _removeUnitButton.onClick.RemoveListener(HandleRemoveUnitPressed);
+            _rotateUnitButton.onClick.RemoveListener(HandleRotateUnitPressed);
             _cancelSelectionButton.onClick.RemoveListener(HandleCancelSelectionPressed);
 
             // Hide Menu
