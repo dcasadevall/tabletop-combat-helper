@@ -108,7 +108,7 @@ namespace Replays.Playback {
                 return TimeSpan.Zero;
             }
 
-            if (_pastCommands.Last.Value.CommandSnapshot.Command.IsInitialGameStateCommand) {
+            if (commandSnapshot.Command.IsInitialGameStateCommand) {
                 return TimeSpan.Zero;
             }
 
@@ -146,6 +146,8 @@ namespace Replays.Playback {
         /// Used during Play or Seek
         /// </summary>
         private void ReplayCommandsAtCurrentTime() {
+            // TODO: Review why this is <= instead of <. This makes it so we replay any non initial game state
+            // command that would happen at 0:00 (though technically that shouldn't happen)
             while (_pastCommands.Count > 0 &&
                    !_pastCommands.Last.Value.CommandSnapshot.Command.IsInitialGameStateCommand &&
                    _currentTime <= _pastCommands.Last.Value.ReplayTime) {
