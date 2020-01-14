@@ -79,6 +79,7 @@ namespace Units.Spawning.Commands {
             // Undo is not supported for player units.
             // We may want to consider splitting this command in two: Spawn initial unit / Spawn unit
             if (_data.unitCommandData.unitType == UnitType.Player) {
+                _logger.Log(LoggedFeature.Replays, "Not undoing command since unit type is player.");
                 return;
             }
 

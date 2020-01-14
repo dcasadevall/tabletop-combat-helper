@@ -1,5 +1,9 @@
 using System;
+using CommandSystem;
 using Grid;
+using Grid.Commands;
+using Logging;
+using Math;
 using UniRx;
 using Units.Actions;
 
@@ -12,13 +16,15 @@ namespace Units.Movement.ActionHandlers {
     public class UnitMoveAnimator : ISingleUnitActionHandler {
         private readonly IGridUnitManager _gridUnitManager;
         private readonly IGridInputManager _gridInputManager;
+        private readonly ICommandQueue _commandQueue;
+        private readonly ILogger _logger;
 
         public UnitAction ActionType {
             get {
                 return UnitAction.AnimateMovement;
             }
         }
-        
+
         public IObservable<UniRx.Unit> ConfirmActionObservable {
             get {
                 return Observable.Return(UniRx.Unit.Default);
@@ -31,21 +37,31 @@ namespace Units.Movement.ActionHandlers {
             }
         }
 
-        public UnitMoveAnimator(IGridUnitManager gridUnitManager, IGridInputManager gridInputManager) {
+        public UnitMoveAnimator(IGridUnitManager gridUnitManager, IGridInputManager gridInputManager,
+                                ICommandQueue commandQueue, ILogger logger) {
             _gridUnitManager = gridUnitManager;
             _gridInputManager = gridInputManager;
+            _commandQueue = commandQueue;
+            _logger = logger;
         }
 
         public void HandleActionPlanned(IUnit unit) {
-            if (_gridInputManager.TileAtMousePosition.HasValue) {
-                _gridUnitManager.PlaceUnitAtTile(unit, _gridInputManager.TileAtMousePosition.Value);
+            if (!_gridInputManager.TileAtMousePosition.HasValue) {
+                return;
             }
+            
+            IntVector2? unitCoords = _gridUnitManager.GetUnitCoords(unit);
+            if (unitCoords == null) {
+                _logger.LogError(LoggedFeature.Units, "UnitCoords not found for unit: {0}", unit);
+                return;
+            }
+
+            IntVector2 moveDistance = _gridInputManager.TileAtMousePosition.Value - unitCoords.Value;
+            _commandQueue.Enqueue<MoveUnitCommand, MoveUnitData>(new MoveUnitData(unit.UnitId, moveDistance),
+                                                                 CommandSource.Game);
         }
 
-        public void HandleActionConfirmed(IUnit unit) {
-        }
-
-        public void HandleActionCanceled(IUnit unit) {
-        }
+        public void HandleActionConfirmed(IUnit unit) { }
+        public void HandleActionCanceled(IUnit unit) { }
     }
 }
