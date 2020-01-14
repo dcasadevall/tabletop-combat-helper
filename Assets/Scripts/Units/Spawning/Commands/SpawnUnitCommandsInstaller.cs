@@ -7,9 +7,12 @@ namespace Units.Spawning.Commands {
     public class SpawnUnitCommandsInstaller : Installer {
         public override void InstallBindings() {
             Container.Bind<IMutableUnitRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<SpawnUnitCommand>();
+            Container.Bind<IMutableUnitRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<DespawnUnitCommand>();
 
             Container.Bind<SpawnUnitCommand>().AsSingle();
             Container.Bind<IFactory<IUnitData, UnitCommandData>>().To<UnitCommandDataFactory>().AsSingle();
+            
+            Container.Bind<DespawnUnitCommand>().AsTransient();
         }
     }
 }

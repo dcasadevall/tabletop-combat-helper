@@ -9,6 +9,7 @@ using UI.RadialMenu;
 using UniRx.Async;
 using Units.Actions;
 using Units.Movement;
+using Units.Spawning.Commands;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -118,6 +119,8 @@ namespace Units.Selection {
         }
         
         private void HandleRemoveUnitButtonPressed() {
+            _commandQueue.Enqueue<DespawnUnitCommand, DespawnUnitData>(new DespawnUnitData(_unit.UnitId),
+                                                                       CommandSource.Game);
             Hide();
         }
         

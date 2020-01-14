@@ -1,6 +1,7 @@
 using System.Runtime.Serialization;
 
 namespace Units.Spawning.Commands {
+    [System.Serializable]
     public class DespawnUnitData : ISerializable {
         public readonly UnitId unitId;
 

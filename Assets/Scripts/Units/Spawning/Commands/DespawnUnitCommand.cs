@@ -26,7 +26,6 @@ namespace Units.Spawning.Commands {
         // Coordinates at which the unit was before despawned. This allows us to undo the command.
         private IntVector2? _tileCoords;
         private IUnit _unit;
-        private List<ICommand> _petCommands = new List<ICommand>();
 
         public DespawnUnitCommand(DespawnUnitData data,
                                   ICommandFactory commandFactory,
@@ -45,24 +44,18 @@ namespace Units.Spawning.Commands {
         }
 
         public IObservable<UniRx.Unit> Run() {
-            IUnit unit = _unitRegistry.GetUnit(_data.unitId);
-            _tileCoords = _gridUnitManager.GetUnitCoords(unit);
-
-            // Despawn pets first.
-            // We need to directly run the command since these are children of the parent despawn command,
-            // and should never be ran as standalone
-            for (var i = 0; i < unit.PetUnits.Length; i++) {
-                ICommand petDespawnCommand =
-                    _commandFactory.Create(typeof(DespawnUnitCommand),
-                                           typeof(DespawnUnitData),
-                                           new DespawnUnitData(unit.PetUnits[i].UnitId));
-                petDespawnCommand.Run();
-                _petCommands.Add(petDespawnCommand);
+            _unit = _unitRegistry.GetUnit(_data.unitId);
+            if (_unit == null) {
+                string errorMsg = $"Unit not found: {_data.unitId}";
+                _logger.LogError(LoggedFeature.Units, errorMsg);
+                return Observable.Throw<UniRx.Unit>(new IndexOutOfRangeException(errorMsg));
             }
 
-            // Now the unit itself.
-            _unitPool.Despawn(unit.UnitId);
-            _gridUnitManager.RemoveUnit(unit);
+            _tileCoords = _gridUnitManager.GetUnitCoords(_unit);
+
+            // Only despawn the unit. This does not remove pet units.
+            _unitPool.Despawn(_unit.UnitId);
+            _gridUnitManager.RemoveUnit(_unit);
 
             return Observable.ReturnUnit();
         }
@@ -72,32 +65,15 @@ namespace Units.Spawning.Commands {
                 _logger.LogError(LoggedFeature.Units, "Cannot undo Despawn command without previously running it.");
                 return;
             }
-            
-            uint? index = _indexResolver.ResolveUnitIndex(_unit.UnitData);
-            if (index == null) {
-                _logger.LogError(LoggedFeature.Units, $"Unit index not resolved: {_unit.UnitData.Name}");
-                return;
-            }
 
             if (_tileCoords == null) {
                 _logger.LogError(LoggedFeature.Units, "Cannot undo Despawn command without tileCoords.");
                 return;
             }
-            
+
             // Spawn the unit at the same coords it was despawned. This does not spawn pet units.
-            IUnit unit = _unitPool.Spawn(_unit.UnitId, _unit.UnitData, _unit.PetUnits);
+            IUnit unit = _unitPool.Spawn(_unit.UnitId, _unit.UnitData, new IUnit[] { });
             _gridUnitManager.PlaceUnitAtTile(unit, _tileCoords.Value);
-            
-            // Undo pet command despawns.
-            _petCommands.ForEach(x => x.Undo());
-//
-//            var commandData = new UnitCommandData(_unit.UnitId, index.Value, _unit.UnitData.UnitType);
-//            // This needs to be created directly since the section command is dependant on this command.
-//            SpawnUnitData spawnUnitData = new SpawnUnitData(commandData, _tileCoords.Value, isInitialSpawn: false);
-//            ICommand spawnUnitCommand = _commandFactory.Create(typeof(SpawnUnitCommand),
-//                                                               typeof(SpawnUnitData),
-//                                                               spawnUnitData);
-//            spawnUnitCommand.Run();
         }
     }
 }
