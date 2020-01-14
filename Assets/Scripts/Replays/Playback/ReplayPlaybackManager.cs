@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CommandSystem;
+using Logging;
 using Util;
 using Zenject;
 
@@ -16,6 +17,7 @@ namespace Replays.Playback {
         private readonly ICommandQueue _commandQueue;
         private readonly ICommandFactory _commandFactory;
         private readonly IClock _clock;
+        private readonly ILogger _logger;
 
         private TimeSpan _currentTime;
         
@@ -73,10 +75,11 @@ namespace Replays.Playback {
         /// </summary>
         private readonly LinkedList<ReplaySnapshot> _futureCommands = new LinkedList<ReplaySnapshot>();
 
-        public ReplayPlaybackManager(ICommandQueue commandQueue, IClock clock) {
+        public ReplayPlaybackManager(ICommandQueue commandQueue, IClock clock, ILogger logger) {
             _commandQueue = commandQueue;
             _clock = clock;
-            
+            _logger = logger;
+
             // We do this here and not as part of IInitializable to avoid race condition issues.
             _commandQueue.AddListener(this);
         }
@@ -143,7 +146,9 @@ namespace Replays.Playback {
         /// Used during Play or Seek
         /// </summary>
         private void ReplayCommandsAtCurrentTime() {
-            while (_pastCommands.Count > 0 && _currentTime <= _pastCommands.Last.Value.ReplayTime) {
+            while (_pastCommands.Count > 0 &&
+                   !_pastCommands.Last.Value.CommandSnapshot.Command.IsInitialGameStateCommand &&
+                   _currentTime <= _pastCommands.Last.Value.ReplayTime) {
                 UndoPreviousCommand();
             }
 
@@ -185,6 +190,7 @@ namespace Replays.Playback {
 
         private void RedoNextCommand() {
             ICommandSnapshot futureSnapshot = _futureCommands.First.Value.CommandSnapshot;
+            _logger.Log(LoggedFeature.Replays, "Redoing next command: {0}", futureSnapshot.Command);
             futureSnapshot.Command.Run();
             
             _pastCommands.AddLast(_futureCommands.First.Value);
@@ -193,6 +199,7 @@ namespace Replays.Playback {
 
         private void UndoPreviousCommand() {
             ICommandSnapshot pastSnapshot = _pastCommands.Last.Value.CommandSnapshot;
+            _logger.Log(LoggedFeature.Replays, "Undoing previous command: {0}", pastSnapshot.Command);
             pastSnapshot.Command.Undo();
 
             _futureCommands.AddFirst(_pastCommands.Last.Value);
