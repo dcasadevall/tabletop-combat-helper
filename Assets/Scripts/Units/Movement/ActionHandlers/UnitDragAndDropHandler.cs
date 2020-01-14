@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
 using CameraSystem;
+using CommandSystem;
 using Grid;
+using Grid.Commands;
 using Logging;
 using Math;
 using UniRx;
@@ -16,10 +18,12 @@ namespace Units.Movement.ActionHandlers {
     /// Action is never canceled.
     /// </summary>
     public class UnitDragAndDropHandler : ISingleUnitActionHandler, IBatchedUnitActionHandler {
-        private readonly CameraInput _cameraInput;
         private readonly IGridInputManager _gridInputManager;
         private readonly IGridUnitManager _gridUnitManager;
+        private readonly ICommandQueue _commandQueue;
         private readonly ILogger _logger;
+
+        private IntVector2 _startCoords;
         private IDisposable _disposable;
 
         public UnitAction ActionType {
@@ -42,19 +46,23 @@ namespace Units.Movement.ActionHandlers {
             }
         }
 
-        public UnitDragAndDropHandler(CameraInput cameraInput, 
-                                      IGridInputManager gridInputManager,
+        public UnitDragAndDropHandler(IGridInputManager gridInputManager,
                                       IGridUnitManager gridUnitManager,
+                                      ICommandQueue commandQueue,
                                       ILogger logger) {
-            _cameraInput = cameraInput;
             _gridInputManager = gridInputManager;
             _gridUnitManager = gridUnitManager;
+            _commandQueue = commandQueue;
             _logger = logger;
         }
 
         public void HandleActionPlanned(IUnit unit) {
             _disposable =
-                _gridInputManager.MouseEnteredTile.Subscribe(next => _gridUnitManager.PlaceUnitAtTile(unit, next));
+                _gridInputManager.MouseEnteredTile.Pairwise().Subscribe(coordsPair => {
+                    IntVector2 moveDistance = coordsPair.Current - coordsPair.Previous;
+                    _commandQueue.Enqueue<MoveUnitCommand, MoveUnitData>(new MoveUnitData(unit.UnitId, moveDistance),
+                                                                         CommandSource.Game);
+                });
         }
 
         public void HandleActionConfirmed(IUnit unit) {
@@ -73,13 +81,11 @@ namespace Units.Movement.ActionHandlers {
                 return;
             }
             
-            IntVector2 startCoordinate = _gridInputManager.TileAtMousePosition.Value;
-            var unitStartingCoordinates =
-                units.ToDictionary(unit => unit.UnitId, unit => _gridUnitManager.GetUnitCoords(unit).Value);
-            _disposable = _gridInputManager.MouseEnteredTile.Subscribe(tileCoords => {
+            _disposable = _gridInputManager.MouseEnteredTile.Pairwise().Subscribe(tileCoords => {
                 foreach (var unit in units) {
-                    IntVector2 startingUnitCoords = unitStartingCoordinates[unit.UnitId];
-                    _gridUnitManager.PlaceUnitAtTile(unit, startingUnitCoords + tileCoords - startCoordinate);
+                    IntVector2 moveDistance = tileCoords.Current - tileCoords.Previous;
+                    _commandQueue.Enqueue<MoveUnitCommand, MoveUnitData>(new MoveUnitData(unit.UnitId, moveDistance),
+                                                                         CommandSource.Game);
                 }
             });
         }
