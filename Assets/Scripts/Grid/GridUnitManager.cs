@@ -15,6 +15,7 @@ namespace Grid {
     /// </summary>
     internal class GridUnitManager : IGridUnitManager, IInitializable {
         public event System.Action<IUnit, IntVector2> UnitPlacedAtTile = delegate {};
+        public event System.Action<IUnit, IntVector2> UnitRemovedFromTile = delegate {};
         
         private Dictionary<UnitId, int> _unitMap = new Dictionary<UnitId, int>();
         private List<IUnit>[,] _tiles;
@@ -67,8 +68,8 @@ namespace Grid {
             }
 
             // Add unit to new position.
+            _tiles[tileCoords.x, tileCoords.y].Add(unit);
             int tileIndex = (int)(System.Math.Max(0, tileCoords.y) * _grid.NumTilesX + tileCoords.x);
-            _tiles[tileIndex % _grid.NumTilesX, tileIndex / _grid.NumTilesY].Add(unit);
             _unitMap.Add(unit.UnitId, tileIndex);
             
             // Move unit in 3D space.
@@ -87,10 +88,14 @@ namespace Grid {
                 return false;
             }
 
+            // Remove unit from our unit / tile caches.
             int tileIndex = _unitMap[unit.UnitId];
-            _tiles[tileIndex % _grid.NumTilesX, tileIndex / _grid.NumTilesY].Remove(unit);
+            IntVector2 tileCoords = IntVector2.Of((int)(tileIndex % _grid.NumTilesX), (int)(tileIndex / _grid.NumTilesY));
+            _tiles[tileCoords.x, tileCoords.y].Remove(unit);
             _unitMap.Remove(unit.UnitId);
 
+            // Notify listeners.
+            UnitRemovedFromTile.Invoke(unit, tileCoords);
             return true;
         }
         

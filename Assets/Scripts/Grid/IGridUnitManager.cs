@@ -17,6 +17,12 @@ namespace Grid {
         /// This may be due to initial spawn, or when a unit is moved from one tile to another.
         /// </summary>
         event System.Action<IUnit, IntVector2> UnitPlacedAtTile;
+        
+        /// <summary>
+        /// Event called whenever a unit is removed from a tile.
+        /// This may be due to a unit moved from one tile to another, or a unit being removed from the grid.
+        /// </summary>
+        event System.Action<IUnit, IntVector2> UnitRemovedFromTile;
 
         /// <summary>
         /// Returns all the units of the given <see cref="UnitType"/> on the board.
