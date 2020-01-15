@@ -51,20 +51,24 @@ namespace TileVisibility {
 
         private void HandleUnitPlacedAtTile(IUnit unit, IntVector2 tileCoords) {
             IntVector2[] visibileTiles =
-                _gridPositionCalculator.GetTilesAtDistance(tileCoords, unit.UnitData.UnitStats.visibilityRadius);
+                _gridPositionCalculator.GetTilesAtDistance(tileCoords, unit.UnitData.UnitStats.visibilityRadius / 5);
 
             foreach (var coords in visibileTiles) {
+                _visibilityMatrix[coords].lightSourceCount++;
+                if (_visibilityMatrix[coords].tileVisibilityType == TileVisibilityType.Visible) {
+                    continue;
+                }
+                
                 _visibilityMatrix[coords].tileVisibilityType = TileVisibilityType.Visible;
                 _tileVisibilityDelegates.ForEach(del => del.HandleTileVisibilityChanged(coords,
                                                                                         _visibilityMatrix[coords]
                                                                                             .tileVisibilityType));
-                _visibilityMatrix[coords].lightSourceCount++;
             }
         }
 
         private void HandleUnitRemovedFromTile(IUnit unit, IntVector2 tileCoords) {
             IntVector2[] visibileTiles =
-                _gridPositionCalculator.GetTilesAtDistance(tileCoords, unit.UnitData.UnitStats.visibilityRadius);
+                _gridPositionCalculator.GetTilesAtDistance(tileCoords, unit.UnitData.UnitStats.visibilityRadius / 5);
 
             foreach (var coords in visibileTiles) {
                 _visibilityMatrix[coords].lightSourceCount--;

@@ -10,14 +10,11 @@ namespace TileVisibility {
         
         public override void InstallBindings() {
             Container.BindInterfacesTo<TileVisibilityUpdater>().AsSingle();
-            Container.Bind<FogOfWarMeshFilterColorSetter>()
-                     .AsSingle()
-                     .WhenInjectedInto<FogOfWarMeshTileVisibilityDelegate>();
             Container.Bind<MeshFilter>()
                      .FromComponentInNewPrefab(_fogOfWarMeshFilter)
                      .AsSingle()
-                     .WhenInjectedInto<FogOfWarMeshTileVisibilityDelegate>();
-            Container.BindInterfacesTo<FogOfWarMeshTileVisibilityDelegate>().AsSingle();
+                     .WhenInjectedInto<FogOfWarMeshFilterColorSetter>();
+            Container.BindInterfacesTo<FogOfWarMeshFilterColorSetter>().AsSingle();
             
             // Needed for fog of war mesh.
             Container.Install<MeshUtilsInstaller>();
