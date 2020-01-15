@@ -1,6 +1,6 @@
 using System;
 
-namespace Util {
+namespace Utils.Clock {
   public interface IClock {
     /// <summary>
     /// Returns the current time, in <see cref="TimeSpan"/> format.

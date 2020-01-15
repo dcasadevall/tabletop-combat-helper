@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FOW : MonoBehaviour
-{
+public class FOW : MonoBehaviour {
     public int mapSizeX, mapSizeY;
     public Vector3[] FOWMapArray;
 
@@ -14,18 +13,17 @@ public class FOW : MonoBehaviour
     private Color32 selectedColor;
     private int tileVertexIndex = 0;
 
-    void Start()
-    {
+    void Start() {
         Mesh mesh = GetComponent<MeshFilter>().mesh;
         Vector3[] vertices = mesh.vertices;
         Color32[] vertexColors = new Color32[vertices.Length];
 
         Debug.Log(vertices.Length);
-        
+
         for (int i = 0; i < FOWMapArray.Length; i += 1) {
             Debug.Log("i: " + i);
             Debug.Log("FOW array: " + FOWMapArray[i]);
-             
+
             if (FOWMapArray[i].z == 0) {
                 selectedColor = fogVertexColor;
             } else if (FOWMapArray[i].z == 1) {
@@ -35,7 +33,7 @@ public class FOW : MonoBehaviour
             }
 
             // add 1 to map size to account for N+1 vertices in the tiles
-            tileVertexIndex = (int)FOWMapArray[i].y * (mapSizeX + 1) + (int)FOWMapArray[i].x;
+            tileVertexIndex = (int) FOWMapArray[i].y * (mapSizeX + 1) + (int) FOWMapArray[i].x;
 
             // get 4 verts
             vertexColors[tileVertexIndex] = selectedColor;

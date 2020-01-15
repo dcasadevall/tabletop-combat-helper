@@ -1,6 +1,6 @@
 using System;
 
-namespace Util {
+namespace Utils.Clock {
   public class UnityClock : IClock {
     public TimeSpan Now {
       get {
