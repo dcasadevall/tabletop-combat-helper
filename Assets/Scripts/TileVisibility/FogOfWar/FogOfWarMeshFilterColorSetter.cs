@@ -1,4 +1,5 @@
 using System;
+using CameraSystem;
 using Grid;
 using Math;
 using UniRx;
@@ -40,7 +41,7 @@ namespace TileVisibility.FogOfWar {
             _meshFilter.mesh = _gridMeshGenerator.Generate(_grid);
             _meshFilter.transform.position = new Vector3(_grid.WorldSpaceBounds().min.x,
                                                          _grid.WorldSpaceBounds().min.y,
-                                                         -2.0f);
+                                                         DepthConstants.FOG_OF_WAR_DEPTH);
             
             // Tick every 5 frames
             _observer = Observable.EveryUpdate()

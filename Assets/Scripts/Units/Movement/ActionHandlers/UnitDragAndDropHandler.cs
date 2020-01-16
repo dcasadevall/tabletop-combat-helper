@@ -113,7 +113,6 @@ namespace Units.Movement.ActionHandlers {
             // These can be checked because our stream guarantees that they are not.
             IntVector2 mouseCoords = _gridInputManager.TileAtMousePosition.GetValueChecked();
             foreach (var unit in units) {
-                IntVector2 unitStart = _gridUnitManager.GetUnitCoords(unit).GetValueChecked();
                 IntVector2 moveDistance = mouseCoords - _startCoordinate.GetValueChecked();
                 CommitUnitMovement(unit, moveDistance);
             }

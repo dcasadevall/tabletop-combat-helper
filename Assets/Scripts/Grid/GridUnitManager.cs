@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CameraSystem;
 using Grid.Positioning;
 using Logging;
 using Math;
@@ -75,7 +76,7 @@ namespace Grid {
             // Move unit in 3D space.
             Transform unitTransform = _unitTransformRegistry.GetTransformableUnit(unit.UnitId).Transform;
             Vector2 worldPosition = _gridPositionCalculator.GetTileCenterWorldPosition(tileCoords);
-            unitTransform.position = new Vector3(worldPosition.x, worldPosition.y, unitTransform.position.z);
+            unitTransform.position = new Vector3(worldPosition.x, worldPosition.y, DepthConstants.UNIT_DEPTH);
 
             // Notify listeners
             UnitPlacedAtTile.Invoke(unit, tileCoords);
