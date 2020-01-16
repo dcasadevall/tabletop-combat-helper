@@ -1,5 +1,7 @@
+using Grid.Commands;
 using Units.Actions;
 using Units.Movement.ActionHandlers;
+using Units.Spawning;
 using Zenject;
 
 namespace Units.Movement {
@@ -15,6 +17,13 @@ namespace Units.Movement {
             Container.Bind(typeof(ISingleUnitActionHandler), typeof(IBatchedUnitActionHandler))
                      .To<UnitDragAndDropHandler>()
                      .AsSingle();
+            
+                        
+            // UnitDragAndDropHandler modifies transform to preview unit location.
+            Container.Bind<IUnitTransformRegistry>()
+                     .To<UnitRegistry>()
+                     .FromResolve()
+                     .WhenInjectedInto<UnitDragAndDropHandler>();
         }
     }
 }

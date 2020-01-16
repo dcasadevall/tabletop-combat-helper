@@ -15,6 +15,6 @@ namespace Units.Serialized {
         /// e.g: How many units (normally feet) in each direction this unit can see.
         /// 5 feet = 1 tile.
         /// </summary>
-        public int visibilityRadius = 30;
+        public int visibilityRadius = 5;
     }
 }

@@ -40,7 +40,7 @@ namespace TileVisibility.FogOfWar {
             _meshFilter.mesh = _gridMeshGenerator.Generate(_grid);
             _meshFilter.transform.position = new Vector3(_grid.WorldSpaceBounds().min.x,
                                                          _grid.WorldSpaceBounds().min.y,
-                                                         -3.0f);
+                                                         -2.0f);
             
             // Tick every 5 frames
             _observer = Observable.EveryUpdate()
