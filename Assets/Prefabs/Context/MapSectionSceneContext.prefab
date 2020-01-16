@@ -52,6 +52,7 @@ MonoBehaviour:
   - {fileID: 2616146810924423047, guid: 47bd38f4f7d1c4513a6b8e0b1b053cc1, type: 3}
   - {fileID: 268898890915226259, guid: 9f6b7ebc3bf99491aa11ee21a3aa01af, type: 3}
   - {fileID: 5620275601756309865, guid: 99188830058a0481d812cbd3f3f3cd0f, type: 3}
+  - {fileID: 1039994629815704456, guid: bd6921ceed873409bade0ba61a0a13ba, type: 3}
   _autoRun: 1
   OnPreInstall:
     m_PersistentCalls:
