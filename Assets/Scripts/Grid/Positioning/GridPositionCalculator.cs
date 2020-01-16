@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Math;
 using UnityEngine;
+using Utils;
 
 namespace Grid.Positioning {
     public class GridPositionCalculator : IGridPositionCalculator {
@@ -49,14 +50,14 @@ namespace Grid.Positioning {
             if (distance <= 0) {
                 return new IntVector2[0];
             }
-            
+
             var tiles = new List<IntVector2>();
             for (int x = -distance; x <= distance; x++) {
                 for (int y = -distance; y <= distance; y++) {
                     if (x == 0 && y == 0) {
                         continue;
                     }
-                    
+
                     var tileCoords = coords + IntVector2.Of(x, y);
                     if (!IsInsideGrid(tileCoords)) {
                         continue;
@@ -65,7 +66,7 @@ namespace Grid.Positioning {
                     if (System.Math.Abs(x) + System.Math.Abs(y) > distance) {
                         continue;
                     }
-                    
+
                     tiles.Add(tileCoords);
                 }
             }
@@ -76,19 +77,50 @@ namespace Grid.Positioning {
         /// <inheritdoc />
         public IntVector2[] GetTilesCoveredByRect(Rect worldSpaceRect) {
             float minX = Mathf.Max(GetTileOriginWorldPosition(0, Axis.X), worldSpaceRect.min.x);
-            float maxX = Mathf.Min(GetTileOriginWorldPosition(_grid.NumTilesX - 1, Axis.X) + _grid.TileSize, worldSpaceRect.max.x);
+            float maxX = Mathf.Min(GetTileOriginWorldPosition(_grid.NumTilesX - 1, Axis.X) + _grid.TileSize,
+                                   worldSpaceRect.max.x);
             float minY = Mathf.Max(GetTileOriginWorldPosition(0, Axis.Y), worldSpaceRect.min.y);
-            float maxY = Mathf.Min(GetTileOriginWorldPosition(_grid.NumTilesY - 1, Axis.Y) + _grid.TileSize, worldSpaceRect.max.y);
-            
-            IntVector2? bottomLeft = GetTileContainingWorldPosition(new Vector2(minX, minY));
-            IntVector2? topRight = GetTileContainingWorldPosition(new Vector2(maxX, maxY));
-            if (!bottomLeft.HasValue || !topRight.HasValue) {
-                throw new Exception("Bounds are not right for grid rect.");
+            float maxY = Mathf.Min(GetTileOriginWorldPosition(_grid.NumTilesY - 1, Axis.Y) + _grid.TileSize,
+                                   worldSpaceRect.max.y);
+
+            IntVector2 bottomLeft = GetTileContainingWorldPosition(new Vector2(minX, minY)).GetValueChecked();
+            Vector2 bottomLeftCenter = GetTileCenterWorldPosition(bottomLeft);
+            IntVector2 topRight = GetTileContainingWorldPosition(new Vector2(maxX, maxY)).GetValueChecked();
+            Vector2 topRightCenter = GetTileCenterWorldPosition(topRight);
+
+            // Only select tiles covered at least by their center position.
+            if (minX > bottomLeftCenter.x) {
+                minX += _grid.TileSize;
             }
+
+            if (minY > bottomLeftCenter.y) {
+                minY += _grid.TileSize;
+            }
+
+            if (maxX < topRightCenter.x) {
+                maxX -= _grid.TileSize;
+            }
+
+            if (maxY < topRightCenter.y) {
+                maxY -= _grid.TileSize;
+            }
+
+            // Guarantee that we have not gone outside of grid bounds after correcting the selection.
+            Rect gridBounds = _grid.WorldSpaceBounds();
+            if (minX >= gridBounds.xMax ||
+                minY >= gridBounds.yMax ||
+                maxX <= gridBounds.xMin ||
+                maxY <= gridBounds.yMin) {
+                return new IntVector2[0];
+            }
+
+            // Assign new bottomLeft / topRight with constrained bounds
+            bottomLeft = GetTileContainingWorldPosition(new Vector2(minX, minY)).GetValueChecked();
+            topRight = GetTileContainingWorldPosition(new Vector2(maxX, maxY)).GetValueChecked();
             
             var tiles = new List<IntVector2>();
-            for (int x = bottomLeft.Value.x; x <= topRight.Value.x; x++) {
-                for (int y = bottomLeft.Value.y; y <= topRight.Value.y; y++) {
+            for (int x = bottomLeft.x; x <= topRight.x; x++) {
+                for (int y = bottomLeft.y; y <= topRight.y; y++) {
                     tiles.Add(IntVector2.Of(x, y));
                 }
             }

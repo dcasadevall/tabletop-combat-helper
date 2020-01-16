@@ -1,4 +1,3 @@
-
 using Math;
 using UnityEngine;
 
@@ -16,7 +15,7 @@ namespace Grid.Positioning {
         /// </summary>
         /// <returns></returns>
         Vector2 GetTileOriginWorldPosition(IntVector2 tileCoords);
-        
+
         /**
          * Returns the tile that is closest to the center of the grid in the current context.
          * In the case where the grid is not of odd width (x axis), the tile X returned is the one left of the center position.
@@ -55,6 +54,8 @@ namespace Grid.Positioning {
         /// <summary>
         /// Returns the tiles contained within the given rectangle, in world space coordinates.
         /// It returns any tiles partially covered, or fully contained within the given rect.
+        ///
+        /// Note: The rect area must cover a tile center for that tile to be included in the returned set.
         /// </summary>
         /// <param name="worldSpaceRect"></param>
         /// <returns></returns>

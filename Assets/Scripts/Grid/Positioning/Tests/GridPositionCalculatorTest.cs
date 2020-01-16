@@ -187,9 +187,9 @@ namespace Grid.Positioning.Tests {
                         {1, 0, 0}
                     }
                 };
-                // 1.0f includes the next tile
+                // 1.51f includes the next tile since it's above the center
                 yield return new object[] {
-                    Rect.MinMaxRect(0.0f, 0.0f, 1.0f, 1.0f),
+                    Rect.MinMaxRect(0.0f, 0.0f, 1.51f, 1.51f),
                     new[,] {
                         {0, 0, 0},
                         {1, 1, 0},
@@ -197,7 +197,7 @@ namespace Grid.Positioning.Tests {
                     }
                 };
                 yield return new object[] {
-                    Rect.MinMaxRect(0.0f, 0.0f, 2.0f, 2.0f),
+                    Rect.MinMaxRect(0.0f, 0.0f, 2.9f, 2.9f),
                     new[,] {
                         {1, 1, 1},
                         {1, 1, 1},
@@ -239,6 +239,48 @@ namespace Grid.Positioning.Tests {
                 };
             }
         }
+        
+        private class GetTilesCoveredByRectThresholdCases : IEnumerable {
+            public IEnumerator GetEnumerator() {
+                // 1.50f includes the next tile since it's above the center. 1.49f does not.
+                yield return new object[] {
+                    Rect.MinMaxRect(0.0f, 0.0f, 1.50f, 1.50f),
+                    new[,] {
+                        {0, 0, 0},
+                        {1, 1, 0},
+                        {1, 1, 0}
+                    }
+                };
+                // 1.50f includes the next tile since it's above the center. 1.49f does not.
+                yield return new object[] {
+                    Rect.MinMaxRect(0.0f, 0.0f, 1.49f, 1.49f),
+                    new[,] {
+                        {0, 0, 0},
+                        {0, 0, 0},
+                        {1, 0, 0}
+                    }
+                };
+                // Try mixed case. X is over the middle, but Y is not.
+                yield return new object[] {
+                    Rect.MinMaxRect(0.0f, 0.0f, 1.50f, 1.49f),
+                    new[,] {
+                        {0, 0, 0},
+                        {0, 0, 0},
+                        {1, 1, 0}
+                    }
+                };
+                // 2.0f is still not covering most of the 3rd row / col, so don't select it.
+                yield return new object[] {
+                    Rect.MinMaxRect(0.0f, 0.0f, 2.0f, 2.0f),
+                    new[,] {
+                        {0, 0, 0},
+                        {1, 1, 0},
+                        {1, 1, 0}
+                    }
+                };
+            }
+        }
+
 
         [TestCaseSource(typeof(GetTilesCoveredByRectAllTilesContainedCases))]
         public void TestGivenRectInsideGrid_GetTilesCoveredByRect_ReturnsAllTilesContained(Rect rect, int[,] resultMatrix) {
@@ -249,6 +291,11 @@ namespace Grid.Positioning.Tests {
         public void TestGivenRectOutsideGrid_GetTilesCoveredByRect_ReturnsIntersection(Rect rect, int[,] resultMatrix) {
             TestGetTilesCoveredByRect(rect, resultMatrix);
         }
+        
+        [TestCaseSource(typeof(GetTilesCoveredByRectThresholdCases))]
+        public void TestGivenRectNotCoveringEntireTile_GetTilesCoveredByRect_IncludesTilesOverCenter(Rect rect, int[,] resultMatrix) {
+            TestGetTilesCoveredByRect(rect, resultMatrix);
+        } 
 
         private void TestGetTilesCoveredByRect(Rect rect, int[,] resultMatrix) {
             _grid.NumTilesX.Returns(100U);
@@ -275,8 +322,7 @@ namespace Grid.Positioning.Tests {
             _grid.NumTilesY.Returns(100U);
             
             var result = _positionCalculator.GetTilesCoveredByRect(Rect.zero);
-            Assert.AreEqual(1, result.Length);
-            Assert.AreEqual(IntVector2.Zero, result[0]);
+            Assert.AreEqual(0, result.Length);
         }
     }
 }
