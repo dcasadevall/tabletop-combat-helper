@@ -1,10 +1,7 @@
 ﻿using CommandSystem.Installers;
 using Map.Commands;
-using Map.MapSections.Commands;
 using Map.Serialized;
-using Map.UI;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using Zenject;
 
 namespace Map.MapSelection {

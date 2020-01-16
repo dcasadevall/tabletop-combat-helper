@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6177683463821511290
+--- !u!1 &9035170322217803048
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4446635996379177132}
-  - component: {fileID: 2901459981742678035}
+  - component: {fileID: 1543971652704286718}
+  - component: {fileID: 44151523371644737}
   m_Layer: 0
-  m_Name: MapSectionSceneContext
+  m_Name: MapEditorSectionSceneContext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4446635996379177132
+--- !u!4 &1543971652704286718
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6177683463821511290}
+  m_GameObject: {fileID: 9035170322217803048}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,13 +31,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2901459981742678035
+--- !u!114 &44151523371644737
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6177683463821511290}
+  m_GameObject: {fileID: 9035170322217803048}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89715ad69b973a14899afa2c6730b30b, type: 3}
@@ -47,13 +47,7 @@ MonoBehaviour:
   _monoInstallers: []
   _installerPrefabs:
   - {fileID: 7754144119156181451, guid: ea41255bd272b4e7a91ba7750a9c217a, type: 3}
-  - {fileID: 5133261490375389605, guid: e8caeaf003efd40ef9f1d52da1332016, type: 3}
   - {fileID: 2001596227, guid: c6a9db96f3e8247e6b7bc24f2e060fc8, type: 3}
-  - {fileID: 4144602517964906790, guid: 5437112e9f5bb4331a148d2d857e52a2, type: 3}
-  - {fileID: 2616146810924423047, guid: 47bd38f4f7d1c4513a6b8e0b1b053cc1, type: 3}
-  - {fileID: 268898890915226259, guid: 9f6b7ebc3bf99491aa11ee21a3aa01af, type: 3}
-  - {fileID: 5620275601756309865, guid: 99188830058a0481d812cbd3f3f3cd0f, type: 3}
-  - {fileID: 1039994629815704456, guid: bd6921ceed873409bade0ba61a0a13ba, type: 3}
   _autoRun: 1
   OnPreInstall:
     m_PersistentCalls:
@@ -77,9 +71,9 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   _parentNewObjectsUnderSceneContext: 1
   _contractNames:
-  - Map
+  - MapEditorSection
   _parentContractNames:
-  - Encounter
+  - MapEditor
   - EncounterSelection
   - PlayerSelection
   - AssetLoading

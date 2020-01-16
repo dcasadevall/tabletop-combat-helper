@@ -1,25 +1,17 @@
 using System;
 using System.Collections.Generic;
 using CommandSystem;
-using EncounterSelection;
-using Grid.Serialized;
 using Logging;
 using Map.MapSections.Commands;
-using Map.UI;
+using Map.MapSelection;
 using Replays.Persistence.UI;
 using UI;
 using UniRx;
-using UniRx.Async;
-using UnityEngine;
 using UnityEngine.SceneManagement;
-using Utils;
 using Zenject;
-using ILogger = Logging.ILogger;
 
 namespace Map.Commands {
     public class LoadMapCommand : ICommand {
-        private const string kEncounterScene = "EncounterScene";
-
         private readonly LoadMapCommandData _data;
         private readonly List<IMapReference> _mapPreviews;
         private readonly ICommandFactory _commandFactory;
@@ -59,7 +51,7 @@ namespace Map.Commands {
             IMapReference mapReference = _mapPreviews[(int) _data.mapIndex];
             IObservable<IMapData> mapDataObservable = mapReference.LoadMap();
             mapDataObservable.Subscribe(mapData => {
-                _sceneLoader.LoadSceneAsync(kEncounterScene,
+                _sceneLoader.LoadSceneAsync(_data.sceneName,
                                             LoadSceneMode.Additive,
                                             container => {
                                                 HandleMapSceneLoaded(container, mapData);

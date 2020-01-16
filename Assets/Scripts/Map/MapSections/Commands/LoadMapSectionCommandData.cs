@@ -8,9 +8,9 @@ namespace Map.MapSections.Commands {
         public readonly uint sectionIndex;
         public readonly LoadMapCommandData mapCommandData;
 
-        public LoadMapSectionCommandData(uint sectionIndex, LoadMapCommandData loadMapCommandData) {
+        public LoadMapSectionCommandData(uint sectionIndex, LoadMapCommandData mapCommandData) {
             this.sectionIndex = sectionIndex;
-            this.mapCommandData = loadMapCommandData;
+            this.mapCommandData = mapCommandData;
         }
         
         #region ISerializable

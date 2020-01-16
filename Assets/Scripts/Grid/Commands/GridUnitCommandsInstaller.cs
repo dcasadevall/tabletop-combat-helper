@@ -1,10 +1,11 @@
 using CommandSystem;
+
 using CommandSystem.Installers;
 using Units.Spawning;
 using Zenject;
 
 namespace Grid.Commands {
-    public class GridCommandsInstaller : Installer {
+    public class GridUnitCommandsInstaller : Installer {
         public override void InstallBindings() {
             // We expose the concrete type so it can be instantiated by Type.
             Container.Bind<MoveUnitCommand>().AsSingle();

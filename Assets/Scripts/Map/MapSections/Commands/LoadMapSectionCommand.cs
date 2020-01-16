@@ -2,19 +2,13 @@ using System;
 using System.Collections.Generic;
 using CommandSystem;
 using Grid.Serialized;
-using Logging;
 using UniRx;
 using UniRx.Async;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
-using ILogger = Logging.ILogger;
 
 namespace Map.MapSections.Commands {
     public class LoadMapSectionCommand : ICommand {
-        // TODO: Inject this
-        private const string kMapSectionScene = "MapSectionScene";
-
         private readonly LoadMapSectionCommandData _data;
         private readonly IMapData _mapData;
         private readonly IPausableCommandQueue _pausableCommandQueue;
@@ -76,7 +70,7 @@ namespace Map.MapSections.Commands {
             }
 
             IMapSectionData mapSectionData = _mapData.Sections[nextSection];
-            return _sceneLoader.LoadSceneAsync(kMapSectionScene,
+            return _sceneLoader.LoadSceneAsync(_data.mapCommandData.sectionSceneName,
                                                LoadSceneMode.Additive,
                                                container => {
                                                    _loadedScenes[nextSection] =
