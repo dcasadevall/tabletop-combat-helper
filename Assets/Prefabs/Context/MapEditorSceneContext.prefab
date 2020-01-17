@@ -49,6 +49,7 @@ MonoBehaviour:
   - {fileID: 4137717807952470436}
   _installerPrefabs:
   - {fileID: 7713475859710784944, guid: 17d580ea188c74b48935ad0a7014c36e, type: 3}
+  - {fileID: 7121415755053799941, guid: 034afb82d47404b42bba743b9cfbbc71, type: 3}
   _autoRun: 1
   OnPreInstall:
     m_PersistentCalls:
