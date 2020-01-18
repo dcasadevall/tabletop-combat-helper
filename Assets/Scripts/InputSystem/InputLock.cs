@@ -25,13 +25,13 @@ namespace InputSystem {
             lock (this) {
                 if (_owner != null) {
                     var msg = $"Failed to acquire input lock. Already locked by: {_owner}";
-                    _logger.LogError(LoggedFeature.UI, msg);
+                    _logger.LogError(LoggedFeature.Input, msg);
                     throw new Exception(msg);
                 }
 
                 var lockToken = new LockToken(this);
                 _owner = lockToken.guid;
-                _logger.Log(LoggedFeature.UI, "Lock acquired: {0}", _owner);
+                _logger.Log(LoggedFeature.Input, "Lock acquired: {0}", _owner);
                 InputLockAcquired?.Invoke();
 
                 return lockToken;
@@ -42,7 +42,7 @@ namespace InputSystem {
             lock (this) {
                 if (!_owner.Equals(requestor)) {
                     var msg = $"Failed to release input lock. Lock owner: {_owner}. Requestor: {requestor}";
-                    _logger.LogError(LoggedFeature.UI, msg);
+                    _logger.LogError(LoggedFeature.Input, msg);
                     throw new Exception(msg);
                 }
 

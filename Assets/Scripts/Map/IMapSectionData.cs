@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Grid.Serialized;
 using Map.Rendering;
+using Math;
 using UnityEngine;
 
 namespace Map {
@@ -10,5 +12,6 @@ namespace Map {
         Sprite[] Sprites { get; }
         MapTileType MapTileType { get; }
         int PixelsPerUnit { get; }
+        Dictionary<IntVector2, ITileMetadata> TileMetadataMap { get; }
     }
 }

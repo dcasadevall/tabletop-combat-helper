@@ -1,11 +1,13 @@
 using System;
+using System.Collections.Generic;
 using Grid.Serialized;
 using Map.Rendering;
+using Math;
 using UnityEngine;
 
 namespace Map.Serialized {
     [Serializable]
-    public class MapSectionData : IMapSectionData {
+    public class MapSectionData : IMapSectionData, IMutableMapSectionData {
         public GridData gridData;
         public IGridData GridData {
             get {
@@ -37,6 +39,13 @@ namespace Map.Serialized {
         public int PixelsPerUnit {
             get {
                 return 1;
+            }
+        }
+
+        public TileMetadataPair[] tileMetadataPairs;
+        public Dictionary<IntVector2, ITileMetadata> TileMetadataMap {
+            get {
+                
             }
         }
     }

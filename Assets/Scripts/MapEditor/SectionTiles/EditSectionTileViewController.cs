@@ -1,15 +1,18 @@
 using System.Collections.Generic;
+using Logging;
 using Map;
+using Map.Serialized;
 using Math;
 using UniRx.Async;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using ILogger = Logging.ILogger;
 
 namespace MapEditor.SectionTiles {
     public class EditSectionTileViewController : MonoBehaviour {
         [SerializeField]
-        private Button _addSectionTileButton;
+        private Button _confirmButton;
 
         [SerializeField]
         private Button _cancelButton;
@@ -17,15 +20,18 @@ namespace MapEditor.SectionTiles {
         [SerializeField]
         private Dropdown _sectionSelectDropdown;
 
-        private IMapData _mapData;
+        private MapData _mapData;
+        private ILogger _logger;
+        private int _selectedIndex = 0;
 
         [Inject]
-        public void Construct(IMapData mapData) {
+        public void Construct(MapData mapData, ILogger logger) {
             _mapData = mapData;
+            _logger = logger;
         }
 
         private void Awake() {
-            _addSectionTileButton.onClick.AddListener(HandleAddSectionTilePressed);
+            _confirmButton.onClick.AddListener(HandleConfirmPressed);
             _sectionSelectDropdown.onValueChanged.AddListener(HandleSectionSelectValueChanged);
         }
 
@@ -41,22 +47,30 @@ namespace MapEditor.SectionTiles {
         }
 
         private void OnDestroy() {
-            _addSectionTileButton.onClick.RemoveListener(HandleAddSectionTilePressed);
+            _confirmButton.onClick.RemoveListener(HandleConfirmPressed);
             _sectionSelectDropdown.onValueChanged.RemoveListener(HandleSectionSelectValueChanged);
         }
 
         public async UniTask Show(IntVector2 tileCoords) {
             gameObject.SetActive(true);
 
-            UniTask addSectionTask = _addSectionTileButton.OnClickAsync();
+            UniTask addSectionTask = _confirmButton.OnClickAsync();
             UniTask cancelTask = _cancelButton.OnClickAsync();
             await UniTask.WhenAny(addSectionTask, cancelTask);
 
             gameObject.SetActive(false);
         }
 
-        private void HandleAddSectionTilePressed() { }
+        private void HandleConfirmPressed() {
+        }
 
-        private void HandleSectionSelectValueChanged(int selectedIndex) { }
+        private void HandleSectionSelectValueChanged(int selectedIndex) {
+            if (selectedIndex < 0 || selectedIndex >= _mapData.Sections.Length) {
+                _logger.LogError(LoggedFeature.MapEditor, "Invalid section index: {0}", selectedIndex);
+                return;
+            }
+            
+            _selectedIndex = selectedIndex;
+        }
     }
 }

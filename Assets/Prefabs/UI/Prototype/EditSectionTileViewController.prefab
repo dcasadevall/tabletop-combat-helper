@@ -1081,7 +1081,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ac4c34c77014abaa353f5b987a9d181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _addSectionTileButton: {fileID: 6150298481214917112}
+  _confirmButton: {fileID: 6150298481214917112}
   _cancelButton: {fileID: 2656297039605767034}
   _sectionSelectDropdown: {fileID: 5208120660635339348}
 --- !u!1 &5208120662159687866
