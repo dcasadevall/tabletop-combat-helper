@@ -41,7 +41,7 @@ namespace Units.Selection {
         private IRadialMenu _radialMenu;
         private ILogger _logger;
         
-        private Guid? _lockId;
+        private IDisposable _lockToken;
         private IUnit _unit;
         private Vector3 _menuScreenPositon;
 
@@ -73,13 +73,8 @@ namespace Units.Selection {
                 return UniTask.FromException(new Exception(msg));
             }
 
-            // Acquire input lock. If we fail to do so, return.
-            _lockId = _inputLock.Lock();
-            if (_lockId == null) {
-                var msg = "Failed to acquire input lock.";
-                _logger.LogError(LoggedFeature.Units, msg);
-                return UniTask.FromException(new Exception(msg));
-            }
+            // Acquire input lock.
+            _lockToken = _inputLock.Lock();
 
             // Set selected unit and events
             _unit = unit;
@@ -95,9 +90,8 @@ namespace Units.Selection {
         }
 
         private UniTask Hide() {
-            if (_lockId != null) {
-                _inputLock.Unlock(_lockId.Value);
-            }
+            _lockToken?.Dispose();
+            _lockToken = null;
 
             _moveUnitButton.onClick.RemoveListener(HandleMoveUnitButtonPressed);
             _removeUnitButton.onClick.RemoveListener(HandleRemoveUnitButtonPressed);

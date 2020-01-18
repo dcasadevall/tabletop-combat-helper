@@ -25,7 +25,7 @@ namespace Replays.Playback.UI {
         private IMapData _mapData;
         private IReplayPlaybackManager _playbackManager;
         private ICommandHistorySaver _commandHistorySaver;
-        private Guid? _lockId;
+        private IDisposable _lockToken;
         private bool _wasPausedBeforeDragging;
         private bool _wasPlayingBeforeDragging;
 
@@ -48,7 +48,7 @@ namespace Replays.Playback.UI {
         }
 
         private void Update() {
-            if (_lockId == null) {
+            if (_lockToken == null) {
                 _scrubSlider.value = _playbackManager.Progress;
             }
 
@@ -89,11 +89,11 @@ namespace Replays.Playback.UI {
         }
 
         public void HandleSliderDragBegin(BaseEventData baseEventData) {
-            if (_inputLock.IsLocked && _lockId == null) {
+            if (_inputLock.IsLocked && _lockToken == null) {
                 return;
             }
 
-            _lockId = _inputLock.Lock();
+            _lockToken = _inputLock.Lock();
             _wasPausedBeforeDragging = _playbackManager.IsPaused;
             _wasPlayingBeforeDragging = _playbackManager.IsPlaying;
         }
@@ -104,10 +104,8 @@ namespace Replays.Playback.UI {
         }
 
         public void HandleSliderDragEnd(BaseEventData baseEventData) {
-            if (_lockId != null) {
-                _inputLock.Unlock(_lockId.Value);
-                _lockId = null;
-            }
+            _lockToken?.Dispose();
+            _lockToken = null;
 
             if (!_wasPausedBeforeDragging && _wasPlayingBeforeDragging) {
                 _playbackManager.Play();

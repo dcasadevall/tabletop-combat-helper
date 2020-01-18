@@ -16,6 +16,7 @@ namespace Grid {
             Container.Bind<IGrid>().To<Grid>().AsSingle();
             Container.Bind<IRandomGridPositionProvider>().To<SpiralSequenceRandomPositionProvider>().AsSingle();
             Container.Bind<IGridPositionCalculator>().To<GridPositionCalculator>().AsSingle();
+            Container.BindInterfacesTo<GridInputManager>().AsSingle();
             
             // Grid Visualization
             Container.Bind<IGridCellHighlightPool>().To<GridCellHighlightPool>().AsSingle();

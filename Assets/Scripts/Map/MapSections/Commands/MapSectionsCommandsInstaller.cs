@@ -12,6 +12,9 @@ namespace Map.MapSections.Commands {
         }
 
         public override void InstallBindings() {
+            // Signals
+            Container.DeclareSignal<MapSectionWillLoadSignal>();
+            
             // We must expose the concrete command for the typed creation to work.
             Container.Bind<IMapSectionContext>().To<MapSectionContext>().FromInstance(_context);
             Container.Bind<MapSectionContext>()

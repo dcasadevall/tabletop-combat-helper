@@ -25,7 +25,6 @@ namespace CameraSystem {
         private Camera _camera;
         private EventSystem _eventSystem;
         private IInputLock _inputLock;
-        private Guid? _lockId;
 
         [Inject]
         public void Construct(Camera camera,
@@ -111,40 +110,32 @@ namespace CameraSystem {
                 return;
             }
 
-            _lockId = _inputLock.Lock();
-            if (_lockId == null) {
-                return;
-            }
+            using (_inputLock.Lock()) {
+                // Panning with mouse
+                float mouseSensitivity = 0.02f;
+                if (Input.GetMouseButtonDown(0)) {
+                    // We can't inject IGridUnitManager or IGridInputManager since camera controller lives 
+                    // in the project context, so we have to raycast :/.
+                    if (Physics2D.Raycast(_camera.ScreenToWorldPoint(Input.mousePosition),
+                                          Vector2.zero,
+                                          1000.0f,
+                                          LayerMask.GetMask("Units")).collider != null) {
+                        return;
+                    }
 
-            // Panning with mouse
-            float mouseSensitivity = 0.02f;
-            if (Input.GetMouseButtonDown(0)) {
-                // We can't inject IGridUnitManager or IGridInputManager since camera controller lives 
-                // in the project context, so we have to raycast :/.
-                if (Physics2D.Raycast(_camera.ScreenToWorldPoint(Input.mousePosition),
-                                      Vector2.zero,
-                                      1000.0f,
-                                      LayerMask.GetMask("Units")).collider != null) {
-                    _inputLock.Unlock(_lockId.Value);
-                    _lockId = null;
-                    return;
+                    lastPosition = Input.mousePosition;
                 }
-                
-                lastPosition = Input.mousePosition;
-            }
- 
-            if (Input.GetMouseButton(0) && lastPosition != null) {
-                Vector3 delta = Input.mousePosition - lastPosition.Value;
-                transform.Translate(-delta.x * mouseSensitivity, -delta.y * mouseSensitivity, 0);
-                lastPosition = Input.mousePosition;
-            }
 
-            if (Input.GetMouseButtonUp(0)) {
-                lastPosition = null;
+                if (Input.GetMouseButton(0) && lastPosition != null) {
+                    Vector3 delta = Input.mousePosition - lastPosition.Value;
+                    transform.Translate(-delta.x * mouseSensitivity, -delta.y * mouseSensitivity, 0);
+                    lastPosition = Input.mousePosition;
+                }
+
+                if (Input.GetMouseButtonUp(0)) {
+                    lastPosition = null;
+                }
             }
-            
-            _inputLock.Unlock(_lockId.Value);
-            _lockId = null;
         }
 
         private void LateUpdate() {

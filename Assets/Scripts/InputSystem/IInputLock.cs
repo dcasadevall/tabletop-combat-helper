@@ -22,15 +22,13 @@ namespace InputSystem {
         /// </summary>
         bool IsLocked { get; }
         /// <summary>
-        /// Attempts to acquire the lock, returning a new Guid if successful, or null otherwise.
+        /// Attempts to acquire the lock, returning a <see cref="IDisposable"/> object that will release the lock
+        /// when disposed of.
+        ///
+        /// This will throw an exception if the lock is already held by another actor. So be sure to check for
+        /// <see cref="IsLocked"/> if you want to fail gracefully.
         /// </summary>
         /// <returns></returns>
-        Guid? Lock();
-        /// <summary>
-        /// Unlocks the current lock if the given owner matches the owner that originally locked it.
-        /// Returns true if successful, and false otherwise.
-        /// </summary>
-        /// <param name="owner"></param>
-        bool Unlock(Guid owner);
+        IDisposable Lock();
     }
 }

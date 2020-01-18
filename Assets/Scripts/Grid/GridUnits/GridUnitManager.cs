@@ -10,7 +10,7 @@ using UnityEngine;
 using Zenject;
 using ILogger = Logging.ILogger;
 
-namespace Grid {
+namespace Grid.GridUnits {
     /// <summary>
     /// Implementation of <see cref="IGridUnitManager"/> which uses an in memory map as a registry.
     /// </summary>

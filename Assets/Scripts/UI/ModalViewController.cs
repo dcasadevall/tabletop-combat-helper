@@ -1,6 +1,5 @@
 using System;
 using InputSystem;
-using JetBrains.Annotations;
 using Logging;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,9 +14,7 @@ namespace UI {
         private IInputLock _inputLock;
         private ILogger _logger;
         private bool _isShown;
-
-        [CanBeNull]
-        private Guid? _lock;
+        private IDisposable _lock;
         
         [Inject]
         public void Construct(IInputLock inputLock, ILogger logger) {
@@ -43,11 +40,10 @@ namespace UI {
         }
 
         public void Hide() {
-            _isShown = false;
-            if (_lock != null) {
-                _inputLock.Unlock(_lock.Value);
-            }
+            _lock?.Dispose();
+            _lock = null;
             
+            _isShown = false;
             gameObject.SetActive(false);
         }
     }

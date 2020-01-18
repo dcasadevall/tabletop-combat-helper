@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Grid;
+using Grid.GridUnits;
 using InputSystem;
 using UniRx;
 using Units.Movement;
@@ -14,7 +14,7 @@ namespace Units.Selection {
         private readonly UnitSelectionHighlighter _unitSelectionHighlighter;
         private readonly IUnitMovementController _unitMovementController;
         private readonly IInputLock _inputLock;
-        private readonly IGridInputManager _gridInputManager;
+        private readonly IGridUnitInputManager _gridUnitInputManager;
         private readonly IUnitRegistry _unitRegistry;
         private readonly List<IDisposable> _disposables;
 
@@ -22,12 +22,12 @@ namespace Units.Selection {
                                      UnitSelectionHighlighter unitSelectionHighlighter,
                                      IUnitMovementController unitMovementController,
                                      IInputLock inputLock,
-                                     IGridInputManager gridInputManager) {
+                                     IGridUnitInputManager gridUnitInputManager) {
             _unitMenuViewController = unitMenuViewController;
             _unitSelectionHighlighter = unitSelectionHighlighter;
             _unitMovementController = unitMovementController;
             _inputLock = inputLock;
-            _gridInputManager = gridInputManager;
+            _gridUnitInputManager = gridUnitInputManager;
             _disposables = new List<IDisposable>();
         }
 
@@ -35,16 +35,16 @@ namespace Units.Selection {
             var mouseDownStream = Observable.EveryUpdate()
                                             .Where(_ => Input.GetMouseButtonDown(0))
                                             .Where(_ => !_inputLock.IsLocked)
-                                            .Where(_ => _gridInputManager.UnitsAtMousePosition.Length > 0)
+                                            .Where(_ => _gridUnitInputManager.UnitsAtMousePosition.Length > 0)
                                             .Select(_ => new Tuple<string, IUnit[]>("down",
-                                                                                    _gridInputManager
+                                                                                    _gridUnitInputManager
                                                                                         .UnitsAtMousePosition));
             var mouseUpStream = Observable.EveryUpdate()
                                           .Where(_ => Input.GetMouseButtonUp(0))
                                           .Where(_ => !_inputLock.IsLocked)
-                                          .Where(_ => _gridInputManager.UnitsAtMousePosition.Length > 0)
+                                          .Where(_ => _gridUnitInputManager.UnitsAtMousePosition.Length > 0)
                                           .Select(_ => new Tuple<string, IUnit[]>("up",
-                                                                                  _gridInputManager
+                                                                                  _gridUnitInputManager
                                                                                       .UnitsAtMousePosition));
             var clickStream = mouseDownStream.Merge(mouseUpStream)
                                              // Add Interval info from current to previous event
@@ -67,9 +67,9 @@ namespace Units.Selection {
             var mouseDragStream = Observable.Timer(TimeSpan.FromMilliseconds(300))
                                             .TakeWhile(_ => Input.GetMouseButton(0))
                                             .TakeWhile(_ => !_inputLock.IsLocked)
-                                            .TakeWhile(_ => _gridInputManager.UnitsAtMousePosition.Length > 0)
+                                            .TakeWhile(_ => _gridUnitInputManager.UnitsAtMousePosition.Length > 0)
                                             .TakeUntil(mouseUpStream)
-                                            .Select(_ => _gridInputManager.UnitsAtMousePosition)
+                                            .Select(_ => _gridUnitInputManager.UnitsAtMousePosition)
                                             .Repeat();
 
             mouseDragStream.Subscribe(OnMouseDrag).AddTo(_disposables);

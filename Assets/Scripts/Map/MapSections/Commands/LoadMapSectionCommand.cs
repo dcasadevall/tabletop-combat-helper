@@ -9,6 +9,7 @@ using Zenject;
 
 namespace Map.MapSections.Commands {
     public class LoadMapSectionCommand : ICommand {
+        private readonly SignalBus _signalBus;
         private readonly LoadMapSectionCommandData _data;
         private readonly IMapData _mapData;
         private readonly IPausableCommandQueue _pausableCommandQueue;
@@ -23,11 +24,13 @@ namespace Map.MapSections.Commands {
 
         private uint _previousSection;
 
-        public LoadMapSectionCommand(LoadMapSectionCommandData data,
+        public LoadMapSectionCommand(SignalBus signalBus,
+                                     LoadMapSectionCommandData data,
                                      IMapData mapData,
                                      IPausableCommandQueue pausableCommandQueue,
                                      MapSectionContext mapSectionContext,
                                      ZenjectSceneLoader sceneLoader) {
+            _signalBus = signalBus;
             _data = data;
             _mapData = mapData;
             _pausableCommandQueue = pausableCommandQueue;
@@ -52,13 +55,16 @@ namespace Map.MapSections.Commands {
         private static Dictionary<uint, SceneState> _loadedScenes = new Dictionary<uint, SceneState>();
 
         private IObservable<Unit> LoadMapSection(uint nextSection) {
+            IMapSectionData mapSectionData = _mapData.Sections[nextSection];
+            _signalBus.Fire(new MapSectionWillLoadSignal(mapSectionData));
+            
             // While we change scenes, pause any commands from being processed.
             // This avoids race conditions with commands being instantiated in the wrong context.
             _pausableCommandQueue.Pause();
-            
+
             _previousSection = _mapSectionContext.CurrentSectionIndex;
             _mapSectionContext.CurrentSectionIndex = nextSection;
-            
+
             if (_loadedScenes.ContainsKey(_previousSection)) {
                 _loadedScenes[_previousSection].Deactivate();
             }
@@ -69,12 +75,12 @@ namespace Map.MapSections.Commands {
                 return Observable.ReturnUnit();
             }
 
-            IMapSectionData mapSectionData = _mapData.Sections[nextSection];
             return _sceneLoader.LoadSceneAsync(_data.mapCommandData.sectionSceneName,
                                                LoadSceneMode.Additive,
                                                container => {
                                                    _loadedScenes[nextSection] =
-                                                       new SceneState(SceneManager.GetSceneAt(SceneManager.sceneCount - 1));
+                                                       new SceneState(SceneManager.GetSceneAt(SceneManager.sceneCount -
+                                                                                              1));
 
                                                    container.Bind<IGridData>().FromInstance(mapSectionData.GridData);
                                                    container.Bind<IMapSectionData>().FromInstance(mapSectionData);

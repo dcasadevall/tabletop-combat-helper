@@ -1,4 +1,5 @@
 using System;
+using Logging;
 
 namespace InputSystem {
     public class InputLock : IInputLock {
@@ -13,35 +14,55 @@ namespace InputSystem {
             }
         }
 
+        private readonly ILogger _logger;
         private Guid? _owner;
 
-        public Guid? Lock() {
+        public InputLock(ILogger logger) {
+            _logger = logger;
+        }
+
+        public IDisposable Lock() {
             lock (this) {
-                if (IsLocked) {
-                    return null;
+                if (_owner != null) {
+                    var msg = $"Failed to acquire input lock. Already locked by: {_owner}";
+                    _logger.LogError(LoggedFeature.UI, msg);
+                    throw new Exception(msg);
                 }
 
-                _owner = Guid.NewGuid();
+                var lockToken = new LockToken(this);
+                _owner = lockToken.guid;
+                _logger.Log(LoggedFeature.UI, "Lock acquired: {0}", _owner);
                 InputLockAcquired?.Invoke();
 
-                return _owner;
+                return lockToken;
             }
         }
 
-        public bool Unlock(Guid owner) {
+        private void Unlock(Guid requestor) {
             lock (this) {
-                if (_owner == null) {
-                    return false;
+                if (!_owner.Equals(requestor)) {
+                    var msg = $"Failed to release input lock. Lock owner: {_owner}. Requestor: {requestor}";
+                    _logger.LogError(LoggedFeature.UI, msg);
+                    throw new Exception(msg);
                 }
 
-                if (!_owner.Equals(owner)) {
-                    return false;
-                }
-
+                _logger.Log(LoggedFeature.UI, "Lock released: {0}", _owner);
                 _owner = null;
                 InputLockReleased?.Invoke();
+            }
+        }
 
-                return true;
+        private class LockToken : IDisposable {
+            public readonly Guid guid;
+            private readonly InputLock _inputLock;
+
+            public LockToken(InputLock inputLock) {
+                _inputLock = inputLock;
+                guid = Guid.NewGuid();
+            }
+
+            public void Dispose() {
+                _inputLock.Unlock(guid);
             }
         }
     }

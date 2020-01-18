@@ -41,7 +41,7 @@ namespace Drawing.UI {
         private ICommandQueue _commandQueue;
         private IInputLock _inputLock;
         private ILogger _logger;
-        private Guid? _lockId;
+        private IDisposable _lockToken;
 
         [Inject]
         public void Construct(ICommandQueue commandQueue,
@@ -57,11 +57,7 @@ namespace Drawing.UI {
         }
 
         public void Show() {
-            _lockId = _inputLock.Lock();
-            if (_lockId == null) {
-                _logger.LogError(LoggedFeature.Drawing, "Failed to acquire input lock.");
-                return;
-            }
+            _lockToken = _inputLock.Lock();
 
             _stopPaintingButton.SetActive(true);
             _drawingTools.SetActive(true);
@@ -70,10 +66,8 @@ namespace Drawing.UI {
         }
 
         private void Hide() {
-            if (_lockId != null) {
-                _inputLock.Unlock(_lockId.Value);
-                _lockId = null;
-            }
+            _lockToken?.Dispose();
+            _lockToken = null;
 
             _stopPaintingButton.SetActive(false);
             _drawingTools.SetActive(false);
