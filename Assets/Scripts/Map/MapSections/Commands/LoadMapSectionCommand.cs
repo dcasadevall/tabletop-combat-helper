@@ -9,7 +9,11 @@ using Zenject;
 
 namespace Map.MapSections.Commands {
     public class LoadMapSectionCommand : ICommand {
-        private readonly SignalBus _signalBus;
+        // TODO: Use Zenject signals instead of a static event once this is fixed:
+        // https://github.com/svermeulen/Extenject/issues/27
+        // This works for now because we don't mind exposing the command implementation.
+        public static event System.Action MapSectionWillLoad;
+
         private readonly LoadMapSectionCommandData _data;
         private readonly IMapData _mapData;
         private readonly IPausableCommandQueue _pausableCommandQueue;
@@ -24,13 +28,11 @@ namespace Map.MapSections.Commands {
 
         private uint _previousSection;
 
-        public LoadMapSectionCommand(SignalBus signalBus,
-                                     LoadMapSectionCommandData data,
+        public LoadMapSectionCommand(LoadMapSectionCommandData data,
                                      IMapData mapData,
                                      IPausableCommandQueue pausableCommandQueue,
                                      MapSectionContext mapSectionContext,
                                      ZenjectSceneLoader sceneLoader) {
-            _signalBus = signalBus;
             _data = data;
             _mapData = mapData;
             _pausableCommandQueue = pausableCommandQueue;
@@ -55,9 +57,8 @@ namespace Map.MapSections.Commands {
         private static Dictionary<uint, SceneState> _loadedScenes = new Dictionary<uint, SceneState>();
 
         private IObservable<Unit> LoadMapSection(uint nextSection) {
-            IMapSectionData mapSectionData = _mapData.Sections[nextSection];
-            _signalBus.Fire(new MapSectionWillLoadSignal(mapSectionData));
-            
+            MapSectionWillLoad?.Invoke();
+
             // While we change scenes, pause any commands from being processed.
             // This avoids race conditions with commands being instantiated in the wrong context.
             _pausableCommandQueue.Pause();
@@ -75,6 +76,7 @@ namespace Map.MapSections.Commands {
                 return Observable.ReturnUnit();
             }
 
+            IMapSectionData mapSectionData = _mapData.Sections[nextSection];
             return _sceneLoader.LoadSceneAsync(_data.mapCommandData.sectionSceneName,
                                                LoadSceneMode.Additive,
                                                container => {

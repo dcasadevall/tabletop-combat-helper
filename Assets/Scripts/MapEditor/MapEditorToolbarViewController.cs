@@ -23,20 +23,17 @@ namespace MapEditor {
 
         private IMapEditorTool _sectionTileEditor;
         private IInputLock _inputLock;
-        private SignalBus _signalBus;
 
         [Inject]
         public void Construct([Inject(Id = MapEditorInstaller.SECTION_TILE_EDITOR_ID)]
-                              SignalBus signalBus,
                               IMapEditorTool sectionTileEditor, 
                               IInputLock inputLock) {
-            _signalBus = signalBus;
             _sectionTileEditor = sectionTileEditor;
             _inputLock = inputLock;
         }
 
         private void Awake() {
-            _signalBus.Subscribe<MapSectionWillLoadSignal>(HandleMapSectionWillLoad);
+            LoadMapSectionCommand.MapSectionWillLoad += HandleMapSectionWillLoad;
             _sectionTileButton.onClick.AddListener(HandleSectionTileButtonPressed);
             _roomToolButton.onClick.AddListener(HandleRoomToolButtonPressed);
             _cancelButton.onClick.AddListener(HandleCancelButtonPressed);
@@ -45,6 +42,7 @@ namespace MapEditor {
         }
 
         private void OnDestroy() {
+            LoadMapSectionCommand.MapSectionWillLoad -= HandleMapSectionWillLoad;
             _sectionTileButton.onClick.RemoveListener(HandleSectionTileButtonPressed);
             _roomToolButton.onClick.RemoveListener(HandleRoomToolButtonPressed);
             _cancelButton.onClick.RemoveListener(HandleCancelButtonPressed);
@@ -80,7 +78,7 @@ namespace MapEditor {
         }
         
         // On section load, exit all editing. Because we have 1 toolbar per section.
-        private void HandleMapSectionWillLoad(MapSectionWillLoadSignal signal) {
+        private void HandleMapSectionWillLoad() {
             HandleCancelButtonPressed();
         }
     }
