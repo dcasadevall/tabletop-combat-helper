@@ -52,8 +52,7 @@ namespace Grid {
 
             if (_debugSettings.ShowDebugGrid) {
                 if (_cells[x, y] == null) {
-                    var position = _positionCalculator.GetTileCenterWorldPosition(IntVector2.Of(x, y));
-                    _cells[x, y] = _cellHighlightPool.Spawn(position, new Color(0, 0, 0, 0));
+                    _cells[x, y] = _cellHighlightPool.Spawn(IntVector2.Of(x, y), new Color(0, 0, 0, 0));
                 }
 
                 _cells[x, y].SetColor(new Color(0, 0, 0, 0));

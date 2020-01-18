@@ -79,8 +79,7 @@ namespace Units.Movement.ActionHandlers {
             var baseSpeedTiles =
                 _gridPositionCalculator.GetTilesAtDistance(coords.Value, unit.UnitData.UnitStats.speed / 5);
             foreach (var tileCoords in baseSpeedTiles) {
-                var worldPosition = _gridPositionCalculator.GetTileCenterWorldPosition(tileCoords);
-                _gridCellHighlightPool.Spawn(worldPosition, new Color(0, 1, 0, 0.6f));
+                _gridCellHighlightPool.Spawn(tileCoords, new Color(0, 1, 0, 0.6f));
                 _validTiles.Add(tileCoords);
             }
         }
