@@ -1,7 +1,7 @@
 using CommandSystem;
 using InputSystem;
-using Map.Commands;
 using Map.MapSections.Commands;
+using Map.MapSelection.Commands;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;

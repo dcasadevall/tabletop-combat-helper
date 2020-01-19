@@ -17,14 +17,5 @@ namespace Map.Serialized {
                 return sections.Cast<IMapSectionData>().ToArray();
             }
         }
-        
-        IMutableMapSectionData[] IMutableMapData.Sections {
-            get {
-                return sections;
-            }
-            set {
-                
-            }
-        }
     }
 }

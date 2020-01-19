@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.Serialization;
-using Map.Commands;
+using Map.MapSelection.Commands;
 
 namespace Map.MapSections.Commands {
     [Serializable]

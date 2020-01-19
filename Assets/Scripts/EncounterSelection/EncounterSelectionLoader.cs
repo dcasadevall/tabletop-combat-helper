@@ -1,8 +1,8 @@
 
 using System;
 using CommandSystem;
-using Map.Commands;
 using Map.MapSelection;
+using Map.MapSelection.Commands;
 using Replays.Persistence;
 using Replays.Persistence.UI;
 using Zenject;
@@ -51,7 +51,7 @@ namespace EncounterSelection {
             _encounterSelectionContext.EncounterType = EncounterType.EditMap;
             LoadMapCommandData commandData =
                 new LoadMapCommandData((uint) mapIndex, "MapEditorScene", "MapEditorSectionScene");
-            _commandQueue.Enqueue<LoadMapCommand, LoadMapCommandData>(commandData, CommandSource.Game);
+            _commandQueue.Enqueue<LoadEditableMapCommand, LoadMapCommandData>(commandData, CommandSource.Game);
         }
 
         private void HandleLoadMapClicked(int mapIndex) {

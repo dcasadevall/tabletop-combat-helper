@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using CommandSystem;
 using Logging;
 using Map.MapSections.Commands;
-using Map.MapSelection;
+using Map.Serialized;
 using Replays.Persistence.UI;
 using UI;
 using UniRx;
 using UnityEngine.SceneManagement;
 using Zenject;
 
-namespace Map.Commands {
+namespace Map.MapSelection.Commands {
     /// <summary>
     /// Version of <see cref="LoadMapCommand"/> used for the map editor. Injected MapData is mutable so
     /// editor actors can modify it.
     /// </summary>
     public class LoadEditableMapCommand : ICommand {
         private readonly LoadMapCommandData _data;
-        private readonly List<IMapReference> _mapPreviews;
+        private readonly List<IMutableMapReference> _mapReferences;
         private readonly ICommandFactory _commandFactory;
         private readonly ILogger _logger;
         private readonly IReplayLoaderViewController _replayLoaderViewController;
@@ -32,12 +32,14 @@ namespace Map.Commands {
             }
         }
 
-        public LoadMapCommand(LoadMapCommandData data,
-                              List<IMapReference> mapPreviews, ICommandFactory commandFactory, ILogger logger,
-                              ZenjectSceneLoader sceneLoader,
-                              IModalViewController modalViewController) {
+        public LoadEditableMapCommand(LoadMapCommandData data,
+                                      List<IMutableMapReference> mapReferences, 
+                                      ICommandFactory commandFactory, 
+                                      ILogger logger,
+                                      ZenjectSceneLoader sceneLoader,
+                                      IModalViewController modalViewController) {
             _data = data;
-            _mapPreviews = mapPreviews;
+            _mapReferences = mapReferences;
             _commandFactory = commandFactory;
             _logger = logger;
             _sceneLoader = sceneLoader;
@@ -45,28 +47,30 @@ namespace Map.Commands {
         }
 
         public IObservable<Unit> Run() {
-            if (_data.mapIndex >= _mapPreviews.Count) {
+            if (_data.mapIndex >= _mapReferences.Count) {
                 string errorMsg = string.Format("Invalid map index: {0}", _data.mapIndex);
                 _logger.LogError(LoggedFeature.Map, errorMsg);
                 return Observable.Throw<Unit>(new Exception(errorMsg));
             }
 
             _modalViewController.Show("Loading Assets...");
-            IMapReference mapReference = _mapPreviews[(int) _data.mapIndex];
-            IObservable<IMapData> mapDataObservable = mapReference.LoadMap();
+            IMutableMapReference mapReference = _mapReferences[(int) _data.mapIndex];
+            // TODO: Commands to use unitask. this should just be all async / await
+            IObservable<MapData> mapDataObservable = mapReference.LoadMap().ToObservable();
             mapDataObservable.Subscribe(mapData => {
                 _sceneLoader.LoadSceneAsync(_data.sceneName,
                                             LoadSceneMode.Additive,
                                             container => {
                                                 HandleMapSceneLoaded(container, mapData);
-                                            });      
+                                            });
             });
 
             return _sceneLoadedSubject;
         }
 
-        private void HandleMapSceneLoaded(DiContainer container, IMapData mapData) {
+        private void HandleMapSceneLoaded(DiContainer container, MapData mapData) {
             container.Bind<LoadMapCommandData>().FromInstance(_data);
+            container.Bind<MapData>().FromInstance(mapData);
             container.Bind<IMapData>().FromInstance(mapData);
 
             // This needs to happen after 1 frame because we are currently still loading the next scene.

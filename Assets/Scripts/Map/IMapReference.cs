@@ -1,4 +1,5 @@
 using System;
+using UniRx.Async;
 using UnityEngine.AddressableAssets;
 
 namespace Map {
@@ -17,6 +18,6 @@ namespace Map {
         /// Attempts to load the map asynchronously.
         /// </summary>
         /// <returns></returns>
-        IObservable<IMapData> LoadMap();
+        UniTask<IMapData> LoadMap();
     }
 }

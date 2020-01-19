@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using CommandSystem;
 using Logging;
 using Map.MapSections.Commands;
-using Map.MapSelection;
 using Replays.Persistence.UI;
 using UI;
 using UniRx;
 using UnityEngine.SceneManagement;
 using Zenject;
 
-namespace Map.Commands {
+namespace Map.MapSelection.Commands {
     public class LoadMapCommand : ICommand {
         private readonly LoadMapCommandData _data;
         private readonly List<IMapReference> _mapPreviews;
@@ -29,7 +28,9 @@ namespace Map.Commands {
         }
 
         public LoadMapCommand(LoadMapCommandData data,
-                              List<IMapReference> mapPreviews, ICommandFactory commandFactory, ILogger logger,
+                              List<IMapReference> mapPreviews,
+                              ICommandFactory commandFactory,
+                              ILogger logger,
                               ZenjectSceneLoader sceneLoader,
                               IModalViewController modalViewController) {
             _data = data;
@@ -49,7 +50,8 @@ namespace Map.Commands {
 
             _modalViewController.Show("Loading Assets...");
             IMapReference mapReference = _mapPreviews[(int) _data.mapIndex];
-            IObservable<IMapData> mapDataObservable = mapReference.LoadMap();
+            // TODO: Commands to use unitask. this should just be all async / await
+            IObservable<IMapData> mapDataObservable = mapReference.LoadMap().ToObservable();
             mapDataObservable.Subscribe(mapData => {
                 _sceneLoader.LoadSceneAsync(_data.sceneName,
                                             LoadSceneMode.Additive,

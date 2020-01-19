@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Grid.Serialized;
 using Map.Rendering;
 using Math;
@@ -7,7 +8,7 @@ using UnityEngine;
 
 namespace Map.Serialized {
     [Serializable]
-    public class MapSectionData : IMapSectionData, IMutableMapSectionData {
+    public class MapSectionData : IMapSectionData {
         public GridData gridData;
         public IGridData GridData {
             get {
@@ -42,10 +43,11 @@ namespace Map.Serialized {
             }
         }
 
-        public TileMetadataPair[] tileMetadataPairs;
+        public List<TileMetadataPair> tileMetadataPairs = new List<TileMetadataPair>();
         public Dictionary<IntVector2, ITileMetadata> TileMetadataMap {
             get {
-                
+                return tileMetadataPairs.ToDictionary(x => IntVector2.Of(x.tileCoords),
+                                                      x => (ITileMetadata) x.tileMetadata);
             }
         }
     }

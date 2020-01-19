@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using Castle.Core.Internal;
 using Logging;
 using Map;
 using Map.Serialized;
 using Math;
+using ModestTree;
 using UniRx.Async;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,12 +23,15 @@ namespace MapEditor.SectionTiles {
         private Dropdown _sectionSelectDropdown;
 
         private MapData _mapData;
+        private IMapSectionData _mapSectionData;
         private ILogger _logger;
         private int _selectedIndex = 0;
+        private IntVector2 _tileCoords;
 
         [Inject]
-        public void Construct(MapData mapData, ILogger logger) {
+        public void Construct(IMapSectionData mapSectionData, MapData mapData, ILogger logger) {
             _mapData = mapData;
+            _mapSectionData = mapSectionData;
             _logger = logger;
         }
 
@@ -54,14 +59,39 @@ namespace MapEditor.SectionTiles {
         public async UniTask Show(IntVector2 tileCoords) {
             gameObject.SetActive(true);
 
-            UniTask addSectionTask = _confirmButton.OnClickAsync();
+            // Show existing section connection if possible.
+            _selectedIndex = 0;
+            if (_mapSectionData.TileMetadataMap.ContainsKey(tileCoords) &&
+                _mapSectionData.TileMetadataMap[tileCoords].SectionConnection != null) {
+                _selectedIndex = (int) _mapSectionData.TileMetadataMap[tileCoords].SectionConnection.Value;
+            }
+            _sectionSelectDropdown.value = _selectedIndex;
+            
+            // Wait on confirm / cancel
+            _tileCoords = tileCoords;
+            UniTask confirmTask = _confirmButton.OnClickAsync();
             UniTask cancelTask = _cancelButton.OnClickAsync();
-            await UniTask.WhenAny(addSectionTask, cancelTask);
+            await UniTask.WhenAny(confirmTask, cancelTask);
 
             gameObject.SetActive(false);
         }
 
         private void HandleConfirmPressed() {
+            if (_selectedIndex < 0 || _selectedIndex >= _mapData.Sections.Length) {
+                _logger.LogError(LoggedFeature.MapEditor, "Invalid section index: {0}", _selectedIndex);
+                return;
+            }
+
+            MapSectionData mapSectionData = _mapData.sections[_selectedIndex];
+            int index = mapSectionData.tileMetadataPairs.FindIndex(x => IntVector2.Of(x.tileCoords) == _tileCoords);
+
+            if (index == -1) {
+                mapSectionData.tileMetadataPairs.Add(new TileMetadataPair(new Vector2(_tileCoords.x, _tileCoords.y)));
+                index = mapSectionData.tileMetadataPairs.Count - 1;
+            }
+
+            TileMetadata tileMetadata = mapSectionData.tileMetadataPairs[index].tileMetadata;
+            tileMetadata.sectionConnection = _selectedIndex;
         }
 
         private void HandleSectionSelectValueChanged(int selectedIndex) {

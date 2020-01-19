@@ -1,5 +1,5 @@
 ﻿using CommandSystem.Installers;
-using Map.Commands;
+using Map.MapSelection.Commands;
 using Map.Serialized;
 using UnityEngine;
 using Zenject;
@@ -24,9 +24,9 @@ namespace Map.MapSelection {
             foreach (var mapReference in _mapSelectionData.mapReferences) {
                 Container.Bind<IMapReference>().To<MapReference>().FromInstance(mapReference);
             }
-            
-            // Commands installer
-            CommandsInstaller.Install<MapCommandsInstaller>(Container);
+
+            Container.Install<MapEditorSelectionInstaller>();
+            CommandsInstaller.Install<MapSelectionCommandsInstaller>(Container);
         }
     }
 }
