@@ -31,7 +31,6 @@ namespace InputSystem {
 
                 var lockToken = new LockToken(this);
                 _owner = lockToken.guid;
-                _logger.Log(LoggedFeature.Input, "Lock acquired: {0}", _owner);
                 InputLockAcquired?.Invoke();
 
                 return lockToken;
@@ -46,7 +45,6 @@ namespace InputSystem {
                     throw new Exception(msg);
                 }
 
-                _logger.Log(LoggedFeature.UI, "Lock released: {0}", _owner);
                 _owner = null;
                 InputLockReleased?.Invoke();
             }

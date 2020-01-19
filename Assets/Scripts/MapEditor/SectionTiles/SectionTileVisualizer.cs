@@ -10,6 +10,7 @@ namespace MapEditor.SectionTiles {
         }
 
         public void Initialize() {
+            
         }
 
         public void Dispose() {
