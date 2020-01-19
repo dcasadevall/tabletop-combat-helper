@@ -13,7 +13,7 @@ using Zenject;
 namespace Map.MapSelection.Commands {
     public class LoadMapCommand : ICommand {
         private readonly LoadMapCommandData _data;
-        private readonly List<IMapReference> _mapReferences;
+        private readonly List<ILoadadableMapReference> _mapReferences;
         private readonly ICommandFactory _commandFactory;
         private readonly ILogger _logger;
         private readonly IReplayLoaderViewController _replayLoaderViewController;
@@ -29,7 +29,7 @@ namespace Map.MapSelection.Commands {
         }
 
         public LoadMapCommand(LoadMapCommandData data,
-                              List<IMapReference> mapReferences,
+                              List<ILoadadableMapReference> mapReferences,
                               ICommandFactory commandFactory,
                               ILogger logger,
                               ZenjectSceneLoader sceneLoader,
@@ -50,7 +50,7 @@ namespace Map.MapSelection.Commands {
             }
 
             _modalViewController.Show("Loading Assets...");
-            IMapReference mapReference = _mapReferences[(int) _data.mapIndex];
+            ILoadadableMapReference mapReference = _mapReferences[(int) _data.mapIndex];
             // TODO: Commands to use unitask. this should just be all async / await
             IObservable<IMutableMapData> mapDataObservable = mapReference.LoadMap().ToObservable();
             mapDataObservable.Subscribe(mapData => {

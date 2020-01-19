@@ -5,7 +5,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Map.Serialized {
     [Serializable]
-    public class MapReference : IMapReference {
+    public class MapReference : ILoadadableMapReference {
         public string name;
         public string MapName {
             get {

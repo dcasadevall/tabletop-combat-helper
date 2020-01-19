@@ -22,7 +22,13 @@ namespace Map.MapSelection {
                      .FromComponentInNewPrefab(mapSelectViewControllerPrefab).AsSingle();
             
             foreach (var mapReference in _mapSelectionData.mapReferences) {
+                // Most actors just see the map reference.
                 Container.Bind<IMapReference>().To<MapReference>().FromInstance(mapReference);
+                // LoadMapCommand needs to actually load the asset.
+                Container.Bind<ILoadadableMapReference>()
+                         .To<MapReference>()
+                         .FromInstance(mapReference)
+                         .WhenInjectedInto<LoadMapCommand>();
             }
 
             CommandsInstaller.Install<MapSelectionCommandsInstaller>(Container);
