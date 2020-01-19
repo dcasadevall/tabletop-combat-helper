@@ -47,5 +47,7 @@ MonoBehaviour:
     type: 3}
   _editSectionTileVcPrefab: {fileID: 6481291186857624241, guid: 21a011ee3925845e8a87be2ff854fe5f,
     type: 3}
+  _sectionTileRendererPrefab: {fileID: 1200446127716184142, guid: 0ff5af9afe3b74e6e99659e8bad9f082,
+    type: 3}
   _sectionTilesModeCursor: {fileID: 2800000, guid: e051747e73f584d929f8203504189bf6,
     type: 3}

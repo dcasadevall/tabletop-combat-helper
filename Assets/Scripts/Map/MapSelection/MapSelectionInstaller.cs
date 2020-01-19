@@ -25,7 +25,6 @@ namespace Map.MapSelection {
                 Container.Bind<IMapReference>().To<MapReference>().FromInstance(mapReference);
             }
 
-            Container.Install<MapEditorSelectionInstaller>();
             CommandsInstaller.Install<MapSelectionCommandsInstaller>(Container);
         }
     }

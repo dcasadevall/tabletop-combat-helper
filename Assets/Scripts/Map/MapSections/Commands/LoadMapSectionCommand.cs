@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CommandSystem;
 using Grid.Serialized;
+using Map.Serialized;
 using UniRx;
 using UniRx.Async;
 using UnityEngine.SceneManagement;
@@ -17,7 +18,7 @@ namespace Map.MapSections.Commands {
         public static event System.Action MapSectionWillLoad;
 
         private readonly LoadMapSectionCommandData _data;
-        private readonly IMapData _mapData;
+        private readonly MapData _mapData;
         private readonly IPausableCommandQueue _pausableCommandQueue;
         private readonly MapSectionContext _mapSectionContext;
         private readonly ZenjectSceneLoader _sceneLoader;
@@ -31,7 +32,7 @@ namespace Map.MapSections.Commands {
         private uint _previousSection;
 
         public LoadMapSectionCommand(LoadMapSectionCommandData data,
-                                     IMapData mapData,
+                                     MapData mapData,
                                      IPausableCommandQueue pausableCommandQueue,
                                      MapSectionContext mapSectionContext,
                                      ZenjectSceneLoader sceneLoader) {
@@ -78,8 +79,8 @@ namespace Map.MapSections.Commands {
                 return Observable.ReturnUnit();
             }
 
-            IMapSectionData mapSectionData = _mapData.Sections[nextSection];
-            return _sceneLoader.LoadSceneAsync(_data.mapCommandData.sectionSceneName,
+            MapSectionData mapSectionData = _mapData.sections[nextSection];
+            return _sceneLoader.LoadSceneAsync(_data.mapCommandData.SectionSceneName,
                                                LoadSceneMode.Additive,
                                                container => {
                                                    _loadedScenes[nextSection] =
@@ -88,6 +89,9 @@ namespace Map.MapSections.Commands {
                                                    container.Bind<uint>().WithId(MAP_SECTION_INDEX_ID).FromInstance(nextSection);
                                                    container.Bind<IGridData>().FromInstance(mapSectionData.GridData);
                                                    container.Bind<IMapSectionData>().FromInstance(mapSectionData);
+                                                   if (_data.mapCommandData.isMapEditor) {
+                                                       container.Bind<IMutableMapSectionData>().FromInstance(mapSectionData);
+                                                   }
                                                    _pausableCommandQueue.Resume();
                                                }).ToUniTask().ToObservable();
         }

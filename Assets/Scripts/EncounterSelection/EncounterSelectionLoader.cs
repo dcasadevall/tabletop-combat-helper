@@ -49,9 +49,8 @@ namespace EncounterSelection {
             _replayLoaderViewController.Hide();
 
             _encounterSelectionContext.EncounterType = EncounterType.EditMap;
-            LoadMapCommandData commandData =
-                new LoadMapCommandData((uint) mapIndex, "MapEditorScene", "MapEditorSectionScene");
-            _commandQueue.Enqueue<LoadEditableMapCommand, LoadMapCommandData>(commandData, CommandSource.Game);
+            LoadMapCommandData commandData = new LoadMapCommandData((uint) mapIndex, isMapEditor: true);
+            _commandQueue.Enqueue<LoadMapCommand, LoadMapCommandData>(commandData, CommandSource.Game);
         }
 
         private void HandleLoadMapClicked(int mapIndex) {

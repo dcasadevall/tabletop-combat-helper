@@ -2,7 +2,7 @@ using System;
 
 namespace Map.Serialized {
     [Serializable]
-    public class TileMetadata : ITileMetadata, IMutableTileMetadata {
+    public class TileMetadata : ITileMetadata {
         /// <summary>
         /// If > 0, this tile has a section connection.
         /// </summary>
@@ -18,14 +18,6 @@ namespace Map.Serialized {
                 }
 
                 return (uint) sectionConnection;
-            }
-            set {
-                if (value == null) {
-                    sectionConnection = -1;
-                    return;
-                }
-
-                sectionConnection = (int) value.Value;
             }
         }
     }

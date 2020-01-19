@@ -1,4 +1,5 @@
 using System;
+using Map.Serialized;
 using UniRx.Async;
 using UnityEngine.AddressableAssets;
 
@@ -15,9 +16,9 @@ namespace Map {
         string MapName { get; }
         
         /// <summary>
-        /// Attempts to load the map asynchronously.
+        /// Attempts to load the map asynchronously, returning the loaded <see cref="MapData"/> on success.
         /// </summary>
         /// <returns></returns>
-        UniTask<IMapData> LoadMap();
+        UniTask<MapData> LoadMap();
     }
 }

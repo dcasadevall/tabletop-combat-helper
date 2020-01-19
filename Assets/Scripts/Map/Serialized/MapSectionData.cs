@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Map.Serialized {
     [Serializable]
-    public class MapSectionData : IMapSectionData, IMutableMapSectionData {
+    public class MapSectionData : IMutableMapSectionData {
         public GridData gridData;
 
         public IGridData GridData {
@@ -99,6 +99,7 @@ namespace Map.Serialized {
 
             if (index == -1) {
                 tileMetadataPairs.Add(new TileMetadataPair(new Vector2(tileCoords.x, tileCoords.y)));
+                index = tileMetadataPairs.Count - 1;
             }
 
             return tileMetadataPairs[index].tileMetadata;

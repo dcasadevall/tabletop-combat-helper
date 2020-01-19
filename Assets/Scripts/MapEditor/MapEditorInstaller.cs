@@ -38,7 +38,6 @@ namespace MapEditor {
             Container.Bind<IMapEditorTool>().WithId(SECTION_TILE_EDITOR_ID).To<SectionTileEditor>().AsSingle();
             Container.BindMemoryPool<SectionTileRenderer, SectionTileRenderer.Pool>()
                      .FromComponentInNewPrefab(_sectionTileRendererPrefab)
-                     .AsSingle()
                      .WhenInjectedInto<SectionTileEditor>();
         }
     }

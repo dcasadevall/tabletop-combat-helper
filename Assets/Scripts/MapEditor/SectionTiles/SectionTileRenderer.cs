@@ -7,7 +7,7 @@ using Zenject;
 namespace MapEditor.SectionTiles {
     public class SectionTileRenderer : MonoBehaviour {
         [SerializeField]
-        private Text _sectionLabel;
+        private TextMesh _sectionLabel;
 
         private IGridPositionCalculator _gridPositionCalculator;
 
