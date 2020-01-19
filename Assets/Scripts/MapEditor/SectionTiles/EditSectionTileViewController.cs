@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
 using Castle.Core.Internal;
 using Logging;
 using Map;
+using Map.MapSections.Commands;
 using Map.Serialized;
 using Math;
 using ModestTree;
+using UniRx;
 using UniRx.Async;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,16 +25,18 @@ namespace MapEditor.SectionTiles {
         [SerializeField]
         private Dropdown _sectionSelectDropdown;
 
-        private MapData _mapData;
-        private IMapSectionData _mapSectionData;
+        private IMapData _mapData;
+        private IMutableMapSectionData _mutableMapSectionData;
         private ILogger _logger;
         private int _selectedIndex = 0;
         private IntVector2 _tileCoords;
 
         [Inject]
-        public void Construct(IMapSectionData mapSectionData, MapData mapData, ILogger logger) {
+        public void Construct(IMapData mapData,
+                              IMutableMapSectionData mutableMapSectionData, 
+                              ILogger logger) {
             _mapData = mapData;
-            _mapSectionData = mapSectionData;
+            _mutableMapSectionData = mutableMapSectionData;
             _logger = logger;
         }
 
@@ -61,9 +66,9 @@ namespace MapEditor.SectionTiles {
 
             // Show existing section connection if possible.
             _selectedIndex = 0;
-            if (_mapSectionData.TileMetadataMap.ContainsKey(tileCoords) &&
-                _mapSectionData.TileMetadataMap[tileCoords].SectionConnection != null) {
-                _selectedIndex = (int) _mapSectionData.TileMetadataMap[tileCoords].SectionConnection.Value;
+            if (_mutableMapSectionData.TileMetadataMap.ContainsKey(tileCoords) &&
+                _mutableMapSectionData.TileMetadataMap[tileCoords].SectionConnection != null) {
+                _selectedIndex = (int) _mutableMapSectionData.TileMetadataMap[tileCoords].SectionConnection.Value;
             }
             _sectionSelectDropdown.value = _selectedIndex;
             
@@ -82,16 +87,7 @@ namespace MapEditor.SectionTiles {
                 return;
             }
 
-            MapSectionData mapSectionData = _mapData.sections[_selectedIndex];
-            int index = mapSectionData.tileMetadataPairs.FindIndex(x => IntVector2.Of(x.tileCoords) == _tileCoords);
-
-            if (index == -1) {
-                mapSectionData.tileMetadataPairs.Add(new TileMetadataPair(new Vector2(_tileCoords.x, _tileCoords.y)));
-                index = mapSectionData.tileMetadataPairs.Count - 1;
-            }
-
-            TileMetadata tileMetadata = mapSectionData.tileMetadataPairs[index].tileMetadata;
-            tileMetadata.sectionConnection = _selectedIndex;
+            _mutableMapSectionData.SetSectionConnection(_tileCoords, (uint)_selectedIndex);
         }
 
         private void HandleSectionSelectValueChanged(int selectedIndex) {

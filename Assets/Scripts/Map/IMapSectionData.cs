@@ -12,6 +12,8 @@ namespace Map {
         Sprite[] Sprites { get; }
         MapTileType MapTileType { get; }
         int PixelsPerUnit { get; }
+        
+        IObservable<Tuple<IntVector2, ITileMetadata>> TileMetadataChanged { get; }
         Dictionary<IntVector2, ITileMetadata> TileMetadataMap { get; }
     }
 }

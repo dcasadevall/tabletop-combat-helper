@@ -1,4 +1,6 @@
+using Map.Serialized;
 using MapEditor.SectionTiles;
+using Math;
 using UnityEngine;
 using Zenject;
 
@@ -7,12 +9,16 @@ namespace MapEditor {
         public const string SECTION_TILE_EDITOR_ID = "SectionTileEditor";
         public const string ROOM_EDITOR_ID = "RoomEditor";
         public const string SECTION_TILES_CURSOR = "SectionTilesCursor";
+        public const string SECTION_TILE_PREFAB = "SectionTilesCursor";
 
         [SerializeField]
         private MapEditorToolbarViewController _toolbarPrefab;
 
         [SerializeField]
         private EditSectionTileViewController _editSectionTileVcPrefab;
+        
+        [SerializeField]
+        private SectionTileRenderer _sectionTileRendererPrefab;
         
         [SerializeField]
         private Texture2D _sectionTilesModeCursor;
@@ -30,6 +36,10 @@ namespace MapEditor {
                      .Lazy();
             Container.Bind<Texture2D>().WithId(SECTION_TILES_CURSOR).FromInstance(_sectionTilesModeCursor).AsSingle();
             Container.Bind<IMapEditorTool>().WithId(SECTION_TILE_EDITOR_ID).To<SectionTileEditor>().AsSingle();
+            Container.BindMemoryPool<SectionTileRenderer, SectionTileRenderer.Pool>()
+                     .FromComponentInNewPrefab(_sectionTileRendererPrefab)
+                     .AsSingle()
+                     .WhenInjectedInto<SectionTileEditor>();
         }
     }
 }

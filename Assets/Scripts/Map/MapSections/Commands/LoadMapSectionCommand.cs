@@ -9,6 +9,8 @@ using Zenject;
 
 namespace Map.MapSections.Commands {
     public class LoadMapSectionCommand : ICommand {
+        public const string MAP_SECTION_INDEX_ID = "MapSectionIndex";
+        
         // TODO: Use Zenject signals instead of a static event once this is fixed:
         // https://github.com/svermeulen/Extenject/issues/27
         // This works for now because we don't mind exposing the command implementation.
@@ -81,9 +83,9 @@ namespace Map.MapSections.Commands {
                                                LoadSceneMode.Additive,
                                                container => {
                                                    _loadedScenes[nextSection] =
-                                                       new SceneState(SceneManager.GetSceneAt(SceneManager.sceneCount -
-                                                                                              1));
+                                                       new SceneState(SceneManager.GetSceneAt(SceneManager.sceneCount - 1));
 
+                                                   container.Bind<uint>().WithId(MAP_SECTION_INDEX_ID).FromInstance(nextSection);
                                                    container.Bind<IGridData>().FromInstance(mapSectionData.GridData);
                                                    container.Bind<IMapSectionData>().FromInstance(mapSectionData);
                                                    _pausableCommandQueue.Resume();
