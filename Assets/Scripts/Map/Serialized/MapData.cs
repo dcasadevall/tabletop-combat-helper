@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 namespace Map.Serialized {
-    public class MapData : ScriptableObject, IMapData {
+    public class MapData : ScriptableObject, IMutableMapData {
         public string mapName;
         public string MapName {
             get {
@@ -15,6 +15,12 @@ namespace Map.Serialized {
         public IMapSectionData[] Sections {
             get {
                 return sections.Cast<IMapSectionData>().ToArray();
+            }
+        }
+
+        IMutableMapSectionData[] IMutableMapData.Sections {
+            get {
+                return sections.Cast<IMutableMapSectionData>().ToArray();
             }
         }
     }

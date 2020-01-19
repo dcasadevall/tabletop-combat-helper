@@ -19,6 +19,6 @@ namespace Map {
         /// Attempts to load the map asynchronously, returning the loaded <see cref="MapData"/> on success.
         /// </summary>
         /// <returns></returns>
-        UniTask<MapData> LoadMap();
+        UniTask<IMutableMapData> LoadMap();
     }
 }

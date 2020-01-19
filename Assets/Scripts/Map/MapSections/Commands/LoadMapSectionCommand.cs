@@ -10,15 +10,13 @@ using Zenject;
 
 namespace Map.MapSections.Commands {
     public class LoadMapSectionCommand : ICommand {
-        public const string MAP_SECTION_INDEX_ID = "MapSectionIndex";
-        
         // TODO: Use Zenject signals instead of a static event once this is fixed:
         // https://github.com/svermeulen/Extenject/issues/27
         // This works for now because we don't mind exposing the command implementation.
         public static event System.Action MapSectionWillLoad;
 
         private readonly LoadMapSectionCommandData _data;
-        private readonly MapData _mapData;
+        private readonly IMutableMapData _mapData;
         private readonly IPausableCommandQueue _pausableCommandQueue;
         private readonly MapSectionContext _mapSectionContext;
         private readonly ZenjectSceneLoader _sceneLoader;
@@ -32,7 +30,7 @@ namespace Map.MapSections.Commands {
         private uint _previousSection;
 
         public LoadMapSectionCommand(LoadMapSectionCommandData data,
-                                     MapData mapData,
+                                     IMutableMapData mapData,
                                      IPausableCommandQueue pausableCommandQueue,
                                      MapSectionContext mapSectionContext,
                                      ZenjectSceneLoader sceneLoader) {
@@ -79,14 +77,13 @@ namespace Map.MapSections.Commands {
                 return Observable.ReturnUnit();
             }
 
-            MapSectionData mapSectionData = _mapData.sections[nextSection];
+            IMutableMapSectionData mapSectionData = _mapData.Sections[nextSection];
             return _sceneLoader.LoadSceneAsync(_data.mapCommandData.SectionSceneName,
                                                LoadSceneMode.Additive,
                                                container => {
                                                    _loadedScenes[nextSection] =
                                                        new SceneState(SceneManager.GetSceneAt(SceneManager.sceneCount - 1));
 
-                                                   container.Bind<uint>().WithId(MAP_SECTION_INDEX_ID).FromInstance(nextSection);
                                                    container.Bind<IGridData>().FromInstance(mapSectionData.GridData);
                                                    container.Bind<IMapSectionData>().FromInstance(mapSectionData);
                                                    if (_data.mapCommandData.isMapEditor) {

@@ -15,7 +15,7 @@ namespace Map.Serialized {
 
 
         public AssetReference mapData;
-        public async UniTask<MapData> LoadMap() {
+        public async UniTask<IMutableMapData> LoadMap() {
             var handle = mapData.LoadAssetAsync<MapData>();
             await UniTask.WaitUntil(() => handle.IsDone)
                          .Timeout(TimeSpan.FromSeconds(10));

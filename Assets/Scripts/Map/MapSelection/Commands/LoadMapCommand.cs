@@ -52,7 +52,7 @@ namespace Map.MapSelection.Commands {
             _modalViewController.Show("Loading Assets...");
             IMapReference mapReference = _mapReferences[(int) _data.mapIndex];
             // TODO: Commands to use unitask. this should just be all async / await
-            IObservable<MapData> mapDataObservable = mapReference.LoadMap().ToObservable();
+            IObservable<IMutableMapData> mapDataObservable = mapReference.LoadMap().ToObservable();
             mapDataObservable.Subscribe(mapData => {
                 _sceneLoader.LoadSceneAsync(_data.SceneName,
                                             LoadSceneMode.Additive,
@@ -64,11 +64,11 @@ namespace Map.MapSelection.Commands {
             return _sceneLoadedSubject;
         }
 
-        private void HandleMapSceneLoaded(DiContainer container, MapData mapData) {
-            container.Bind<LoadMapCommandData>().FromInstance(_data);
-            container.Bind<IMapData>().FromInstance(mapData);
+        private void HandleMapSceneLoaded(DiContainer container, IMutableMapData mapData) {
             // MapSection command may inject mutable map data if on editor mode.
-            container.Bind<MapData>().FromInstance(mapData).WhenInjectedInto<LoadMapSectionCommand>();
+            container.Bind<IMapData>().FromInstance(mapData);
+            container.Bind<IMutableMapData>().FromInstance(mapData).WhenInjectedInto<LoadMapSectionCommand>();
+            container.Bind<LoadMapCommandData>().FromInstance(_data);
 
             // This needs to happen after 1 frame because we are currently still loading the next scene.
             // Otherwise, the dependency graph cannot be yet built.
