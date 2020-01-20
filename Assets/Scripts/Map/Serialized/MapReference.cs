@@ -1,11 +1,12 @@
 using System;
 using UniRx.Async;
+using UnityEditor;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Map.Serialized {
     [Serializable]
-    public class MapReference : ILoadadableMapReference {
+    public class MapReference : ILoadadableMapReference, IMapReference {
         public string name;
         public string MapName {
             get {
