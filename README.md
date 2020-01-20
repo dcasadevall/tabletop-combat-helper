@@ -27,10 +27,13 @@ You should be able to play the game within the editor, or build to device.
 If you want to modify / add to maps and units, you can download the content from http://dcasadevall.com/apps/tabletop-combat-helper-content.
 Checkout this repository somewhere on your local drive, then create a symbolic link to tabletop-combat-helper-content/Content
 in Assets/Content.
+
+Now go to Window -> Asset Management -> Addressables and select "Play Mode Script -> Fast Mode".
 This allows you to play in the editor without having to download assets from the remote server, as well as modify the list of units / maps and add
 to them for quick iteration.
+This also allows you to use the map editor to modify the maps stored under the Content/ directory.
 
-Note that if you build to device, the local content will not be used. For that, refer to Method C.
+Note that you will need to create a content build / upload to your own content url before seeing the existing changes outside of the Unity Editor (on device). For that, refer to Method C.
 
 ### Method C: Building your own content
 
@@ -53,3 +56,14 @@ Note that the game does work on WebGL. The only caveat is that for that to happe
 assets from your content remote path or host the assets on the same domain where you host your WebGL application.
 For a working example check out:
 http://dcasadevall.com/apps/tabletop-combat-helper/
+
+## Map Editor
+
+In order to use the map editor, one must first download local content and select local content playback mode by going to "Window -> Asset Management -> Addressables" and selecting "Play Mode Script -> Fast Mode".
+If you don't do this, any changes will not be persisted outside of editor or throughout play sessions.
+Refer to "Building your own content" for more details on how to modify / publish local changes to content.
+
+While you can modify basic map information such as the tile data / grid size by simply editing the ScriptableObject under Content/Settings/Maps/, the map editor gives you a visual interface for editing some more obscure values such as:
+
+* Section Connections
+* Initial Map Units (Not implemented)
