@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using CommandSystem;
 using Logging;
+using Map.MapData;
+using Map.MapData.Store;
 using Map.MapSections.Commands;
-using Map.Serialized;
 using Replays.Persistence.UI;
 using UI;
 using UniRx;
@@ -13,9 +14,8 @@ using Zenject;
 namespace Map.MapSelection.Commands {
     public class LoadMapCommand : ICommand {
         private readonly LoadMapCommandData _data;
-        private readonly List<ILoadadableMapReference> _mapReferences;
+        private readonly IReadOnlyMapAssetStore _mapStore;
         private readonly ICommandFactory _commandFactory;
-        private readonly ILogger _logger;
         private readonly IReplayLoaderViewController _replayLoaderViewController;
         private readonly IMapSelectViewController _mapSelectViewController;
         private readonly ZenjectSceneLoader _sceneLoader;
@@ -29,35 +29,26 @@ namespace Map.MapSelection.Commands {
         }
 
         public LoadMapCommand(LoadMapCommandData data,
-                              List<ILoadadableMapReference> mapReferences,
+                              IReadOnlyMapAssetStore mapStore,
                               ICommandFactory commandFactory,
-                              ILogger logger,
                               ZenjectSceneLoader sceneLoader,
                               IModalViewController modalViewController) {
             _data = data;
-            _mapReferences = mapReferences;
+            _mapStore = mapStore;
             _commandFactory = commandFactory;
-            _logger = logger;
             _sceneLoader = sceneLoader;
             _modalViewController = modalViewController;
         }
 
         public IObservable<Unit> Run() {
-            if (_data.mapIndex >= _mapReferences.Count) {
-                string errorMsg = string.Format("Invalid map index: {0}", _data.mapIndex);
-                _logger.LogError(LoggedFeature.Map, errorMsg);
-                return Observable.Throw<Unit>(new Exception(errorMsg));
-            }
-
             _modalViewController.Show("Loading Assets...");
-            ILoadadableMapReference mapReference = _mapReferences[(int) _data.mapIndex];
             // TODO: Commands to use unitask. this should just be all async / await
-            IObservable<IMutableMapData> mapDataObservable = mapReference.LoadMap().ToObservable();
-            mapDataObservable.Subscribe(mapData => {
+            IObservable<IMapAsset> mapDataObservable = _mapStore.LoadMap(new MapStoreId(_data.mapIndex)).ToObservable();
+            mapDataObservable.Subscribe(mapAsset => {
                 _sceneLoader.LoadSceneAsync(_data.SceneName,
                                             LoadSceneMode.Additive,
                                             container => {
-                                                HandleMapSceneLoaded(container, mapData);
+                                                HandleMapSceneLoaded(container, mapAsset.MapData);
                                             });      
             });
 

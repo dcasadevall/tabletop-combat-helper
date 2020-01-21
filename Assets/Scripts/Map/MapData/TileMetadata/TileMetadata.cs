@@ -1,6 +1,6 @@
 using System;
 
-namespace Map.Serialized {
+namespace Map.MapData.TileMetadata {
     [Serializable]
     public class TileMetadata : ITileMetadata {
         /// <summary>

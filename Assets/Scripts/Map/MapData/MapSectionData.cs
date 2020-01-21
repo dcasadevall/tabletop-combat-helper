@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Grid.Serialized;
+using Map.MapData.TileMetadata;
 using Map.Rendering;
 using Math;
 using UniRx;
 using UnityEngine;
 
-namespace Map.Serialized {
+namespace Map.MapData {
     [Serializable]
     public class MapSectionData : IMutableMapSectionData {
         public GridData gridData;
@@ -69,7 +70,7 @@ namespace Map.Serialized {
         }
 
         public void SetSectionConnection(IntVector2 tileCoords, uint sectionIndex) {
-            TileMetadata tileMetadata = GetTileMetadata(tileCoords);
+            TileMetadata.TileMetadata tileMetadata = GetTileMetadata(tileCoords);
             var oldSectionIndex = tileMetadata.sectionConnection;
             
             tileMetadata.sectionConnection = (int) sectionIndex;
@@ -79,7 +80,7 @@ namespace Map.Serialized {
         }
 
         public void ClearSectionConnection(IntVector2 tileCoords) {
-            TileMetadata tileMetadata = GetTileMetadata(tileCoords);
+            TileMetadata.TileMetadata tileMetadata = GetTileMetadata(tileCoords);
             var oldSectionIndex = tileMetadata.sectionConnection;
             tileMetadata.sectionConnection = -1;
             
@@ -94,7 +95,7 @@ namespace Map.Serialized {
             }
         }
 
-        private TileMetadata GetTileMetadata(IntVector2 tileCoords) {
+        private TileMetadata.TileMetadata GetTileMetadata(IntVector2 tileCoords) {
             int index = tileMetadataPairs.FindIndex(x => IntVector2.Of(x.tileCoords) == tileCoords);
 
             if (index == -1) {

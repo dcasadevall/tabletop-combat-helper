@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Grid.Serialized;
+using Map.MapData.TileMetadata;
 using Map.Rendering;
 using Math;
 using UnityEngine;
 
-namespace Map {
+namespace Map.MapData {
     public interface IMapSectionData {
         IGridData GridData { get; }
         String SectionName { get; }

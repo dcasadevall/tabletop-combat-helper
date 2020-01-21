@@ -1,6 +1,6 @@
 using Math;
 
-namespace Map {
+namespace Map.MapData {
     public interface IMutableMapSectionData : IMapSectionData {
         /// <summary>
         /// Adds or modifies a section connection to the given tile coords, into the given section index.

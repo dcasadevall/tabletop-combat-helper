@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Map.Serialized {
+namespace Map.MapData.TileMetadata {
     [Serializable]
     public class TileMetadataPair {
         public Vector2 tileCoords;

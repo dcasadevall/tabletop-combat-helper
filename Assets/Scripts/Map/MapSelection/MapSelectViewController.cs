@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Logging;
+using Map.MapData;
+using Map.MapData.Store;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;

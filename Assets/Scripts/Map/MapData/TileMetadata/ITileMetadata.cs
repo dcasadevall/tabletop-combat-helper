@@ -1,4 +1,4 @@
-namespace Map {
+namespace Map.MapData.TileMetadata {
     /// <summary>
     /// Information additionally serialized to a tile in the grid, such as section connections, npc units to spawn,
     /// room wall vertices, etc..

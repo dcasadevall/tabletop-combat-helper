@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Logging;
 using Map;
+using Map.MapData;
+using Map.MapData.TileMetadata;
 using Math;
 using UniRx;
 using Zenject;

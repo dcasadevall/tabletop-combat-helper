@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using CommandSystem;
 using Grid.Serialized;
-using Map.Serialized;
+using Map.MapData;
 using UniRx;
 using UniRx.Async;
 using UnityEngine.SceneManagement;

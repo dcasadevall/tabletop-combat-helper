@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Map.MapData;
 using Map.MapSections;
 using Zenject;
 

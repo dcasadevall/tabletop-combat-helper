@@ -2,6 +2,7 @@ using System;
 using Grid;
 using Grid.Positioning;
 using Logging;
+using Map.MapData;
 using Map.MapSections;
 using Math;
 using Math.Random;

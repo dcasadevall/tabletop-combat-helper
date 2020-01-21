@@ -1,6 +1,7 @@
 using System;
 using InputSystem;
 using Map;
+using Map.MapData;
 using Replays.Persistence;
 using UI;
 using UnityEngine;

@@ -1,9 +1,8 @@
-using System;
 using System.Linq;
 using UnityEngine;
 
-namespace Map.Serialized {
-    public class MapData : ScriptableObject, IMutableMapData {
+namespace Map.MapData {
+    public class SerializedMapData : ScriptableObject, IMutableMapData {
         public string mapName;
         public string MapName {
             get {

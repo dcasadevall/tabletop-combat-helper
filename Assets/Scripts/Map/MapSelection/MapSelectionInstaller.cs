@@ -1,6 +1,7 @@
 ﻿using CommandSystem.Installers;
+using Map.MapData;
+using Map.MapData.Store;
 using Map.MapSelection.Commands;
-using Map.Serialized;
 using UnityEngine;
 using Zenject;
 
@@ -23,10 +24,10 @@ namespace Map.MapSelection {
             
             foreach (var mapReference in _mapSelectionData.mapReferences) {
                 // Most actors just see the map reference.
-                Container.Bind<IMapReference>().To<MapReference>().FromInstance(mapReference);
+                Container.Bind<IMapReference>().To<AddressableAssetMapReference>().FromInstance(mapReference);
                 // LoadMapCommand needs to actually load the asset.
-                Container.Bind<ILoadadableMapReference>()
-                         .To<MapReference>()
+                Container.Bind<IReadOnlyMapAssetStore>()
+                         .To<AddressableAssetMapReference>()
                          .FromInstance(mapReference)
                          .WhenInjectedInto<LoadMapCommand>();
             }
