@@ -22,10 +22,10 @@ namespace Map.MapData.Store {
         UniTask<IMutableMapData> LoadMap(MapStoreId mapStoreId);
 
         /// <summary>
-        /// Attempts to commit the changes made to the <see cref="IMutableMapData"/>.
+        /// Attempts to commit the changes made to the <see cref="IMutableMapData"/> with the given <see cref="MapStoreId"/>.
         /// This method may be unsupported by implementations of <see cref="IMapDataStore"/>
         /// </summary>
         /// <returns>True if successfully committed the changes. False otherwise.</returns>
-        bool Commit();
+        bool Commit(MapStoreId mapStoreId);
     }
 }

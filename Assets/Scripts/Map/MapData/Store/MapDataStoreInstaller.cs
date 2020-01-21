@@ -1,5 +1,6 @@
 using CommandSystem.Installers;
 using Map.MapData.Store.Commands;
+using MapEditor;
 using Zenject;
 
 namespace Map.MapData.Store {
@@ -26,7 +27,8 @@ namespace Map.MapData.Store {
             }
             Container.Bind<IMapDataStore>()
                      .To<AddressableAssetMapDataStore>()
-                     .WhenInjectedInto<LoadMapCommand>();
+                     .AsSingle()
+                     .WhenInjectedInto(typeof(LoadMapCommand), typeof(MapEditorInstaller));
 
             CommandsInstaller.Install<MapDataStoreCommandsInstaller>(Container);
         }

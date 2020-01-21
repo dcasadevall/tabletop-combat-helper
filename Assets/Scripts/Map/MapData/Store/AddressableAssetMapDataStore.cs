@@ -41,7 +41,15 @@ namespace Map.MapData.Store {
             return handle.Result;
         }
 
-        public bool Commit() {
+        public bool Commit(MapStoreId mapStoreId) {
+            var mapReference = _addressableAssetMapReferences.Find(x => x.MapStoreId == mapStoreId);
+            if (mapReference == null) {
+                var msg = $"Invalid MapId: {mapStoreId}";
+                _logger.LogError(LoggedFeature.Assets, msg);
+                return false;
+            }
+            
+            EditorUtility.SetDirty(mapReference.AssetReference.editorAsset);
             AssetDatabase.SaveAssets();
             return true;
         }

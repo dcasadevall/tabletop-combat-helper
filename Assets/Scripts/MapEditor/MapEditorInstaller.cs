@@ -1,3 +1,4 @@
+using Map.MapData.Store;
 using MapEditor.SectionTiles;
 using Math;
 using UnityEngine;
@@ -22,11 +23,24 @@ namespace MapEditor {
         [SerializeField]
         private Texture2D _sectionTilesModeCursor;
 
+        // This is injected via the proper installer.
+        // We just want to make sure it's only exposed to this installer and the proper command.
+        private IMapDataStore _mapDataStore;
+
+        [Inject]
+        public void Construct(IMapDataStore mapDataStore) {
+            _mapDataStore = mapDataStore;
+        }
+
         public override void InstallBindings() {
+            // Toolbar View Controller
             Container.Bind<MapEditorToolbarViewController>()
                      .FromComponentInNewPrefab(_toolbarPrefab)
                      .AsSingle()
                      .NonLazy();
+            Container.Bind<IMapDataStore>()
+                     .FromInstance(_mapDataStore)
+                     .WhenInjectedInto<MapEditorToolbarViewController>();
 
             // Section Tile Editor
             Container.Bind<EditSectionTileViewController>()

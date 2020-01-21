@@ -1,8 +1,11 @@
 using InputSystem;
+using Logging;
+using Map.MapData.Store;
 using Map.MapSections.Commands;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using ILogger = Logging.ILogger;
 
 namespace MapEditor {
     public class MapEditorToolbarViewController : MonoBehaviour {
@@ -13,6 +16,9 @@ namespace MapEditor {
         private Button _roomToolButton;
 
         [SerializeField]
+        private Button _saveButton;
+
+        [SerializeField]
         private Button _cancelButton;
 
         [SerializeField]
@@ -21,35 +27,48 @@ namespace MapEditor {
         [SerializeField]
         private GameObject _cancelContainer;
 
+        private MapStoreId _mapStoreId;
         private IMapEditorTool _sectionTileEditor;
+        private IMapDataStore _mapDataStore;
         private IInputLock _inputLock;
+        private ILogger _logger;
 
         [Inject]
-        public void Construct([Inject(Id = MapEditorInstaller.SECTION_TILE_EDITOR_ID)]
-                              IMapEditorTool sectionTileEditor, 
-                              IInputLock inputLock) {
+        public void Construct(MapStoreId mapStoreId,
+                              [Inject(Id = MapEditorInstaller.SECTION_TILE_EDITOR_ID)]
+                              IMapEditorTool sectionTileEditor,
+                              IMapDataStore mapDataStore,
+                              IInputLock inputLock,
+                              ILogger logger) {
+            _mapStoreId = mapStoreId;
             _sectionTileEditor = sectionTileEditor;
+            _mapDataStore = mapDataStore;
             _inputLock = inputLock;
+            _logger = logger;
         }
 
         private void Awake() {
-            LoadMapSectionCommand.MapSectionWillLoad += HandleMapSectionWillLoad;
             _sectionTileButton.onClick.AddListener(HandleSectionTileButtonPressed);
             _roomToolButton.onClick.AddListener(HandleRoomToolButtonPressed);
+            _saveButton.onClick.AddListener(HandleSaveButtonPressed);
             _cancelButton.onClick.AddListener(HandleCancelButtonPressed);
+
+            LoadMapSectionCommand.MapSectionWillLoad += HandleMapSectionWillLoad;
             _inputLock.InputLockAcquired += HandleInputLockAcquired;
             _inputLock.InputLockReleased += HandleInputLockReleased;
         }
 
         private void OnDestroy() {
-            LoadMapSectionCommand.MapSectionWillLoad -= HandleMapSectionWillLoad;
             _sectionTileButton.onClick.RemoveListener(HandleSectionTileButtonPressed);
             _roomToolButton.onClick.RemoveListener(HandleRoomToolButtonPressed);
+            _saveButton.onClick.RemoveListener(HandleSaveButtonPressed);
             _cancelButton.onClick.RemoveListener(HandleCancelButtonPressed);
+
+            LoadMapSectionCommand.MapSectionWillLoad -= HandleMapSectionWillLoad;
             _inputLock.InputLockAcquired -= HandleInputLockAcquired;
             _inputLock.InputLockReleased -= HandleInputLockReleased;
         }
-        
+
         private void HandleInputLockAcquired() {
             gameObject.SetActive(false);
         }
@@ -70,13 +89,21 @@ namespace MapEditor {
             _cancelContainer.SetActive(true);
         }
 
+        private void HandleSaveButtonPressed() {
+            if (_mapDataStore.Commit(_mapStoreId)) {
+                _logger.Log(LoggedFeature.MapEditor, "Successfully saved map data.");
+            } else {
+                _logger.LogError(LoggedFeature.MapEditor, "Error saving map data.");
+            }
+        }
+
         private void HandleCancelButtonPressed() {
             _sectionTileEditor.StopEditing();
 
             _toolbarContainer.SetActive(true);
             _cancelContainer.SetActive(false);
         }
-        
+
         // On section load, exit all editing. Because we have 1 toolbar per section.
         private void HandleMapSectionWillLoad() {
             HandleCancelButtonPressed();

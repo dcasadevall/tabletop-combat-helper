@@ -40,21 +40,23 @@ namespace Map.MapData.Store.Commands {
         public IObservable<Unit> Run() {
             _modalViewController.Show("Loading Assets...");
             // TODO: Commands to use unitask. this should just be all async / await
-            IObservable<IMutableMapData> mapDataObservable = _mapStore.LoadMap(new MapStoreId(_data.mapIndex)).ToObservable();
+            MapStoreId mapStoreId = new MapStoreId(_data.mapIndex);
+            IObservable<IMutableMapData> mapDataObservable = _mapStore.LoadMap(mapStoreId).ToObservable();
             mapDataObservable.Subscribe(mapData => {
                 _sceneLoader.LoadSceneAsync(_data.SceneName,
                                             LoadSceneMode.Additive,
                                             container => {
-                                                HandleMapSceneLoaded(container, mapData);
+                                                HandleMapSceneLoaded(container, mapData, mapStoreId);
                                             });      
             });
 
             return _sceneLoadedSubject;
         }
 
-        private void HandleMapSceneLoaded(DiContainer container, IMutableMapData mapData) {
+        private void HandleMapSceneLoaded(DiContainer container, IMutableMapData mapData, MapStoreId mapStoreId) {
             // MapSection command may inject mutable map data if on editor mode.
             container.Bind<IMapData>().FromInstance(mapData);
+            container.Bind<MapStoreId>().FromInstance(mapStoreId);
             container.Bind<IMutableMapData>().FromInstance(mapData).WhenInjectedInto<LoadMapSectionCommand>();
             container.Bind<LoadMapCommandData>().FromInstance(_data);
 
