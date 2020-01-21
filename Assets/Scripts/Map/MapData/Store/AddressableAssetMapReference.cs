@@ -21,10 +21,8 @@ namespace Map.MapData.Store {
             }
         }
         
-        public MapStoreId MapStoreId { get; }
-
-        public AddressableAssetMapReference(MapStoreId mapStoreId) {
-            MapStoreId = mapStoreId;
-        }
+        // TODO: Maybe separate the serializable map reference vs the addressable asset reference so we don't have
+        // this mutable field.
+        public MapStoreId MapStoreId { get; set; }
     }
 }

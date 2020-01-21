@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Map.MapSelection.Commands {
+namespace Map.MapData.Store.Commands {
     [Serializable]
     public class LoadMapCommandData : ISerializable {
         public uint mapIndex;

@@ -3,10 +3,10 @@ using UniRx.Async;
 
 namespace Map.MapData.Store {
     /// <summary>
-    /// A version of the Map Asset store that allows mutating / committing the loaded assets.
-    /// Should only be used in map editor mode.
+    /// Data Store used to load / save map data.
+    /// Implementations may choose to restrict saving the mutated map data.
     /// </summary>
-    public interface IReadWriteMapAssetStore {
+    public interface IMapDataStore {
         /// <summary>
         /// List of <see cref="IMapReference"/>s available to load. 
         /// </summary>
@@ -14,15 +14,16 @@ namespace Map.MapData.Store {
 
         /// <summary>
         /// Attempts to load the given <see cref="MapStoreId"/> asynchronously,
-        /// returning the loaded <see cref="IMapAsset"/> on success.
+        /// returning the loaded <see cref="IMutableMapData"/> on success.
         /// 
         /// Note that changes to the returned data should be persisted by calling <see cref="Commit()"/>.
         /// </summary>
         /// <returns></returns>
-        UniTask<IMutableMapAsset> LoadMap(MapStoreId mapStoreId);
+        UniTask<IMutableMapData> LoadMap(MapStoreId mapStoreId);
 
         /// <summary>
-        /// Attempts to commit the changes made to the <see cref="IMutableMapAsset"/>. 
+        /// Attempts to commit the changes made to the <see cref="IMutableMapData"/>.
+        /// This method may be unsupported by implementations of <see cref="IMapDataStore"/>
         /// </summary>
         /// <returns>True if successfully committed the changes. False otherwise.</returns>
         bool Commit();

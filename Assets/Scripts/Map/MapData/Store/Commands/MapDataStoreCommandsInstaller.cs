@@ -1,7 +1,7 @@
 using Zenject;
 
-namespace Map.MapSelection.Commands {
-    public class MapSelectionCommandsInstaller : Installer {
+namespace Map.MapData.Store.Commands {
+    public class MapDataStoreCommandsInstaller : Installer {
         public override void InstallBindings() {
             Container.Bind<LoadMapCommand>().AsSingle();
         }

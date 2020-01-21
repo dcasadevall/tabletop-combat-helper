@@ -1,8 +1,8 @@
 
 using System;
 using CommandSystem;
+using Map.MapData.Store.Commands;
 using Map.MapSelection;
-using Map.MapSelection.Commands;
 using Replays.Persistence;
 using Replays.Persistence.UI;
 using Zenject;

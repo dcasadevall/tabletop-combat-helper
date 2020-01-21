@@ -1,20 +1,17 @@
 using System;
-using System.Collections.Generic;
 using CommandSystem;
-using Logging;
-using Map.MapData;
-using Map.MapData.Store;
 using Map.MapSections.Commands;
+using Map.MapSelection;
 using Replays.Persistence.UI;
 using UI;
 using UniRx;
 using UnityEngine.SceneManagement;
 using Zenject;
 
-namespace Map.MapSelection.Commands {
+namespace Map.MapData.Store.Commands {
     public class LoadMapCommand : ICommand {
         private readonly LoadMapCommandData _data;
-        private readonly IReadOnlyMapAssetStore _mapStore;
+        private readonly IMapDataStore _mapStore;
         private readonly ICommandFactory _commandFactory;
         private readonly IReplayLoaderViewController _replayLoaderViewController;
         private readonly IMapSelectViewController _mapSelectViewController;
@@ -29,7 +26,7 @@ namespace Map.MapSelection.Commands {
         }
 
         public LoadMapCommand(LoadMapCommandData data,
-                              IReadOnlyMapAssetStore mapStore,
+                              IMapDataStore mapStore,
                               ICommandFactory commandFactory,
                               ZenjectSceneLoader sceneLoader,
                               IModalViewController modalViewController) {
@@ -43,12 +40,12 @@ namespace Map.MapSelection.Commands {
         public IObservable<Unit> Run() {
             _modalViewController.Show("Loading Assets...");
             // TODO: Commands to use unitask. this should just be all async / await
-            IObservable<IMapAsset> mapDataObservable = _mapStore.LoadMap(new MapStoreId(_data.mapIndex)).ToObservable();
-            mapDataObservable.Subscribe(mapAsset => {
+            IObservable<IMutableMapData> mapDataObservable = _mapStore.LoadMap(new MapStoreId(_data.mapIndex)).ToObservable();
+            mapDataObservable.Subscribe(mapData => {
                 _sceneLoader.LoadSceneAsync(_data.SceneName,
                                             LoadSceneMode.Additive,
                                             container => {
-                                                HandleMapSceneLoaded(container, mapAsset.MapData);
+                                                HandleMapSceneLoaded(container, mapData);
                                             });      
             });
 
