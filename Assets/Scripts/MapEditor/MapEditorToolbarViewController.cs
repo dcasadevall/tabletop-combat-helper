@@ -14,6 +14,9 @@ namespace MapEditor {
 
         [SerializeField]
         private Button _roomToolButton;
+        
+        [SerializeField]
+        private Button _addUnitButton;
 
         [SerializeField]
         private Button _saveButton;
@@ -29,6 +32,7 @@ namespace MapEditor {
 
         private MapStoreId _mapStoreId;
         private IMapEditorTool _sectionTileEditor;
+        private IMapEditorTool _unitTileEditor;
         private IMapDataStore _mapDataStore;
         private IInputLock _inputLock;
         private ILogger _logger;
@@ -37,17 +41,21 @@ namespace MapEditor {
         public void Construct(MapStoreId mapStoreId,
                               [Inject(Id = MapEditorInstaller.SECTION_TILE_EDITOR_ID)]
                               IMapEditorTool sectionTileEditor,
+                              [Inject(Id = MapEditorInstaller.UNIT_TILE_EDITOR_ID)]
+                              IMapEditorTool unitTileEditor,
                               IMapDataStore mapDataStore,
                               IInputLock inputLock,
                               ILogger logger) {
             _mapStoreId = mapStoreId;
             _sectionTileEditor = sectionTileEditor;
+            _unitTileEditor = unitTileEditor;
             _mapDataStore = mapDataStore;
             _inputLock = inputLock;
             _logger = logger;
         }
 
         private void Awake() {
+            _addUnitButton.onClick.AddListener(HandleAddUnitButtonPressed);
             _sectionTileButton.onClick.AddListener(HandleSectionTileButtonPressed);
             _roomToolButton.onClick.AddListener(HandleRoomToolButtonPressed);
             _saveButton.onClick.AddListener(HandleSaveButtonPressed);
@@ -59,6 +67,7 @@ namespace MapEditor {
         }
 
         private void OnDestroy() {
+            _addUnitButton.onClick.RemoveListener(HandleAddUnitButtonPressed);
             _sectionTileButton.onClick.RemoveListener(HandleSectionTileButtonPressed);
             _roomToolButton.onClick.RemoveListener(HandleRoomToolButtonPressed);
             _saveButton.onClick.RemoveListener(HandleSaveButtonPressed);
@@ -75,6 +84,13 @@ namespace MapEditor {
 
         private void HandleInputLockReleased() {
             gameObject.SetActive(true);
+        }
+
+        private void HandleAddUnitButtonPressed() {
+            _unitTileEditor.StartEditing();
+            
+            _toolbarContainer.SetActive(false);
+            _cancelContainer.SetActive(true);
         }
 
         private void HandleSectionTileButtonPressed() {
@@ -99,6 +115,7 @@ namespace MapEditor {
 
         private void HandleCancelButtonPressed() {
             _sectionTileEditor.StopEditing();
+            _unitTileEditor.StopEditing();
 
             _toolbarContainer.SetActive(true);
             _cancelContainer.SetActive(false);
