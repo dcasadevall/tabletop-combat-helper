@@ -1,6 +1,7 @@
 using CommandSystem;
 using InputSystem;
-using Map.Commands;
+using Map.MapData;
+using Map.MapData.Store.Commands;
 using Map.MapSections.Commands;
 using UnityEngine;
 using UnityEngine.UI;

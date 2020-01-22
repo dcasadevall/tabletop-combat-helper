@@ -10,8 +10,10 @@ namespace Map.MapSections {
         private GameObject _mapSelectionViewController;
 
         public override void InstallBindings() {
-            Container.Bind<MapSectionSelectionViewController>().FromComponentInNewPrefab(_mapSelectionViewController)
-                     .AsSingle().NonLazy();
+            Container.Bind<MapSectionSelectionViewController>()
+                     .FromComponentInNewPrefab(_mapSelectionViewController)
+                     .AsSingle()
+                     .NonLazy();
             
             CommandsInstaller.Install<MapSectionsCommandsInstaller>(Container);
         }

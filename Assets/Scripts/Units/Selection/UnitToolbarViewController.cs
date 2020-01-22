@@ -27,7 +27,7 @@ namespace Units.Selection {
         private BatchUnitMenuViewController _batchUnitMenuViewController;
         private IInputLock _inputLock;
         private ILogger _logger;
-        private Guid? _lockId;
+        private IDisposable _lockToken;
         private IDisposable _selectionObserver;
 
         [Inject]
@@ -80,7 +80,7 @@ namespace Units.Selection {
         }
 
         private void HandleInputLockAcquired() {
-            if (_lockId != null) {
+            if (_lockToken != null) {
                 return;
             }
 
@@ -106,12 +106,7 @@ namespace Units.Selection {
         }
 
         private void HandleBatchSelectPressed() {
-            _lockId = _inputLock.Lock();
-            if (_lockId == null) {
-                _logger.LogError(LoggedFeature.Units, "Failed to acquire input lock.");
-                return;
-            }
-
+            _lockToken = _inputLock.Lock();
             // Locking causes this menu to hide, and the way events are fired, we get an event before the ownerId
             // is assigned.
             // TODO: Input.Lock() to return owner so we can verify we own the lock.
@@ -125,29 +120,27 @@ namespace Units.Selection {
 
         private async void HandleUnitsSelected(IUnit[] units) {
             _logger.Log(LoggedFeature.Units, "Selected {0} Units", units.Length);
-            
+
             // Stop observing for selection
             _selectionObserver?.Dispose();
             _selectionObserver = null;
             gameObject.SetActive(false);
-            
+
             // Start Batch Unit UI / Input handling
             await _batchUnitMenuViewController.ShowAndWaitForAction(units);
             gameObject.SetActive(true);
-            
+
             // Return to normal cursor mode.
             HandleNormalCursorPressed();
         }
 
         public void HandleNormalCursorPressed() {
-            if (_lockId != null) {
-                _inputLock.Unlock(_lockId.Value);
-            }
-
             _normalCursorButton.SetActive(false);
             _batchSelectButton.SetActive(true);
             _selectionObserver?.Dispose();
             _selectionObserver = null;
+            _lockToken?.Dispose();
+            _lockToken = null;
         }
     }
 }

@@ -2,14 +2,14 @@ using System;
 using Grid.Positioning;
 using Math;
 using UniRx;
-using Units;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Utils;
 using Zenject;
 
 namespace Grid {
-    public class GridInputManager : IGridInputManager, IInitializable {
+    public class GridInputManager : IGridInputManager {
         private readonly Camera _camera;
-        private readonly IGridUnitManager _gridUnitManager;
         private readonly IGridPositionCalculator _gridPositionCalculator;
 
         /// <summary>
@@ -19,45 +19,39 @@ namespace Grid {
 
         public IObservable<IntVector2> MouseEnteredTile {
             get {
-                return MouseTileCoords.Where(tile => tile != null).Select(tile => tile.Value);
+                return MouseTileCoords.Where(tile => tile != null).Select(tile => tile.GetValueChecked());
             }
         }
-        
+
+        public IObservable<IntVector2> LeftMouseButtonOnTile { get; }
+
         public IntVector2? TileAtMousePosition {
             get {
                 return MouseTileCoords.Value;
             }
         }
 
-        public IUnit[] UnitsAtMousePosition {
-            get {
-                if (!TileAtMousePosition.HasValue) {
-                    return new IUnit[0];
-                }
-
-                return _gridUnitManager.GetUnitsAtTile(TileAtMousePosition.Value);
-            }
-        }
-
-        public GridInputManager(Camera camera, 
-                                IGridUnitManager gridUnitManager,
-                                IGridPositionCalculator gridPositionCalculator) {
+        public GridInputManager(Camera camera, EventSystem eventSystem, IGridPositionCalculator gridPositionCalculator) {
             _camera = camera;
-            _gridUnitManager = gridUnitManager;
             _gridPositionCalculator = gridPositionCalculator;
-        }
-
-        public void Initialize() {
+            
+            // These are initialized on construction to avoid race conditions on initialize
             MouseTileCoords = Observable.EveryUpdate()
                                         .Select(_ => GetTileAtMousePositionInternal())
                                         .DistinctUntilChanged()
                                         .ToReadOnlyReactiveProperty();
+
+            LeftMouseButtonOnTile = Observable.EveryUpdate()
+                                              .Where(_ => Input.GetMouseButton(0))
+                                              .Where(_ => !eventSystem.IsPointerOverGameObject())
+                                              .Where(_ => TileAtMousePosition != null)
+                                              .Select(_ => TileAtMousePosition.GetValueChecked());
         }
 
         private IntVector2? GetTileAtMousePositionInternal() {
             Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
             Vector3 curPosition = _camera.ScreenToWorldPoint(curScreenPoint);
-            return _gridPositionCalculator.GetTileContainingWorldPosition(curPosition); 
+            return _gridPositionCalculator.GetTileContainingWorldPosition(curPosition);
         }
     }
 }

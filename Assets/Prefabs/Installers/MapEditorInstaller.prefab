@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7121415755053799940
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7121415755053799938}
+  - component: {fileID: 7121415755053799941}
+  m_Layer: 0
+  m_Name: MapEditorInstaller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7121415755053799938
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7121415755053799940}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7121415755053799941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7121415755053799940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f8513d3609a435d9f82568ece39947f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _toolbarPrefab: {fileID: 5883080224823662797, guid: 54c58cdfd206742928d0a693cea92db4,
+    type: 3}
+  _editSectionTileVcPrefab: {fileID: 6481291186857624241, guid: 21a011ee3925845e8a87be2ff854fe5f,
+    type: 3}
+  _sectionTileRendererPrefab: {fileID: 1200446127716184142, guid: 0ff5af9afe3b74e6e99659e8bad9f082,
+    type: 3}
+  _mapElementMenuVcPrefab: {fileID: 1778217846604432310, guid: ecd5cdeed7b2947738978ee2363986e2,
+    type: 3}
+  _sectionTilesModeCursor: {fileID: 2800000, guid: e051747e73f584d929f8203504189bf6,
+    type: 3}

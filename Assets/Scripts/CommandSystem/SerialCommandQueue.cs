@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Logging;
-using Map.Commands;
 using UniRx;
 using Utils.Clock;
 using Zenject;
@@ -60,7 +59,7 @@ namespace CommandSystem {
                 _commandFactory.Create(pendingCommand.commandType, pendingCommand.dataType, pendingCommand.data);
             if (command == null) {
                 _logger.LogError(LoggedFeature.CommandSystem,
-                                 "Command is not bound. Have you created a AbstractCommandsInstaller for your system?");
+                                 "Command is not bound. Have you installed a separate Installer via CommandsInstaller.Install?");
                 return;
             }
 

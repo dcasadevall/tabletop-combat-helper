@@ -10,6 +10,8 @@ namespace Logging {
         #region Registry
         public static LoggedFeature TODO => new LoggedFeature("TODO");
         public static LoggedFeature Editor => new LoggedFeature("Editor");
+        public static LoggedFeature Input => new LoggedFeature("Input");
+        public static LoggedFeature MapEditor => new LoggedFeature("MapEditor");
         public static LoggedFeature Pooling => new LoggedFeature("Pooling");
         public static LoggedFeature Coroutines => new LoggedFeature("Coroutines");
         public static LoggedFeature Assets => new LoggedFeature("Assets");

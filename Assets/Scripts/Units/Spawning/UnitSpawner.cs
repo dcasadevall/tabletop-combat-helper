@@ -52,8 +52,8 @@ namespace Units.Spawning {
         public void Initialize() {
             _unitPickerViewController.SpawnUnitClicked += HandleSpawnUnitClicked;
 
-            // If we are loading a replay, don't attempt to initially spawn units
-            if (_encounterSelectionContext.EncounterType == EncounterType.Replay) {
+            // If we are loading a replay or edit mode, don't attempt to initially spawn units
+            if (_encounterSelectionContext.EncounterType != EncounterType.Combat) {
                 return;
             } 
             

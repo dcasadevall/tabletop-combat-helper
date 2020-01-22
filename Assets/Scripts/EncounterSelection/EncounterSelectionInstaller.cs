@@ -12,7 +12,7 @@ namespace EncounterSelection {
             if (showEncounterSelectionView) {
                 Container.Bind<EncounterSelectionContext>().FromInstance(context).AsSingle()
                          .WhenInjectedInto<EncounterSelectionLoader>();
-                Container.Bind<IInitializable>().To<EncounterSelectionLoader>().AsSingle();
+                Container.BindInterfacesTo<EncounterSelectionLoader>().AsSingle();
             } else {
                 context.EncounterType = EncounterType.Replay;
             }

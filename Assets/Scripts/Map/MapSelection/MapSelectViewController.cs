@@ -1,20 +1,27 @@
 using System;
 using System.Collections.Generic;
 using Logging;
+using Map.MapData;
+using Map.MapData.Store;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using ILogger = Logging.ILogger;
 
-namespace Map.UI {
+namespace Map.MapSelection {
     public class MapSelectViewController : MonoBehaviour, IMapSelectViewController {
        public event Action<int> LoadMapClicked = delegate {};
+       public event Action<int> EditMapClicked = delegate {};
 
 #pragma warning disable 649
         [SerializeField]
         private Dropdown _dropdown;
+        
         [SerializeField]
         private Button _loadMapButton;
+        
+        [SerializeField]
+        private Button _editMapButton;
 #pragma warning restore 649
         
         private int _selectedIndex = 0;
@@ -40,7 +47,14 @@ namespace Map.UI {
             }
             
             _loadMapButton.onClick.AddListener(HandleOnLoadMapClicked);
+            _editMapButton.onClick.AddListener(HandleOnEditMapClicked);
             _dropdown.onValueChanged.AddListener(HandleOnValueChanged);
+        }
+
+        private void OnDestroy() {
+            _loadMapButton.onClick.RemoveListener(HandleOnLoadMapClicked);
+            _editMapButton.onClick.RemoveListener(HandleOnEditMapClicked);
+            _dropdown.onValueChanged.RemoveListener(HandleOnValueChanged);
         }
 
         private void HandleOnLoadMapClicked() {
@@ -50,6 +64,15 @@ namespace Map.UI {
             }
             
             LoadMapClicked.Invoke(_selectedIndex);
+        }
+        
+        private void HandleOnEditMapClicked() {
+            if (_selectedIndex < 0 || _selectedIndex >= _mapReferences.Count) {
+                _logger.LogError(LoggedFeature.Map, "Invalid selected index: {0}", _selectedIndex);
+                return;
+            }
+            
+            EditMapClicked.Invoke(_selectedIndex);
         }
 
         public void Show() {

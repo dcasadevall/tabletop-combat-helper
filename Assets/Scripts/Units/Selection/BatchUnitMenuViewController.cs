@@ -3,6 +3,7 @@ using System.Linq;
 using CommandSystem;
 using Grid;
 using Grid.Commands;
+using Grid.GridUnits;
 using Grid.Positioning;
 using Logging;
 using UI.RadialMenu;
@@ -31,7 +32,7 @@ namespace Units.Selection {
         private ICommandQueue _commandQueue;
         private IUnitActionPlanner _unitActionPlanner;
         private IGridUnitManager _gridUnitManager;
-        private IGridInputManager _gridInputManager;
+        private IGridUnitInputManager _gridUnitInputManager;
         private IRadialMenu _radialMenu;
         private IGridPositionCalculator _gridPositionCalculator;
         private ILogger _logger;
@@ -46,7 +47,7 @@ namespace Units.Selection {
                               ICommandQueue commandQueue,
                               IUnitActionPlanner unitActionPlanner,
                               IGridUnitManager gridUnitManager,
-                              IGridInputManager gridInputManager,
+                              IGridUnitInputManager gridUnitInputManager,
                               IGridPositionCalculator gridPositionCalculator,
                               ILogger logger) {
             _camera = camera;
@@ -54,7 +55,7 @@ namespace Units.Selection {
             _unitSelectionHighlighter = unitSelectionHighlighter;
             _unitActionPlanner = unitActionPlanner;
             _gridUnitManager = gridUnitManager;
-            _gridInputManager = gridInputManager;
+            _gridUnitInputManager = gridUnitInputManager;
             _gridPositionCalculator = gridPositionCalculator;
             _logger = logger;
 
@@ -94,8 +95,8 @@ namespace Units.Selection {
                                           .Where(_ => Input.GetMouseButtonUp(0));
             var mouseDownStream = Observable.EveryUpdate()
                                             .Where(_ => Input.GetMouseButtonDown(0))
-                                            .Where(_ => _gridInputManager.UnitsAtMousePosition.Length > 0)
-                                            .Where(_ => units.Intersect(_gridInputManager.UnitsAtMousePosition).Any())
+                                            .Where(_ => _gridUnitInputManager.UnitsAtMousePosition.Length > 0)
+                                            .Where(_ => units.Intersect(_gridUnitInputManager.UnitsAtMousePosition).Any())
                                             .First();
 
             _observer = mouseDownStream.Select(_ => mouseUpStream).Subscribe(_ => {

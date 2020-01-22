@@ -3,6 +3,7 @@ using Grid;
 using Grid.Positioning;
 using Logging;
 using Map;
+using Map.MapData;
 using Map.MapSections;
 using Math;
 using UnityEngine;
