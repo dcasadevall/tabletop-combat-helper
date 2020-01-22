@@ -4,14 +4,21 @@ using Grid;
 using Grid.Highlighting;
 using InputSystem;
 using Logging;
+using Map.MapData;
+using MapEditor.MapElement;
 using Math;
 using UniRx;
 using UnityEngine;
 using Zenject;
 
 namespace MapEditor.SectionTiles {
+    /// <summary>
+    /// <see cref="IMapEditorTool"/> responsible for detecting section tile clicks.
+    /// TODO: Move to generic MapElementEditor
+    /// </summary>
     public class SectionTileEditor : IMapEditorTool {
         private readonly Texture2D _cursorTexture;
+        private readonly IMutableMapSectionData _mapSectionData;
         private readonly IGridCellHighlightPool _gridCellHighlightPool;
         private readonly IGridInputManager _gridInputManager;
         private readonly IInputLock _inputLock;
@@ -21,15 +28,25 @@ namespace MapEditor.SectionTiles {
 
         public SectionTileEditor([Inject(Id = MapEditorInstaller.SECTION_TILES_CURSOR)]
                                  Texture2D cursorTexture,
+                                 IMutableMapSectionData mapSectionData,
                                  IGridCellHighlightPool gridCellHighlightPool,
                                  IGridInputManager gridInputManager,
                                  IInputLock inputLock,
                                  EditSectionTileViewController editSectionTileViewController) {
             _cursorTexture = cursorTexture;
+            _mapSectionData = mapSectionData;
             _gridCellHighlightPool = gridCellHighlightPool;
             _gridInputManager = gridInputManager;
             _inputLock = inputLock;
             _editSectionTileViewController = editSectionTileViewController;
+        }
+
+        public IMapElement MapElementAtTileCoords(IntVector2 tileCoords) {
+            if (!_mapSectionData.TileMetadataMap.ContainsKey(tileCoords)) {
+                return null;
+            }
+            
+            return new SectionTileMapElement(_mapSectionData, tileCoords);
         }
 
         public void StartEditing() {

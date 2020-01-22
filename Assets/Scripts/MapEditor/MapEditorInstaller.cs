@@ -1,4 +1,5 @@
 using Map.MapData.Store;
+using MapEditor.MapElement;
 using MapEditor.SectionTiles;
 using Math;
 using UnityEngine;
@@ -19,6 +20,9 @@ namespace MapEditor {
         
         [SerializeField]
         private SectionTileRenderer _sectionTileRendererPrefab;
+
+        [SerializeField]
+        private MapElementMenuViewController _mapElementMenuVcPrefab;
         
         [SerializeField]
         private Texture2D _sectionTilesModeCursor;
@@ -41,6 +45,14 @@ namespace MapEditor {
             Container.Bind<IMapDataStore>()
                      .FromInstance(_mapDataStore)
                      .WhenInjectedInto<MapEditorToolbarViewController>();
+            
+            // Map Elements
+            Container.Bind<IMapElementMenuViewController>()
+                     .To<MapElementMenuViewController>()
+                     .FromComponentInNewPrefab(_mapElementMenuVcPrefab)
+                     .AsSingle()
+                     .Lazy();
+            Container.BindInterfacesTo<MapElementSelectionDetector>().AsSingle();
 
             // Section Tile Editor
             Container.Bind<EditSectionTileViewController>()

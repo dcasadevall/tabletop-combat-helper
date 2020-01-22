@@ -8,9 +8,8 @@ using Utils;
 using Zenject;
 
 namespace Grid {
-    public class GridInputManager : IGridInputManager, IInitializable {
+    public class GridInputManager : IGridInputManager {
         private readonly Camera _camera;
-        private readonly EventSystem _eventSystem;
         private readonly IGridPositionCalculator _gridPositionCalculator;
 
         /// <summary>
@@ -20,11 +19,11 @@ namespace Grid {
 
         public IObservable<IntVector2> MouseEnteredTile {
             get {
-                return MouseTileCoords.Where(tile => tile != null).Select(tile => tile.Value);
+                return MouseTileCoords.Where(tile => tile != null).Select(tile => tile.GetValueChecked());
             }
         }
 
-        public IObservable<IntVector2> LeftMouseButtonOnTile { get; private set; }
+        public IObservable<IntVector2> LeftMouseButtonOnTile { get; }
 
         public IntVector2? TileAtMousePosition {
             get {
@@ -34,11 +33,9 @@ namespace Grid {
 
         public GridInputManager(Camera camera, EventSystem eventSystem, IGridPositionCalculator gridPositionCalculator) {
             _camera = camera;
-            _eventSystem = eventSystem;
             _gridPositionCalculator = gridPositionCalculator;
-        }
-
-        public void Initialize() {
+            
+            // These are initialized on construction to avoid race conditions on initialize
             MouseTileCoords = Observable.EveryUpdate()
                                         .Select(_ => GetTileAtMousePositionInternal())
                                         .DistinctUntilChanged()
@@ -46,7 +43,7 @@ namespace Grid {
 
             LeftMouseButtonOnTile = Observable.EveryUpdate()
                                               .Where(_ => Input.GetMouseButton(0))
-                                              .Where(_ => !_eventSystem.IsPointerOverGameObject())
+                                              .Where(_ => !eventSystem.IsPointerOverGameObject())
                                               .Where(_ => TileAtMousePosition != null)
                                               .Select(_ => TileAtMousePosition.GetValueChecked());
         }

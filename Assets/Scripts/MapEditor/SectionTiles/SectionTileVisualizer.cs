@@ -9,6 +9,9 @@ using UniRx;
 using Zenject;
 
 namespace MapEditor.SectionTiles {
+    /// <summary>
+    /// Class responsible for showing the section tiles in the map editor.
+    /// </summary>
     internal class SectionTileVisualizer : IInitializable, IDisposable {
         private readonly IMapData _mapData;
         private readonly IMapSectionData _mapSectionData;

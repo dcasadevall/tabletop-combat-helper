@@ -10,8 +10,20 @@ using UnityEngine;
 
 namespace Map.MapData {
     [Serializable]
-    public class MapSectionData : IMutableMapSectionData {
+    public class SerializedMapSectionData : IMutableMapSectionData {
         public GridData gridData;
+
+        /// <summary>
+        /// Section Index set by the containing <see cref="SerializedMapData"/>.
+        /// This is not super robust but it does the job.
+        /// </summary>
+        [HideInInspector]
+        public uint sectionIndex;
+        public uint SectionIndex {
+            get {
+                return sectionIndex;
+            }
+        }
 
         public IGridData GridData {
             get {

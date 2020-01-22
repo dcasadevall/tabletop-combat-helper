@@ -8,6 +8,9 @@ using Zenject;
 using ILogger = Logging.ILogger;
 
 namespace MapEditor.SectionTiles {
+    /// <summary>
+    /// MonoBehaviour used to render the individual section tiles into the grid. 
+    /// </summary>
     public class SectionTileRenderer : MonoBehaviour {
         [SerializeField]
         private TextMesh _sectionLabel;

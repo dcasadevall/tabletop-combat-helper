@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Castle.Core.Internal;
 using Logging;
 using Map;
@@ -15,6 +16,9 @@ using Zenject;
 using ILogger = Logging.ILogger;
 
 namespace MapEditor.SectionTiles {
+    /// <summary>
+    /// ViewController used to edit / add a section tile.
+    /// </summary>
     public class EditSectionTileViewController : MonoBehaviour {
         [SerializeField]
         private Button _confirmButton;
@@ -26,8 +30,10 @@ namespace MapEditor.SectionTiles {
         private Dropdown _sectionSelectDropdown;
 
         private IMapData _mapData;
-        private IMutableMapSectionData _mutableMapSectionData;
+        private IMutableMapSectionData _mapSectionData;
         private ILogger _logger;
+        
+        private Dictionary<uint, int> _dropdownIndexMap = new Dictionary<uint, int>();
         private int _selectedIndex = 0;
         private IntVector2 _tileCoords;
 
@@ -36,7 +42,7 @@ namespace MapEditor.SectionTiles {
                               IMutableMapSectionData mutableMapSectionData, 
                               ILogger logger) {
             _mapData = mapData;
-            _mutableMapSectionData = mutableMapSectionData;
+            _mapSectionData = mutableMapSectionData;
             _logger = logger;
         }
 
@@ -50,8 +56,17 @@ namespace MapEditor.SectionTiles {
             
             _sectionSelectDropdown.ClearOptions();
             var options = new List<Dropdown.OptionData>();
-            foreach (var mapDataSection in _mapData.Sections) {
-                options.Add(new Dropdown.OptionData(mapDataSection.SectionName));
+
+            int i = 0;
+            foreach (var sectionConnection in _mapData.Sections) {
+                // Do not include this own section
+                if (sectionConnection.SectionIndex == _mapSectionData.SectionIndex) {
+                    continue;
+                }
+
+                options.Add(new Dropdown.OptionData(sectionConnection.SectionName));
+                _dropdownIndexMap[sectionConnection.SectionIndex] = i;
+                i++;
             }
             _sectionSelectDropdown.AddOptions(options);
         }
@@ -66,9 +81,10 @@ namespace MapEditor.SectionTiles {
 
             // Show existing section connection if possible.
             _selectedIndex = 0;
-            if (_mutableMapSectionData.TileMetadataMap.ContainsKey(tileCoords) &&
-                _mutableMapSectionData.TileMetadataMap[tileCoords].SectionConnection != null) {
-                _selectedIndex = (int) _mutableMapSectionData.TileMetadataMap[tileCoords].SectionConnection.Value;
+            if (_mapSectionData.TileMetadataMap.ContainsKey(tileCoords) &&
+                _mapSectionData.TileMetadataMap[tileCoords].SectionConnection != null) {
+                var connectionIndex = _mapSectionData.TileMetadataMap[tileCoords].SectionConnection.Value;
+                _selectedIndex = _dropdownIndexMap[connectionIndex];
             }
             _sectionSelectDropdown.value = _selectedIndex;
             
@@ -87,7 +103,8 @@ namespace MapEditor.SectionTiles {
                 return;
             }
 
-            _mutableMapSectionData.SetSectionConnection(_tileCoords, (uint)_selectedIndex);
+            uint sectionIndex = _dropdownIndexMap.FirstOrDefault(x => x.Value == _selectedIndex).Key;
+            _mapSectionData.SetSectionConnection(_tileCoords, sectionIndex);
         }
 
         private void HandleSectionSelectValueChanged(int selectedIndex) {

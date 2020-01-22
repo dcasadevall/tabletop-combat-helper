@@ -8,8 +8,9 @@ using UnityEngine;
 
 namespace Map.MapData {
     public interface IMapSectionData {
+        uint SectionIndex { get; }
         IGridData GridData { get; }
-        String SectionName { get; }
+        string SectionName { get; }
         Sprite[] Sprites { get; }
         MapTileType MapTileType { get; }
         int PixelsPerUnit { get; }
