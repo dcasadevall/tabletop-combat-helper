@@ -61,26 +61,16 @@ namespace EncounterOverlay {
             _animator.SetBool(_inputLockBoolName, true);
         }
 
-        public void HandleReplayPlaybackButtonPressed() {
+        public async void HandleReplayPlaybackButtonPressed() {
             _animator.SetBool(_replayPlaybackOpenBoolName, true);
-            _replayPlaybackViewController.ViewControllerDismissed += HandleReplayPlaybackViewControllerDismissed;
-            _replayPlaybackViewController.Show();
-        }
-
-        private void HandleReplayPlaybackViewControllerDismissed() {
+            await _replayPlaybackViewController.Show();
             _animator.SetBool(_replayPlaybackOpenBoolName, false);
-            _replayPlaybackViewController.ViewControllerDismissed -= HandleReplayPlaybackViewControllerDismissed;
         }
 
-        public void HandleDrawingButtonPressed() {
+        public async void HandleDrawingButtonPressed() {
             _animator.SetBool(_drawingOpenBoolName, true);
-            _drawingViewController.ViewControllerDismissed += HandleDrawingViewControllerDismissed;
-            _drawingViewController.Show();
-        }
-
-        private void HandleDrawingViewControllerDismissed() {
+            await _drawingViewController.Show();
             _animator.SetBool(_drawingOpenBoolName, false);
-            _drawingViewController.ViewControllerDismissed -= HandleDrawingViewControllerDismissed;
         }
     }
 }

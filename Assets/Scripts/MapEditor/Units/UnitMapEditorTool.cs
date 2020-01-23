@@ -12,7 +12,7 @@ using Zenject;
 namespace MapEditor.Units {
     public class UnitMapEditorTool : ISingleTileMapEditorToolDelegate {
         private readonly IGridUnitManager _gridUnitManager;
-        private readonly IUnitPickerViewController _unitPickerViewController;
+        private readonly IUnitSpawnViewController _unitSpawnViewController;
         private readonly Texture2D _cursorTexture;
 
         public Texture2D CursorTexture {
@@ -24,21 +24,14 @@ namespace MapEditor.Units {
         public UnitMapEditorTool([Inject(Id = MapEditorInstaller.UNIT_TILES_CURSOR)]
                                  Texture2D cursorTexture, 
                                  IGridUnitManager gridUnitManager,
-                                 IUnitPickerViewController unitPickerViewController) {
+                                 IUnitSpawnViewController unitSpawnViewController) {
             _cursorTexture = cursorTexture;
             _gridUnitManager = gridUnitManager;
-            _unitPickerViewController = unitPickerViewController;
+            _unitSpawnViewController = unitSpawnViewController;
         }
 
-        public async UniTask Show(IntVector2 tileCoords) {
-            // TODO: IDismissNotifyingViewController to be async
-            bool viewControllerDismissed = false;
-            Action dismissAction = () => viewControllerDismissed = true;
-
-            _unitPickerViewController.ViewControllerDismissed += dismissAction;
-            _unitPickerViewController.Show();
-            await UniTask.WaitUntil(() => viewControllerDismissed);
-            _unitPickerViewController.ViewControllerDismissed -= dismissAction;
+        public UniTask Show(IntVector2 tileCoords) {
+            return _unitSpawnViewController.Show(tileCoords);
         }
 
         public IMapElement MapElementAtTileCoords(IntVector2 tileCoords) {

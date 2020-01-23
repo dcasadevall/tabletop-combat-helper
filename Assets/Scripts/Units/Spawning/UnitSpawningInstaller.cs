@@ -29,8 +29,8 @@ namespace Units.Spawning {
         }
         
         public override void InstallBindings() {
-            // Unit Picker UI. This is injected here because the dependency graph is local to unit spawning.
-            Container.BindInterfacesTo<UnitPickerViewController>()
+            // Unit Spawning UI. This is injected here because the dependency graph is local to unit spawning.
+            Container.Bind<IUnitSpawnViewController>().To<UnitSpawnViewController>()
                      .FromComponentInNewPrefab(_unitPickerVcPrefab)
                      .AsSingle()
                      .Lazy();
@@ -49,7 +49,7 @@ namespace Units.Spawning {
             Container.Bind<IMutableUnitRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<UnitPool>();
             
             // Bind ITicker and IInitializable to the UnitsSpawner
-            Container.BindInterfacesTo<UnitSpawner>().AsSingle();
+            Container.BindInterfacesTo<PlayerUnitSpawner>().AsSingle();
             
             // Settings
             Container.Bind<IUnitSpawnSettings>().To<UnitSpawnSettings>().FromInstance(_unitSpawnSettings).AsSingle();
