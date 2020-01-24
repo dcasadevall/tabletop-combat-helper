@@ -16,19 +16,18 @@ namespace MapEditor.SingleTileEditor {
     /// </summary>
     public class SingleTileMapEditorTool : IMapEditorTool {
         private readonly ISingleTileMapEditorToolDelegate _delegate;
-        private readonly IGridCellHighlighter _gridCellHighlighter;
+        private readonly IGridCellHighlightPool _gridCellHighlightPool;
         private readonly IGridInputManager _gridInputManager;
         private readonly IInputLock _inputLock;
-        
-        private IDisposable _highlightObserver;
-        private IDisposable _tileClickObserver;
+        private IGridCellHighlight _gridCellHighlight;
+        private List<IDisposable> _observers = new List<IDisposable>();
 
         public SingleTileMapEditorTool(ISingleTileMapEditorToolDelegate @delegate,
-                                       IGridCellHighlighter gridCellHighlighter,
+                                       IGridCellHighlightPool gridCellHighlightPool,
                                        IGridInputManager gridInputManager,
                                        IInputLock inputLock) {
             _delegate = @delegate;
-            _gridCellHighlighter = gridCellHighlighter;
+            _gridCellHighlightPool = gridCellHighlightPool;
             _gridInputManager = gridInputManager;
             _inputLock = inputLock;
         }
@@ -38,46 +37,53 @@ namespace MapEditor.SingleTileEditor {
         }
 
         public void StartEditing() {
-            _tileClickObserver = _gridInputManager.LeftMouseButtonOnTile
-                                                  .Where(_ => !_inputLock.IsLocked)
-                                                  .Subscribe(HandleTileClicked);
+            _gridInputManager.LeftMouseButtonOnTile
+                             .Where(_ => !_inputLock.IsLocked)
+                             .Subscribe(HandleTileClicked).AddTo(_observers);
 
-            _highlightObserver = _gridCellHighlighter.HighlightCellOnMouseOver(stayHighlighted: true);
+            _gridInputManager.MouseEnteredTile
+                             .Where(_ => !_inputLock.IsLocked)
+                             .Subscribe(HandleMouseOnTile)
+                             .AddTo(_observers);
 
             SetSectionTileCursor();
         }
 
         public void StopEditing() {
-            _gridCellHighlighter.ClearHighlight();
-            _tileClickObserver?.Dispose();
-            _tileClickObserver = null;
-            _highlightObserver?.Dispose();
-            _highlightObserver = null;
+            if (_gridCellHighlight != null) {
+                _gridCellHighlightPool.Despawn(_gridCellHighlight);
+                _gridCellHighlight = null;
+            }
+
+            _observers.ForEach(x => x.Dispose());
             SetDefaultCursor();
         }
 
         private async void HandleTileClicked(IntVector2 tileCoords) {
             // Trigger highlight for mobile since mouse over does not happen there.
-            _gridCellHighlighter.SetHighlight(tileCoords);
+            HandleMouseOnTile(tileCoords);
 
             using (_inputLock.Lock()) {
                 SetDefaultCursor();
-                
-                // Stop highlighting on mouse over.
-                _highlightObserver?.Dispose();
-                _highlightObserver = null;
-                // Update highlight to match new mouse position.
-                _gridCellHighlighter.ClearHighlight();
+                await _delegate.Show(tileCoords);
+
+                // Update highlight to match new mouse position
+                _gridCellHighlightPool.Despawn(_gridCellHighlight);
+                _gridCellHighlight = null;
                 if (_gridInputManager.TileAtMousePosition != null) {
-                    _gridCellHighlighter.SetHighlight(_gridInputManager.TileAtMousePosition.Value);
+                    HandleMouseOnTile(_gridInputManager.TileAtMousePosition.Value);
                 }
 
-                await _delegate.Show(tileCoords);
-                
-                _gridCellHighlighter.ClearHighlight();
-                _highlightObserver = _gridCellHighlighter.HighlightCellOnMouseOver(stayHighlighted: true);
                 SetSectionTileCursor();
             }
+        }
+
+        private void HandleMouseOnTile(IntVector2 tileCoords) {
+            if (_gridCellHighlight != null) {
+                _gridCellHighlightPool.Despawn(_gridCellHighlight);
+            }
+
+            _gridCellHighlight = _gridCellHighlightPool.Spawn(tileCoords, new Color(1, 0, 0, 0.4f));
         }
 
         private void SetSectionTileCursor() {

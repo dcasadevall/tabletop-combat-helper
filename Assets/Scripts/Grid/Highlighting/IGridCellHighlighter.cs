@@ -19,13 +19,8 @@ namespace Grid.Highlighting {
         /// <returns></returns>
         IDisposable HighlightCellOnMouseOver(bool stayHighlighted = false);
         /// <summary>
-        /// Manually highlight the given tile coordinates. Remains highlighted until <see cref="ClearHighlight"/> is called.
-        /// </summary>
-        /// <param name="tileCoords"></param>
-        void SetHighlight(IntVector2 tileCoords);
-        /// <summary>
         /// Clears any highlight that may be left due to calling <see cref="HighlightCellOnMouseOver(bool)"/>
-        /// when stayHighlighted is true, or calling <see cref="SetHighlight"/>.
+        /// when stayHighlighted is true.
         /// </summary>
         void ClearHighlight();
     }
