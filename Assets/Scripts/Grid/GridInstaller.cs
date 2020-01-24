@@ -19,6 +19,7 @@ namespace Grid {
             Container.BindInterfacesTo<GridInputManager>().AsSingle();
             
             // Grid Visualization
+            Container.Bind<IGridCellHighlighter>().To<GridCellHighlighter>().AsSingle();
             Container.Bind<IGridCellHighlightPool>().To<GridCellHighlightPool>().AsSingle();
             Container.BindMemoryPool<GridCellHighlight, GridCellHighlight.Pool>().WithInitialSize(10)
                      .FromComponentInNewPrefab(gridCellPrefab).UnderTransformGroup("CellHighlights")

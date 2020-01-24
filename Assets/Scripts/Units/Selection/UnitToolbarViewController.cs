@@ -36,26 +36,25 @@ namespace Units.Selection {
 
         private BatchUnitSelectionDetector _batchUnitSelectionDetector;
         private BatchUnitMenuViewController _batchUnitMenuViewController;
-        private IGridCellHighlightPool _gridCellHighlightPool;
+        private IGridCellHighlighter _gridCellHighlighter;
         private IGridInputManager _gridInputManager;
         private IUnitSpawnViewController _unitSpawnViewController;
         private IInputLock _inputLock;
         private ILogger _logger;
 
         private IDisposable _selectionObserver;
-        private IGridCellHighlight _gridCellHighlight;
 
         [Inject]
         internal void Construct(BatchUnitSelectionDetector batchUnitSelectionDetector,
                                 BatchUnitMenuViewController batchUnitMenuViewController,
-                                IGridCellHighlightPool gridCellHighlightPool,
+                                IGridCellHighlighter gridCellHighlighter,
                                 IGridInputManager gridInputManager,
                                 IUnitSpawnViewController unitSpawnViewController,
                                 IInputLock inputLock,
                                 ILogger logger) {
             _batchUnitSelectionDetector = batchUnitSelectionDetector;
             _batchUnitMenuViewController = batchUnitMenuViewController;
-            _gridCellHighlightPool = gridCellHighlightPool;
+            _gridCellHighlighter = gridCellHighlighter;
             _gridInputManager = gridInputManager;
             _unitSpawnViewController = unitSpawnViewController;
             _inputLock = inputLock;
@@ -130,9 +129,8 @@ namespace Units.Selection {
                 Show();
                 ShowCancelButton();
 
-                // TODO: Create a "Highlight Mouse On Tile" reusable method.
                 CancellableTaskResult<IntVector2> cancelableResult;
-                using (_gridInputManager.MouseEnteredTile.Subscribe(HandleMouseEnteredTile)) {
+                using (_gridCellHighlighter.HighlightCellOnMouseOver(stayHighlighted: true)) {
                     cancelableResult =
                         await _gridInputManager.LeftMouseButtonOnTile.ToButtonCancellableTask(_cancelButton);
                 }
@@ -141,20 +139,8 @@ namespace Units.Selection {
                     await _unitSpawnViewController.Show(cancelableResult.result);
                 }
 
-                HideHighlight();
+                _gridCellHighlighter.ClearHighlight();
                 ShowToolbar();
-            }
-        }
-
-        private void HandleMouseEnteredTile(IntVector2 tileCoords) {
-            HideHighlight();
-            _gridCellHighlight = _gridCellHighlightPool.Spawn(tileCoords, new Color(1, 0, 0, 0.4f));
-        }
-
-        private void HideHighlight() {
-            if (_gridCellHighlight != null) {
-                _gridCellHighlightPool.Despawn(_gridCellHighlight);
-                _gridCellHighlight = null;
             }
         }
 
