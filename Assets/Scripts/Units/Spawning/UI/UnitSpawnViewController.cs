@@ -105,6 +105,13 @@ namespace Units.Spawning.UI {
                 return;
             }
 
+            // If only one unit, just spawn at the point.
+            if (numUnits == 1) {
+                SpawnUnit(unitData, tileCoords);
+                return;
+            }
+            
+            // For multiple units, spawn randomly around the position.
             IntVector2[] tilePositions = _randomGridPositionProvider.GetRandomUniquePositions(tileCoords, 1, numUnits);
             foreach (var tilePosition in tilePositions) {
                 SpawnUnit(unitData, tilePosition);

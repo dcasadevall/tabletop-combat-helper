@@ -24,7 +24,7 @@ namespace Grid.Highlighting {
             var observer = _gridInputManager.MouseEnteredTile
                                             .Subscribe(HandleMouseOnTile);
 
-            return new HighlightDisposable(observer, stayHighlighted, this);
+            return new HighlightDisposable(observer, !stayHighlighted, this);
         }
 
         private void HandleMouseOnTile(IntVector2 tileCoords) {
