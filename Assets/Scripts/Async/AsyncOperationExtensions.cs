@@ -3,8 +3,8 @@ using System.Collections;
 using System.Threading;
 using UniRx;
 
-namespace Utils {
-    public static class UniRxExtensions {
+namespace Async {
+    public static class AsyncOperationExtensions {
         /// <summary>
         /// Example ToObservable method from UniRX Docs.
         /// </summary>

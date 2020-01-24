@@ -1,13 +1,11 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
+using Async;
 using Grid;
 using Grid.Highlighting;
 using InputSystem;
 using Logging;
 using Math;
 using UniRx;
-using UniRx.Async;
 using Units.Spawning.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,10 +42,8 @@ namespace Units.Selection {
         private IInputLock _inputLock;
         private ILogger _logger;
 
-        private IDisposable _lockToken;
         private IDisposable _selectionObserver;
         private IGridCellHighlight _gridCellHighlight;
-        private CancellationTokenSource _cancellationTokenSource;
 
         [Inject]
         internal void Construct(BatchUnitSelectionDetector batchUnitSelectionDetector,
@@ -74,7 +70,6 @@ namespace Units.Selection {
 
             _addUnitsButton.onClick.AddListener(HandleAddUnitsPressed);
             _batchSelectButton.onClick.AddListener(HandleBatchSelectPressed);
-            _cancelButton.onClick.AddListener(HandleCancelButtonPressed);
         }
 
         // TODO: This is a pretty janky way of handling input.
@@ -96,7 +91,6 @@ namespace Units.Selection {
 
             _addUnitsButton.onClick.RemoveListener(HandleAddUnitsPressed);
             _batchSelectButton.onClick.RemoveListener(HandleBatchSelectPressed);
-            _cancelButton.onClick.RemoveListener(HandleCancelButtonPressed);
         }
 
         private void Show() {
@@ -132,28 +126,24 @@ namespace Units.Selection {
         }
 
         private async void HandleAddUnitsPressed() {
-            using (_lockToken = _inputLock.Lock()) {
-                await Task.Run(() => WaitForClickAndShowSpawnViewController(), _cancellationTokenSource.Token);
+            using (_inputLock.Lock()) {
+                Show();
+                ShowCancelButton();
+
+                // TODO: Create a "Highlight Mouse On Tile" reusable method.
+                CancellableTaskResult<IntVector2> cancelableResult;
+                using (_gridInputManager.MouseEnteredTile.Subscribe(HandleMouseEnteredTile)) {
+                    cancelableResult =
+                        await _gridInputManager.LeftMouseButtonOnTile.ToButtonCancellableTask(_cancelButton);
+                }
+
+                if (!cancelableResult.isCanceled) {
+                    await _unitSpawnViewController.Show(cancelableResult.result);
+                }
+
+                HideHighlight();
+                ShowToolbar();
             }
-        }
-
-        private async void WaitForClickAndShowSpawnViewController() {
-            Show();
-            ShowCancelButton();
-
-            // TODO: Create a "Highlight Mouse On Tile" reusable method.
-            // Note that we don't use 'using' because we need the variable tileCoords out of that scope.
-            IDisposable observer = _gridInputManager.MouseEnteredTile.Subscribe(HandleMouseEnteredTile);
-            IntVector2 tileCoords = await Task.Run(() => _gridInputManager.LeftMouseButtonOnTile.ToTask(), _cancellationTokenSource.Token);
-            observer.Dispose();
-            
-            await _unitSpawnViewController.Show(tileCoords);
-            
-            HideHighlight();
-            ShowToolbar();
-        }
-
-        private async void HandleTileClicked(IntVector2 tileCoords) {
         }
 
         private void HandleMouseEnteredTile(IntVector2 tileCoords) {
@@ -169,30 +159,23 @@ namespace Units.Selection {
         }
 
         private async void HandleBatchSelectPressed() {
-            using (_lockToken = _inputLock.Lock()) {
+            using (_inputLock.Lock()) {
                 Show(); // See essay above.
                 ShowCancelButton();
 
-                _cancellationTokenSource = new CancellationTokenSource();
-                using (_batchUnitSelectionDetector
-                       .GetSelectedUnitsObservable().Subscribe(HandleUnitsSelected)) {
-                    await UniTask.WaitUntil(() => _cancellationTokenSource.Token.IsCancellationRequested);
-                }
+                CancellableTaskResult<IUnit[]> taskResult = await _batchUnitSelectionDetector
+                                                                  .GetSelectedUnitsObservable()
+                                                                  .ToButtonCancellableTask(_cancelButton);
 
+                if (!taskResult.isCanceled) {
+                    _logger.Log(LoggedFeature.Units, "Selected {0} Units", taskResult.result.ToString());
+                    Hide();
+                    await _batchUnitMenuViewController.ShowAndWaitForAction(taskResult.result);
+                    Show();
+                }
+                
                 ShowToolbar();
             }
-        }
-
-        private async void HandleUnitsSelected(IUnit[] units) {
-            _logger.Log(LoggedFeature.Units, "Selected {0} Units", units.ToString());
-            Hide();
-            await _batchUnitMenuViewController.ShowAndWaitForAction(units);
-            Show();
-            _cancellationTokenSource.Cancel();
-        }
-
-        private void HandleCancelButtonPressed() {
-            _cancellationTokenSource.Cancel();
         }
     }
 }
