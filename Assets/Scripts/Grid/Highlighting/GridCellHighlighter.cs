@@ -29,10 +29,6 @@ namespace Grid.Highlighting {
 
         private void HandleMouseOnTile(IntVector2 tileCoords) {
             ClearHighlight();
-            SetHighlight(tileCoords);
-        }
-
-        public void SetHighlight(IntVector2 tileCoords) {
             _gridCellHighlight = _gridCellHighlightPool.Spawn(tileCoords, HIGHLIGHT_COLOR);
         }
 

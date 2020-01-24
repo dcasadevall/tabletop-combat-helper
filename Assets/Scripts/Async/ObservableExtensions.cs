@@ -20,7 +20,7 @@ namespace Async {
             try {
                 var cancelSource = new CancellationTokenSource();
                 using (cancelStream.Subscribe(_ => cancelSource.Cancel())) {
-                    TResult result = await Task.Run(() => observable.ToTask(cancelSource.Token), cancelSource.Token);
+                    TResult result = await Task.Run(() => observable.First().ToTask(cancelSource.Token), cancelSource.Token);
                     return CancellableTaskResult<TResult>.FromResult(result);
                 }
             } catch (OperationCanceledException e) {
