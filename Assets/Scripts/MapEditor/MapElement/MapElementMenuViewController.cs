@@ -1,6 +1,8 @@
+using Async;
 using Grid.Positioning;
 using Math;
 using UI.RadialMenu;
+using UniRx;
 using UniRx.Async;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +13,6 @@ namespace MapEditor.MapElement {
         private Camera _camera;
         private IRadialMenu _radialMenu;
         private IGridPositionCalculator _gridPositionCalculator;
-        private IMapElement _mapElement;
 
         [SerializeField]
         private Button _removeButton;
@@ -30,19 +31,15 @@ namespace MapEditor.MapElement {
             Vector3 screenPosition =
                 _camera.WorldToScreenPoint(_gridPositionCalculator.GetTileCenterWorldPosition(tileCoords));
             _radialMenu.Show(screenPosition);
-            _removeButton.onClick.AddListener(HandleRemoveButtonClicked);
-            _mapElement = mapElement;
-            
-            var removeTask = _removeButton.OnClickAsync();
-            var cancelTask = _cancelButton.OnClickAsync();
-            await UniTask.WhenAny(removeTask, cancelTask);
 
-            _removeButton.onClick.RemoveListener(HandleRemoveButtonClicked);
+            var result = await _removeButton.OnClickAsObservable()
+                                            .First()
+                                            .ToButtonCancellableTask(_cancelButton);
+            if (!result.isCanceled) {
+                mapElement.Remove();
+            }
+
             _radialMenu.Hide();
-        }
-
-        private void HandleRemoveButtonClicked() {
-            _mapElement.Remove();
         }
     }
 }

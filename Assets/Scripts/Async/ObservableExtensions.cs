@@ -28,6 +28,13 @@ namespace Async {
             }
         }
 
+        /// <summary>
+        /// Creates a task from the given observable, which will be canceled gracefully if the given button is pressed.
+        /// </summary>
+        /// <param name="observable"></param>
+        /// <param name="button"></param>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
         public static Task<CancellableTaskResult<TResult>> ToButtonCancellableTask<TResult>(
             this IObservable<TResult> observable, Button button) {
             return observable.ToCancellableTask(button.OnClickAsObservable());

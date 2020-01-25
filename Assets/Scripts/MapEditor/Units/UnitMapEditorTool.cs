@@ -1,4 +1,5 @@
 using System;
+using CommandSystem;
 using Grid;
 using MapEditor.MapElement;
 using MapEditor.SingleTileEditor;
@@ -12,6 +13,7 @@ using Zenject;
 namespace MapEditor.Units {
     public class UnitMapEditorTool : ISingleTileMapEditorToolDelegate {
         private readonly IGridUnitManager _gridUnitManager;
+        private readonly ICommandQueue _commandQueue;
         private readonly IUnitSpawnViewController _unitSpawnViewController;
         private readonly Texture2D _cursorTexture;
 
@@ -24,9 +26,11 @@ namespace MapEditor.Units {
         public UnitMapEditorTool([Inject(Id = MapEditorInstaller.UNIT_TILES_CURSOR)]
                                  Texture2D cursorTexture, 
                                  IGridUnitManager gridUnitManager,
+                                 ICommandQueue commandQueue,
                                  IUnitSpawnViewController unitSpawnViewController) {
             _cursorTexture = cursorTexture;
             _gridUnitManager = gridUnitManager;
+            _commandQueue = commandQueue;
             _unitSpawnViewController = unitSpawnViewController;
         }
 
@@ -40,7 +44,7 @@ namespace MapEditor.Units {
                 return null;
             }
 
-            return new UnitMapElement(_gridUnitManager, units[0]);
+            return new UnitMapElement(_commandQueue, units[0]);
         }
     }
 }
