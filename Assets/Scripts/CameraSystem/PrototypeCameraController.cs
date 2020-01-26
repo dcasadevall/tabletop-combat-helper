@@ -14,11 +14,13 @@ namespace CameraSystem {
     public class PrototypeCameraController : MonoBehaviour, ICameraController {
         [SerializeField]
         private RegionHandler regionHandler;
+
         [SerializeField]
         private bool lerpToTargetPosition;
 
         [SerializeField]
         private float smoothTime;
+
         private Vector3 positionToMoveTo;
 
         private DiContainer _container;
@@ -36,23 +38,29 @@ namespace CameraSystem {
         }
 
         private Vector3? lastPosition;
+
         private void Update() {
             // Panning with WASD
             float speed = 5.0f;
-            if(Input.GetKey(KeyCode.D)) {
-                transform.Translate(new Vector3(speed * Time.deltaTime,0,0));
+            if (Input.GetKey(KeyCode.D)) {
+                transform.Translate(new Vector3(speed * Time.deltaTime, 0, 0));
             }
-            if(Input.GetKey(KeyCode.A))
-            {
-                transform.Translate(new Vector3(-speed * Time.deltaTime,0,0));
+
+            if (Input.GetKey(KeyCode.A)) {
+                transform.Translate(new Vector3(-speed * Time.deltaTime, 0, 0));
             }
-            if(Input.GetKey(KeyCode.S))
-            {
-                transform.Translate(new Vector3(0,-speed * Time.deltaTime,0));
+
+            if (Input.GetKey(KeyCode.S)) {
+                transform.Translate(new Vector3(0, -speed * Time.deltaTime, 0));
             }
-            if(Input.GetKey(KeyCode.W))
-            {
-                transform.Translate(new Vector3(0,speed * Time.deltaTime,0));
+
+            if (Input.GetKey(KeyCode.W)) {
+                transform.Translate(new Vector3(0, speed * Time.deltaTime, 0));
+            }
+
+            // Check for lock. Do nothing if not acquired.
+            if (_inputLock.IsLocked) {
+                return;
             }
 
             positionToMoveTo = transform.position;
@@ -61,32 +69,32 @@ namespace CameraSystem {
             Vector3 newCameraPosition = Vector3.zero;
 
             if (regionHandler != null && regionHandler.Regions.Count > 0) {
-
                 Region region = regionHandler.ActiveRegion;
 
                 // The following block holds the logic for moving the camera on the horizontal axis. If the current regions width is small than that of the width of the
                 // camera, the camera stays fixed at the center of the region. Otherwise it'll move towards the target on the x-axis.
                 if (region.Width < cameraAspectSize * 2) {
                     newCameraPosition.x = region.p0.x + region.Width / 2;
-                }
-                else {
-                    newCameraPosition.x = Mathf.Clamp(positionToMoveTo.x, region.p0.x + cameraAspectSize, region.p1.x - cameraAspectSize);
+                } else {
+                    newCameraPosition.x = Mathf.Clamp(positionToMoveTo.x,
+                                                      region.p0.x + cameraAspectSize,
+                                                      region.p1.x - cameraAspectSize);
                 }
 
                 // The same logic but this time for the vertical axis. If the active region is smaller in height than the height of the camera, the camera stays fixed in the
                 // center of the region.
                 if (region.Height < _camera.orthographicSize * 2) {
                     newCameraPosition.y = region.p1.y + region.Height / 2;
-                }
-                else {
-                    newCameraPosition.y = Mathf.Clamp(positionToMoveTo.y, region.p1.y + _camera.orthographicSize, region.p0.y - _camera.orthographicSize);
+                } else {
+                    newCameraPosition.y = Mathf.Clamp(positionToMoveTo.y,
+                                                      region.p1.y + _camera.orthographicSize,
+                                                      region.p0.y - _camera.orthographicSize);
                 }
 
                 if (!region.Contains(positionToMoveTo)) {
                     regionHandler.SetActiveRegion(positionToMoveTo);
                 }
-            }
-            else {
+            } else {
                 newCameraPosition = positionToMoveTo;
             }
 
@@ -102,11 +110,6 @@ namespace CameraSystem {
 
             // Check if we are hovering UI
             if (_eventSystem.IsPointerOverGameObject()) {
-                return;
-            }
-
-            // Check for lock. Do nothing if not acquired.
-            if (_inputLock.IsLocked) {
                 return;
             }
 
@@ -139,9 +142,14 @@ namespace CameraSystem {
         }
 
         private void LateUpdate() {
+            if (_inputLock.IsLocked) {
+                return;
+            }
+            
             float sizeMin = 2f;
             float sizeMax = 35f;
-            _camera.orthographicSize = Mathf.Clamp(_camera.orthographicSize - Input.mouseScrollDelta.y, sizeMin, sizeMax);
+            _camera.orthographicSize =
+                Mathf.Clamp(_camera.orthographicSize - Input.mouseScrollDelta.y, sizeMin, sizeMax);
         }
 
         // Call this function to switch to a completely different region handler

@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Grid;
 using Grid.Highlighting;
 using InputSystem;
 using MapEditor.MapElement;
 using Math;
 using UniRx;
+using UniRx.Async;
 using UnityEngine;
 
 namespace MapEditor.SingleTileEditor {
@@ -19,8 +22,10 @@ namespace MapEditor.SingleTileEditor {
         private readonly IGridCellHighlightPool _gridCellHighlightPool;
         private readonly IGridInputManager _gridInputManager;
         private readonly IInputLock _inputLock;
+        private readonly List<IDisposable> _observers = new List<IDisposable>();
+
+        private CancellationTokenSource _cancellationTokenSource;
         private IGridCellHighlight _gridCellHighlight;
-        private List<IDisposable> _observers = new List<IDisposable>();
 
         public SingleTileMapEditorTool(ISingleTileMapEditorToolDelegate @delegate,
                                        IGridCellHighlightPool gridCellHighlightPool,
@@ -38,11 +43,12 @@ namespace MapEditor.SingleTileEditor {
 
         public void StartEditing() {
             _gridInputManager.LeftMouseButtonOnTile
-                             .Where(_ => !_inputLock.IsLocked)
-                             .Subscribe(HandleTileClicked).AddTo(_observers);
+                             .Where(_ => _cancellationTokenSource == null)
+                             .Subscribe(HandleTileClicked)
+                             .AddTo(_observers);
 
             _gridInputManager.MouseEnteredTile
-                             .Where(_ => !_inputLock.IsLocked)
+                             .Where(_ => _cancellationTokenSource == null)
                              .Subscribe(HandleMouseOnTile)
                              .AddTo(_observers);
 
@@ -50,6 +56,9 @@ namespace MapEditor.SingleTileEditor {
         }
 
         public void StopEditing() {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource = null;
+            
             if (_gridCellHighlight != null) {
                 _gridCellHighlightPool.Despawn(_gridCellHighlight);
                 _gridCellHighlight = null;
@@ -62,20 +71,22 @@ namespace MapEditor.SingleTileEditor {
         private async void HandleTileClicked(IntVector2 tileCoords) {
             // Trigger highlight for mobile since mouse over does not happen there.
             HandleMouseOnTile(tileCoords);
+            SetDefaultCursor();
 
-            using (_inputLock.Lock()) {
-                SetDefaultCursor();
-                await _delegate.Show(tileCoords);
+            // Allow cancellation when "StopEditing" is called.
+            _cancellationTokenSource = new CancellationTokenSource();
+            // The task is ran "as uni task" to avoid opening a new thread.
+            // We are showing a view controller which will require MonoBehaviours (needs main thread).
+            var task = Task.Run(() => _delegate.Show(tileCoords);
 
-                // Update highlight to match new mouse position
-                _gridCellHighlightPool.Despawn(_gridCellHighlight);
-                _gridCellHighlight = null;
-                if (_gridInputManager.TileAtMousePosition != null) {
-                    HandleMouseOnTile(_gridInputManager.TileAtMousePosition.Value);
-                }
-
-                SetSectionTileCursor();
+            // Update highlight to match new mouse position
+            _gridCellHighlightPool.Despawn(_gridCellHighlight);
+            _gridCellHighlight = null;
+            if (_gridInputManager.TileAtMousePosition != null) {
+                HandleMouseOnTile(_gridInputManager.TileAtMousePosition.Value);
             }
+
+            SetSectionTileCursor();
         }
 
         private void HandleMouseOnTile(IntVector2 tileCoords) {

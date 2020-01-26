@@ -2,7 +2,6 @@ using Async;
 using Grid.Positioning;
 using Math;
 using UI.RadialMenu;
-using UniRx;
 using UniRx.Async;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,19 +26,17 @@ namespace MapEditor.MapElement {
             _radialMenu = GetComponent<IRadialMenu>();
         }
 
-        public async void Show(IntVector2 tileCoords, IMapElement mapElement) {
+        public async UniTask Show(IntVector2 tileCoords, IMapElement mapElement) {
             Vector3 screenPosition =
                 _camera.WorldToScreenPoint(_gridPositionCalculator.GetTileCenterWorldPosition(tileCoords));
             _radialMenu.Show(screenPosition);
 
-            var result = await _removeButton.OnClickAsObservable()
-                                            .First()
-                                            .ToButtonCancellableTask(_cancelButton);
+            var result = await _removeButton.ToButtonCancellableTask(_cancelButton);
             if (!result.isCanceled) {
                 mapElement.Remove();
             }
 
-            _radialMenu.Hide();
+            await _radialMenu.Hide();
         }
     }
 }

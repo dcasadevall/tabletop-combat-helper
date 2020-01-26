@@ -1,7 +1,10 @@
+using System;
 using InputSystem;
 using Logging;
 using Map.MapData.Store;
 using Map.MapSections.Commands;
+using UniRx;
+using UniRx.Async;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -14,7 +17,7 @@ namespace MapEditor {
 
         [SerializeField]
         private Button _roomToolButton;
-        
+
         [SerializeField]
         private Button _addUnitButton;
 
@@ -35,7 +38,10 @@ namespace MapEditor {
         private IMapEditorTool _unitTileEditor;
         private IMapDataStore _mapDataStore;
         private IInputLock _inputLock;
+        private IInputEvents _inputEvents;
         private ILogger _logger;
+
+        private IDisposable _cancelObserver;
 
         [Inject]
         public void Construct(MapStoreId mapStoreId,
@@ -45,12 +51,14 @@ namespace MapEditor {
                               IMapEditorTool unitTileEditor,
                               IMapDataStore mapDataStore,
                               IInputLock inputLock,
+                              IInputEvents inputEvents,
                               ILogger logger) {
             _mapStoreId = mapStoreId;
             _sectionTileEditor = sectionTileEditor;
             _unitTileEditor = unitTileEditor;
             _mapDataStore = mapDataStore;
             _inputLock = inputLock;
+            _inputEvents = inputEvents;
             _logger = logger;
         }
 
@@ -59,9 +67,7 @@ namespace MapEditor {
             _sectionTileButton.onClick.AddListener(HandleSectionTileButtonPressed);
             _roomToolButton.onClick.AddListener(HandleRoomToolButtonPressed);
             _saveButton.onClick.AddListener(HandleSaveButtonPressed);
-            _cancelButton.onClick.AddListener(HandleCancelButtonPressed);
 
-            LoadMapSectionCommand.MapSectionWillLoad += HandleMapSectionWillLoad;
             _inputLock.InputLockAcquired += HandleInputLockAcquired;
             _inputLock.InputLockReleased += HandleInputLockReleased;
         }
@@ -71,9 +77,7 @@ namespace MapEditor {
             _sectionTileButton.onClick.RemoveListener(HandleSectionTileButtonPressed);
             _roomToolButton.onClick.RemoveListener(HandleRoomToolButtonPressed);
             _saveButton.onClick.RemoveListener(HandleSaveButtonPressed);
-            _cancelButton.onClick.RemoveListener(HandleCancelButtonPressed);
 
-            LoadMapSectionCommand.MapSectionWillLoad -= HandleMapSectionWillLoad;
             _inputLock.InputLockAcquired -= HandleInputLockAcquired;
             _inputLock.InputLockReleased -= HandleInputLockReleased;
         }
@@ -86,23 +90,51 @@ namespace MapEditor {
             gameObject.SetActive(true);
         }
 
-        private void HandleAddUnitButtonPressed() {
-            _unitTileEditor.StartEditing();
-            
-            _toolbarContainer.SetActive(false);
-            _cancelContainer.SetActive(true);
+        private async void HandleAddUnitButtonPressed() {
+            using (_inputLock.Lock()) {
+                gameObject.SetActive(true);
+                _toolbarContainer.SetActive(false);
+                _cancelContainer.SetActive(true);
+
+                _unitTileEditor.StartEditing();
+                await UniTask.WhenAny(_cancelButton.OnClickAsync(),
+                                      _inputEvents.RightMouseClick.First().ToUniTask());
+                _unitTileEditor.StopEditing();
+
+                _toolbarContainer.SetActive(true);
+                _cancelContainer.SetActive(false);
+            }
         }
 
-        private void HandleSectionTileButtonPressed() {
-            _sectionTileEditor.StartEditing();
+        private async void HandleSectionTileButtonPressed() {
+            using (_inputLock.Lock()) {
+                gameObject.SetActive(true);
+                _toolbarContainer.SetActive(false);
+                _cancelContainer.SetActive(true);
 
-            _toolbarContainer.SetActive(false);
-            _cancelContainer.SetActive(true);
+                _sectionTileEditor.StartEditing();
+                // Either cancel button, right click, or section load (because we have 1 toolbar per section) will quit.
+                await UniTask.WhenAny(_cancelButton.OnClickAsync(),
+                                      _inputEvents.RightMouseClick.First().ToUniTask());
+                _sectionTileEditor.StopEditing();
+
+                _toolbarContainer.SetActive(true);
+                _cancelContainer.SetActive(false);
+            }
         }
 
-        private void HandleRoomToolButtonPressed() {
-            _toolbarContainer.SetActive(false);
-            _cancelContainer.SetActive(true);
+        private async void HandleRoomToolButtonPressed() {
+            using (_inputLock.Lock()) {
+                gameObject.SetActive(true);
+                _toolbarContainer.SetActive(false);
+                _cancelContainer.SetActive(true);
+
+                await UniTask.WhenAny(_cancelButton.OnClickAsync(),
+                                      _inputEvents.RightMouseClick.First().ToUniTask());
+
+                _toolbarContainer.SetActive(true);
+                _cancelContainer.SetActive(false);
+            }
         }
 
         private void HandleSaveButtonPressed() {
@@ -111,19 +143,6 @@ namespace MapEditor {
             } else {
                 _logger.LogError(LoggedFeature.MapEditor, "Error saving map data.");
             }
-        }
-
-        private void HandleCancelButtonPressed() {
-            _sectionTileEditor.StopEditing();
-            _unitTileEditor.StopEditing();
-
-            _toolbarContainer.SetActive(true);
-            _cancelContainer.SetActive(false);
-        }
-
-        // On section load, exit all editing. Because we have 1 toolbar per section.
-        private void HandleMapSectionWillLoad() {
-            HandleCancelButtonPressed();
         }
     }
 }
