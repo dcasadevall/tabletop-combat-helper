@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using CommandSystem;
 using Grid.Positioning;
 using Logging;
 using Math;
+using UniRx;
 using UniRx.Async;
 using Units.Serialized;
 using Units.Spawning.Commands;
@@ -82,18 +84,20 @@ namespace Units.Spawning.UI {
             }
         }
 
-        public async UniTask Show(IntVector2 tileCoords) {
+        public async UniTask Show(IntVector2 tileCoords, CancellationToken cancellationToken) {
             // Show the UI, subscribe to events
             gameObject.SetActive(true);
 
+            (UniTask cancelTask, CancellationTokenRegistration tokenRegistration) = cancellationToken.ToUniTask();
             var spawnButtonTask = _spawnButton.OnClickAsync();
             var cancelButtonTask = _cancelButton.OnClickAsync();
-            var eventReceived = await UniTask.WhenAny(spawnButtonTask, cancelButtonTask);
+            var eventReceived = await UniTask.WhenAny(spawnButtonTask, cancelButtonTask, cancelTask);
             if (eventReceived == 0) {
                 HandleOnSpawnButtonClicked(tileCoords);
             }
 
             gameObject.SetActive(false);
+            tokenRegistration.Dispose();
         }
 
         private void HandleOnSpawnButtonClicked(IntVector2 tileCoords) {

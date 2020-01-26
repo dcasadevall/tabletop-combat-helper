@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Logging;
 using Map.MapData;
 using Math;
@@ -70,7 +71,7 @@ namespace MapEditor.SectionTiles {
             _sectionSelectDropdown.onValueChanged.RemoveListener(HandleSectionSelectValueChanged);
         }
 
-        public async UniTask Show(IntVector2 tileCoords) {
+        public async UniTask Show(IntVector2 tileCoords, CancellationToken cancellationToken) {
             gameObject.SetActive(true);
 
             // Show existing section connection if possible.
@@ -82,13 +83,15 @@ namespace MapEditor.SectionTiles {
             }
             _sectionSelectDropdown.value = _selectedIndex;
             
-            // Wait on confirm / cancel
+            // Wait on confirm / cancel / cancel token
             _tileCoords = tileCoords;
             UniTask confirmTask = _confirmButton.OnClickAsync();
             UniTask cancelTask = _cancelButton.OnClickAsync();
-            await UniTask.WhenAny(confirmTask, cancelTask);
+            (UniTask cancelTokenTask, CancellationTokenRegistration tokenRegistration) = cancellationToken.ToUniTask();
+            await UniTask.WhenAny(confirmTask, cancelTask, cancelTokenTask);
 
             gameObject.SetActive(false);
+            tokenRegistration.Dispose();
         }
 
         private void HandleConfirmPressed() {

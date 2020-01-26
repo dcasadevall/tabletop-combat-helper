@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Async;
 using Grid;
 using Grid.Highlighting;
@@ -136,7 +137,7 @@ namespace Units.Selection {
                 }
 
                 if (!cancelableResult.isCanceled) {
-                    await _unitSpawnViewController.Show(cancelableResult.result);
+                    await _unitSpawnViewController.Show(cancelableResult.result, CancellationToken.None);
                 }
 
                 _gridCellHighlighter.ClearHighlight();

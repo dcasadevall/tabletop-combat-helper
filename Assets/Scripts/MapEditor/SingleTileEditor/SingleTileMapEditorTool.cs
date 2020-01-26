@@ -21,7 +21,6 @@ namespace MapEditor.SingleTileEditor {
         private readonly ISingleTileMapEditorToolDelegate _delegate;
         private readonly IGridCellHighlightPool _gridCellHighlightPool;
         private readonly IGridInputManager _gridInputManager;
-        private readonly IInputLock _inputLock;
         private readonly List<IDisposable> _observers = new List<IDisposable>();
 
         private CancellationTokenSource _cancellationTokenSource;
@@ -29,12 +28,10 @@ namespace MapEditor.SingleTileEditor {
 
         public SingleTileMapEditorTool(ISingleTileMapEditorToolDelegate @delegate,
                                        IGridCellHighlightPool gridCellHighlightPool,
-                                       IGridInputManager gridInputManager,
-                                       IInputLock inputLock) {
+                                       IGridInputManager gridInputManager) {
             _delegate = @delegate;
             _gridCellHighlightPool = gridCellHighlightPool;
             _gridInputManager = gridInputManager;
-            _inputLock = inputLock;
         }
 
         public IMapElement MapElementAtTileCoords(IntVector2 tileCoords) {
@@ -77,7 +74,8 @@ namespace MapEditor.SingleTileEditor {
             _cancellationTokenSource = new CancellationTokenSource();
             // The task is ran "as uni task" to avoid opening a new thread.
             // We are showing a view controller which will require MonoBehaviours (needs main thread).
-            var task = Task.Run(() => _delegate.Show(tileCoords);
+            await _delegate.Show(tileCoords, _cancellationTokenSource.Token).SuppressCancellationThrow();
+            _cancellationTokenSource = null;
 
             // Update highlight to match new mouse position
             _gridCellHighlightPool.Despawn(_gridCellHighlight);

@@ -1,3 +1,4 @@
+using System.Threading;
 using Map.MapData;
 using MapEditor.MapElement;
 using MapEditor.SingleTileEditor;
@@ -26,8 +27,8 @@ namespace MapEditor.SectionTiles {
             _mapSectionData = mapSectionData;
         }
 
-        public UniTask Show(IntVector2 tileCoords) {
-            return _editSectionTileViewController.Show(tileCoords);
+        public UniTask Show(IntVector2 tileCoords, CancellationToken cancellationToken) {
+            return _editSectionTileViewController.Show(tileCoords, cancellationToken);
         }
 
         public IMapElement MapElementAtTileCoords(IntVector2 tileCoords) {

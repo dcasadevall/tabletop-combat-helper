@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using CommandSystem;
 using Grid;
 using MapEditor.MapElement;
@@ -34,8 +35,8 @@ namespace MapEditor.Units {
             _unitSpawnViewController = unitSpawnViewController;
         }
 
-        public UniTask Show(IntVector2 tileCoords) {
-            return _unitSpawnViewController.Show(tileCoords);
+        public UniTask Show(IntVector2 tileCoords, CancellationToken cancellationToken) {
+            return _unitSpawnViewController.Show(tileCoords, cancellationToken);
         }
 
         public IMapElement MapElementAtTileCoords(IntVector2 tileCoords) {
