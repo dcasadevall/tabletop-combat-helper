@@ -98,7 +98,7 @@ namespace MapEditor {
 
                 _unitTileEditor.StartEditing();
                 await UniTask.WhenAny(_cancelButton.OnClickAsync(),
-                                      _inputEvents.RightMouseClick.First().ToUniTask());
+                                      _inputEvents.RightMouseClickStream.First().ToUniTask());
                 _unitTileEditor.StopEditing();
 
                 _toolbarContainer.SetActive(true);
@@ -115,7 +115,7 @@ namespace MapEditor {
                 _sectionTileEditor.StartEditing();
                 // Either cancel button, right click, or section load (because we have 1 toolbar per section) will quit.
                 await UniTask.WhenAny(_cancelButton.OnClickAsync(),
-                                      _inputEvents.RightMouseClick.First().ToUniTask());
+                                      _inputEvents.RightMouseClickStream.First().ToUniTask());
                 _sectionTileEditor.StopEditing();
 
                 _toolbarContainer.SetActive(true);
@@ -130,7 +130,7 @@ namespace MapEditor {
                 _cancelContainer.SetActive(true);
 
                 await UniTask.WhenAny(_cancelButton.OnClickAsync(),
-                                      _inputEvents.RightMouseClick.First().ToUniTask());
+                                      _inputEvents.RightMouseClickStream.First().ToUniTask());
 
                 _toolbarContainer.SetActive(true);
                 _cancelContainer.SetActive(false);
