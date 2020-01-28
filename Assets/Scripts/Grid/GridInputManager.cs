@@ -9,7 +9,6 @@ using Utils;
 namespace Grid {
     public class GridInputManager : IGridInputManager {
         private readonly Camera _camera;
-        private readonly EventSystem _eventSystem;
         private readonly IGridPositionCalculator _gridPositionCalculator;
 
         /// <summary>
@@ -24,6 +23,8 @@ namespace Grid {
         }
 
         public IObservable<IntVector2> LeftMouseButtonOnTile { get; }
+        public IObservable<IntVector2> LeftMouseDownOnTile { get; }
+        public IObservable<IntVector2> LeftMouseDragOnTile { get; }
 
         public IntVector2? TileAtMousePosition {
             get {
@@ -34,7 +35,6 @@ namespace Grid {
         public GridInputManager(Camera camera, EventSystem eventSystem,
                                 IGridPositionCalculator gridPositionCalculator) {
             _camera = camera;
-            _eventSystem = eventSystem;
             _gridPositionCalculator = gridPositionCalculator;
 
             // These are initialized on construction to avoid race conditions on initialize
@@ -55,7 +55,19 @@ namespace Grid {
                                                               .Where(_ => TileAtMousePosition != null)
                                                               .Select(_ => TileAtMousePosition.GetValueChecked());
 
+            IObservable<IntVector2> mouseDragStream = Observable.EveryUpdate()
+                                                                .Where(_ => Input.GetMouseButton(0))
+                                                                .Where(_ => TileAtMousePosition != null)
+                                                                .TakeUntil(mouseUpStream)
+                                                                .Select(_ => TileAtMousePosition.GetValueChecked())
+                                                                .Pairwise()
+                                                                .Where(tileCoords =>
+                                                                           tileCoords.Current != tileCoords.Previous)
+                                                                .Select(tileCoords => tileCoords.Current);
+            
             LeftMouseButtonOnTile = mouseDownStream.Select(pos => mouseUpStream).Switch();
+            LeftMouseDownOnTile = mouseDownStream;
+            LeftMouseDragOnTile = mouseDragStream;
         }
 
         private IntVector2? GetTileAtMousePositionInternal() {

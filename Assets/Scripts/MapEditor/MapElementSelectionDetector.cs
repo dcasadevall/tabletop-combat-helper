@@ -14,9 +14,7 @@ using Zenject;
 namespace MapEditor {
     public class MapElementSelectionDetector : IInitializable, IDisposable {
         private readonly IMapElementMenuViewController _mapElementMenuViewController;
-        private readonly IInputEvents _inputEvents;
         private readonly IGridInputManager _gridInputManager;
-        private readonly IGridPositionCalculator _gridPositionCalculator;
         private readonly IInputLock _inputLock;
         private readonly List<IMapEditorTool> _mapEditorTools;
         private readonly List<IDisposable> _observers = new List<IDisposable>();
@@ -26,14 +24,11 @@ namespace MapEditor {
                                            [Inject(Id = MapEditorInstaller.UNIT_TILE_EDITOR_ID)]
                                            IMapEditorTool unitTileEditor,
                                            IMapElementMenuViewController mapElementMenuViewController,
-                                           IInputEvents inputEvents,
                                            IGridInputManager gridInputManager,
                                            IGridPositionCalculator gridPositionCalculator,
                                            IInputLock inputLock) {
             _mapElementMenuViewController = mapElementMenuViewController;
-            _inputEvents = inputEvents;
             _gridInputManager = gridInputManager;
-            _gridPositionCalculator = gridPositionCalculator;
             _inputLock = inputLock;
 
             // TODO: Try to find a way to inject this array even though the implementations are bound with ID.
@@ -49,11 +44,23 @@ namespace MapEditor {
                              .Subscribe(HandleTileClicked)
                              .AddTo(_observers);
 
-            MouseDragEvent<IMapElement> dragEvent = _inputEvents.GetMouseDragEvent(worldPosition =>
-                                                                                       SelectMapElementAtWorldPosition(worldPosition),
-                                                                                   mapElement => mapElement != null);
-            dragEvent.MouseDragStream.Subscribe(x => HandleMouseDrag(x.Item1, x.Item2)).AddTo(_observers);
-            dragEvent.DragEndStream.Subscribe(x => HandleDragEnded(x.Item1, x.Item2)).AddTo(_observers);
+            _gridInputManager.LeftMouseDownOnTile
+                              // We select only clicks that start on a map element.
+                             .Select(SelectMapElement)
+                             .Where(x => x != null)
+                             // Start capturing drag on mouse down.
+                             // We "zip" an observable made with the single selected element with
+                             // the observable of every emitted drag value.
+                             // This results in a stream which emits values every time we drag on to a new tile,
+                             // and containing the originally selected map element.
+                             .Select(mapElement =>
+                                         _gridInputManager.LeftMouseDragOnTile.Zip(new List<IMapElement> {mapElement}
+                                                                                       .ToObservable(),
+                                                                                   Tuple.Create))
+                             // Switch "flattens" the observable of observables
+                             .Switch()
+                             .Subscribe(x => HandleMouseDrag(x.Item1, x.Item2))
+                             .AddTo(_observers);
         }
 
         public void Dispose() {
@@ -72,21 +79,8 @@ namespace MapEditor {
             }
         }
 
-        private void HandleMouseDrag(Vector2 worldPosition, IMapElement mapElement) {
+        private void HandleMouseDrag(IntVector2 tileCoords, IMapElement mapElement) {
             
-        }
-
-        private void HandleDragEnded(Vector2 worldPosition, IMapElement mapElement) {
-            
-        }
-
-        private IMapElement SelectMapElementAtWorldPosition(Vector2 worldPosition) {
-            IntVector2? tileCoords = _gridPositionCalculator.GetTileContainingWorldPosition(worldPosition);
-            if (tileCoords == null) {
-                return null;
-            }
-
-            return SelectMapElement(tileCoords.Value);
         }
 
         private IMapElement SelectMapElement(IntVector2 tileCoords) {
