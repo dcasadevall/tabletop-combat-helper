@@ -54,7 +54,7 @@ namespace MapEditor {
                              .Where(x => x != null)
                              .Where(_ => !_inputLock.IsLocked)
                              .Select(element => Observable
-                                                .Timer(TimeSpan.FromMilliseconds(150))
+                                                .Timer(TimeSpan.FromMilliseconds(200))
                                                 .CombineLatest(Observable.Return(element), Tuple.Create))
                              .Switch()
                              .Subscribe(x => HandleMouseHeldOnElement(x.Item2))
@@ -83,6 +83,10 @@ namespace MapEditor {
         // and encapsulate its lifecycle.
         #region MouseDrag
         private void HandleMouseHeldOnElement(IMapElement mapElement) {
+            if (_inputLock.IsLocked) {
+                return;
+            }
+            
             _mouseDragLock = _inputLock.Lock();
             _gridInputManager.LeftMouseDragOnTile.Subscribe(coords => HandleElementDragged(mapElement, coords));
             _mouseUpObserver = Observable.EveryUpdate()
