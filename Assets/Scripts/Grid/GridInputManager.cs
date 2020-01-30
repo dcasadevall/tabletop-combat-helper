@@ -59,11 +59,7 @@ namespace Grid {
                                                                 .Where(_ => Input.GetMouseButton(0))
                                                                 .Where(_ => TileAtMousePosition != null)
                                                                 .TakeUntil(mouseUpStream)
-                                                                .Select(_ => TileAtMousePosition.GetValueChecked())
-                                                                .Pairwise()
-                                                                .Where(tileCoords =>
-                                                                           tileCoords.Current != tileCoords.Previous)
-                                                                .Select(tileCoords => tileCoords.Current);
+                                                                .Select(_ => TileAtMousePosition.GetValueChecked());
             
             LeftMouseButtonOnTile = mouseDownStream.Select(pos => mouseUpStream).Switch();
             LeftMouseDownOnTile = mouseDownStream;

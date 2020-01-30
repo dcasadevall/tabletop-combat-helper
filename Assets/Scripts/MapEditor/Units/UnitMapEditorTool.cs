@@ -45,7 +45,7 @@ namespace MapEditor.Units {
                 return null;
             }
 
-            return new UnitMapElement(_commandQueue, units[0]);
+            return new UnitMapElement(_commandQueue, units[0], tileCoords);
         }
     }
 }

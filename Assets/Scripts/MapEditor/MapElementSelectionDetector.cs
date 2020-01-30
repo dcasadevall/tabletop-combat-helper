@@ -25,7 +25,6 @@ namespace MapEditor {
                                            IMapEditorTool unitTileEditor,
                                            IMapElementMenuViewController mapElementMenuViewController,
                                            IGridInputManager gridInputManager,
-                                           IGridPositionCalculator gridPositionCalculator,
                                            IInputLock inputLock) {
             _mapElementMenuViewController = mapElementMenuViewController;
             _gridInputManager = gridInputManager;
@@ -45,21 +44,24 @@ namespace MapEditor {
                              .AddTo(_observers);
 
             _gridInputManager.LeftMouseDownOnTile
-                              // We select only clicks that start on a map element.
+                             // We select only clicks that start on a map element.
                              .Select(SelectMapElement)
                              .Where(x => x != null)
+                             .Where(_ => !_inputLock.IsLocked)
                              // Start capturing drag on mouse down.
                              // We "zip" an observable made with the single selected element with
                              // the observable of every emitted drag value.
                              // This results in a stream which emits values every time we drag on to a new tile,
                              // and containing the originally selected map element.
                              .Select(mapElement =>
-                                         _gridInputManager.LeftMouseDragOnTile.Zip(new List<IMapElement> {mapElement}
-                                                                                       .ToObservable(),
-                                                                                   Tuple.Create))
+                                         _gridInputManager.LeftMouseDragOnTile.CombineLatest(new List<IMapElement>
+                                                                                                     {mapElement}
+                                                                                                 .ToObservable(),
+                                                                                             Tuple.Create))
                              // Switch "flattens" the observable of observables
                              .Switch()
-                             .Subscribe(x => HandleMouseDrag(x.Item1, x.Item2))
+                             // Call HandleDrag on the MapElement
+                             .Subscribe(x => HandleElementDragged(x.Item2, x.Item1))
                              .AddTo(_observers);
         }
 
@@ -79,8 +81,10 @@ namespace MapEditor {
             }
         }
 
-        private void HandleMouseDrag(IntVector2 tileCoords, IMapElement mapElement) {
-            
+        private void HandleElementDragged(IMapElement mapElement, IntVector2 tileCoords) {
+            using (_inputLock.Lock()) {
+                mapElement.HandleDrag(tileCoords);
+            }
         }
 
         private IMapElement SelectMapElement(IntVector2 tileCoords) {
