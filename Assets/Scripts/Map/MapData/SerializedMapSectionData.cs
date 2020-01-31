@@ -6,6 +6,7 @@ using Map.MapData.TileMetadata;
 using Map.Rendering;
 using Math;
 using UniRx;
+using Units.Serialized;
 using UnityEngine;
 
 namespace Map.MapData {
@@ -61,9 +62,14 @@ namespace Map.MapData {
             }
         }
 
+        public IntVector2 playerUnitSpawnPoint;
+        public IntVector2? PlayerUnitSpawnPoint {
+            get {
+                return playerUnitSpawnPoint;
+            }
+        }
 
         public List<TileMetadataPair> tileMetadataPairs = new List<TileMetadataPair>();
-
         public Dictionary<IntVector2, ITileMetadata> TileMetadataMap {
             get {
                 return tileMetadataPairs.ToDictionary(x => IntVector2.Of(x.tileCoords),
@@ -74,10 +80,38 @@ namespace Map.MapData {
         #region IMutableMapSectionData
         private Subject<Tuple<IntVector2, ITileMetadata>> _tileMetadataChangeSubject =
             new Subject<Tuple<IntVector2, ITileMetadata>>();
-
         public IObservable<Tuple<IntVector2, ITileMetadata>> TileMetadataChanged {
             get {
                 return _tileMetadataChangeSubject;
+            }
+        }
+
+        public void AddInitialUnit(IntVector2 tileCoords, IUnitData unit) {
+            TileMetadata.TileMetadata tileMetadata = GetTileMetadata(tileCoords);
+            tileMetadata.units.Add(UnitData.Clone(unit));
+            _tileMetadataChangeSubject.OnNext(new Tuple<IntVector2, ITileMetadata>(tileCoords, tileMetadata));
+        }
+
+        public void RemoveInitialUnit(IntVector2 tileCoords, IUnitData unit) {
+            // Note: we assume name is a valid unique identifier. This works for now.. but we may want to
+            // generate a unique id for units.
+            TileMetadata.TileMetadata tileMetadata = GetTileMetadata(tileCoords);
+            tileMetadata.units.RemoveAll(x => x.name == unit.Name);
+        }
+
+        private Subject<IntVector2?> _playerUnitSpawnPointSubject = new Subject<IntVector2?>();
+        public IObservable<IntVector2?> PlayerUnitSpawnPointChanged {
+            get {
+                return _playerUnitSpawnPointSubject;
+            }
+        }
+        
+        public void SetPlayerUnitSpawnPoint(IntVector2 spawnPoint) {
+            IntVector2 oldSpawnPoint = playerUnitSpawnPoint;
+            playerUnitSpawnPoint = spawnPoint;
+            
+            if (oldSpawnPoint != playerUnitSpawnPoint) {
+                _playerUnitSpawnPointSubject.OnNext(playerUnitSpawnPoint);
             }
         }
 

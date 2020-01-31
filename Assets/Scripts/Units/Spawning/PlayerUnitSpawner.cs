@@ -1,6 +1,7 @@
 using CommandSystem;
 using EncounterSelection;
 using Grid.Positioning;
+using Map.MapData;
 using Math;
 using Units.Serialized;
 using Units.Spawning.Commands;
@@ -17,16 +18,19 @@ namespace Units.Spawning {
         private readonly IUnitSpawnSettings _unitSpawnSettings;
         private readonly IEncounterSelectionContext _encounterSelectionContext;
         private readonly IFactory<IUnitData, UnitCommandData> _unitCommandDataFactory;
+        private readonly IMapSectionData _mapSectionData;
         private readonly ICommandQueue _commandQueue;
 
         public PlayerUnitSpawner(IEncounterSelectionContext encounterSelectionContext,
                                  IGridPositionCalculator gridPositionCalculator,
                                  IRandomGridPositionProvider randomGridPositionProvider,
                                  IFactory<IUnitData, UnitCommandData> unitCommandDataFactory,
+                                 IMapSectionData mapSectionData,
                                  ICommandQueue commandQueue,
                                  IUnitSpawnSettings unitSpawnSettings) {
             _encounterSelectionContext = encounterSelectionContext;
             _unitCommandDataFactory = unitCommandDataFactory;
+            _mapSectionData = mapSectionData;
             _commandQueue = commandQueue;
             _randomGridPositionProvider = randomGridPositionProvider;
             _gridPositionCalculator = gridPositionCalculator;
@@ -39,9 +43,13 @@ namespace Units.Spawning {
                 return;
             }
 
+            if (_mapSectionData.PlayerUnitSpawnPoint == null) {
+                return;
+            }
+
             // Spawn initial player units
             IUnitData[] playerUnits = _unitSpawnSettings.GetUnits(UnitType.Player);
-            IntVector2 startPosition = _gridPositionCalculator.GetTileClosestToCenter();
+            IntVector2 startPosition = _mapSectionData.PlayerUnitSpawnPoint.Value;
             IntVector2[] tilePositions =
                 _randomGridPositionProvider.GetRandomUniquePositions(startPosition,
                                                                      _unitSpawnSettings

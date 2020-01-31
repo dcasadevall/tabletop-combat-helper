@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using CommandSystem;
 using Grid;
+using Map.MapData;
 using MapEditor.MapElement;
 using MapEditor.SingleTileEditor;
 using Math;
@@ -16,6 +17,7 @@ namespace MapEditor.Units {
         private readonly IGridUnitManager _gridUnitManager;
         private readonly ICommandQueue _commandQueue;
         private readonly IUnitSpawnViewController _unitSpawnViewController;
+        private readonly IMutableMapSectionData _mapSectionData;
         private readonly Texture2D _cursorTexture;
 
         public Texture2D CursorTexture {
@@ -28,15 +30,23 @@ namespace MapEditor.Units {
                                  Texture2D cursorTexture, 
                                  IGridUnitManager gridUnitManager,
                                  ICommandQueue commandQueue,
-                                 IUnitSpawnViewController unitSpawnViewController) {
+                                 IUnitSpawnViewController unitSpawnViewController,
+                                 IMutableMapSectionData mapSectionData) {
             _cursorTexture = cursorTexture;
             _gridUnitManager = gridUnitManager;
             _commandQueue = commandQueue;
             _unitSpawnViewController = unitSpawnViewController;
+            _mapSectionData = mapSectionData;
         }
 
-        public UniTask Show(IntVector2 tileCoords, CancellationToken cancellationToken) {
-            return _unitSpawnViewController.Show(tileCoords, cancellationToken);
+        public async UniTask Show(IntVector2 tileCoords, CancellationToken cancellationToken) {
+            _gridUnitManager.UnitPlacedAtTile += HandleUnitPlacedAtTile;
+            await _unitSpawnViewController.Show(tileCoords, cancellationToken);
+            _gridUnitManager.UnitPlacedAtTile -= HandleUnitPlacedAtTile;
+        }
+        
+        private void HandleUnitPlacedAtTile(IUnit unit, IntVector2 tileCoords) {
+            _mapSectionData.AddInitialUnit(tileCoords, unit.UnitData);
         }
 
         public IMapElement MapElementAtTileCoords(IntVector2 tileCoords) {
@@ -45,7 +55,7 @@ namespace MapEditor.Units {
                 return null;
             }
 
-            return new UnitMapElement(_commandQueue, units[0], tileCoords);
+            return new UnitMapElement(_commandQueue, units[0], tileCoords, _mapSectionData);
         }
     }
 }

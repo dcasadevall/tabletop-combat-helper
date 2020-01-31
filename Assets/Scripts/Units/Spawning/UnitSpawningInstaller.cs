@@ -48,8 +48,9 @@ namespace Units.Spawning {
             // Maybe use identifiers? random number?
             Container.Bind<IMutableUnitRegistry>().To<UnitRegistry>().FromResolve().WhenInjectedInto<UnitPool>();
             
-            // Bind ITicker and IInitializable to the UnitsSpawner
+            // Bind lifecycle to the UnitsSpawners
             Container.BindInterfacesTo<PlayerUnitSpawner>().AsSingle();
+            Container.BindInterfacesTo<InitialUnitSpawner>().AsSingle();
             
             // Settings
             Container.Bind<IUnitSpawnSettings>().To<UnitSpawnSettings>().FromInstance(_unitSpawnSettings).AsSingle();

@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 namespace Units.Serialized {
@@ -45,6 +46,18 @@ namespace Units.Serialized {
             get {
                 return unitStats;
             }
+        }
+
+        public static UnitData Clone(IUnitData unitData) {
+            var clonedData = CreateInstance<UnitData>();
+            clonedData.name = unitData.Name;
+            clonedData.unitType = unitData.UnitType;
+            clonedData.pets = unitData.Pets.Select(Clone).ToArray();
+            clonedData.sprite = unitData.Sprite;
+            clonedData.avatarSprite = unitData.AvatarSprite;
+            clonedData.unitStats = unitData.UnitStats;
+
+            return clonedData;
         }
     }
 }
