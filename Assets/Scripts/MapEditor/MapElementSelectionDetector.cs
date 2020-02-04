@@ -26,7 +26,7 @@ namespace MapEditor {
                                            [Inject(Id = MapEditorInstaller.UNIT_TILE_EDITOR_ID)]
                                            IMapEditorTool unitTileEditor,
                                            [Inject(Id = MapEditorInstaller.PLAYER_UNITS_TILE_EDITOR_ID)]
-                                           IMapEditorTool playerunitsTileEditor,
+                                           IMapEditorTool playerUnitsTileEditor,
                                            IMapElementMenuViewController mapElementMenuViewController,
                                            IGridInputManager gridInputManager,
                                            IInputLock inputLock) {
@@ -38,7 +38,7 @@ namespace MapEditor {
             _mapEditorTools = new List<IMapEditorTool> {
                 sectionTileEditor,
                 unitTileEditor,
-                playerunitsTileEditor
+                playerUnitsTileEditor
             };
         }
 

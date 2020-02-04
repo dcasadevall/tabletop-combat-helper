@@ -55,6 +55,8 @@ namespace MapEditor.SectionTiles {
 
         private void HandleTileMetadataChanged(IntVector2 tileCoords, ITileMetadata tileMetadata) {
             if (tileMetadata.SectionConnection == null) {
+                // TODO: This errors because it listens to all metadata changes.
+                // We should only emit changes of specific properties.
                 _tileRendererPool.Despawn(tileCoords);
                 return;
             }

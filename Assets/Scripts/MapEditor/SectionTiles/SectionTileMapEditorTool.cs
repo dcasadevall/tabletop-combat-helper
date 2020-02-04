@@ -35,6 +35,10 @@ namespace MapEditor.SectionTiles {
             if (!_mapSectionData.TileMetadataMap.ContainsKey(tileCoords)) {
                 return null;
             }
+
+            if (_mapSectionData.TileMetadataMap[tileCoords].SectionConnection == null) {
+                return null;
+            }
             
             return new SectionTileMapElement(_mapSectionData, tileCoords);
         }

@@ -91,17 +91,15 @@ namespace Map.MapData {
             }
         }
 
-        public void AddInitialUnit(IntVector2 tileCoords, IUnitData unit) {
+        public void AddInitialUnit(IntVector2 tileCoords, UnitDataReference unitDataReference) {
             TileMetadata.TileMetadata tileMetadata = GetTileMetadata(tileCoords);
-            tileMetadata.units.Add(UnitData.Clone(unit));
+            tileMetadata.units.Add(unitDataReference);
             _tileMetadataChangeSubject.OnNext(new Tuple<IntVector2, ITileMetadata>(tileCoords, tileMetadata));
         }
 
-        public void RemoveInitialUnit(IntVector2 tileCoords, IUnitData unit) {
-            // Note: we assume name is a valid unique identifier. This works for now.. but we may want to
-            // generate a unique id for units.
+        public void RemoveInitialUnit(IntVector2 tileCoords, UnitDataReference unitDataReference) {
             TileMetadata.TileMetadata tileMetadata = GetTileMetadata(tileCoords);
-            tileMetadata.units.RemoveAll(x => x.name == unit.Name);
+            tileMetadata.units.RemoveAll(x => x.UnitIndex == unitDataReference.UnitIndex);
         }
 
         private Subject<IntVector2?> _playerUnitSpawnPointSubject = new Subject<IntVector2?>();

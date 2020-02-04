@@ -8,13 +8,13 @@ namespace Map.MapData {
         /// </summary>
         /// <param name="tileCoords"></param>
         /// <param name="unit"></param>
-        void AddInitialUnit(IntVector2 tileCoords, IUnitData unit);
+        void AddInitialUnit(IntVector2 tileCoords, UnitDataReference unit);
         /// <summary>
         /// Removes a unit to be spawned initially  when the map loads in the given coords.
         /// </summary>
         /// <param name="tileCoords"></param>
         /// <param name="unit"></param>
-        void RemoveInitialUnit(IntVector2 tileCoords, IUnitData unit);
+        void RemoveInitialUnit(IntVector2 tileCoords, UnitDataReference unit);
         /// <summary>
         /// Sets the coordinates where the player units will spawn when the map is loaded.
         /// </summary>

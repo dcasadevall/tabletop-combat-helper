@@ -24,10 +24,10 @@ namespace Map.MapData.TileMetadata {
             }
         }
 
-        public List<UnitData> units = new List<UnitData>();
-        public IUnitData[] Units {
+        public List<UnitDataReference> units = new List<UnitDataReference>();
+        public IReadOnlyList<UnitDataReference> Units {
             get {
-                return units.Cast<IUnitData>().ToArray();
+                return units;
             }
         }
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Units.Serialized;
 
 namespace Map.MapData.TileMetadata {
@@ -13,6 +14,6 @@ namespace Map.MapData.TileMetadata {
         /// <summary>
         /// The units that should be initially spawned on this tile.
         /// </summary>
-        IUnitData[] Units { get; }
+        IReadOnlyList<UnitDataReference> Units { get; }
     }
 }

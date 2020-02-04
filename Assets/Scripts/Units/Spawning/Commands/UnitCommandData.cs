@@ -9,9 +9,11 @@ namespace Units.Spawning.Commands {
     [Serializable]
     public class UnitCommandData : ISerializable {
         public readonly UnitId unitId;
-        public readonly UnitType unitType;
-        public readonly uint unitIndex;
+        public readonly UnitDataReference unitDataReference;
         public readonly UnitCommandData[] pets;
+        
+        public uint UnitIndex => unitDataReference.UnitIndex;
+        public UnitType UnitType => unitDataReference.UnitType;
 
         public UnitCommandData(UnitId unitId, uint unitIndex, UnitType unitType) : this(unitId,
                                                                                         unitIndex,
@@ -20,25 +22,22 @@ namespace Units.Spawning.Commands {
 
         public UnitCommandData(UnitId unitId, uint unitIndex, UnitType unitType, UnitCommandData[] pets) {
             this.unitId = unitId;
-            this.unitIndex = unitIndex;
-            this.unitType = unitType;
+            this.unitDataReference = new UnitDataReference(unitIndex, unitType);
             this.pets = pets;
         }
-        
+
         #region ISerializable
         public UnitCommandData(SerializationInfo info, StreamingContext context) {
-            unitIndex = info.GetUInt32("unitIndex");
-            unitType = (UnitType)info.GetUInt32("unitType");
+            unitDataReference = (UnitDataReference) info.GetValue("unitDataReference", typeof(UnitDataReference));
             unitId = (UnitId) info.GetValue("unitId", typeof(UnitId));
-            pets = (UnitCommandData[])info.GetValue("pets", typeof(UnitCommandData[]));
+            pets = (UnitCommandData[]) info.GetValue("pets", typeof(UnitCommandData[]));
         }
-        
+
         public void GetObjectData(SerializationInfo info, StreamingContext context) {
-            info.AddValue("unitIndex", unitIndex);
-            info.AddValue("unitType", (int)unitType);
+            info.AddValue("unitDataReference", unitDataReference);
             info.AddValue("unitId", unitId);
             info.AddValue("pets", pets);
         }
-        #endregion 
+        #endregion
     }
 }

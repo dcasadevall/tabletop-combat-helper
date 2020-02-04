@@ -4,7 +4,6 @@ using Grid;
 using Logging;
 using UniRx;
 using Units.Serialized;
-using UnityEngine;
 using ILogger = Logging.ILogger;
 
 namespace Units.Spawning.Commands {
@@ -44,15 +43,15 @@ namespace Units.Spawning.Commands {
         }
 
         public IObservable<UniRx.Unit> Run() {
-            IUnitData[] unitDatas = _unitSpawnSettings.GetUnits(_data.unitCommandData.unitType);
-            if (_data.unitCommandData.unitIndex >= unitDatas.Length) {
+            IUnitData[] unitDatas = _unitSpawnSettings.GetUnits(_data.unitCommandData.UnitType);
+            if (_data.unitCommandData.UnitIndex >= unitDatas.Length) {
                 string errorMsg = string.Format("Unit Index not in unit datas range: {0}",
-                                                _data.unitCommandData.unitIndex);
+                                                _data.unitCommandData.UnitIndex);
                 _logger.LogError(LoggedFeature.Units, errorMsg);
                 return Observable.Throw<UniRx.Unit>(new IndexOutOfRangeException(errorMsg));
             }
 
-            IUnitData unitData = unitDatas[(int) _data.unitCommandData.unitIndex];
+            IUnitData unitData = unitDatas[(int) _data.unitCommandData.UnitIndex];
             _logger.Log(LoggedFeature.Units, "Spawning: {0}", unitData.Name);
 
             // First, spawn the pets recursively.
@@ -78,7 +77,7 @@ namespace Units.Spawning.Commands {
         public void Undo() {
             // Undo is not supported for player units.
             // We may want to consider splitting this command in two: Spawn initial unit / Spawn unit
-            if (_data.unitCommandData.unitType == UnitType.Player) {
+            if (_data.unitCommandData.UnitType == UnitType.Player) {
                 _logger.Log(LoggedFeature.Replays, "Not undoing command since unit type is player.");
                 return;
             }
