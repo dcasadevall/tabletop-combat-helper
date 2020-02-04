@@ -13,7 +13,6 @@ namespace Units.Spawning {
     /// </summary>
     public class PlayerUnitSpawner : IInitializable {
         private readonly bool _shouldSpawnInitialUnits;
-        private readonly IGridPositionCalculator _gridPositionCalculator;
         private readonly IRandomGridPositionProvider _randomGridPositionProvider;
         private readonly IUnitSpawnSettings _unitSpawnSettings;
         private readonly IEncounterSelectionContext _encounterSelectionContext;
@@ -22,7 +21,6 @@ namespace Units.Spawning {
         private readonly ICommandQueue _commandQueue;
 
         public PlayerUnitSpawner(IEncounterSelectionContext encounterSelectionContext,
-                                 IGridPositionCalculator gridPositionCalculator,
                                  IRandomGridPositionProvider randomGridPositionProvider,
                                  IFactory<IUnitData, UnitCommandData> unitCommandDataFactory,
                                  IMapSectionData mapSectionData,
@@ -33,7 +31,6 @@ namespace Units.Spawning {
             _mapSectionData = mapSectionData;
             _commandQueue = commandQueue;
             _randomGridPositionProvider = randomGridPositionProvider;
-            _gridPositionCalculator = gridPositionCalculator;
             _unitSpawnSettings = unitSpawnSettings;
         }
 

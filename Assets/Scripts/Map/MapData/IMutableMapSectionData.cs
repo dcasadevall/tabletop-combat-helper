@@ -21,6 +21,10 @@ namespace Map.MapData {
         /// <param name="spawnPoint"></param>
         void SetPlayerUnitSpawnPoint(IntVector2 spawnPoint);
         /// <summary>
+        /// Removes the player unit spawn point from this section.
+        /// </summary>
+        void ClearPlayerUnitSpawnPoint();
+        /// <summary>
         /// Adds or modifies a section connection to the given tile coords, into the given section index.
         /// </summary>
         /// <param name="tileCoords"></param>

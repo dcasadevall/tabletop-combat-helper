@@ -62,10 +62,14 @@ namespace Map.MapData {
             }
         }
 
-        public IntVector2 playerUnitSpawnPoint;
+        public Vector2? playerUnitSpawnPoint;
         public IntVector2? PlayerUnitSpawnPoint {
             get {
-                return playerUnitSpawnPoint;
+                if (playerUnitSpawnPoint == null) {
+                    return null;
+                }
+                
+                return IntVector2.Of(playerUnitSpawnPoint.Value);
             }
         }
 
@@ -107,12 +111,21 @@ namespace Map.MapData {
         }
         
         public void SetPlayerUnitSpawnPoint(IntVector2 spawnPoint) {
-            IntVector2 oldSpawnPoint = playerUnitSpawnPoint;
-            playerUnitSpawnPoint = spawnPoint;
+            Vector2? oldSpawnPoint = playerUnitSpawnPoint;
+            playerUnitSpawnPoint = new Vector2(spawnPoint.x, spawnPoint.y);
             
-            if (oldSpawnPoint != playerUnitSpawnPoint) {
-                _playerUnitSpawnPointSubject.OnNext(playerUnitSpawnPoint);
+            if (oldSpawnPoint == null || IntVector2.Of(oldSpawnPoint.Value) != spawnPoint) {
+                _playerUnitSpawnPointSubject.OnNext(spawnPoint);
             }
+        }
+
+        public void ClearPlayerUnitSpawnPoint() {
+            if (playerUnitSpawnPoint == null) {
+                return;
+            }
+
+            playerUnitSpawnPoint = null;
+            _playerUnitSpawnPointSubject.OnNext(null);
         }
 
         public void SetSectionConnection(IntVector2 tileCoords, uint sectionIndex) {

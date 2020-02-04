@@ -20,6 +20,9 @@ namespace MapEditor {
 
         [SerializeField]
         private Button _addUnitButton;
+        
+        [SerializeField]
+        private Button _playerUnitsButton;
 
         [SerializeField]
         private Button _saveButton;
@@ -35,6 +38,7 @@ namespace MapEditor {
 
         private MapStoreId _mapStoreId;
         private IMapEditorTool _sectionTileEditor;
+        private IMapEditorTool _playerUnitsTileEditor;
         private IMapEditorTool _unitTileEditor;
         private IMapDataStore _mapDataStore;
         private IInputLock _inputLock;
@@ -49,12 +53,15 @@ namespace MapEditor {
                               IMapEditorTool sectionTileEditor,
                               [Inject(Id = MapEditorInstaller.UNIT_TILE_EDITOR_ID)]
                               IMapEditorTool unitTileEditor,
+                              [Inject(Id = MapEditorInstaller.PLAYER_UNITS_TILE_EDITOR_ID)]
+                              IMapEditorTool playerUnitsTileEditor,
                               IMapDataStore mapDataStore,
                               IInputLock inputLock,
                               IInputEvents inputEvents,
                               ILogger logger) {
             _mapStoreId = mapStoreId;
             _sectionTileEditor = sectionTileEditor;
+            _playerUnitsTileEditor = playerUnitsTileEditor;
             _unitTileEditor = unitTileEditor;
             _mapDataStore = mapDataStore;
             _inputLock = inputLock;
@@ -63,6 +70,7 @@ namespace MapEditor {
         }
 
         private void Awake() {
+            _playerUnitsButton.onClick.AddListener(PlayerUnitsButtonPressed);
             _addUnitButton.onClick.AddListener(HandleAddUnitButtonPressed);
             _sectionTileButton.onClick.AddListener(HandleSectionTileButtonPressed);
             _roomToolButton.onClick.AddListener(HandleRoomToolButtonPressed);
@@ -73,6 +81,7 @@ namespace MapEditor {
         }
 
         private void OnDestroy() {
+            _playerUnitsButton.onClick.RemoveListener(PlayerUnitsButtonPressed);
             _addUnitButton.onClick.RemoveListener(HandleAddUnitButtonPressed);
             _sectionTileButton.onClick.RemoveListener(HandleSectionTileButtonPressed);
             _roomToolButton.onClick.RemoveListener(HandleRoomToolButtonPressed);
@@ -88,6 +97,22 @@ namespace MapEditor {
 
         private void HandleInputLockReleased() {
             gameObject.SetActive(true);
+        }
+
+        private async void PlayerUnitsButtonPressed() {
+            using (_inputLock.Lock()) {
+                gameObject.SetActive(true);
+                _toolbarContainer.SetActive(false);
+                _cancelContainer.SetActive(true);
+
+                _unitTileEditor.StartEditing();
+                await UniTask.WhenAny(_cancelButton.OnClickAsync(),
+                                      _inputEvents.RightMouseClickStream.First().ToUniTask());
+                _unitTileEditor.StopEditing();
+
+                _toolbarContainer.SetActive(true);
+                _cancelContainer.SetActive(false);
+            }
         }
 
         private async void HandleAddUnitButtonPressed() {

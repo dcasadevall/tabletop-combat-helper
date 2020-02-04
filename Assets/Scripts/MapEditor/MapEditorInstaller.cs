@@ -1,5 +1,6 @@
 using Map.MapData.Store;
 using MapEditor.MapElement;
+using MapEditor.PlayerUnits;
 using MapEditor.SectionTiles;
 using MapEditor.SingleTileEditor;
 using MapEditor.Units;
@@ -11,8 +12,10 @@ namespace MapEditor {
     public class MapEditorInstaller : MonoInstaller {
         public const string SECTION_TILE_EDITOR_ID = "SectionTileEditor";
         public const string UNIT_TILE_EDITOR_ID = "UnitTileEditor";
+        public const string PLAYER_UNITS_TILE_EDITOR_ID = "PlayerUnitsTileEditor";
         public const string SECTION_TILES_CURSOR = "SectionTilesCursor";
         public const string UNIT_TILES_CURSOR = "UnitTilesCursor";
+        public const string PLAYER_UNITS_TILES_CURSOR = "PlayerUnitsTilesCursor";
         public const string ROOM_EDITOR_ID = "RoomEditor";
 
         [SerializeField]
@@ -32,6 +35,9 @@ namespace MapEditor {
 
         [SerializeField]
         private Texture2D _unitTilesModeCursor;
+        
+        [SerializeField]
+        private Texture2D _playerUnitsTilesModeCursor;
 
         // This is injected via the proper installer.
         // We just want to make sure it's only exposed to this installer and the proper command.
@@ -86,6 +92,14 @@ namespace MapEditor {
             Container.Bind<Texture2D>().WithId(UNIT_TILES_CURSOR).FromInstance(_unitTilesModeCursor).AsCached();
             Container.Bind<IMapEditorTool>().WithId(UNIT_TILE_EDITOR_ID)
                      .FromResolveGetter<UnitMapEditorTool>(editor => {
+                         return Container.Instantiate<SingleTileMapEditorTool>(new[] {editor});
+                     }).AsCached();
+            
+            // Initial Player Units Editor
+            Container.Bind<PlayerUnitsMapEditorTool>().AsSingle();
+            Container.Bind<Texture2D>().WithId(PLAYER_UNITS_TILES_CURSOR).FromInstance(_playerUnitsTilesModeCursor).AsCached();
+            Container.Bind<IMapEditorTool>().WithId(PLAYER_UNITS_TILE_EDITOR_ID)
+                     .FromResolveGetter<PlayerUnitsMapEditorTool>(editor => {
                          return Container.Instantiate<SingleTileMapEditorTool>(new[] {editor});
                      }).AsCached();
         }
