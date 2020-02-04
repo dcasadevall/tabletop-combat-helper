@@ -25,6 +25,8 @@ namespace MapEditor {
                                            IMapEditorTool sectionTileEditor,
                                            [Inject(Id = MapEditorInstaller.UNIT_TILE_EDITOR_ID)]
                                            IMapEditorTool unitTileEditor,
+                                           [Inject(Id = MapEditorInstaller.PLAYER_UNITS_TILE_EDITOR_ID)]
+                                           IMapEditorTool playerunitsTileEditor,
                                            IMapElementMenuViewController mapElementMenuViewController,
                                            IGridInputManager gridInputManager,
                                            IInputLock inputLock) {
@@ -35,7 +37,8 @@ namespace MapEditor {
             // TODO: Try to find a way to inject this array even though the implementations are bound with ID.
             _mapEditorTools = new List<IMapEditorTool> {
                 sectionTileEditor,
-                unitTileEditor
+                unitTileEditor,
+                playerunitsTileEditor
             };
         }
 

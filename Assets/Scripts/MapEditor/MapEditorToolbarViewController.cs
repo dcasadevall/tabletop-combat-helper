@@ -105,10 +105,10 @@ namespace MapEditor {
                 _toolbarContainer.SetActive(false);
                 _cancelContainer.SetActive(true);
 
-                _unitTileEditor.StartEditing();
+                _playerUnitsTileEditor.StartEditing();
                 await UniTask.WhenAny(_cancelButton.OnClickAsync(),
                                       _inputEvents.RightMouseClickStream.First().ToUniTask());
-                _unitTileEditor.StopEditing();
+                _playerUnitsTileEditor.StopEditing();
 
                 _toolbarContainer.SetActive(true);
                 _cancelContainer.SetActive(false);

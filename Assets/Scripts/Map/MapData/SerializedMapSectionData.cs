@@ -62,14 +62,15 @@ namespace Map.MapData {
             }
         }
 
-        public Vector2? playerUnitSpawnPoint;
+        public bool hasPlayerUnitSpawnPoint;
+        public Vector2 playerUnitSpawnPoint;
         public IntVector2? PlayerUnitSpawnPoint {
             get {
-                if (playerUnitSpawnPoint == null) {
+                if (!hasPlayerUnitSpawnPoint) {
                     return null;
                 }
                 
-                return IntVector2.Of(playerUnitSpawnPoint.Value);
+                return IntVector2.Of(playerUnitSpawnPoint);
             }
         }
 
@@ -111,20 +112,22 @@ namespace Map.MapData {
         }
         
         public void SetPlayerUnitSpawnPoint(IntVector2 spawnPoint) {
-            Vector2? oldSpawnPoint = playerUnitSpawnPoint;
+            IntVector2? oldSpawnPoint = PlayerUnitSpawnPoint;
             playerUnitSpawnPoint = new Vector2(spawnPoint.x, spawnPoint.y);
+            hasPlayerUnitSpawnPoint = true;
             
-            if (oldSpawnPoint == null || IntVector2.Of(oldSpawnPoint.Value) != spawnPoint) {
+            if (oldSpawnPoint == null || oldSpawnPoint.Value != spawnPoint) {
                 _playerUnitSpawnPointSubject.OnNext(spawnPoint);
             }
         }
 
         public void ClearPlayerUnitSpawnPoint() {
-            if (playerUnitSpawnPoint == null) {
+            if (!hasPlayerUnitSpawnPoint) {
                 return;
             }
 
-            playerUnitSpawnPoint = null;
+            playerUnitSpawnPoint = default(Vector2);
+            hasPlayerUnitSpawnPoint = false;
             _playerUnitSpawnPointSubject.OnNext(null);
         }
 

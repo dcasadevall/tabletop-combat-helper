@@ -25,7 +25,13 @@ namespace MapEditor {
         private EditSectionTileViewController _editSectionTileVcPrefab;
 
         [SerializeField]
-        private SectionTileRenderer _sectionTileRendererPrefab;
+        private MapElementTileRenderer _mapElementTileRendererPrefab;
+        
+        [SerializeField]
+        private Sprite _sectionTileSprite;
+        
+        [SerializeField]
+        private Sprite _playerUnitsSprite;
 
         [SerializeField]
         private MapElementMenuViewController _mapElementMenuVcPrefab;
@@ -81,9 +87,12 @@ namespace MapEditor {
                      .FromResolveGetter<SectionTileMapEditorTool>(editor => {
                          return Container.Instantiate<SingleTileMapEditorTool>(new[] {editor});
                      }).AsCached();
-            
-            Container.BindMemoryPool<SectionTileRenderer, SectionTileRenderer.Pool>()
-                     .FromComponentInNewPrefab(_sectionTileRendererPrefab)
+
+            Container.Bind<Sprite>().FromInstance(_sectionTileSprite).AsCached()
+                     .WhenInjectedInto<SectionTileVisualizer>();
+            Container.BindMemoryPool<MapElementTileRenderer, MapElementTileRenderer.Pool>()
+                     .FromComponentInNewPrefab(_mapElementTileRendererPrefab)
+                     .AsCached()
                      .WhenInjectedInto<SectionTileVisualizer>();
             Container.BindInterfacesTo<SectionTileVisualizer>().AsSingle();
             
@@ -102,6 +111,14 @@ namespace MapEditor {
                      .FromResolveGetter<PlayerUnitsMapEditorTool>(editor => {
                          return Container.Instantiate<SingleTileMapEditorTool>(new[] {editor});
                      }).AsCached();
+
+            Container.Bind<Sprite>().FromInstance(_playerUnitsSprite).AsCached()
+                     .WhenInjectedInto<PlayerUnitsTileVisualizer>();
+            Container.BindMemoryPool<MapElementTileRenderer, MapElementTileRenderer.Pool>()
+                     .FromComponentInNewPrefab(_mapElementTileRendererPrefab)
+                     .AsCached()
+                     .WhenInjectedInto<PlayerUnitsTileVisualizer>();
+            Container.BindInterfacesTo<PlayerUnitsTileVisualizer>().AsSingle();
         }
     }
 }

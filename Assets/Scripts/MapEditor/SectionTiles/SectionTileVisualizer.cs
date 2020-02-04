@@ -4,9 +4,12 @@ using Logging;
 using Map;
 using Map.MapData;
 using Map.MapData.TileMetadata;
+using MapEditor.MapElement;
 using Math;
 using UniRx;
+using UnityEngine;
 using Zenject;
+using ILogger = Logging.ILogger;
 
 namespace MapEditor.SectionTiles {
     /// <summary>
@@ -15,17 +18,20 @@ namespace MapEditor.SectionTiles {
     internal class SectionTileVisualizer : IInitializable, IDisposable {
         private readonly IMapData _mapData;
         private readonly IMapSectionData _mapSectionData;
-        private readonly SectionTileRenderer.Pool _tileRendererPool;
+        private readonly Sprite _sprite;
+        private readonly MapElementTileRenderer.Pool _tileRendererPool;
         private readonly ILogger _logger;
 
         private IDisposable _observer;
 
         public SectionTileVisualizer(IMapData mapData,
                                      IMapSectionData mapSectionData,
-                                     SectionTileRenderer.Pool tileRendererPool, 
+                                     Sprite sprite,
+                                     MapElementTileRenderer.Pool tileRendererPool, 
                                      ILogger logger) {
             _mapData = mapData;
             _mapSectionData = mapSectionData;
+            _sprite = sprite;
             _tileRendererPool = tileRendererPool;
             _logger = logger;
         }
@@ -61,7 +67,7 @@ namespace MapEditor.SectionTiles {
             }
 
             string sectionName = _mapData.Sections[tileMetadata.SectionConnection.Value].SectionName;
-            _tileRendererPool.Spawn(tileCoords, sectionName);
+            _tileRendererPool.Spawn(tileCoords, _sprite, sectionName);
         }
     }
 }
