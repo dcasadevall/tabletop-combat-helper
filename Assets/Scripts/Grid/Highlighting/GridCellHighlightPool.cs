@@ -5,7 +5,7 @@ using Math;
 using UnityEngine;
 
 namespace Grid.Highlighting {
-    public class GridCellHighlightPool : IGridCellHighlightPool {
+    internal class GridCellHighlightPool : IGridCellHighlightPool {
         private readonly List<IGridCellHighlight> _spawnedHighlights;
         private readonly IGridPositionCalculator _gridPositionCalculator;
         private readonly GridCellHighlight.Pool _monoPool;

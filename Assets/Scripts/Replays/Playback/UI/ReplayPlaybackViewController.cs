@@ -4,23 +4,27 @@ using Map;
 using Map.MapData;
 using Replays.Persistence;
 using UI;
+using UniRx;
+using UniRx.Async;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Utils;
 using Zenject;
 
 namespace Replays.Playback.UI {
     public class ReplayPlaybackViewController : MonoBehaviour, IDismissNotifyingViewController {
-        public event Action ViewControllerDismissed;
-
-        [SerializeField]
-        private Slider _scrubSlider;
-
         [SerializeField]
         private string _isPlayingBoolName = "IsPlaying";
 
         [SerializeField]
         private Animator _animator;
+        
+        [SerializeField]
+        private Slider _scrubSlider;
+
+        [SerializeField]
+        private Button _cancelReplayButton;
 
         private IInputLock _inputLock;
         private IMapData _mapData;
@@ -29,6 +33,7 @@ namespace Replays.Playback.UI {
         private IDisposable _lockToken;
         private bool _wasPausedBeforeDragging;
         private bool _wasPlayingBeforeDragging;
+        private bool _playbackCanceled;
 
         [Inject]
         public void Construct(IInputLock inputLock, IMapData mapData, IReplayPlaybackManager playbackManager,
@@ -37,15 +42,17 @@ namespace Replays.Playback.UI {
             _mapData = mapData;
             _playbackManager = playbackManager;
             _commandHistorySaver = commandHistorySaver;
-            _playbackManager.PlaybackInterrupted += HandlePlaybackInterrupted;
+            
+            Preconditions.CheckNotNull(_animator, _scrubSlider, _cancelReplayButton);
+        }
+
+        private void Awake() {
+            // Start hidden by default.
+            gameObject.SetActive(false);
         }
 
         private void HandlePlaybackInterrupted() {
-            HandleCancelReplayButtonPressed();
-        }
-
-        private void Start() {
-            Hide();
+            _playbackCanceled = true;
         }
 
         private void Update() {
@@ -60,14 +67,19 @@ namespace Replays.Playback.UI {
             _animator.SetBool(_isPlayingBoolName, _playbackManager.IsPlaying && !_playbackManager.IsPaused);
         }
 
-        public void Show() {
+        public async UniTask Show() {
+            _playbackManager.PlaybackInterrupted += HandlePlaybackInterrupted;
             _playbackManager.Seek(1.0f);
             gameObject.SetActive(true);
-        }
 
-        public void Hide() {
+            var cancelButtonTask = _cancelReplayButton.OnClickAsync();
+            var cancelReplayTask = UniTask.WaitUntil(() => _playbackCanceled);
+
+            await UniTask.WhenAny(cancelButtonTask, cancelReplayTask);
+            
+            _playbackManager.PlaybackInterrupted -= HandlePlaybackInterrupted;
+            _playbackManager.Stop();
             gameObject.SetActive(false);
-            ViewControllerDismissed?.Invoke();
         }
 
         public void HandlePlayButtonPressed() {
@@ -78,15 +90,8 @@ namespace Replays.Playback.UI {
             _playbackManager.Pause();
         }
 
-        public void HandleForwardButtonPressed() { }
-
         public void HandleSaveReplayButtonPressed() {
             _commandHistorySaver.SaveCommandHistory(_mapData.MapName);
-        }
-
-        public void HandleCancelReplayButtonPressed() {
-            _playbackManager.Stop();
-            Hide();
         }
 
         public void HandleSliderDragBegin(BaseEventData baseEventData) {

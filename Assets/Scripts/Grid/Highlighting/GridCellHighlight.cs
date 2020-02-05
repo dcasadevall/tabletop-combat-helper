@@ -2,7 +2,7 @@ using UnityEngine;
 using Zenject;
 
 namespace Grid.Highlighting {
-    public class GridCellHighlight : MonoBehaviour, IGridCellHighlight {
+    internal class GridCellHighlight : MonoBehaviour, IGridCellHighlight {
         [SerializeField]
         private SpriteRenderer _backgroundRenderer;
         

@@ -7,6 +7,6 @@ namespace CameraSystem {
         public const float UNIT_DEPTH = -3.0f;
         public const float CELL_HIGHLIGHT_DEPTH = -2.5f;
         public const float FOG_OF_WAR_DEPTH = -2.0f;
-        public const float SECTION_TILES_EDITOR_DEPTH = -1.0f;
+        public const float MAP_EDITOR_ELEMENT_DEPTH = -1.0f;
     }
 }

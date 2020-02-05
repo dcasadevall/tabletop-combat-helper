@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Units.Serialized;
 
 namespace Map.MapData.TileMetadata {
     [Serializable]
@@ -19,6 +22,21 @@ namespace Map.MapData.TileMetadata {
 
                 return (uint) sectionConnection;
             }
+        }
+
+        public List<UnitDataReference> units = new List<UnitDataReference>();
+        public IReadOnlyList<UnitDataReference> Units => units;
+
+        public bool IsEmpty() {
+            if (SectionConnection != null) {
+                return false;
+            }
+
+            if (Units.Count > 0) {
+                return false;
+            }
+
+            return true;
         }
     }
 }

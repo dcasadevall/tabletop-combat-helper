@@ -8,7 +8,7 @@ namespace CameraSystem {
     public class CameraInput {
         private readonly Camera _camera;
 
-        public Vector3 MouseWorldPosition {
+        public Vector2 MouseWorldPosition {
             get {
                 return _camera.ScreenToWorldPoint(Input.mousePosition);
             }

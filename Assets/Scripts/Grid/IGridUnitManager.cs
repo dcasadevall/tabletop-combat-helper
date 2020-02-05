@@ -46,6 +46,7 @@ namespace Grid {
         ///  <summary>
         ///  Places the given unit at the tile for the given tile coordinates, if possible.
         ///  Returns true if the unit was successfully place, false otherwise.
+        /// TODO: Hide this method as one should only use commands to move / spawn units.
         /// 
         ///  If the unit already exists in the grid, this unit is removed from the original tile and placed
         ///  into the  new one, effectively "moving" it.
@@ -57,6 +58,7 @@ namespace Grid {
 
         /// <summary>
         /// Removes the given unit from the grid.
+        /// TODO: Hide this method as one should only use commands to spawn / despawn units.
         /// 
         /// Returns true if the unit was successfully removed, and false otherwise.
         /// </summary>

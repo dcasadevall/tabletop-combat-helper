@@ -1,3 +1,4 @@
+using Async;
 using Grid.Positioning;
 using Math;
 using UI.RadialMenu;
@@ -11,7 +12,6 @@ namespace MapEditor.MapElement {
         private Camera _camera;
         private IRadialMenu _radialMenu;
         private IGridPositionCalculator _gridPositionCalculator;
-        private IMapElement _mapElement;
 
         [SerializeField]
         private Button _removeButton;
@@ -26,23 +26,17 @@ namespace MapEditor.MapElement {
             _radialMenu = GetComponent<IRadialMenu>();
         }
 
-        public async void Show(IntVector2 tileCoords, IMapElement mapElement) {
+        public async UniTask Show(IntVector2 tileCoords, IMapElement mapElement) {
             Vector3 screenPosition =
                 _camera.WorldToScreenPoint(_gridPositionCalculator.GetTileCenterWorldPosition(tileCoords));
             _radialMenu.Show(screenPosition);
-            _removeButton.onClick.AddListener(HandleRemoveButtonClicked);
-            _mapElement = mapElement;
-            
-            var removeTask = _removeButton.OnClickAsync();
-            var cancelTask = _cancelButton.OnClickAsync();
-            await UniTask.WhenAny(removeTask, cancelTask);
 
-            _removeButton.onClick.RemoveListener(HandleRemoveButtonClicked);
-            _radialMenu.Hide();
-        }
+            var result = await _removeButton.ToButtonCancellableTask(_cancelButton);
+            if (!result.isCanceled) {
+                mapElement.Remove();
+            }
 
-        private void HandleRemoveButtonClicked() {
-            _mapElement.Remove();
+            await _radialMenu.Hide();
         }
     }
 }

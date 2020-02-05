@@ -33,7 +33,7 @@ namespace UI {
         }
 
         private void Update() {
-            if (_lock == null && _isShown) {
+            if (_lock == null && _isShown && !_inputLock.IsLocked) {
                 _logger.Log(LoggedFeature.Network, "ModalViewController acquiring input lock.");
                 _lock = _inputLock.Lock();
             }

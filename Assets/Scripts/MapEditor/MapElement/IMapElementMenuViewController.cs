@@ -1,7 +1,8 @@
 using Math;
+using UniRx.Async;
 
 namespace MapEditor.MapElement {
     public interface IMapElementMenuViewController {
-        void Show(IntVector2 tileCoords, IMapElement mapElement);
+        UniTask Show(IntVector2 tileCoords, IMapElement mapElement);
     }
 }

@@ -57,7 +57,7 @@ namespace UI.SelectionBox {
             // Same deal but this time only emit mouse ups. This is the event that we want to return.
             // Note that we need to pass in the "StartPosition" to the mouse up stream method to
             // create a different observable based on the start position, which depends on mouseDownStream.
-            var mouseUpObservable = mouseDownStream.Select(GetMouseUpStream).Switch();
+            var mouseUpObservable = mouseDownStream.Select(x => GetMouseUpStream(x)).Switch();
             mouseUpObservable.Subscribe(HandleMouseUp).AddTo(_disposables);
 
             return mouseUpObservable;

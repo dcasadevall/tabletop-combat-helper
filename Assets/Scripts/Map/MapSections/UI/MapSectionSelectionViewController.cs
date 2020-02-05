@@ -34,12 +34,30 @@ namespace Map.MapSections.UI {
             _commandQueue = commandQueue;
         }
 
+        private void Start() {
+            _inputLock.InputLockAcquired += HandleInputLockAcquired;
+            _inputLock.InputLockReleased += HandleInputLockReleased;
+        }
+
         private void Update() {
             _nextSectionButton.gameObject.SetActive(!_inputLock.IsLocked);
             _previousSectionButton.gameObject.SetActive(!_inputLock.IsLocked);
             
             _previousSectionButton.interactable = _mapSectionContext.CurrentSectionIndex > 0;
             _nextSectionButton.interactable = _mapSectionContext.CurrentSectionIndex < _mapData.Sections.Length - 1;
+        }
+
+        private void OnDestroy() {
+            _inputLock.InputLockAcquired -= HandleInputLockAcquired;
+            _inputLock.InputLockReleased -= HandleInputLockReleased;
+        }
+
+        private void HandleInputLockAcquired() {
+            gameObject.SetActive(false);
+        }
+        
+        private void HandleInputLockReleased() {
+            gameObject.SetActive(true);
         }
 
         private void HandleNextSectionButtonCLicked() {

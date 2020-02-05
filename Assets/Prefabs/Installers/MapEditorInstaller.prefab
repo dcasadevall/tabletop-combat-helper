@@ -47,9 +47,15 @@ MonoBehaviour:
     type: 3}
   _editSectionTileVcPrefab: {fileID: 6481291186857624241, guid: 21a011ee3925845e8a87be2ff854fe5f,
     type: 3}
-  _sectionTileRendererPrefab: {fileID: 1200446127716184142, guid: 0ff5af9afe3b74e6e99659e8bad9f082,
+  _mapElementTileRendererPrefab: {fileID: 2475874424136107029, guid: 0ff5af9afe3b74e6e99659e8bad9f082,
     type: 3}
+  _sectionTileSprite: {fileID: 21300000, guid: a8cde81e5be6f4f74a686561fb8518cc, type: 3}
+  _playerUnitsSprite: {fileID: 21300000, guid: 73c91a625a2b64c94b4235de7c0cd8eb, type: 3}
   _mapElementMenuVcPrefab: {fileID: 1778217846604432310, guid: ecd5cdeed7b2947738978ee2363986e2,
     type: 3}
   _sectionTilesModeCursor: {fileID: 2800000, guid: e051747e73f584d929f8203504189bf6,
+    type: 3}
+  _unitTilesModeCursor: {fileID: 2800000, guid: 1daf304480ed442338b022cf076e9a2a,
+    type: 3}
+  _playerUnitsTilesModeCursor: {fileID: 2800000, guid: afc20cd8c6a98471c9b92939c7630b1c,
     type: 3}

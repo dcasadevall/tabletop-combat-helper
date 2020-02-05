@@ -6,6 +6,7 @@ using Map.MapData.TileMetadata;
 using Map.Rendering;
 using Math;
 using UniRx;
+using Units.Serialized;
 using UnityEngine;
 
 namespace Map.MapData {
@@ -61,9 +62,19 @@ namespace Map.MapData {
             }
         }
 
+        public bool hasPlayerUnitSpawnPoint;
+        public Vector2 playerUnitSpawnPoint;
+        public IntVector2? PlayerUnitSpawnPoint {
+            get {
+                if (!hasPlayerUnitSpawnPoint) {
+                    return null;
+                }
+                
+                return IntVector2.Of(playerUnitSpawnPoint);
+            }
+        }
 
         public List<TileMetadataPair> tileMetadataPairs = new List<TileMetadataPair>();
-
         public Dictionary<IntVector2, ITileMetadata> TileMetadataMap {
             get {
                 return tileMetadataPairs.ToDictionary(x => IntVector2.Of(x.tileCoords),
@@ -72,13 +83,55 @@ namespace Map.MapData {
         }
 
         #region IMutableMapSectionData
-        private Subject<Tuple<IntVector2, ITileMetadata>> _tileMetadataChangeSubject =
-            new Subject<Tuple<IntVector2, ITileMetadata>>();
+        private Subject<IntVector2?> _playerUnitSpawnPointSubject = new Subject<IntVector2?>();
+        public IObservable<IntVector2?> PlayerUnitSpawnPointChanged => _playerUnitSpawnPointSubject;
 
-        public IObservable<Tuple<IntVector2, ITileMetadata>> TileMetadataChanged {
-            get {
-                return _tileMetadataChangeSubject;
+        private Subject<Tuple<IntVector2, uint?>> _sectionConnectionChangeSubject =
+            new Subject<Tuple<IntVector2, uint?>>();
+        public IObservable<Tuple<IntVector2, uint?>> SectionConnectionChanged => _sectionConnectionChangeSubject;
+
+        private Subject<Tuple<IntVector2, UnitDataReference>> _unitAddedSubject =
+            new Subject<Tuple<IntVector2, UnitDataReference>>();
+        public IObservable<Tuple<IntVector2, UnitDataReference>> UnitAdded => _unitAddedSubject;
+
+        private Subject<Tuple<IntVector2, UnitDataReference>> _unitRemovedSubject =
+            new Subject<Tuple<IntVector2, UnitDataReference>>();
+        public IObservable<Tuple<IntVector2, UnitDataReference>> UnitRemoved => _unitRemovedSubject;
+        
+        public void AddInitialUnit(IntVector2 tileCoords, UnitDataReference unitDataReference) {
+            TileMetadata.TileMetadata tileMetadata = GetTileMetadata(tileCoords);
+            tileMetadata.units.Add(unitDataReference);
+            _unitAddedSubject.OnNext(Tuple.Create(tileCoords, unitDataReference));
+        }
+
+        public void RemoveInitialUnit(IntVector2 tileCoords, UnitDataReference unitDataReference) {
+            TileMetadata.TileMetadata tileMetadata = GetTileMetadata(tileCoords);
+            tileMetadata.units.RemoveAll(x => x.UnitIndex == unitDataReference.UnitIndex);
+            _unitRemovedSubject.OnNext(Tuple.Create(tileCoords, unitDataReference));
+            ClearTileMetadataIfNecessary(tileCoords);
+        }
+
+        public void SetPlayerUnitSpawnPoint(IntVector2 spawnPoint) {
+            IntVector2? oldSpawnPoint = PlayerUnitSpawnPoint;
+            playerUnitSpawnPoint = new Vector2(spawnPoint.x, spawnPoint.y);
+            hasPlayerUnitSpawnPoint = true;
+            
+            if (oldSpawnPoint == null || oldSpawnPoint.Value != spawnPoint) {
+                _playerUnitSpawnPointSubject.OnNext(spawnPoint);
             }
+        }
+
+        public void ClearPlayerUnitSpawnPoint() {
+            if (!hasPlayerUnitSpawnPoint) {
+                return;
+            }
+
+            IntVector2 oldSpawnPoint = IntVector2.Of(playerUnitSpawnPoint);
+            playerUnitSpawnPoint = default(Vector2);
+            hasPlayerUnitSpawnPoint = false;
+            _playerUnitSpawnPointSubject.OnNext(null);
+            
+            ClearTileMetadataIfNecessary(oldSpawnPoint);
         }
 
         public void SetSectionConnection(IntVector2 tileCoords, uint sectionIndex) {
@@ -87,7 +140,7 @@ namespace Map.MapData {
             
             tileMetadata.sectionConnection = (int) sectionIndex;
             if (oldSectionIndex != sectionIndex) {
-                _tileMetadataChangeSubject.OnNext(new Tuple<IntVector2, ITileMetadata>(tileCoords, tileMetadata));
+                _sectionConnectionChangeSubject.OnNext(Tuple.Create(tileCoords, tileMetadata.SectionConnection));
             }
         }
 
@@ -96,15 +149,11 @@ namespace Map.MapData {
             var oldSectionIndex = tileMetadata.sectionConnection;
             tileMetadata.sectionConnection = -1;
             
-            // NOTE: When we add more metadata, we will only want to clear if there is no metadata left.
-            // Do we maybe want to split the kinds of metadata?
-            // Maybe we can have some sort of "default value" list, which we compare to in order to know if we 
-            // should remove the metadata or not.
-            ClearTileMetadata(tileCoords);
-
             if (oldSectionIndex != -1) {
-                _tileMetadataChangeSubject.OnNext(new Tuple<IntVector2, ITileMetadata>(tileCoords, tileMetadata));
+                _sectionConnectionChangeSubject.OnNext(Tuple.Create(tileCoords, tileMetadata.SectionConnection));
             }
+            
+            ClearTileMetadataIfNecessary(tileCoords);
         }
 
         private TileMetadata.TileMetadata GetTileMetadata(IntVector2 tileCoords) {
@@ -117,13 +166,19 @@ namespace Map.MapData {
 
             return tileMetadataPairs[index].tileMetadata;
         }
-
-        private void ClearTileMetadata(IntVector2 tileCoords) {
-            int index = tileMetadataPairs.FindIndex(x => IntVector2.Of(x.tileCoords) == tileCoords);
-            if (index == -1) {
+        
+        private void ClearTileMetadataIfNecessary(IntVector2 tileCoords) {
+            TileMetadataPair tileMetadataPair =
+                tileMetadataPairs.FirstOrDefault(x => IntVector2.Of(x.tileCoords) == tileCoords);
+            if (tileMetadataPair == null) {
                 return;
             }
 
+            if (!tileMetadataPair.tileMetadata.IsEmpty()) {
+                return;
+            }
+            
+            int index = tileMetadataPairs.FindIndex(x => IntVector2.Of(x.tileCoords) == tileCoords);
             tileMetadataPairs.RemoveAt(index);
         }
         #endregion

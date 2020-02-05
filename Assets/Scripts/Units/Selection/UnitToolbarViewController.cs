@@ -1,12 +1,16 @@
 using System;
+using System.Threading;
+using Async;
 using Grid;
-using Grid.Positioning;
+using Grid.Highlighting;
 using InputSystem;
 using Logging;
-using UI.SelectionBox;
+using Math;
 using UniRx;
 using Units.Spawning.UI;
 using UnityEngine;
+using UnityEngine.UI;
+using Utils;
 using Zenject;
 using ILogger = Logging.ILogger;
 
@@ -17,36 +21,55 @@ namespace Units.Selection {
     /// </summary>
     public class UnitToolbarViewController : MonoBehaviour, IInitializable, ITickable, IDisposable {
         [SerializeField]
-        private GameObject _batchSelectButton;
+        private Button _addUnitsButton;
 
         [SerializeField]
-        private GameObject _normalCursorButton;
+        private Button _batchSelectButton;
 
-        private IUnitPickerViewController _unitPickerViewController;
+        [SerializeField]
+        private Button _cancelButton;
+
+        [SerializeField]
+        private GameObject _buttonGroup;
+
+        [SerializeField]
+        private GameObject _cancelGroup;
+
         private BatchUnitSelectionDetector _batchUnitSelectionDetector;
         private BatchUnitMenuViewController _batchUnitMenuViewController;
+        private IGridCellHighlighter _gridCellHighlighter;
+        private IGridInputManager _gridInputManager;
+        private IUnitSpawnViewController _unitSpawnViewController;
         private IInputLock _inputLock;
         private ILogger _logger;
-        private IDisposable _lockToken;
+
         private IDisposable _selectionObserver;
 
         [Inject]
         internal void Construct(BatchUnitSelectionDetector batchUnitSelectionDetector,
                                 BatchUnitMenuViewController batchUnitMenuViewController,
-                                IUnitPickerViewController unitPickerViewController,
+                                IGridCellHighlighter gridCellHighlighter,
+                                IGridInputManager gridInputManager,
+                                IUnitSpawnViewController unitSpawnViewController,
                                 IInputLock inputLock,
                                 ILogger logger) {
             _batchUnitSelectionDetector = batchUnitSelectionDetector;
             _batchUnitMenuViewController = batchUnitMenuViewController;
-            _unitPickerViewController = unitPickerViewController;
+            _gridCellHighlighter = gridCellHighlighter;
+            _gridInputManager = gridInputManager;
+            _unitSpawnViewController = unitSpawnViewController;
             _inputLock = inputLock;
             _logger = logger;
+
+            Preconditions.CheckNotNull(_addUnitsButton, _batchSelectButton, _cancelButton, _buttonGroup, _cancelGroup);
         }
 
         public void Initialize() {
             _inputLock.InputLockAcquired += HandleInputLockAcquired;
             _inputLock.InputLockReleased += HandleInputLockReleased;
-            Show();
+
+            _addUnitsButton.onClick.AddListener(HandleAddUnitsPressed);
+            _batchSelectButton.onClick.AddListener(HandleBatchSelectPressed);
         }
 
         // TODO: This is a pretty janky way of handling input.
@@ -58,14 +81,16 @@ namespace Units.Selection {
             }
 
             if (Input.GetKeyUp(KeyCode.U)) {
-                _unitPickerViewController.Show();
+                HandleAddUnitsPressed();
             }
         }
 
         public void Dispose() {
             _inputLock.InputLockAcquired -= HandleInputLockAcquired;
             _inputLock.InputLockReleased -= HandleInputLockReleased;
-            _unitPickerViewController.ViewControllerDismissed -= HandleUnitPickerDismissed;
+
+            _addUnitsButton.onClick.RemoveListener(HandleAddUnitsPressed);
+            _batchSelectButton.onClick.RemoveListener(HandleBatchSelectPressed);
         }
 
         private void Show() {
@@ -79,11 +104,17 @@ namespace Units.Selection {
             gameObject.SetActive(false);
         }
 
-        private void HandleInputLockAcquired() {
-            if (_lockToken != null) {
-                return;
-            }
+        private void ShowToolbar() {
+            _buttonGroup.SetActive(true);
+            _cancelGroup.SetActive(false);
+        }
 
+        private void ShowCancelButton() {
+            _buttonGroup.SetActive(false);
+            _cancelGroup.SetActive(true);
+        }
+
+        private void HandleInputLockAcquired() {
             // Note that this works only because we parent our objects under the scene context.
             // TODO: Instead of injecting unitSelection with MapSectionScene, all UI should be "encounter" UI
             // Otherwise, Show / Hide will show ui from hidden map sections unless we parent them under the scene ctx.
@@ -94,53 +125,44 @@ namespace Units.Selection {
             Show();
         }
 
-        public void HandleAddUnitsPressed() {
-            Hide();
-            _unitPickerViewController.ViewControllerDismissed += HandleUnitPickerDismissed;
-            _unitPickerViewController.Show();
+        private async void HandleAddUnitsPressed() {
+            using (_inputLock.Lock()) {
+                Show();
+                ShowCancelButton();
+
+                CancellableTaskResult<IntVector2> cancelableResult;
+                using (_gridCellHighlighter.HighlightCellOnMouseOver(stayHighlighted: true)) {
+                    cancelableResult =
+                        await _gridInputManager.LeftMouseButtonOnTile.ToButtonCancellableTask(_cancelButton);
+                }
+
+                if (!cancelableResult.isCanceled) {
+                    await _unitSpawnViewController.Show(cancelableResult.result, CancellationToken.None);
+                }
+
+                _gridCellHighlighter.ClearHighlight();
+                ShowToolbar();
+            }
         }
 
-        private void HandleUnitPickerDismissed() {
-            _unitPickerViewController.ViewControllerDismissed -= HandleUnitPickerDismissed;
-            Show();
-        }
+        private async void HandleBatchSelectPressed() {
+            using (_inputLock.Lock()) {
+                Show(); // See essay above.
+                ShowCancelButton();
 
-        private void HandleBatchSelectPressed() {
-            _lockToken = _inputLock.Lock();
-            // Locking causes this menu to hide, and the way events are fired, we get an event before the ownerId
-            // is assigned.
-            // TODO: Input.Lock() to return owner so we can verify we own the lock.
-            Show();
+                CancellableTaskResult<IUnit[]> taskResult = await _batchUnitSelectionDetector
+                                                                  .GetSelectedUnitsObservable()
+                                                                  .ToButtonCancellableTask(_cancelButton);
 
-            _normalCursorButton.SetActive(true);
-            _batchSelectButton.SetActive(false);
-            _selectionObserver =
-                _batchUnitSelectionDetector.GetSelectedUnitsObservable().Subscribe(HandleUnitsSelected);
-        }
-
-        private async void HandleUnitsSelected(IUnit[] units) {
-            _logger.Log(LoggedFeature.Units, "Selected {0} Units", units.Length);
-
-            // Stop observing for selection
-            _selectionObserver?.Dispose();
-            _selectionObserver = null;
-            gameObject.SetActive(false);
-
-            // Start Batch Unit UI / Input handling
-            await _batchUnitMenuViewController.ShowAndWaitForAction(units);
-            gameObject.SetActive(true);
-
-            // Return to normal cursor mode.
-            HandleNormalCursorPressed();
-        }
-
-        public void HandleNormalCursorPressed() {
-            _normalCursorButton.SetActive(false);
-            _batchSelectButton.SetActive(true);
-            _selectionObserver?.Dispose();
-            _selectionObserver = null;
-            _lockToken?.Dispose();
-            _lockToken = null;
+                if (!taskResult.isCanceled) {
+                    _logger.Log(LoggedFeature.Units, "Selected {0} Units", taskResult.result.ToString());
+                    Hide();
+                    await _batchUnitMenuViewController.ShowAndWaitForAction(taskResult.result);
+                    Show();
+                }
+                
+                ShowToolbar();
+            }
         }
     }
 }

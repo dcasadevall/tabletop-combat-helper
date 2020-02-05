@@ -6,8 +6,10 @@ using Drawing.TexturePainter;
 using InputSystem;
 using Logging;
 using UI;
+using UniRx.Async;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 using Zenject;
 using ILogger = Logging.ILogger;
 
@@ -21,11 +23,9 @@ namespace Drawing.UI {
 
         public event Action DrawingEnabled = delegate { };
         public event Action DrawingDisabled = delegate { };
-        public event Action ViewControllerDismissed;
 
         public TexturePaintParams PaintParams { get; private set; }
 
-        // TODO: These should be shown / hidden via animator
         [SerializeField]
         private GameObject _stopPaintingButton;
 
@@ -37,45 +37,44 @@ namespace Drawing.UI {
 
         [SerializeField]
         private Slider _brushSizeSlider;
+        
+        [SerializeField]
+        private Button _cancelButton;
 
         private ICommandQueue _commandQueue;
         private IInputLock _inputLock;
-        private ILogger _logger;
         private IDisposable _lockToken;
 
         [Inject]
         public void Construct(ICommandQueue commandQueue,
-                              IInputLock inputLock, ILogger logger) {
+                              IInputLock inputLock) {
             _commandQueue = commandQueue;
             _inputLock = inputLock;
-            _logger = logger;
+            
+            Preconditions.CheckNotNull(_stopPaintingButton, _drawingTools, _colorPicker, _brushSizeSlider);
         }
 
         private void Start() {
-            Hide();
+            _stopPaintingButton.SetActive(false);
+            _drawingTools.SetActive(false);
             SetColor(kDefaultColor);
         }
 
-        public void Show() {
-            _lockToken = _inputLock.Lock();
+        public async UniTask Show() {
+            using (_inputLock.Lock()) {
+                _stopPaintingButton.SetActive(true);
+                _drawingTools.SetActive(true);
+                DrawingEnabled?.Invoke();
 
-            _stopPaintingButton.SetActive(true);
-            _drawingTools.SetActive(true);
+                await _cancelButton.OnClickAsync();
 
-            DrawingEnabled?.Invoke();
+                _stopPaintingButton.SetActive(false);
+                _drawingTools.SetActive(false);
+                DrawingDisabled?.Invoke();
+            }
         }
 
-        private void Hide() {
-            _lockToken?.Dispose();
-            _lockToken = null;
-
-            _stopPaintingButton.SetActive(false);
-            _drawingTools.SetActive(false);
-
-            DrawingDisabled?.Invoke();
-            ViewControllerDismissed?.Invoke();
-        }
-
+        // The handlers below are set via onclick events on the prefab.
         public void SetBrush() {
             PaintParams = TexturePaintParams.MakeWithColor(_colorPicker.CurrentColor, (int) _brushSizeSlider.value);
         }
@@ -90,10 +89,6 @@ namespace Drawing.UI {
 
         public void HandleBrushSizeSliderValueChanged() {
             PaintParams = TexturePaintParams.MakeWithColor(PaintParams.color, (int) _brushSizeSlider.value);
-        }
-
-        public void HandleCancelButtonPressed() {
-            Hide();
         }
 
         public void Clear() {
