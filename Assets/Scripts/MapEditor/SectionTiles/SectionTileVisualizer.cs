@@ -38,12 +38,12 @@ namespace MapEditor.SectionTiles {
 
         public void Initialize() {
             foreach (var kvp in _mapSectionData.TileMetadataMap) {
-                HandleTileMetadataChanged(kvp.Key, kvp.Value);
+                HandleTileMetadataChanged(kvp.Key, kvp.Value.SectionConnection);
             }
 
             _observer =
-                _mapSectionData.TileMetadataChanged
-                               .Subscribe(Observer.Create<Tuple<IntVector2, ITileMetadata>>(tuple => {
+                _mapSectionData.SectionConnectionChanged
+                               .Subscribe(Observer.Create<Tuple<IntVector2, uint?>>(tuple => {
                                    HandleTileMetadataChanged(tuple.Item1, tuple.Item2);
                                }));
         }
@@ -53,22 +53,20 @@ namespace MapEditor.SectionTiles {
             _observer = null;
         }
 
-        private void HandleTileMetadataChanged(IntVector2 tileCoords, ITileMetadata tileMetadata) {
-            if (tileMetadata.SectionConnection == null) {
-                // TODO: This errors because it listens to all metadata changes.
-                // We should only emit changes of specific properties.
+        private void HandleTileMetadataChanged(IntVector2 tileCoords, uint? sectionConnection) {
+            if (sectionConnection == null) {
                 _tileRendererPool.Despawn(tileCoords);
                 return;
             }
 
-            if (tileMetadata.SectionConnection.Value >= _mapData.Sections.Length) {
+            if (sectionConnection.Value >= _mapData.Sections.Length) {
                 _logger.LogError(LoggedFeature.MapEditor,
                                  "Metadata change on SectionConnection out of bounds: {0}",
-                                 tileMetadata.SectionConnection.Value);
+                                 sectionConnection.Value);
                 return;
             }
 
-            string sectionName = _mapData.Sections[tileMetadata.SectionConnection.Value].SectionName;
+            string sectionName = _mapData.Sections[sectionConnection.Value].SectionName;
             _tileRendererPool.Spawn(tileCoords, _sprite, sectionName);
         }
     }

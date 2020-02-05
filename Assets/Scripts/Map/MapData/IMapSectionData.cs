@@ -5,6 +5,7 @@ using Map.MapData.TileMetadata;
 using Map.Rendering;
 using Math;
 using UniRx;
+using Units.Serialized;
 using UnityEngine;
 
 namespace Map.MapData {
@@ -19,9 +20,13 @@ namespace Map.MapData {
         /// If set, coordinates of the tile where players will spawn in this section on map load.
         /// </summary>
         IntVector2? PlayerUnitSpawnPoint { get; }
-        IObservable<IntVector2?> PlayerUnitSpawnPointChanged { get; }
-
         Dictionary<IntVector2, ITileMetadata> TileMetadataMap { get; }
-        IObservable<Tuple<IntVector2, ITileMetadata>> TileMetadataChanged { get; }
+        
+        #region Events
+        IObservable<IntVector2?> PlayerUnitSpawnPointChanged { get; }
+        IObservable<Tuple<IntVector2, uint?>> SectionConnectionChanged { get; }
+        IObservable<Tuple<IntVector2, UnitDataReference>> UnitAdded { get; }
+        IObservable<Tuple<IntVector2, UnitDataReference>> UnitRemoved { get; }
+        #endregion
     }
 }
