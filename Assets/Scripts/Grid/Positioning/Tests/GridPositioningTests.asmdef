@@ -1,21 +1,28 @@
 {
     "name": "GridPositioningTests",
     "references": [
-        "ApplicationAssembly",
-        "Zenject-TestFramework",
-        "Zenject",
-        "NSubstitute"
-    ],
-    "optionalUnityReferences": [
-        "TestAssemblies"
+        "GUID:18d11919acf824d19a1a8f28acc2e586",
+        "GUID:a2f2239355369ba4fb6909aeaa41def5",
+        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4",
+        "GUID:dec8c1c45df5a46b9b7375e65ccf6ee7",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3"
     ],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": []
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll",
+        "NSubstitute.dll",
+        "Zenject-usage.dll",
+        "System.Threading.Tasks.Extensions.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": []
 }
