@@ -5,10 +5,6 @@ namespace Map.MapData.Store {
     public class MapStoreId {
         public readonly uint index;
 
-        // Because MapStoreId is used in serialized objects, it needs an empty constructor.
-        public MapStoreId() {
-        }
-
         public MapStoreId(uint index) {
             this.index = index;
         }

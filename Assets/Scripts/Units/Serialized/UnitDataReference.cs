@@ -13,10 +13,6 @@ namespace Units.Serialized {
         private UnitType _unitType;
         public UnitType UnitType => _unitType;
 
-        // Empty constructor needed for serialization
-        public UnitDataReference() {
-        }
-
         public UnitDataReference(uint unitIndex, UnitType unitType) {
             _unitIndex = unitIndex;
             _unitType = unitType;
