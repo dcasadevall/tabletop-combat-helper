@@ -1,0 +1,102 @@
+using System;
+using CommandSystem;
+using Logging;
+using Map.MapData.Store;
+using Map.MapData.Store.Commands;
+using Map.MapSections;
+using Map.MapSections.Commands;
+using Math;
+using UniRx;
+using Units;
+using Units.Spawning;
+using Units.Spawning.Commands;
+using Unit = UniRx.Unit;
+
+namespace Grid.Commands {
+    public class MoveUnitSectionCommand : ICommand {
+        public bool IsInitialGameStateCommand => false;
+        private readonly MoveUnitSectionCommandData _data;
+        private readonly ICommandFactory _commandFactory;
+        private readonly IUnitRegistry _unitRegistry;
+        private readonly IMapSectionEntryTileFinder _entryTileFinder;
+        private readonly UnitCommandDataFactory _unitCommandDataFactory;
+        private readonly ILogger _logger;
+        private readonly MapStoreId _mapStoreId;
+
+        private ICommand _despawnCommand;
+        private ICommand _spawnCommand;
+
+        public MoveUnitSectionCommand(MoveUnitSectionCommandData data,
+                                      ICommandFactory commandFactory,
+                                      IUnitRegistry unitRegistry,
+                                      IMapSectionEntryTileFinder entryTileFinder,
+                                      UnitCommandDataFactory unitCommandDataFactory,
+                                      ILogger logger,
+                                      MapStoreId mapStoreId) {
+            _data = data;
+            _commandFactory = commandFactory;
+            _unitRegistry = unitRegistry;
+            _entryTileFinder = entryTileFinder;
+            _unitCommandDataFactory = unitCommandDataFactory;
+            _logger = logger;
+            _mapStoreId = mapStoreId;
+        }
+
+        public IObservable<Unit> Run() {
+            IUnit unit = _unitRegistry.GetUnit(_data.unitId);
+            if (unit == null) {
+                _logger.LogError(LoggedFeature.Units,
+                                 "MoveUnitSectionCommand called on unit not in registry: {0}",
+                                 _data.unitId);
+                return Observable.Empty<Unit>();
+            }
+
+            UnitCommandData unitCommandData = _unitCommandDataFactory.Create(unit.UnitData);
+            if (unitCommandData == null) {
+                _logger.LogError(LoggedFeature.Units,
+                                 "Failed to create UnitCommandData: {0}",
+                                 _data.unitId);
+                return Observable.Empty<Unit>();
+            }
+
+            _despawnCommand =
+                _commandFactory.Create<DespawnUnitCommand, DespawnUnitData>(new DespawnUnitData(_data.unitId));
+            _despawnCommand.Run();
+
+            ICommand loadMapSectionCommand = _commandFactory.Create(typeof(LoadMapSectionCommand),
+                                                                    typeof(LoadMapSectionCommandData),
+                                                                    new LoadMapSectionCommandData(_data.toSectionIndex,
+                                                                                                  new
+                                                                                                      LoadMapCommandData(_mapStoreId
+                                                                                                                             .index)));
+            Subject<Unit> sectionLoadedSubject = new Subject<Unit>();
+            loadMapSectionCommand.Run().Subscribe(_ => {
+                IntVector2 entryTileCoords = _entryTileFinder.GetEntryTile(_data.toSectionIndex, _data.fromSectionIndex);
+                _spawnCommand = _commandFactory.Create(typeof(SpawnUnitCommand),
+                                                       typeof(SpawnUnitData),
+                                                       new SpawnUnitData(unitCommandData,
+                                                                         entryTileCoords,
+                                                                         isInitialSpawn: false));
+                _spawnCommand.Run();
+                sectionLoadedSubject.OnNext(Unit.Default);
+            });
+
+            return sectionLoadedSubject;
+        }
+
+        public void Undo() {
+            ICommand loadMapSectionCommand = _commandFactory.Create(typeof(LoadMapSectionCommand),
+                                                                    typeof(LoadMapSectionCommandData),
+                                                                    new
+                                                                        LoadMapSectionCommandData(_data
+                                                                                                      .fromSectionIndex,
+                                                                                                  new
+                                                                                                      LoadMapCommandData(_mapStoreId
+                                                                                                                             .index)));
+            _spawnCommand.Undo();
+            loadMapSectionCommand.Run().Subscribe(_ => {
+                _despawnCommand.Undo();
+            });
+        }
+    }
+}

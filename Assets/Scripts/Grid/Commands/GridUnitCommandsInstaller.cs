@@ -10,6 +10,7 @@ namespace Grid.Commands {
             // We expose the concrete type so it can be instantiated by Type.
             Container.Bind<MoveUnitCommand>().AsSingle();
             Container.Bind<RotateUnitCommand>().AsSingle();
+            Container.Bind<MoveUnitSectionCommand>().AsTransient();
             
             // For now, let RotateUnitCommand modify the unit transform directly, but this should go through
             // GridUnitManager which should be the only actor modifying it.

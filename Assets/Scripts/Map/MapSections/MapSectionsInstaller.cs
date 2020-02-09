@@ -14,6 +14,7 @@ namespace Map.MapSections {
                      .FromComponentInNewPrefab(_mapSelectionViewController)
                      .AsSingle()
                      .NonLazy();
+            Container.Bind<IMapSectionEntryTileFinder>().To<MapSectionEntryTileFinder>().AsSingle();
             
             CommandsInstaller.Install<MapSectionsCommandsInstaller>(Container);
         }
