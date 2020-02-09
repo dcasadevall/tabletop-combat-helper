@@ -8,8 +8,10 @@ using Map.MapSections.Commands;
 using Math;
 using UniRx;
 using Units;
+using Units.Serialized;
 using Units.Spawning;
 using Units.Spawning.Commands;
+using Zenject;
 using Unit = UniRx.Unit;
 
 namespace Grid.Commands {
@@ -19,7 +21,7 @@ namespace Grid.Commands {
         private readonly ICommandFactory _commandFactory;
         private readonly IUnitRegistry _unitRegistry;
         private readonly IMapSectionEntryTileFinder _entryTileFinder;
-        private readonly UnitCommandDataFactory _unitCommandDataFactory;
+        private readonly IUnitDataIndexResolver _unitDataIndexResolver;
         private readonly ILogger _logger;
         private readonly MapStoreId _mapStoreId;
 
@@ -30,14 +32,14 @@ namespace Grid.Commands {
                                       ICommandFactory commandFactory,
                                       IUnitRegistry unitRegistry,
                                       IMapSectionEntryTileFinder entryTileFinder,
-                                      UnitCommandDataFactory unitCommandDataFactory,
+                                      IUnitDataIndexResolver unitDataIndexResolver,
                                       ILogger logger,
                                       MapStoreId mapStoreId) {
             _data = data;
             _commandFactory = commandFactory;
             _unitRegistry = unitRegistry;
             _entryTileFinder = entryTileFinder;
-            _unitCommandDataFactory = unitCommandDataFactory;
+            _unitDataIndexResolver = unitDataIndexResolver;
             _logger = logger;
             _mapStoreId = mapStoreId;
         }
@@ -51,10 +53,10 @@ namespace Grid.Commands {
                 return Observable.Empty<Unit>();
             }
 
-            UnitCommandData unitCommandData = _unitCommandDataFactory.Create(unit.UnitData);
-            if (unitCommandData == null) {
+            uint? unitIndex = _unitDataIndexResolver.ResolveUnitIndex(unit.UnitData);
+            if (unitIndex == null) {
                 _logger.LogError(LoggedFeature.Units,
-                                 "Failed to create UnitCommandData: {0}",
+                                 "Failed to resolve unit index: {0}",
                                  _data.unitId);
                 return Observable.Empty<Unit>();
             }
@@ -71,14 +73,20 @@ namespace Grid.Commands {
                                                                                                                              .index)));
             Subject<Unit> sectionLoadedSubject = new Subject<Unit>();
             loadMapSectionCommand.Run().Subscribe(_ => {
-                IntVector2 entryTileCoords = _entryTileFinder.GetEntryTile(_data.toSectionIndex, _data.fromSectionIndex);
-                _spawnCommand = _commandFactory.Create(typeof(SpawnUnitCommand),
-                                                       typeof(SpawnUnitData),
-                                                       new SpawnUnitData(unitCommandData,
-                                                                         entryTileCoords,
-                                                                         isInitialSpawn: false));
-                _spawnCommand.Run();
-                sectionLoadedSubject.OnNext(Unit.Default);
+                // We need to wait 1 frame in order to avoid race conditions between listeners on new section
+                Observable.IntervalFrame(1).First().Subscribe(__ => {
+                    IntVector2 entryTileCoords =
+                        _entryTileFinder.GetEntryTile(_data.toSectionIndex, _data.fromSectionIndex);
+                    // We don't spawn pets (which also are not despawn on despawn command)
+                    var unitCommandData = new UnitCommandData(unit.UnitId, unitIndex.Value, unit.UnitData.UnitType);
+                    _spawnCommand = _commandFactory.Create(typeof(SpawnUnitCommand),
+                                                           typeof(SpawnUnitData),
+                                                           new SpawnUnitData(unitCommandData,
+                                                                             entryTileCoords,
+                                                                             isInitialSpawn: false));
+                    _spawnCommand.Run();
+                    sectionLoadedSubject.OnNext(Unit.Default);
+                });
             });
 
             return sectionLoadedSubject;
