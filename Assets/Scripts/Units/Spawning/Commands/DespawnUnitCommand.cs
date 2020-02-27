@@ -54,6 +54,7 @@ namespace Units.Spawning.Commands {
             _tileCoords = _gridUnitManager.GetUnitCoords(_unit);
 
             // Only despawn the unit. This does not remove pet units.
+            _logger.Log(LoggedFeature.Units, "Despawning: {0}", _unit.UnitId);
             _unitPool.Despawn(_unit.UnitId);
             _gridUnitManager.RemoveUnit(_unit);
 

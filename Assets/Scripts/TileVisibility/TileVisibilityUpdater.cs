@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Grid;
+using Grid.Commands;
 using Grid.Positioning;
 using Math;
 using Units;
@@ -48,7 +49,7 @@ namespace TileVisibility {
             _gridUnitManager.UnitPlacedAtTile -= HandleUnitPlacedAtTile;
             _gridUnitManager.UnitRemovedFromTile -= HandleUnitRemovedFromTile;
         }
-
+        
         private void HandleUnitPlacedAtTile(IUnit unit, IntVector2 tileCoords) {
             IntVector2[] visibileTiles =
                 _gridPositionCalculator.GetTilesAtDistance(tileCoords, unit.UnitData.UnitStats.visibilityRadius / 5);

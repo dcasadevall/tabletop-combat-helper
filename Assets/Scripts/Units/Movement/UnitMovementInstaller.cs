@@ -17,13 +17,16 @@ namespace Units.Movement {
             Container.Bind(typeof(ISingleUnitActionHandler), typeof(IBatchedUnitActionHandler))
                      .To<UnitDragAndDropHandler>()
                      .AsSingle();
-            
                         
             // UnitDragAndDropHandler modifies transform to preview unit location.
             Container.Bind<IUnitTransformRegistry>()
                      .To<UnitRegistry>()
                      .FromResolve()
                      .WhenInjectedInto<UnitDragAndDropHandler>();
+            
+                        
+            // Handles moving units from one section to another when needed.
+            Container.BindInterfacesTo<MapSectionUnitMover>().AsSingle();
         }
     }
 }

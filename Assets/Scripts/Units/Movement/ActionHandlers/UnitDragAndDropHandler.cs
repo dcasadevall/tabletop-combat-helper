@@ -72,10 +72,16 @@ namespace Units.Movement.ActionHandlers {
         }
 
         public void HandleActionConfirmed(IUnit unit) {
-            // These can be checked (throw exception if null) because our stream guarantees that they are not.
+            // This can be checked (throw exception if null) because our stream guarantees that they are not.
             IntVector2 unitCoords = _gridUnitManager.GetUnitCoords(unit).GetValueChecked();
-            IntVector2 mouseCoords = _gridInputManager.TileAtMousePosition.GetValueChecked();
-            CommitUnitMovement(unit, mouseCoords - unitCoords);
+            IntVector2? mouseCoords = _gridInputManager.TileAtMousePosition;
+            if (mouseCoords == null) {
+                // TODO: Maybe we want to commit the tile the unit is at instead?
+                HandleActionCanceled(unit);
+                return;
+            }
+            
+            CommitUnitMovement(unit, mouseCoords.Value - unitCoords);
 
             _disposable?.Dispose();
             _disposable = null;

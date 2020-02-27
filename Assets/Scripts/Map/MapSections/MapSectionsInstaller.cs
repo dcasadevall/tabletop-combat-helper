@@ -1,4 +1,5 @@
 using CommandSystem.Installers;
+using Grid.GridUnits;
 using Map.MapSections.Commands;
 using Map.MapSections.UI;
 using UnityEngine;
@@ -14,7 +15,8 @@ namespace Map.MapSections {
                      .FromComponentInNewPrefab(_mapSelectionViewController)
                      .AsSingle()
                      .NonLazy();
-            
+            Container.Bind<IMapSectionEntryTileFinder>().To<MapSectionEntryTileFinder>().AsSingle();
+
             CommandsInstaller.Install<MapSectionsCommandsInstaller>(Container);
         }
     }

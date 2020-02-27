@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using CommandSystem;
 using Grid.Positioning;
@@ -31,6 +32,7 @@ namespace Units.Spawning.UI {
         private Button _cancelButton;
 #pragma warning restore 649
 
+        private uint _numPlayers = 0;
         private IUnitData[] _unitDatas;
         private IUnitDataIndexResolver _unitDataIndexResolver;
         private IRandomGridPositionProvider _randomGridPositionProvider;
@@ -45,7 +47,11 @@ namespace Units.Spawning.UI {
                               ICommandQueue commandQueue,
                               IFactory<IUnitData, UnitCommandData> unitCommandDataFactory,
                               ILogger logger) {
-            _unitDatas = unitSpawnSettings.GetUnits(UnitType.NonPlayer);
+            _numPlayers = (uint)unitSpawnSettings.GetUnits(UnitType.Player).Length;
+            _unitDatas = unitSpawnSettings.GetUnits(UnitType.Player)
+                                          .Concat(unitSpawnSettings.GetUnits(UnitType.NonPlayer))
+                                          .ToArray();
+            
             _unitDataIndexResolver = unitDataIndexResolver;
             _randomGridPositionProvider = randomGridPositionProvider;
             _commandQueue = commandQueue;
@@ -103,7 +109,13 @@ namespace Units.Spawning.UI {
         private void HandleOnSpawnButtonClicked(IntVector2 tileCoords) {
             var selectedIndex = (uint) _dropdown.value;
             int numUnits = _unitAmountDropdown.value + 1;
-            IUnitData unitData = _unitDataIndexResolver.ResolveUnitData(UnitType.NonPlayer, selectedIndex);
+            IUnitData unitData;
+            if (selectedIndex < _numPlayers) {
+                unitData = _unitDataIndexResolver.ResolveUnitData(UnitType.Player, selectedIndex);
+            } else {
+                unitData = _unitDataIndexResolver.ResolveUnitData(UnitType.NonPlayer, selectedIndex - _numPlayers);
+            }
+            
             if (unitData == null) {
                 _logger.LogError(LoggedFeature.Units, "Invalid unit index: {0}", selectedIndex);
                 return;
