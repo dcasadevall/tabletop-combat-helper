@@ -20,11 +20,7 @@ namespace Units.Spawning.Commands {
         private readonly IUnitPool _unitPool;
         private readonly ILogger _logger;
 
-        public bool IsInitialGameStateCommand {
-            get {
-                return _data.isInitialSpawn;
-            }
-        }
+        public bool IsInitialGameStateCommand => _data.isInitialSpawn;
 
         public SpawnUnitCommand(SpawnUnitData data,
                                 ICommandFactory commandFactory,
@@ -52,7 +48,6 @@ namespace Units.Spawning.Commands {
             }
 
             IUnitData unitData = unitDatas[(int) _data.unitCommandData.UnitIndex];
-            _logger.Log(LoggedFeature.Units, "Spawning: {0}", unitData.Name);
 
             // First, spawn the pets recursively.
             // We create commands that we execute directly, because
@@ -71,6 +66,7 @@ namespace Units.Spawning.Commands {
             IUnit unit = _unitPool.Spawn(_data.unitCommandData.unitId, unitData, pets);
             _gridUnitManager.PlaceUnitAtTile(unit, _data.tileCoords);
 
+            _logger.Log(LoggedFeature.Units, "Spawned: {0}. Id: {1}", unitData.Name, unit.UnitId);
             return Observable.ReturnUnit();
         }
 

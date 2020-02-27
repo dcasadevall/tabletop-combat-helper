@@ -65,13 +65,11 @@ namespace Grid.Commands {
                 _commandFactory.Create<DespawnUnitCommand, DespawnUnitData>(new DespawnUnitData(_data.unitId));
             _despawnCommand.Run();
 
-            ICommand loadMapSectionCommand = _commandFactory.Create(typeof(LoadMapSectionCommand),
-                                                                    typeof(LoadMapSectionCommandData),
-                                                                    new LoadMapSectionCommandData(_data.toSectionIndex,
-                                                                                                  new
-                                                                                                      LoadMapCommandData(_mapStoreId
-                                                                                                                             .index)));
-            Subject<Unit> sectionLoadedSubject = new Subject<Unit>();
+            var sectionLoadedSubject = new Subject<Unit>();
+            var commandData =
+                new LoadMapSectionCommandData(_data.toSectionIndex, new LoadMapCommandData(_mapStoreId.index));
+            ICommand loadMapSectionCommand =
+                _commandFactory.Create<LoadMapSectionCommand, LoadMapSectionCommandData>(commandData);
             loadMapSectionCommand.Run().Subscribe(_ => {
                 // We need to wait 1 frame in order to avoid race conditions between listeners on new section
                 Observable.IntervalFrame(1).First().Subscribe(__ => {
@@ -79,12 +77,10 @@ namespace Grid.Commands {
                         _entryTileFinder.GetEntryTile(_data.toSectionIndex, _data.fromSectionIndex);
                     // We don't spawn pets (which also are not despawn on despawn command)
                     var unitCommandData = new UnitCommandData(unit.UnitId, unitIndex.Value, unit.UnitData.UnitType);
-                    _spawnCommand = _commandFactory.Create(typeof(SpawnUnitCommand),
-                                                           typeof(SpawnUnitData),
-                                                           new SpawnUnitData(unitCommandData,
-                                                                             entryTileCoords,
-                                                                             isInitialSpawn: false));
+                    var spawnUnitData = new SpawnUnitData(unitCommandData, entryTileCoords, isInitialSpawn: false);
+                    _spawnCommand = _commandFactory.Create<SpawnUnitCommand, SpawnUnitData>(spawnUnitData);
                     _spawnCommand.Run();
+                    
                     sectionLoadedSubject.OnNext(Unit.Default);
                 });
             });
