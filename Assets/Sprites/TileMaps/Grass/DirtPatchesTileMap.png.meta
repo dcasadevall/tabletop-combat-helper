@@ -1,0 +1,568 @@
+fileFormatVersion: 2
+guid: f66b748c4801bde4bb25d40921b6f6d2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6311364533591446003
+    second: DirtPatchesTileMap_0
+  - first:
+      213: 8116322682055395520
+    second: DirtPatchesTileMap_1
+  - first:
+      213: -7110423018157163279
+    second: DirtPatchesTileMap_2
+  - first:
+      213: 659620920154432785
+    second: DirtPatchesTileMap_3
+  - first:
+      213: -624294467954003668
+    second: DirtPatchesTileMap_4
+  - first:
+      213: -534921952614972869
+    second: DirtPatchesTileMap_5
+  - first:
+      213: -6924544626319890058
+    second: DirtPatchesTileMap_6
+  - first:
+      213: -8543507760948830562
+    second: DirtPatchesTileMap_7
+  - first:
+      213: 4148726483111990210
+    second: DirtPatchesTileMap_8
+  - first:
+      213: -704437632525619158
+    second: DirtPatchesTileMap_9
+  - first:
+      213: 4191775440072350501
+    second: DirtPatchesTileMap_10
+  - first:
+      213: -7477214755664701837
+    second: DirtPatchesTileMap_11
+  - first:
+      213: 7611258239448499370
+    second: DirtPatchesTileMap_12
+  - first:
+      213: 1702899295951779843
+    second: DirtPatchesTileMap_13
+  - first:
+      213: -4135475397973433055
+    second: DirtPatchesTileMap_14
+  - first:
+      213: -6688289219017232693
+    second: DirtPatchesTileMap_15
+  - first:
+      213: -8004778845119393776
+    second: DirtPatchesTileMap_16
+  - first:
+      213: -7295528010955829443
+    second: DirtPatchesTileMap_17
+  - first:
+      213: -7502176484644505525
+    second: DirtPatchesTileMap_18
+  - first:
+      213: -3102433335268167352
+    second: DirtPatchesTileMap_19
+  - first:
+      213: -1615764390361955546
+    second: DirtPatchesTileMap_20
+  - first:
+      213: -4719749185833550287
+    second: DirtPatchesTileMap_21
+  - first:
+      213: -9123906280156017237
+    second: DirtPatchesTileMap_22
+  - first:
+      213: 5086075231204034760
+    second: DirtPatchesTileMap_23
+  - first:
+      213: -557551887221285426
+    second: DirtPatchesTileMap_24
+  - first:
+      213: 6702440248853905953
+    second: DirtPatchesTileMap_25
+  - first:
+      213: -6292399896444286047
+    second: DirtPatchesTileMap_26
+  - first:
+      213: -4703281640658104003
+    second: DirtPatchesTileMap_27
+  - first:
+      213: -7100606888712926795
+    second: DirtPatchesTileMap_28
+  - first:
+      213: -1215647251731140480
+    second: DirtPatchesTileMap_29
+  - first:
+      213: 1398732040484600689
+    second: DirtPatchesTileMap_30
+  - first:
+      213: 5550843755189262957
+    second: DirtPatchesTileMap_31
+  - first:
+      213: 4473155666949737064
+    second: DirtPatchesTileMap_32
+  - first:
+      213: 2759957906967215471
+    second: DirtPatchesTileMap_33
+  - first:
+      213: -7801490900921408819
+    second: DirtPatchesTileMap_34
+  - first:
+      213: -5368462275942231396
+    second: DirtPatchesTileMap_35
+  - first:
+      213: -3067060740899286024
+    second: DirtPatchesTileMap_36
+  - first:
+      213: -4658768209531237035
+    second: DirtPatchesTileMap_37
+  - first:
+      213: -5938033640812660227
+    second: DirtPatchesTileMap_38
+  - first:
+      213: -3111027734155653444
+    second: DirtPatchesTileMap_39
+  - first:
+      213: -5148816265853489568
+    second: DirtPatchesTileMap_40
+  - first:
+      213: -7839644814323510223
+    second: DirtPatchesTileMap_41
+  - first:
+      213: -974209870204857146
+    second: DirtPatchesTileMap_42
+  - first:
+      213: 1032539965892650504
+    second: DirtPatchesTileMap_43
+  - first:
+      213: -291019353091055003
+    second: DirtPatchesTileMap_44
+  - first:
+      213: 3008032351057643140
+    second: DirtPatchesTileMap_45
+  - first:
+      213: 4823710957138473599
+    second: DirtPatchesTileMap_46
+  - first:
+      213: -2082878698152518497
+    second: DirtPatchesTileMap_47
+  - first:
+      213: 3994952441231293352
+    second: DirtPatchesTileMap_48
+  - first:
+      213: 1603910710506877329
+    second: DirtPatchesTileMap_49
+  externalObjects: {}
+  serializedVersion: 10
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 200
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 400
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0e684f45678968a0800000000000000
+      internalID: -6311364533591446003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_1
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 400
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c88b5a2a78f2a070800000000000000
+      internalID: 8116322682055395520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_2
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 400
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fc3bf700f3b25d90800000000000000
+      internalID: -7110423018157163279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_3
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 400
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 115a8386bb1772900800000000000000
+      internalID: 659620920154432785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_4
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 400
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c213c523d7f0657f0800000000000000
+      internalID: -624294467954003668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 200
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3283d771539398f0800000000000000
+      internalID: -534921952614972869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_6
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 200
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 679ecd4a95317ef90800000000000000
+      internalID: -6924544626319890058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_7
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 200
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9e1ad4f4fc5f6980800000000000000
+      internalID: -8543507760948830562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_8
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 200
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c3552861cc339930800000000000000
+      internalID: 4148726483111990210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_9
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 200
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a20b4ea94b55936f0800000000000000
+      internalID: -704437632525619158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52b18b3cd8d2c2a30800000000000000
+      internalID: 4191775440072350501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_11
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 376db43bbc89b3890800000000000000
+      internalID: -7477214755664701837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_12
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa4c718ea0f90a960800000000000000
+      internalID: 7611258239448499370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_13
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 0
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 308f77723e9e1a710800000000000000
+      internalID: 1702899295951779843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtPatchesTileMap_14
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 0
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1252d664907db96c0800000000000000
+      internalID: -4135475397973433055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
