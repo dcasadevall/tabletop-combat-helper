@@ -7,7 +7,7 @@ namespace Grid.Serialized {
     /// This allows art to be bound to the data model.
     /// </summary>
     [Serializable]
-    public class GridData : IGridData {
+    public class GridData : ScriptableObject, IGridData {
         public uint numTilesX = 20;
         public uint NumTilesX {
             get {
