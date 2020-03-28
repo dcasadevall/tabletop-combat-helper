@@ -245,7 +245,7 @@ namespace Tiles
             if (Tile.spritePools == null || Tile.spritePools.Length != 15)
             {
                 Tile.spritePools = new SpriteArray[15];
-                Undo.RecordObject(Tile, "Added Missing Sprites");
+                EditorUtility.SetDirty(Tile);
             }
         }
 
@@ -295,7 +295,7 @@ namespace Tiles
             }
 
             if (EditorGUI.EndChangeCheck())
-                Undo.RecordObject(Tile, "Changes In Sprites");
+                EditorUtility.SetDirty(Tile);
 
             EditorGUIUtility.labelWidth = oldLabelWidth;
         }
