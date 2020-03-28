@@ -47,6 +47,51 @@ TextureImporter:
   - first:
       213: -508392647182439322
     second: BigPathsTileMap_3_14
+  - first:
+      213: -6626218510963123973
+    second: BigPathsTileMap_C_0
+  - first:
+      213: -1347314342323299544
+    second: BigPathsTileMap_C_1
+  - first:
+      213: -7304600884312888264
+    second: BigPathsTileMap_C_2
+  - first:
+      213: -5355546445753166750
+    second: BigPathsTileMap_C_3
+  - first:
+      213: 4639722573506391689
+    second: BigPathsTileMap_C_4
+  - first:
+      213: -1825021187486392671
+    second: BigPathsTileMap_C_5
+  - first:
+      213: -8208175650763610702
+    second: BigPathsTileMap_C_6
+  - first:
+      213: 3358200128487662396
+    second: BigPathsTileMap_C_7
+  - first:
+      213: -1847529670593311714
+    second: BigPathsTileMap_C_8
+  - first:
+      213: 7956334352791764724
+    second: BigPathsTileMap_C_9
+  - first:
+      213: -5634149794598406367
+    second: BigPathsTileMap_C_10
+  - first:
+      213: -8171278008370267908
+    second: BigPathsTileMap_C_11
+  - first:
+      213: 472271469706580990
+    second: BigPathsTileMap_C_12
+  - first:
+      213: 179332653597403372
+    second: BigPathsTileMap_C_13
+  - first:
+      213: -7943507136831144117
+    second: BigPathsTileMap_C_14
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -105,7 +150,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -117,7 +162,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -129,7 +174,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: iPhone
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -141,7 +186,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Android
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -155,7 +200,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BigPathsTileMap_3_0
+      name: BigPathsTileMap_C_0
       rect:
         serializedVersion: 2
         x: 0
@@ -169,14 +214,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 657ebeb6c630f024496f8b4b07d29264
-      internalID: -1997153707056578966
+      spriteID: 4884052274de1484197b949a05cdb2e2
+      internalID: -6626218510963123973
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_1
+      name: BigPathsTileMap_C_1
       rect:
         serializedVersion: 2
         x: 800
@@ -190,14 +235,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c011e164aaaef9f4d81c29c698e832b7
-      internalID: -1664247101360861619
+      spriteID: 08a81a3e33264de4aaf1d6363940f0b2
+      internalID: -1347314342323299544
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_2
+      name: BigPathsTileMap_C_2
       rect:
         serializedVersion: 2
         x: 1600
@@ -211,14 +256,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5006bb92e5bb71b4eba4f9c46151c78b
-      internalID: 6616865777206036455
+      spriteID: 8520235eddd59384ba11a3c71658bf40
+      internalID: -7304600884312888264
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_3
+      name: BigPathsTileMap_C_3
       rect:
         serializedVersion: 2
         x: 2400
@@ -232,14 +277,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f349c2a4e38f3ee4e8baa08b71a82396
-      internalID: 4570283856327631101
+      spriteID: 8723d2a00fa8b034c94564294b65ea7b
+      internalID: -5355546445753166750
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_4
+      name: BigPathsTileMap_C_4
       rect:
         serializedVersion: 2
         x: 3200
@@ -253,14 +298,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6b7705ed0e06adf4f879a66176f9e48b
-      internalID: 8763535293117984667
+      spriteID: 4e8d4502dde786f4d8d69a51a423f83d
+      internalID: 4639722573506391689
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_5
+      name: BigPathsTileMap_C_5
       rect:
         serializedVersion: 2
         x: 0
@@ -274,14 +319,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5cb57af97ce0e804b83052625a93d701
-      internalID: -9086924623247062819
+      spriteID: 4a8e77f0ac5c4184c903cfe23f7ed960
+      internalID: -1825021187486392671
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_6
+      name: BigPathsTileMap_C_6
       rect:
         serializedVersion: 2
         x: 800
@@ -295,14 +340,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: df3d5dd74ee0328408c0b0787fa4caa0
-      internalID: 8040611597893383645
+      spriteID: c0cd7ab297f898945b457f17d4c50a3e
+      internalID: -8208175650763610702
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_7
+      name: BigPathsTileMap_C_7
       rect:
         serializedVersion: 2
         x: 1600
@@ -316,14 +361,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0eea51bd65ad45949826ec290183fa00
-      internalID: -3126421585095203595
+      spriteID: 9e123ca4487f71641be46fc30f239bd6
+      internalID: 3358200128487662396
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_8
+      name: BigPathsTileMap_C_8
       rect:
         serializedVersion: 2
         x: 2400
@@ -337,14 +382,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0a274a92066c22d4e8eaa6b18f032a7f
-      internalID: -556825781851316882
+      spriteID: 53e93bd8668a8e94ca40b7bea921754a
+      internalID: -1847529670593311714
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_9
+      name: BigPathsTileMap_C_9
       rect:
         serializedVersion: 2
         x: 3200
@@ -358,14 +403,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ebecbb61a179f7c4f9f858147bc41967
-      internalID: -5615299288025029362
+      spriteID: 4a98794a3e0c8f640adb772e510a9bd3
+      internalID: 7956334352791764724
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_10
+      name: BigPathsTileMap_C_10
       rect:
         serializedVersion: 2
         x: 0
@@ -379,14 +424,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e2c9aadc5b718b448a49de142480018d
-      internalID: 2908133836983233508
+      spriteID: f85f363121280a64590a657ed21a640a
+      internalID: -5634149794598406367
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_11
+      name: BigPathsTileMap_C_11
       rect:
         serializedVersion: 2
         x: 800
@@ -400,14 +445,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e53e3c99edeb34049a6be050087d9581
-      internalID: -6732238921143839084
+      spriteID: 1066c6e36cfc1d34f81e9383cf370d3a
+      internalID: -8171278008370267908
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_12
+      name: BigPathsTileMap_C_12
       rect:
         serializedVersion: 2
         x: 1600
@@ -421,14 +466,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b5441dac1fe6a534fb31083c3c959f09
-      internalID: 7416576382317126267
+      spriteID: 303336212a238324d9fcf58b682a2fad
+      internalID: 472271469706580990
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_13
+      name: BigPathsTileMap_C_13
       rect:
         serializedVersion: 2
         x: 2400
@@ -442,14 +487,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d832836d7c213fa42b3036587083c3d8
-      internalID: 4108245295320416531
+      spriteID: 0c6d1d789c2f83b4e8132330fba0d4c1
+      internalID: 179332653597403372
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigPathsTileMap_3_14
+      name: BigPathsTileMap_C_14
       rect:
         serializedVersion: 2
         x: 3200
@@ -463,8 +508,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 618e5a36c1337604cba600de79ed26eb
-      internalID: -508392647182439322
+      spriteID: fafdc3b97ffd81b459dea5a36e28cfa0
+      internalID: -7943507136831144117
       vertices: []
       indices: 
       edges: []

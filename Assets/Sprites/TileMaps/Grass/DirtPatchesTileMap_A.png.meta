@@ -152,6 +152,51 @@ TextureImporter:
   - first:
       213: 1603910710506877329
     second: DirtPatchesTileMap_49
+  - first:
+      213: 3555171239260000848
+    second: DirtPatchesTileMap_A_0
+  - first:
+      213: 6062812046988398238
+    second: DirtPatchesTileMap_A_1
+  - first:
+      213: -2196239103636329341
+    second: DirtPatchesTileMap_A_2
+  - first:
+      213: 7482100742315404770
+    second: DirtPatchesTileMap_A_3
+  - first:
+      213: 5549271321679833880
+    second: DirtPatchesTileMap_A_4
+  - first:
+      213: 2921280751378644942
+    second: DirtPatchesTileMap_A_5
+  - first:
+      213: -2952774014348524859
+    second: DirtPatchesTileMap_A_6
+  - first:
+      213: 5108221673591613143
+    second: DirtPatchesTileMap_A_7
+  - first:
+      213: 8210499983696953554
+    second: DirtPatchesTileMap_A_8
+  - first:
+      213: -3203323563118183935
+    second: DirtPatchesTileMap_A_9
+  - first:
+      213: 929316196750743687
+    second: DirtPatchesTileMap_A_10
+  - first:
+      213: -8906761009912263006
+    second: DirtPatchesTileMap_A_11
+  - first:
+      213: -1235383084893769893
+    second: DirtPatchesTileMap_A_12
+  - first:
+      213: 3698980506402623234
+    second: DirtPatchesTileMap_A_13
+  - first:
+      213: -2939247602762549891
+    second: DirtPatchesTileMap_A_14
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -236,7 +281,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: DirtPatchesTileMap_0
+      name: DirtPatchesTileMap_A_0
       rect:
         serializedVersion: 2
         x: 0
@@ -250,14 +295,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d0e684f45678968a0800000000000000
-      internalID: -6311364533591446003
+      spriteID: e74f17e23acf683458bfc2b55ce06fd3
+      internalID: 3555171239260000848
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_1
+      name: DirtPatchesTileMap_A_1
       rect:
         serializedVersion: 2
         x: 200
@@ -271,14 +316,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0c88b5a2a78f2a070800000000000000
-      internalID: 8116322682055395520
+      spriteID: 8dab99a4090d5f249836c0436b587a69
+      internalID: 6062812046988398238
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2
+      name: DirtPatchesTileMap_A_2
       rect:
         serializedVersion: 2
         x: 400
@@ -292,14 +337,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1fc3bf700f3b25d90800000000000000
-      internalID: -7110423018157163279
+      spriteID: 3680047404da9074e95ff63849d085b8
+      internalID: -2196239103636329341
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_3
+      name: DirtPatchesTileMap_A_3
       rect:
         serializedVersion: 2
         x: 600
@@ -313,14 +358,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 115a8386bb1772900800000000000000
-      internalID: 659620920154432785
+      spriteID: d323dd9b4cccab94bb0cc3d5820effd7
+      internalID: 7482100742315404770
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_4
+      name: DirtPatchesTileMap_A_4
       rect:
         serializedVersion: 2
         x: 800
@@ -334,14 +379,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c213c523d7f0657f0800000000000000
-      internalID: -624294467954003668
+      spriteID: ce820db2d5b2a9745b39f9d78fb31b35
+      internalID: 5549271321679833880
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_5
+      name: DirtPatchesTileMap_A_5
       rect:
         serializedVersion: 2
         x: 0
@@ -355,14 +400,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b3283d771539398f0800000000000000
-      internalID: -534921952614972869
+      spriteID: 27ed6346e3a49c84693a355dd1f1a267
+      internalID: 2921280751378644942
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_6
+      name: DirtPatchesTileMap_A_6
       rect:
         serializedVersion: 2
         x: 200
@@ -376,14 +421,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 679ecd4a95317ef90800000000000000
-      internalID: -6924544626319890058
+      spriteID: 97d37e796fb8ccb4cbc64270befabc8e
+      internalID: -2952774014348524859
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_7
+      name: DirtPatchesTileMap_A_7
       rect:
         serializedVersion: 2
         x: 400
@@ -397,14 +442,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e9e1ad4f4fc5f6980800000000000000
-      internalID: -8543507760948830562
+      spriteID: 6bb300fad6251f648a7aa88024bf95a4
+      internalID: 5108221673591613143
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_8
+      name: DirtPatchesTileMap_A_8
       rect:
         serializedVersion: 2
         x: 600
@@ -418,14 +463,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2c3552861cc339930800000000000000
-      internalID: 4148726483111990210
+      spriteID: 332b8678f789a2e4e8d17c883491c76c
+      internalID: 8210499983696953554
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_9
+      name: DirtPatchesTileMap_A_9
       rect:
         serializedVersion: 2
         x: 800
@@ -439,14 +484,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a20b4ea94b55936f0800000000000000
-      internalID: -704437632525619158
+      spriteID: b4e0698348eacd64895a0ed76d8a643f
+      internalID: -3203323563118183935
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_10
+      name: DirtPatchesTileMap_A_10
       rect:
         serializedVersion: 2
         x: 0
@@ -460,14 +505,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 52b18b3cd8d2c2a30800000000000000
-      internalID: 4191775440072350501
+      spriteID: d21e0b27ca792814c8a4f1dc85a5dd27
+      internalID: 929316196750743687
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_11
+      name: DirtPatchesTileMap_A_11
       rect:
         serializedVersion: 2
         x: 200
@@ -481,14 +526,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 376db43bbc89b3890800000000000000
-      internalID: -7477214755664701837
+      spriteID: 25b26ea92ab3eb34fa04637ca363ce4b
+      internalID: -8906761009912263006
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_12
+      name: DirtPatchesTileMap_A_12
       rect:
         serializedVersion: 2
         x: 400
@@ -502,14 +547,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aa4c718ea0f90a960800000000000000
-      internalID: 7611258239448499370
+      spriteID: b6ecdbc779ba0fe45a509e4fc81c8fa0
+      internalID: -1235383084893769893
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_13
+      name: DirtPatchesTileMap_A_13
       rect:
         serializedVersion: 2
         x: 600
@@ -523,14 +568,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 308f77723e9e1a710800000000000000
-      internalID: 1702899295951779843
+      spriteID: 769eecf7b7c94f64d957ef6249d61a43
+      internalID: 3698980506402623234
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_14
+      name: DirtPatchesTileMap_A_14
       rect:
         serializedVersion: 2
         x: 800
@@ -544,8 +589,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1252d664907db96c0800000000000000
-      internalID: -4135475397973433055
+      spriteID: b322eaec5843a5f4f9062e3c5bfced00
+      internalID: -2939247602762549891
       vertices: []
       indices: 
       edges: []

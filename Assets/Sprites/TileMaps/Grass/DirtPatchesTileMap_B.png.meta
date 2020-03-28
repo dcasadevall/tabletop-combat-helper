@@ -47,6 +47,51 @@ TextureImporter:
   - first:
       213: -873026931546048022
     second: DirtPatchesTileMap_2_14
+  - first:
+      213: -3776165505682019207
+    second: DirtPatchesTileMap_B_0
+  - first:
+      213: -4219296912580707745
+    second: DirtPatchesTileMap_B_1
+  - first:
+      213: 8121659019665707926
+    second: DirtPatchesTileMap_B_2
+  - first:
+      213: -3162005383920996928
+    second: DirtPatchesTileMap_B_3
+  - first:
+      213: 7644113396545736742
+    second: DirtPatchesTileMap_B_4
+  - first:
+      213: -8913352187137383977
+    second: DirtPatchesTileMap_B_5
+  - first:
+      213: -3419470205451388313
+    second: DirtPatchesTileMap_B_6
+  - first:
+      213: -4865075614227077661
+    second: DirtPatchesTileMap_B_7
+  - first:
+      213: -237482153117400378
+    second: DirtPatchesTileMap_B_8
+  - first:
+      213: 4902180207338567367
+    second: DirtPatchesTileMap_B_9
+  - first:
+      213: 7015359421778509710
+    second: DirtPatchesTileMap_B_10
+  - first:
+      213: 3554969865347925465
+    second: DirtPatchesTileMap_B_11
+  - first:
+      213: 7705656843864290185
+    second: DirtPatchesTileMap_B_12
+  - first:
+      213: 38926054246738085
+    second: DirtPatchesTileMap_B_13
+  - first:
+      213: -4816548964382424915
+    second: DirtPatchesTileMap_B_14
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -127,11 +172,35 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_0
+      name: DirtPatchesTileMap_B_0
       rect:
         serializedVersion: 2
         x: 0
@@ -145,14 +214,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ecc0ade986b67b500800000000000000
-      internalID: 411915988013550798
+      spriteID: 46dc836cefa83a64aadf939bafbc6826
+      internalID: -3776165505682019207
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_1
+      name: DirtPatchesTileMap_B_1
       rect:
         serializedVersion: 2
         x: 200
@@ -166,14 +235,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5512a6888e3ccf5f0800000000000000
-      internalID: -721486436797636267
+      spriteID: fd4cad0b8dcf67a48bc72f099530519f
+      internalID: -4219296912580707745
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_2
+      name: DirtPatchesTileMap_B_2
       rect:
         serializedVersion: 2
         x: 400
@@ -187,14 +256,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c2434216e65cae10800000000000000
-      internalID: 2210237063280935620
+      spriteID: a8f671c0ff920a24bb64ad7fed18ff7a
+      internalID: 8121659019665707926
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_3
+      name: DirtPatchesTileMap_B_3
       rect:
         serializedVersion: 2
         x: 600
@@ -208,14 +277,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8da96fb0b32df82a0800000000000000
-      internalID: -6732931766849987880
+      spriteID: 3d71349925e609b40a5ef1b38521208d
+      internalID: -3162005383920996928
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_4
+      name: DirtPatchesTileMap_B_4
       rect:
         serializedVersion: 2
         x: 800
@@ -229,14 +298,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c8b77c59a07c2210800000000000000
-      internalID: 1309545464361105604
+      spriteID: 22d52fd99739a2c439df353b5d41eebd
+      internalID: 7644113396545736742
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_5
+      name: DirtPatchesTileMap_B_5
       rect:
         serializedVersion: 2
         x: 0
@@ -250,14 +319,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2a86b9779860781c0800000000000000
-      internalID: -4501622115046561630
+      spriteID: dcd4ec59f49d1f44b9247bdbaff9bc5c
+      internalID: -8913352187137383977
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_6
+      name: DirtPatchesTileMap_B_6
       rect:
         serializedVersion: 2
         x: 200
@@ -271,14 +340,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4d345501b78a66a30800000000000000
-      internalID: 4208236148332774356
+      spriteID: 2d8e21f1a311d824c9240802657d87ac
+      internalID: -3419470205451388313
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_7
+      name: DirtPatchesTileMap_B_7
       rect:
         serializedVersion: 2
         x: 400
@@ -292,14 +361,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 77a3efee2c8ac3de0800000000000000
-      internalID: -1352020232931231113
+      spriteID: 37b3171cd4a7bf846bafb24ca77e7264
+      internalID: -4865075614227077661
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_8
+      name: DirtPatchesTileMap_B_8
       rect:
         serializedVersion: 2
         x: 600
@@ -313,14 +382,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aca78d81a1f865b10800000000000000
-      internalID: 1969919229269932746
+      spriteID: ae9321cff683a9b4e93076b0e3410e09
+      internalID: -237482153117400378
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_9
+      name: DirtPatchesTileMap_B_9
       rect:
         serializedVersion: 2
         x: 800
@@ -334,14 +403,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: edd2d642475440490800000000000000
-      internalID: -7781017891059716642
+      spriteID: 1dcd9f64aa5ba1f49b21fc7dcf38754d
+      internalID: 4902180207338567367
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_10
+      name: DirtPatchesTileMap_B_10
       rect:
         serializedVersion: 2
         x: 0
@@ -355,14 +424,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3ae958aef96c96050800000000000000
-      internalID: 5794380785725578915
+      spriteID: 665a46d52ee5e934d9768cd321705597
+      internalID: 7015359421778509710
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_11
+      name: DirtPatchesTileMap_B_11
       rect:
         serializedVersion: 2
         x: 200
@@ -376,14 +445,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 22d7396222422b480800000000000000
-      internalID: -8884999385753879262
+      spriteID: 23bb4d59c976b4f409635aa56b0037b8
+      internalID: 3554969865347925465
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_12
+      name: DirtPatchesTileMap_B_12
       rect:
         serializedVersion: 2
         x: 400
@@ -397,14 +466,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f7a6d70b6fd96e160800000000000000
-      internalID: 7054499549170985599
+      spriteID: 4e78a5c98b0c6be4ab373bf1156a84b9
+      internalID: 7705656843864290185
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_13
+      name: DirtPatchesTileMap_B_13
       rect:
         serializedVersion: 2
         x: 600
@@ -418,14 +487,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7a8f3b7c2b6ab5940800000000000000
-      internalID: 5286001874434259111
+      spriteID: 6414b3c6ed1d1a64e87bd620c10d9fa8
+      internalID: 38926054246738085
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DirtPatchesTileMap_2_14
+      name: DirtPatchesTileMap_B_14
       rect:
         serializedVersion: 2
         x: 800
@@ -439,8 +508,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ae939d991a262e3f0800000000000000
-      internalID: -873026931546048022
+      spriteID: a63262311182cd444889cec69105ffc7
+      internalID: -4816548964382424915
       vertices: []
       indices: 
       edges: []
