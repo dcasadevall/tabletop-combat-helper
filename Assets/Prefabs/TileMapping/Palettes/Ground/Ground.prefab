@@ -53,7 +53,7 @@ Tilemap:
   - first: {x: -1, y: 0, z: 0}
     second:
       m_TileIndex: 20
-      m_TileSpriteIndex: 4294967295
+      m_TileSpriteIndex: 19
       m_TileMatrixIndex: 0
       m_TileColorIndex: 1
       m_ObjectToInstantiate: {fileID: 0}
@@ -135,7 +135,7 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 9230b62be36ec7148935b5bc9c1bb242, type: 2}
   - m_RefCount: 1
-    m_Data: {fileID: 11400000, guid: 6751160992ca71540aa8bbb6a9c1429b, type: 2}
+    m_Data: {fileID: 11400000, guid: 93ecc4d72c02eb94e8c479381e2370ce, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
@@ -175,8 +175,9 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 3508905333847659170, guid: 8e7768db9ec6574459088fe78be793b6,
+      type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 21300000, guid: 2233daf60b620ad49a888eac4d8fd6ba, type: 3}
   - m_RefCount: 1
@@ -186,7 +187,7 @@ Tilemap:
     m_Data: {fileID: 8702878065478777071, guid: 132aebb7156f95b4f9c9623f13c307fb,
       type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -1221288945770435351, guid: 7b4d3d8466195b2479f5b85eb3f93754,
+    m_Data: {fileID: 7090450515865248299, guid: dedc5566c21fbe94189d71b13c8c0b5c,
       type: 3}
   m_TileMatrixArray:
   - m_RefCount: 4
@@ -227,7 +228,7 @@ Tilemap:
       e33: 1
   m_TileColorArray:
   - m_RefCount: 0
-    m_Data: {r: 5.871002, g: 5.871002, b: 5.871002, a: 5.871002}
+    m_Data: {r: 0, g: 0, b: 0, a: 0}
   - m_RefCount: 5
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_AnimationFrameRate: 1
@@ -292,7 +293,7 @@ TilemapRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 1.5, y: 1.5003257, z: 0}
+  m_ChunkCullingBounds: {x: 1.5, y: 1.5, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -339,7 +340,7 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8858588654089437470}
   m_Enabled: 1
-  m_CellSize: {x: 4, y: 4.0006514, z: 0}
+  m_CellSize: {x: 4, y: 4, z: 0}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
