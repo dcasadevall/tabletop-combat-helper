@@ -1,13 +1,14 @@
 ﻿using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
 #if UNITY_EDITOR
-using UnityEditor;
+
 #endif
 
-namespace Tiles
+namespace Grid.Tiles
 {
     /// <summary>
     /// Terrain Tiles with a random pool. Takes into consideration the surrounding tiles to

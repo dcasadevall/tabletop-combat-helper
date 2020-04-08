@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 #endif
 
-namespace Tiles {
+namespace Grid.Tiles {
     /// <summary>
     /// Random Tiles are tiles which pseudo-randomly pick a sprite from a given list of sprites and a target location, and displays that sprite.
     /// The Sprite displayed for the Tile is randomized based on its location and will be fixed for that particular location.
