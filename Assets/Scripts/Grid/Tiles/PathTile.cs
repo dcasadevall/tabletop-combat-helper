@@ -7,8 +7,8 @@ namespace Grid.Tiles {
     /// like a cliff, or where there's a direction, like a river. The difference with a terrain tile
     /// is that this path has directionality, and has to be drawn from a beginning to an end.
     /// </summary>
-    public class PathTile : MonoBehaviour
-    {
+    public class PathTile : MonoBehaviour {
+        [SerializeField] public SpriteArray[] spritePools;
         
     }
 }
