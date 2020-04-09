@@ -14,7 +14,7 @@ namespace Grid.Tiles {
             }
         }
         
-        private SpritePoolArrayEditorGUI _spritePoolArrayEditorGUI;
+        private SpritePoolArrayEditorGUI _spritePoolArrayEditorGui;
         private readonly String[] _labels = {
             "Filled",
             "Three Sides",
@@ -49,12 +49,12 @@ namespace Grid.Tiles {
                 Tile.spritePools = new SpriteArray[kSpritePoolsLength];
                 EditorUtility.SetDirty(Tile);
             }
-            _spritePoolArrayEditorGUI = new SpritePoolArrayEditorGUI(kSpritePoolsLength, _labels, Tile.spritePools, kHelpBoxMessage);
+            _spritePoolArrayEditorGui = new SpritePoolArrayEditorGUI(kSpritePoolsLength, _labels, Tile.spritePools, kHelpBoxMessage);
         }
 
         public override void OnInspectorGUI() {
             EditorGUI.BeginChangeCheck();
-            _spritePoolArrayEditorGUI.DrawGUI();
+            _spritePoolArrayEditorGui.DrawGUI();
             if (EditorGUI.EndChangeCheck())
                 EditorUtility.SetDirty(Tile);
         }

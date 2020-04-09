@@ -1,12 +1,10 @@
 ﻿using System;
 using UnityEditor;
-using Utils.Editor;
 using Utils.Editor.Widgets;
-
 
 namespace Grid.Tiles {
     [CustomEditor(typeof(PathTile))]
-    public class PathTileEditor : Editor {
+    public class PathTileEditor : UnityEditor.Editor {
         private const int kSpritePoolsLength = 6;
         private PathTile Tile {
             get {
@@ -14,7 +12,7 @@ namespace Grid.Tiles {
             }
         }
 
-        private SpritePoolArrayEditorGUI _spritePoolArrayEditorGUI;
+        private SpritePoolArrayEditorGUI _spritePoolArrayEditorGui;
         private readonly String[] _labels = {
             "Single",
             "Start",
@@ -35,12 +33,12 @@ namespace Grid.Tiles {
                 Tile.spritePools = new SpriteArray[kSpritePoolsLength];
                 EditorUtility.SetDirty(Tile);
             }
-            _spritePoolArrayEditorGUI = new SpritePoolArrayEditorGUI(kSpritePoolsLength, _labels, Tile.spritePools, kHelpBoxMessage);
+            _spritePoolArrayEditorGui = new SpritePoolArrayEditorGUI(kSpritePoolsLength, _labels, Tile.spritePools, kHelpBoxMessage);
         }
 
         public override void OnInspectorGUI() {
             EditorGUI.BeginChangeCheck();
-            _spritePoolArrayEditorGUI.DrawGUI();
+            _spritePoolArrayEditorGui.DrawGUI();
             if (EditorGUI.EndChangeCheck())
                 EditorUtility.SetDirty(Tile);
         }
