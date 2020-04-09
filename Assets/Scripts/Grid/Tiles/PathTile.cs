@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Grid.Tiles {
     /// <summary>
@@ -7,7 +9,9 @@ namespace Grid.Tiles {
     /// like a cliff, or where there's a direction, like a river. The difference with a terrain tile
     /// is that this path has directionality, and has to be drawn from a beginning to an end.
     /// </summary>
-    public class PathTile : MonoBehaviour {
+    [Serializable]
+    [CreateAssetMenu(fileName = "New Path Tile", menuName = "Tiles/Path Tile")]
+    public class PathTile : TileBase {
         [SerializeField] public SpriteArray[] spritePools;
         
     }
