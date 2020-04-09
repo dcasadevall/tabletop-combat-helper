@@ -13,9 +13,15 @@ MonoBehaviour:
   m_Name: PathTest
   m_EditorClassIdentifier: 
   spritePools:
-  - spriteArray: []
-  - spriteArray: []
-  - spriteArray: []
-  - spriteArray: []
-  - spriteArray: []
-  - spriteArray: []
+  - spriteArray:
+    - {fileID: 2484270007136899065, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: -3026474631076067886, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: 5897378372747841400, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: 5853726148438546411, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: -8657631330153344352, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: -5417565798273137260, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
