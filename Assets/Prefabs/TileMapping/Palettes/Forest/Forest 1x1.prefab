@@ -41,11 +41,20 @@ Tilemap:
   m_GameObject: {fileID: 7815606968824972768}
   m_Enabled: 1
   m_Tiles:
-  - first: {x: 2, y: 0, z: 0}
+  - first: {x: -2, y: 3, z: 0}
     second:
       m_TileIndex: 23
       m_TileSpriteIndex: 23
       m_TileMatrixIndex: 1
+      m_TileColorIndex: 1
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 3
+      m_ColliderType: 1
+  - first: {x: -1, y: 3, z: 0}
+    second:
+      m_TileIndex: 22
+      m_TileSpriteIndex: 22
+      m_TileMatrixIndex: 0
       m_TileColorIndex: 1
       m_ObjectToInstantiate: {fileID: 0}
       m_TileFlags: 3
@@ -96,8 +105,8 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 4364c135ecd83944b970e8b53910b9f0, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 8feac923fbfa3914d9012681a046872c, type: 2}
   m_TileSpriteArray:
@@ -145,30 +154,30 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
   - m_RefCount: 1
-    m_Data: {fileID: -7773873283771418686, guid: f0f03814462ae9347b6114cab4ea55e1,
+    m_Data: {fileID: 21300000, guid: 2233daf60b620ad49a888eac4d8fd6ba, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: -7384631563771189671, guid: 53673ffec1e4d8141a396e3a027605d3,
       type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 0
+  - m_RefCount: 1
     m_Data:
-      e00: -2.7598475e-14
-      e01: 0
+      e00: 1
+      e01: -0
       e02: 0
-      e03: -1.6199979e+13
-      e10: 7.92e-43
-      e11: 0
+      e03: 0
+      e10: 0
+      e11: -1
       e12: 0
-      e13: 4.5905e-41
+      e13: 0
       e20: 0
-      e21: 0
-      e22: -2.894093e+31
+      e21: -0
+      e22: 1
       e23: 0
       e30: 0
       e31: 0
-      e32: 7.92e-43
-      e33: 0
+      e32: 0
+      e33: 1
   - m_RefCount: 1
     m_Data:
       e00: 1
@@ -190,7 +199,7 @@ Tilemap:
   m_TileColorArray:
   - m_RefCount: 0
     m_Data: {r: -2.8171376e+31, g: -2.8171376e+31, b: -2.8171376e+31, a: -2.8171376e+31}
-  - m_RefCount: 1
+  - m_RefCount: 2
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -272,7 +281,7 @@ GameObject:
   - component: {fileID: 3135942034374061801}
   - component: {fileID: 3001007511171336757}
   m_Layer: 31
-  m_Name: Forest
+  m_Name: Forest 1x1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -317,4 +326,4 @@ MonoBehaviour:
   m_Script: {fileID: 12395, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: Palette Settings
   m_EditorClassIdentifier: 
-  cellSizing: 0
+  cellSizing: 100
