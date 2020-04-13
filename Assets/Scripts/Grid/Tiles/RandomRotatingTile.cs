@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Utils.DataStructures;
 using Random = UnityEngine.Random;
 #if UNITY_EDITOR
 
@@ -21,7 +22,7 @@ namespace Grid.Tiles {
         /// <summary>
         /// Determines if the weighted random should be applied;
         /// </summary>
-        [SerializeField] public bool weightedRandom = false;
+        [SerializeField] public bool weightedRandomEnabled = false;
         
         /// <summary>
         /// If random rotation is applied to the sprite
@@ -43,7 +44,7 @@ namespace Grid.Tiles {
         /// <summary>
         /// The Sprites used for randomizing output.
         /// </summary>
-        [SerializeField] public Sprite[] m_Sprites;
+        [SerializeField] public WeightedSprite[] weightedSprites;
 
         /// <summary>
         /// Retrieves any tile rendering data from the scripted tile.
@@ -57,7 +58,7 @@ namespace Grid.Tiles {
             tileData.transform = Matrix4x4.identity;
             tileData.color = Color.white;
             
-            if ((m_Sprites != null) && (m_Sprites.Length > 0)) {
+            if ((weightedSprites != null) && (weightedSprites.Length > 0)) {
                 long hash = location.x;
                 hash = (hash + 0xabcd1234) + (hash << 15);
                 hash = (hash + 0x0987efab) ^ (hash >> 11);
@@ -66,9 +67,24 @@ namespace Grid.Tiles {
                 hash = (hash + 0xbe9730af) ^ (hash << 11);
                 var oldState = Random.state;
                 Random.InitState((int) hash);
-                tileData.sprite = m_Sprites[(int) (m_Sprites.Length * Random.value)];
 
-                
+                if (weightedRandomEnabled) {
+                    // Get the cumulative weight of the sprites
+                    var cumulativeWeight = 0;
+                    foreach (var spriteInfo in weightedSprites) cumulativeWeight += spriteInfo.Weight;
+
+                    // Pick a random weight and choose a sprite depending on it
+                    var randomWeight = Random.Range(0, cumulativeWeight);
+                    foreach (var spriteInfo in weightedSprites) {
+                        randomWeight -= spriteInfo.Weight;
+                        if (randomWeight < 0) {
+                            tileData.sprite = spriteInfo.Sprite;    
+                            break;
+                        }
+                    }
+                } else {
+                    tileData.sprite = weightedSprites[(int) (weightedSprites.Length * Random.value)].Sprite;
+                }
                 
                 Quaternion rotation = Quaternion.identity;
                 if (randomRotationEnabled) {
@@ -122,65 +138,6 @@ namespace Grid.Tiles {
     }
 
 #if UNITY_EDITOR
-    [CustomEditor(typeof(RandomRotatingTile))]
-    public class RandomTileEditor : Editor {
-        private SerializedProperty m_Color;
-        private SerializedProperty m_ColliderType;
-
-        private RandomRotatingTile Tile {
-            get {
-                return (target as RandomRotatingTile);
-            }
-        }
-
-        public void OnEnable() {
-            m_Color = serializedObject.FindProperty("m_Color");
-            m_ColliderType = serializedObject.FindProperty("m_ColliderType");
-        }
-
-        public override void OnInspectorGUI() {
-            serializedObject.Update();
-
-            EditorGUI.BeginChangeCheck();
-
-            Tile.randomRotationEnabled = EditorGUILayout.Toggle("Random Rotation", Tile.randomRotationEnabled);
-            if (Tile.randomRotationEnabled) {
-                Tile.rotationIntervals = EditorGUILayout.FloatField("Rotation Intervals", Tile.rotationIntervals);
-            }
-            Tile.randomFlippingEnabled = EditorGUILayout.Toggle("Random Flip", Tile.randomFlippingEnabled);
-            
-            int count = EditorGUILayout.DelayedIntField("Number of Sprites",
-                Tile.m_Sprites != null ? Tile.m_Sprites.Length : 0);
-            if (count < 0)
-                count = 0;
-            if (Tile.m_Sprites == null || Tile.m_Sprites.Length != count) {
-                Array.Resize<Sprite>(ref Tile.m_Sprites, count);
-            }
-
-            if (count == 0)
-                return;
-
-            EditorGUILayout.LabelField("Place random sprites.");
-            EditorGUILayout.Space();
-
-            for (int i = 0; i < count; i++) {
-                Tile.m_Sprites[i] = (Sprite) EditorGUILayout.ObjectField("Sprite " + (i + 1),
-                    Tile.m_Sprites[i],
-                    typeof(Sprite),
-                    false,
-                    null);
-            }
-
-            EditorGUILayout.Space();
-
-            EditorGUILayout.PropertyField(m_Color);
-            EditorGUILayout.PropertyField(m_ColliderType);
-
-            if (EditorGUI.EndChangeCheck()) {
-                EditorUtility.SetDirty(Tile);
-                serializedObject.ApplyModifiedProperties();
-            }
-        }
-    }
+    
 #endif
 }
