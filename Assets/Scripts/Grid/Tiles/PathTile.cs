@@ -13,10 +13,15 @@ namespace Grid.Tiles {
     [CreateAssetMenu(fileName = "New Path Tile", menuName = "Tiles/Path Tile")]
     public class PathTile : TileBase {
         [SerializeField] public SpriteArray[] spritePools;
-
+        public Vector3Int? PreviousPathTilePosition { get; set; }
+        
         public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData) {
             base.GetTileData(position, tilemap, ref tileData);
-            tileData.sprite = spritePools[0].spriteArray[0];
+            if (PreviousPathTilePosition == null) {
+                tileData.sprite = spritePools[0].spriteArray[0];
+            } else {
+                Debug.Log(PreviousPathTilePosition.ToString());
+            }
         }
     }
 }
