@@ -3,12 +3,12 @@ using UnityEditor;
 using Utils.Editor.Widgets;
 
 namespace Grid.Tiles {
-    [CustomEditor(typeof(PathTile))]
+    [CustomEditor(typeof(PathTile.PathTile))]
     public class PathTileEditor : UnityEditor.Editor {
         private const int kSpritePoolsLength = 6;
-        private PathTile Tile {
+        private PathTile.PathTile Tile {
             get {
-                return (target as PathTile);
+                return (target as PathTile.PathTile);
             }
         }
 
