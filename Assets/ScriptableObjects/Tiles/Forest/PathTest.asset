@@ -25,3 +25,17 @@ MonoBehaviour:
     - {fileID: -8657631330153344352, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
   - spriteArray:
     - {fileID: -5417565798273137260, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: -4323927188141313929, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: 4038359012556142880, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: -7007145440338919736, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: 1841750644339504454, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: 4471889066359110720, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: -4226414357391406074, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: 310572764684274963, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}

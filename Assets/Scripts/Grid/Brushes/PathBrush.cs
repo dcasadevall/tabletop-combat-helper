@@ -80,6 +80,7 @@ namespace Grid.Brushes {
             } else {
                 _currentTilemap = tilemap;
                 _currentPathTyle = pathTyle;
+                //TODO: Alberto: Use interceptors at some point?
                 _currentPath = GetPathOnTile(tilemap, position, true);
                 isDrawing = true;
             }

@@ -5,7 +5,7 @@ using Utils.Editor.Widgets;
 namespace Grid.Tiles {
     [CustomEditor(typeof(PathTile.PathTile))]
     public class PathTileEditor : UnityEditor.Editor {
-        private const int kSpritePoolsLength = 6;
+        private const int kSpritePoolsLength = 13;
         private PathTile.PathTile Tile {
             get {
                 return (target as PathTile.PathTile);
@@ -18,8 +18,15 @@ namespace Grid.Tiles {
             "Start",
             "End",
             "Straight",
-            "90 turn right",
-            "90 turn left"
+            "turn right",
+            "turn left",
+            "Diagonal",
+            "Half turn right",
+            "Half turn left",
+            "Right diagonal down",
+            "Left diagonal down",
+            "Corner right side",
+            "Corner left side"
         };
         
         private const string kHelpBoxMessage = "Set which Sprite is shown based on the position of the" +
