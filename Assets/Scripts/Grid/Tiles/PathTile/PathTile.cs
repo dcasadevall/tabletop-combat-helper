@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Quaternion = UnityEngine.Quaternion;
@@ -16,17 +17,84 @@ namespace Grid.Tiles.PathTile {
     public class PathTile : TileBase {
         [SerializeField] public SpriteArray[] spritePools;
         
-        public Path CurrentPath { get; set;}
-
         public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData) {
             base.GetTileData(position, tilemap, ref tileData);
 
-//            UpdatePathTypeAndRotation(position);
+            Path currentPath = GetCurrentPath(tilemap, position);
+            if (currentPath == null) {
+                tileData.sprite = spritePools[0].spriteArray[0];
+                return;
+            }
 
-//            PathType pathType = GetPathType();
-//            Debug.Log($"PathType value {(int) _pathType}");
-            tileData.sprite = spritePools[0].spriteArray[0];
-//            tileData.flags = TileFlags.LockTransform;
+            PathLink link = currentPath.GetLink(position);
+            PathLink prevLink = currentPath.GetPrevLink(position);
+            PathLink nextLink = currentPath.GetNextLink(position);
+
+            PathType pathType = GetPathType(link, prevLink, nextLink);
+            link.PathType = pathType;
+            tileData.sprite = spritePools[(int) pathType].spriteArray[0];
+
+            float angle = GetRotation(link, prevLink, nextLink);
+            link.RotationAngle = angle;
+            Quaternion rotation = Quaternion.Euler(0, 0, angle);
+            tileData.transform = Matrix4x4.TRS(Vector3.zero, rotation, Vector3.one);
+
+            tileData.flags = TileFlags.LockTransform;
+        }
+
+        private float GetRotation(PathLink link, PathLink prevLink, PathLink nextLink) {
+            if (prevLink == null && nextLink == null) {
+                return 0;
+            }
+
+            if (prevLink == null) {
+                Vector3Int directionToNext = nextLink.Position - link.Position;
+                return Vector3.SignedAngle(Vector3.down, directionToNext, Vector3.forward);
+            }
+
+            Vector3Int directionFromPrev = link.Position - prevLink.Position;
+            return Vector3.SignedAngle(Vector3.down, directionFromPrev, Vector3.forward);
+        }
+
+        private Path GetCurrentPath(ITilemap tilemap, Vector3Int position) {
+            Path[] paths = tilemap.GetComponent<Transform>().GetComponentsInChildren<Path>();
+            foreach (Path path in paths) {
+                if (path.ContainsTile(position)) {
+                    return path;
+                }
+            }
+            return null;
+        }
+
+        private PathType GetPathType(PathLink link, PathLink prevLink, PathLink nextLink) {
+            
+            if (prevLink == null && nextLink == null) {
+                return PathType.Single;
+            }
+            if (prevLink == null) {
+                return PathType.Start;
+            }
+            if (nextLink == null) {
+                return PathType.End;
+            }
+            
+            Vector3Int directionFromPrev = prevLink.Position - link.Position;
+            Vector3Int directionToNext = link.Position - nextLink.Position;
+            float angle = Vector3.SignedAngle(directionFromPrev, directionToNext, Vector3.forward);
+
+            switch (angle) {
+                case 0:
+                    return PathType.Straight;
+                case 45:
+                    return PathType.HalfTurnRight;
+                case 90:
+                    return PathType.TurnRight;
+                case -45:
+                    return PathType.HalfTurnLeft;
+                case -90:
+                    return PathType.TurnLeft;
+            }
+            return PathType.Single;
         }
 
 //        private void UpdatePathTypeAndRotation(Vector3 position) {
@@ -80,15 +148,5 @@ namespace Grid.Tiles.PathTile {
 //                return;
 //            }
 //        }
-
-        private Vector3 ConvertToNonNullableVector3(Vector3? nullableVector3) {
-            if (nullableVector3 == null) {
-                throw new Exception();
-            }
-
-            return new Vector3(nullableVector3.GetValueOrDefault().x,
-                nullableVector3.GetValueOrDefault().y,
-                nullableVector3.GetValueOrDefault().z);
-        }
     }
 }

@@ -6,50 +6,66 @@ using UnityEngine.Tilemaps;
 
 namespace Grid.Tiles.PathTile {
     public class Path : MonoBehaviour {
-        
-        public LinkedList<PathLink> PathLinks { get; private set; }
-        public Dictionary<Vector3Int, LinkedListNode<PathLink>> PathLinkMap { get; private set; }
+        public int Length {
+            get {
+                return _pathLinkMap.Count;
+            }
+        }
+        private Dictionary<Vector3Int, LinkedListNode<PathLink>> _pathLinkMap;
+        private LinkedList<PathLink> _pathLinks;
 
-        public void Awake() {
-            PathLinks = new LinkedList<PathLink>();
-            PathLinkMap = new Dictionary<Vector3Int, LinkedListNode<PathLink>>();
+        public void Init() {
+            _pathLinks = new LinkedList<PathLink>();
+            _pathLinkMap = new Dictionary<Vector3Int, LinkedListNode<PathLink>>();
         }
 
         public void AddLastLink(Vector3Int pos) {
-            var node = PathLinks.AddLast(new PathLink());
-            PathLinkMap.Add(pos, node);
+            if (_pathLinkMap.ContainsKey(pos)) {
+                return;
+            }
+            var node = _pathLinks.AddLast(new PathLink(pos));
+            _pathLinkMap.Add(pos, node);
         }
 
         public void RemoveLink(Vector3Int pos) {
-            var node = PathLinkMap[pos];
-            PathLinks.Remove(node);
-            PathLinkMap.Remove(pos);
+            var node = _pathLinkMap[pos];
+            _pathLinks.Remove(node);
+            _pathLinkMap.Remove(pos);
+            if (_pathLinkMap.Count == 0) {
+                DestroyImmediate(gameObject);
+            }
         }
-
+        
         public PathLink GetLastLink() {
-            return PathLinks.Last?.Value;
+            return _pathLinks.Last?.Value;
         }
 
         public PathLink GetLink(Vector3Int pos) {
-            return PathLinkMap[pos]?.Value;
+            return _pathLinkMap[pos]?.Value;
         }
 
         public PathLink GetPrevLink(Vector3Int pos) {
-            return PathLinkMap[pos].Previous?.Value;
+            return _pathLinkMap[pos].Previous?.Value;
         }
 
         public PathLink GetNextLink(Vector3Int pos) {
-            return PathLinkMap[pos].Next?.Value;
+            return _pathLinkMap[pos].Next?.Value;
         }
 
         public bool ContainsTile(Vector3Int pos) {
-            return PathLinkMap.ContainsKey(pos);
+            return _pathLinkMap.ContainsKey(pos);
         }
     }
 
+    // TODO: Alberto: should be mutable?
     public class PathLink {
         public PathType PathType = PathType.Single;
+        public Vector3Int Position;
         public Vector3Int Direction = Vector3Int.zero;
-        public float Rotation = 0f;
+        public float RotationAngle = 0f;
+
+        public PathLink(Vector3Int position) {
+            Position = position;
+        }
     }
 }
