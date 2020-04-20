@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Utils.Enums;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
@@ -22,7 +22,8 @@ namespace Grid.Tiles.PathTile {
 
             Path currentPath = GetCurrentPath(tilemap, position);
             if (currentPath == null) {
-                tileData.sprite = spritePools[0].spriteArray[0];
+                if (spritePools.Length == 0) return;
+                tileData.sprite = spritePools[0].spriteArray?[0];
                 return;
             }
 

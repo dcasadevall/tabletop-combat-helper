@@ -5,7 +5,7 @@ using Utils.Editor.Widgets;
 namespace Grid.Tiles {
     [CustomEditor(typeof(PathTile.PathTile))]
     public class PathTileEditor : UnityEditor.Editor {
-        private const int kSpritePoolsLength = 13;
+        private const int kSpritePoolsLength = 15;
         private PathTile.PathTile Tile {
             get {
                 return (target as PathTile.PathTile);
@@ -20,6 +20,8 @@ namespace Grid.Tiles {
             "Straight",
             "turn right",
             "turn left",
+            "Diagonal start",
+            "Diagonal end",
             "Diagonal",
             "Half turn right",
             "Half turn left",

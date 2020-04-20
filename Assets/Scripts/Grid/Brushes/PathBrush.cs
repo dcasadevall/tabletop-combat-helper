@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using Grid.Tiles;
 using Grid.Tiles.PathTile;
-using UnityEditor;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -59,6 +57,8 @@ namespace Grid.Brushes {
             }
 
             TileBase tile = cells[0].tile;
+            if (tile == null) return;
+            
             if (tile.GetType() != typeof(PathTile)) {
                 base.Paint(gridLayout, brushTarget, position);
                 return;
@@ -136,19 +136,15 @@ namespace Grid.Brushes {
                 }
             }
             if (currentPath == null && shouldCreate) {
+                //TODO: Alberto: Use zenject
                 Path path = new GameObject().AddComponent<Path>();
-                //TODO: Alberto: Use zenject?
-                currentPath = Instantiate(path, tilemap.transform);
-                currentPath.gameObject.name = _currentPathTyle.name;
-                currentPath.Init();
-                currentPath.AddLastLink(position);
+                path.transform.SetParent(tilemap.transform);
+                path.gameObject.name = _currentPathTyle.name;
+                path.Init();
+                path.AddLastLink(position);
+                currentPath = path;
             }
             return currentPath;
-        }
-
-        private Vector3Int GetLinkDirection(PathLink link) {
-            Vector3 direction = Quaternion.Euler(0, 0, link.RotationAngle) * Vector3.down;
-            return Vector3Int.RoundToInt(direction);
         }
 
         private List<Vector3Int> GetAllowedNextPositions(Vector3Int position, Path path) {

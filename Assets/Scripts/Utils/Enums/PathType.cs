@@ -1,19 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public enum PathType {
-    Single,
-    Start,
-    End,
-    Straight,
-    TurnRight,
-    TurnLeft,
-    Diagonal,
-    HalfTurnRight,
-    HalfTurnLeft,
-    RightDiagonalDown,
-    LeftDiagonalDown,
-    CornerRightSide,
-    CornerLeftSide
+﻿namespace Utils.Enums {
+    public enum PathType {
+        Single,
+        Start,
+        End,
+        Straight,
+        TurnRight,
+        TurnLeft,
+        DiagonalStart,
+        DiagonalEnd,
+        Diagonal,
+        HalfTurnRight,
+        HalfTurnLeft,
+        RightDiagonalDown,
+        LeftDiagonalDown,
+        CornerRightSide,
+        CornerLeftSide
+    }
 }
