@@ -39,3 +39,7 @@ MonoBehaviour:
     - {fileID: -4226414357391406074, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
   - spriteArray:
     - {fileID: 310572764684274963, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: -7393889475161657956, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
+  - spriteArray:
+    - {fileID: -7553318735015977651, guid: c8e3bc556331c0e4ca551a9c62fcd2ca, type: 3}
