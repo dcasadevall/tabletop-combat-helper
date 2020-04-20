@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.ResourceManagement.Util;
-using UnityEngine.Tilemaps;
+using Utils.Enums;
 
 namespace Grid.Tiles.PathTile {
     public class Path : MonoBehaviour {
