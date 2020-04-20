@@ -5,6 +5,7 @@ using UnityEngine;
 using Utils.Enums;
 
 namespace Grid.Tiles.PathTile {
+    [Serializable]
     public class Path : MonoBehaviour {
         
         [Serializable]
@@ -12,32 +13,33 @@ namespace Grid.Tiles.PathTile {
 
         public int Length {
             get {
-                return _pathLinkMap.Count;
+                return pathLinkMap.Count;
             }
         }
 
-        private LinksDictionary _pathLinkMap;
+        [SerializeField]
+        private LinksDictionary pathLinkMap;
         private LinkedList<PathLink> _pathLinks;
 
         public void Init() {
             _pathLinks = new LinkedList<PathLink>();
-            _pathLinkMap = new LinksDictionary();
+            pathLinkMap = new LinksDictionary();
         }
 
         public void AddLastLink(Vector3Int pos) {
-            if (_pathLinkMap.ContainsKey(pos)) {
+            if (pathLinkMap.ContainsKey(pos)) {
                 return;
             }
 
             var node = _pathLinks.AddLast(new PathLink(pos));
-            _pathLinkMap.Add(pos, node);
+            pathLinkMap.Add(pos, node);
         }
 
         public void RemoveLink(Vector3Int pos) {
-            var node = _pathLinkMap[pos];
+            var node = pathLinkMap[pos];
             _pathLinks.Remove(node);
-            _pathLinkMap.Remove(pos);
-            if (_pathLinkMap.Count == 0) {
+            pathLinkMap.Remove(pos);
+            if (pathLinkMap.Count == 0) {
                 DestroyImmediate(gameObject);
             }
         }
@@ -47,19 +49,19 @@ namespace Grid.Tiles.PathTile {
         }
 
         public PathLink GetLink(Vector3Int pos) {
-            return _pathLinkMap[pos]?.Value;
+            return pathLinkMap[pos]?.Value;
         }
 
         public PathLink GetPrevLink(Vector3Int pos) {
-            return _pathLinkMap[pos].Previous?.Value;
+            return pathLinkMap[pos].Previous?.Value;
         }
 
         public PathLink GetNextLink(Vector3Int pos) {
-            return _pathLinkMap[pos].Next?.Value;
+            return pathLinkMap[pos].Next?.Value;
         }
 
         public bool ContainsTile(Vector3Int pos) {
-            return _pathLinkMap.ContainsKey(pos);
+            return pathLinkMap.ContainsKey(pos);
         }
     }
 
