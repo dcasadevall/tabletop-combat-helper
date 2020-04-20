@@ -1,27 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using RotaryHeart.Lib.SerializableDictionary;
 using UnityEngine;
 using Utils.Enums;
 
 namespace Grid.Tiles.PathTile {
     public class Path : MonoBehaviour {
+        
+        [Serializable]
+        private class LinksDictionary : SerializableDictionaryBase<Vector3Int, LinkedListNode<PathLink>> {}
+
         public int Length {
             get {
                 return _pathLinkMap.Count;
             }
         }
-        
-        private Dictionary<Vector3Int, LinkedListNode<PathLink>> _pathLinkMap;
+
+        private LinksDictionary _pathLinkMap;
         private LinkedList<PathLink> _pathLinks;
 
         public void Init() {
             _pathLinks = new LinkedList<PathLink>();
-            _pathLinkMap = new Dictionary<Vector3Int, LinkedListNode<PathLink>>();
+            _pathLinkMap = new LinksDictionary();
         }
 
         public void AddLastLink(Vector3Int pos) {
             if (_pathLinkMap.ContainsKey(pos)) {
                 return;
             }
+
             var node = _pathLinks.AddLast(new PathLink(pos));
             _pathLinkMap.Add(pos, node);
         }
@@ -34,7 +41,7 @@ namespace Grid.Tiles.PathTile {
                 DestroyImmediate(gameObject);
             }
         }
-        
+
         public PathLink GetLastLink() {
             return _pathLinks.Last?.Value;
         }
