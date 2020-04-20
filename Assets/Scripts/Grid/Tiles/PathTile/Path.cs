@@ -9,6 +9,7 @@ namespace Grid.Tiles.PathTile {
                 return _pathLinkMap.Count;
             }
         }
+        
         private Dictionary<Vector3Int, LinkedListNode<PathLink>> _pathLinkMap;
         private LinkedList<PathLink> _pathLinks;
 
