@@ -25,8 +25,8 @@ namespace Grid.Tiles {
             "Diagonal",
             "Half turn right",
             "Half turn left",
-            "Right diagonal down",
-            "Left diagonal down",
+            "Diagonal right",
+            "Diagonal left",
             "Corner right side",
             "Corner left side"
         };

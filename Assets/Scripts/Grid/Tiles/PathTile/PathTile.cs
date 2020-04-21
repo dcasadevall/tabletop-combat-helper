@@ -30,31 +30,20 @@ namespace Grid.Tiles.PathTile {
             PathLink link = currentPath.GetLink(position);
             PathLink prevLink = currentPath.GetPrevLink(position);
             PathLink nextLink = currentPath.GetNextLink(position);
+            
+            bool isDiagonal = IsDiagonal(link, prevLink, nextLink);
+            link.isDiagonal = isDiagonal;
 
-            PathType pathType = GetPathType(link, prevLink, nextLink);
-            link.PathType = pathType;
+            PathType pathType = GetPathType(link, prevLink, nextLink, isDiagonal);
+            link.pathType = pathType;
             tileData.sprite = spritePools[(int) pathType].spriteArray[0];
 
-            float angle = GetRotation(link, prevLink, nextLink);
-            link.RotationAngle = angle;
+            float angle = GetRotationAngle(link, prevLink, nextLink, isDiagonal);
+            link.rotationAngle = angle;
             Quaternion rotation = Quaternion.Euler(0, 0, angle);
             tileData.transform = Matrix4x4.TRS(Vector3.zero, rotation, Vector3.one);
 
             tileData.flags = TileFlags.LockTransform;
-        }
-
-        private float GetRotation(PathLink link, PathLink prevLink, PathLink nextLink) {
-            if (prevLink == null && nextLink == null) {
-                return 0;
-            }
-
-            if (prevLink == null) {
-                Vector3Int directionToNext = nextLink.Position - link.Position;
-                return Vector3.SignedAngle(Vector3.down, directionToNext, Vector3.forward);
-            }
-
-            Vector3Int directionFromPrev = link.Position - prevLink.Position;
-            return Vector3.SignedAngle(Vector3.down, directionFromPrev, Vector3.forward);
         }
 
         private Path GetCurrentPath(ITilemap tilemap, Vector3Int position) {
@@ -68,35 +57,66 @@ namespace Grid.Tiles.PathTile {
             return null;
         }
 
-        private PathType GetPathType(PathLink link, PathLink prevLink, PathLink nextLink) {
+        private PathType GetPathType(PathLink link, PathLink prevLink, PathLink nextLink, bool isDiagonal) {
             
             if (prevLink == null && nextLink == null) {
                 return PathType.Single;
             }
             if (prevLink == null) {
-                return PathType.Start;
+                return isDiagonal? PathType.DiagonalStart : PathType.Start;
             }
             if (nextLink == null) {
-                return PathType.End;
+                return isDiagonal? PathType.DiagonalEnd : PathType.End;
             }
             
-            Vector3Int directionFromPrev = prevLink.Position - link.Position;
-            Vector3Int directionToNext = link.Position - nextLink.Position;
+            Vector3Int directionFromPrev = prevLink.position - link.position;
+
+            Vector3Int directionToNext = link.position - nextLink.position;
             float angle = Vector3.SignedAngle(directionFromPrev, directionToNext, Vector3.forward);
 
             switch (angle) {
                 case 0:
-                    return PathType.Straight;
+                    return isDiagonal? PathType.Diagonal : PathType.Straight;
                 case 45:
-                    return PathType.HalfTurnRight;
+                    return isDiagonal? PathType.DiagonalRight : PathType.HalfTurnRight;
                 case 90:
                     return PathType.TurnRight;
                 case -45:
-                    return PathType.HalfTurnLeft;
+                    return isDiagonal? PathType.DiagonalLeft : PathType.HalfTurnLeft;
                 case -90:
                     return PathType.TurnLeft;
             }
             return PathType.Single;
+        }
+        
+        private float GetRotationAngle(PathLink link, PathLink prevLink, PathLink nextLink, bool isDiagonal) {
+            if (prevLink == null && nextLink == null) {
+                return 0;
+            }
+            float angle;
+            if (prevLink == null) {
+                Vector3Int directionToNext = nextLink.position - link.position;
+                angle =  Vector3.SignedAngle(Vector3.down, directionToNext, Vector3.forward);
+            } else {
+                Vector3Int directionFromPrev = link.position - prevLink.position;
+                angle = Vector3.SignedAngle(Vector3.down, directionFromPrev, Vector3.forward);
+            }
+            return isDiagonal ? angle - 45 : angle;
+        }
+
+        private bool IsDiagonal(PathLink link, PathLink prevLink, PathLink nextLink) {
+            if (prevLink == null && nextLink == null) {
+                return false;
+            }
+            int absoluteAngle;
+            if (prevLink == null) {
+                Vector3Int directionToNext = link.position - nextLink.position;
+                absoluteAngle = (int) Vector3.Angle(Vector3.down, directionToNext);
+            } else {
+                Vector3Int directionFromPrev = prevLink.position - link.position;
+                absoluteAngle = (int) Vector3.Angle(Vector3.down, directionFromPrev);
+            }
+            return (absoluteAngle / 45) % 2 == 1;
         }
     }
 }

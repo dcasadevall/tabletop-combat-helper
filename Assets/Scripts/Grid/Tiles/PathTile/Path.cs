@@ -1,45 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using RotaryHeart.Lib.SerializableDictionary;
 using UnityEngine;
 using Utils.Enums;
 
 namespace Grid.Tiles.PathTile {
-    [Serializable]
-    public class Path : MonoBehaviour {
-        
-        [Serializable]
-        private class LinksDictionary : SerializableDictionaryBase<Vector3Int, LinkedListNode<PathLink>> {}
-
+    public class Path : MonoBehaviour, ISerializationCallbackReceiver {
         public int Length {
             get {
-                return pathLinkMap.Count;
+                return _pathLinkMap.Count;
             }
         }
 
-        [SerializeField]
-        private LinksDictionary pathLinkMap;
-        private LinkedList<PathLink> _pathLinks;
+        private Dictionary<Vector3Int, LinkedListNode<PathLink>> _pathLinkMap =
+            new Dictionary<Vector3Int, LinkedListNode<PathLink>>();
+        private LinkedList<PathLink> _pathLinks = new LinkedList<PathLink>();
+        private List<PathLink> _serializedPathLinks = new List<PathLink>();
 
-        public void Init() {
-            _pathLinks = new LinkedList<PathLink>();
-            pathLinkMap = new LinksDictionary();
+        public void OnBeforeSerialize() {
+            _serializedPathLinks.Clear();
+            _serializedPathLinks.AddRange(_pathLinks);
+        }
+
+        public void OnAfterDeserialize() {
+            _pathLinks.Clear();
+            _pathLinkMap.Clear();
+            foreach (PathLink pathLink in _serializedPathLinks) {
+                var node = _pathLinks.AddLast(pathLink);
+                _pathLinkMap[pathLink.position] = node;
+            }
         }
 
         public void AddLastLink(Vector3Int pos) {
-            if (pathLinkMap.ContainsKey(pos)) {
+            if (_pathLinkMap.ContainsKey(pos)) {
                 return;
             }
 
             var node = _pathLinks.AddLast(new PathLink(pos));
-            pathLinkMap.Add(pos, node);
+            _pathLinkMap.Add(pos, node);
         }
 
         public void RemoveLink(Vector3Int pos) {
-            var node = pathLinkMap[pos];
+            var node = _pathLinkMap[pos];
             _pathLinks.Remove(node);
-            pathLinkMap.Remove(pos);
-            if (pathLinkMap.Count == 0) {
+            _pathLinkMap.Remove(pos);
+            if (_pathLinkMap.Count == 0) {
                 DestroyImmediate(gameObject);
             }
         }
@@ -49,31 +53,33 @@ namespace Grid.Tiles.PathTile {
         }
 
         public PathLink GetLink(Vector3Int pos) {
-            return pathLinkMap[pos]?.Value;
+            return _pathLinkMap[pos]?.Value;
         }
 
         public PathLink GetPrevLink(Vector3Int pos) {
-            return pathLinkMap[pos].Previous?.Value;
+            return _pathLinkMap[pos].Previous?.Value;
         }
 
         public PathLink GetNextLink(Vector3Int pos) {
-            return pathLinkMap[pos].Next?.Value;
+            return _pathLinkMap[pos].Next?.Value;
         }
 
         public bool ContainsTile(Vector3Int pos) {
-            return pathLinkMap.ContainsKey(pos);
+            return _pathLinkMap.ContainsKey(pos);
         }
     }
 
     // TODO: Alberto: should be mutable?
+    [Serializable]
     public class PathLink {
-        public PathType PathType = PathType.Single;
-        public Vector3Int Position;
-        public Vector3Int Direction = Vector3Int.zero;
-        public float RotationAngle = 0f;
+        [SerializeField] public PathType pathType = PathType.Single;
+        [SerializeField] public Vector3Int position;
+        [SerializeField] public Vector3Int direction = Vector3Int.zero;
+        [SerializeField] public float rotationAngle;
+        [SerializeField] public bool isDiagonal;
 
         public PathLink(Vector3Int position) {
-            Position = position;
+            this.position = position;
         }
     }
 }

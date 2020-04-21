@@ -11,8 +11,8 @@
         Diagonal,
         HalfTurnRight,
         HalfTurnLeft,
-        RightDiagonalDown,
-        LeftDiagonalDown,
+        DiagonalRight,
+        DiagonalLeft,
         CornerRightSide,
         CornerLeftSide
     }

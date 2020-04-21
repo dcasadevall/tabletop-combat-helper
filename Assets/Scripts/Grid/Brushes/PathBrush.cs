@@ -14,12 +14,12 @@ namespace Grid.Brushes {
         /// Determines if the path is drawn in the default direction or the inverse.
         /// </summary>
         public bool isInverse = false;
-        
+
         /// <summary>
         /// If there is a path being drawn.
         /// </summary>
         public bool isDrawing;
-        
+
         /// <summary>
         /// The instance of pathTyle that is being drawn
         /// </summary>
@@ -39,6 +39,7 @@ namespace Grid.Brushes {
         /// Positions allowed to keep drawing tiles for the path.
         /// </summary>
         private List<Vector3Int> _allowedNextPositions;
+
         public List<Vector3Int> AllowedNextPositions => _allowedNextPositions;
 
 
@@ -58,7 +59,7 @@ namespace Grid.Brushes {
 
             TileBase tile = cells[0].tile;
             if (tile == null) return;
-            
+
             if (tile.GetType() != typeof(PathTile)) {
                 base.Paint(gridLayout, brushTarget, position);
                 return;
@@ -67,30 +68,29 @@ namespace Grid.Brushes {
             Tilemap tilemap = brushTarget.GetComponent<Tilemap>();
             if (tilemap == null) return;
 
-            PathTile pathTyle = tile as PathTile;
+            PathTile pathTile = tile as PathTile;
 
-            if (isDrawing && (tilemap != _currentTilemap || pathTyle != _currentPathTyle || _currentPath == null)) {
+            if (isDrawing && (tilemap != _currentTilemap || pathTile != _currentPathTyle || _currentPath == null)) {
                 ResetBrush();
             }
 
             if (isDrawing) {
-                _currentPath.AddLastLink(position);
-                // Refresh previous link in the path
-                tilemap.RefreshTile(_currentPath.GetPrevLink(position).Position);
+                ContinuePath(tilemap, position, _currentPath);
             } else {
                 _currentTilemap = tilemap;
-                _currentPathTyle = pathTyle;
-                //TODO: Alberto: Use interceptors at some point?
-                _currentPath = GetPathOnTile(tilemap, position, true);
-                isDrawing = true;
+                _currentPathTyle = pathTile;
+                Path newPath = StartPath(tilemap, position, pathTile);
+                if (newPath == null) return;
+                _currentPath = newPath;
             }
+
             base.Paint(gridLayout, brushTarget, position);
-            _allowedNextPositions = GetAllowedNextPositions(position, _currentPath);
+            _allowedNextPositions = GetAllowedNextPositions(tilemap, position, _currentPath);
         }
 
         public override void Erase(GridLayout gridLayout, GameObject brushTarget, Vector3Int position) {
             base.Erase(gridLayout, brushTarget, position);
-            
+
             Tilemap tilemap = brushTarget.GetComponent<Tilemap>();
             if (tilemap == null) return;
 
@@ -103,7 +103,7 @@ namespace Grid.Brushes {
 
         public override void BoxErase(GridLayout gridLayout, GameObject brushTarget, BoundsInt position) {
             base.BoxErase(gridLayout, brushTarget, position);
-            
+
             Tilemap tilemap = brushTarget.GetComponent<Tilemap>();
             if (tilemap == null) return;
 
@@ -111,7 +111,7 @@ namespace Grid.Brushes {
                 Path path = GetPathOnTile(tilemap, pos);
                 if (path != null) {
                     path.RemoveLink(pos);
-                }            
+                }
             }
         }
 
@@ -122,53 +122,103 @@ namespace Grid.Brushes {
             }
         }
 
+        private Path StartPath(Tilemap tilemap, Vector3Int position, PathTile pathTile) {
+            //TODO: Alberto: Use interceptors at some point?
+            Path path = CreatePath(tilemap, position, pathTile.name);
+            if (path == null) return null;
+
+            isDrawing = true;
+
+            return path;
+        }
+
+        private void ContinuePath(Tilemap tilemap, Vector3Int position, Path currentPath) {
+            bool allowedPosition = false;
+            foreach (Vector3Int pos in _allowedNextPositions) {
+                if (pos.Equals(position)) {
+                    allowedPosition = true;
+                    break;
+                }
+            }
+
+            if (allowedPosition == false) {
+                ResetBrush();
+                return;
+            }
+
+            // Add current position to the existing path
+            currentPath.AddLastLink(position);
+            // Refresh previous link in the path
+            tilemap.RefreshTile(currentPath.GetPrevLink(position).position);
+        }
+
         private void ResetBrush() {
             isDrawing = false;
         }
 
-        private Path GetPathOnTile(Tilemap tilemap, Vector3Int position, bool shouldCreate = false) {
-            var tilemapPaths = tilemap.GetComponentsInChildren<Path>();
+        private Path GetPathOnTile(Tilemap tilemap, Vector3Int position) {
             Path currentPath = null;
+            var tilemapPaths = tilemap.GetComponentsInChildren<Path>();
             foreach (var path in tilemapPaths) {
                 if (path.ContainsTile(position)) {
                     currentPath = path;
                     break;
                 }
             }
-            if (currentPath == null && shouldCreate) {
-                //TODO: Alberto: Use zenject
-                Path path = new GameObject().AddComponent<Path>();
-                path.transform.SetParent(tilemap.transform);
-                path.gameObject.name = _currentPathTyle.name;
-                path.Init();
-                path.AddLastLink(position);
-                currentPath = path;
-            }
+
             return currentPath;
         }
 
-        private List<Vector3Int> GetAllowedNextPositions(Vector3Int position, Path path) {
+        private Path CreatePath(Tilemap tilemap, Vector3Int position, string pathName) {
+            Path currentPath = GetPathOnTile(tilemap, position);
+            if (currentPath != null) return null;
+
+            //TODO: Alberto: Use zenject
+            Path path = new GameObject().AddComponent<Path>();
+            path.transform.SetParent(tilemap.transform);
+            path.gameObject.name = pathName;
+            path.AddLastLink(position);
+            return path;
+        }
+
+        private List<Vector3Int> GetAllowedNextPositions(Tilemap tilemap, Vector3Int position, Path path) {
             float angle = -90;
-            Vector3 direction = Quaternion.Euler(0, 0, path.GetLastLink().RotationAngle) * Vector3.down;
-                
+            PathLink link = path.GetLastLink();
+            Vector3 direction = Quaternion.Euler(0, 0, link.rotationAngle) * Vector3.down;
+
             if (path.Length == 1) {
-                // all around is allowed if direction is zero
+                // all around is allowed if 
                 angle = -270;
                 direction = Vector3Int.down;
             }
-            
+
+            if (link.isDiagonal) {
+                // start from center if it's a diagonal tile
+                angle = 0;
+            }
+
             List<Vector3Int> allowedPositions = new List<Vector3Int>();
-            
+            var tilemapPaths = tilemap.GetComponentsInChildren<Path>();
             while (angle <= 90) {
-                Quaternion rotation = Quaternion.Euler(0,0,angle);
+                Quaternion rotation = Quaternion.Euler(0, 0, angle);
                 Vector3 adjacentDirection = rotation * direction;
-                Vector3 allowedPosition = position + adjacentDirection;
-                allowedPositions.Add(Vector3Int.RoundToInt(allowedPosition));
+                Vector3Int allowedPosition = Vector3Int.RoundToInt(position + adjacentDirection);
+                bool isOccupied = false;
+                foreach (Path p in tilemapPaths) {
+                    if (p.ContainsTile(allowedPosition)) {
+                        isOccupied = true;
+                        break;
+                    }
+                }
+
+                if (isOccupied == false) {
+                    allowedPositions.Add(Vector3Int.RoundToInt(allowedPosition));
+                }
+
                 angle += 45;
             }
 
             return allowedPositions;
         }
-       
     }
 }
